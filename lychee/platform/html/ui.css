@@ -1,0 +1,176 @@
+/*
+ * Buttons
+ */
+button, button:visited {
+	position: relative;
+	background: #222;
+	display: inline-block; 
+	padding: 2px 5px; 
+	color: #fff; 
+	text-decoration: none;
+	border: 1px solid #fff;
+	border-radius: 6px;
+	box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #000;
+	color: #fff;
+}
+
+button:active {
+	top: 1px;
+	background-color: #999;
+}
+
+
+
+input, .ly-checkbox, .ly-radio, select {
+	margin: 0;
+	color: #fff;
+	background: #222;
+	border: 1px solid #fff;
+	border-radius: 6px;
+	box-shadow: inset 0px 0px 4px 4px rgba(0,0,0,0.5);
+}
+
+
+
+/*
+ * Checkbox, Radio
+ *
+ * Note: not style-able without shadow DOM
+ */
+div.ly-checkbox,
+div.ly-radio {
+	display: block;
+	position: relative;
+	width: 1em;
+	height: 1em;
+	margin: 5px 2px;
+}
+
+div.ly-checkbox.active:before,
+div.ly-radio.active:before {
+	content: '';
+	display: block;
+	position: absolute;
+	width: 70%;
+	height: 70%;
+	margin: 15%;
+	background: #fff;
+	border-radius: 10px;
+}
+
+
+
+/*
+ * Input
+ */
+input {
+	padding: 2px 5px;
+}
+ 
+input[type='text'] {
+	width: 5em;
+	margin: 0;
+	text-align: right;
+}
+
+input[type='number'] {
+	width: 3em;
+	margin: 0;
+	text-align: right;
+}
+
+
+
+/*
+ * Select
+ */
+select {
+	width: 5.8em;
+	padding: 0;
+}
+select option {
+	margin: 2px 0px;
+	padding: 0px 5px;
+}
+
+
+
+/*
+ * Lightboxes
+ */
+.ly-lightbox {
+	display: block;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	opacity: 1;
+	background-color: rgba(0,0,0,0.4);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#40000040, endColorstr=#40000040);
+	z-index: 200;
+}
+.ly-lightbox[id] {
+	position: fixed;
+}
+.ly-lightbox.hidden {
+	top: -20000px;
+	bottom: auto;
+	opacity: 0;
+}
+.ly-lightbox, .ly-lightbox.hidden {
+	-webkit-transition: all 1s ease;
+	-o-transition: all 1s ease;
+	-moz-transition: all 1s ease;
+	-ms-transition: all 1s ease;
+	transition: all 1s ease;
+}
+
+.ly-lightbox header, .ly-lightbox article {
+	display: block;
+	position: relative;
+	width: 60%;
+	margin: 5% auto 0px auto;
+	padding: 10px 20px;
+}
+
+.ly-lightbox header {
+	margin-bottom: 0px;
+	font-weight: bold;
+	line-height: 24px;
+	color: #fff;
+ 	background-color: #cd3333;
+	background-image: -moz-linear-gradient(top, #cd3333 0%, #8b2323 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #cd3333), color-stop(100%, #8b2323));
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#cd3333', endColorstr='#8b2323', GradientType=0);
+	border-radius: 10px 10px 0 0;
+}
+
+.ly-lightbox-close {
+	float: right;
+}
+
+.ly-lightbox article {
+	min-height: 5em;
+	max-height: 80%;
+	margin-top: 0px;
+	padding-bottom: 15px;
+	color: #333;
+	background-color: #fff;
+	background-image: -moz-linear-gradient(top, #ffffff 0%, #d0d0d0 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #d0d0d0));
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#d0d0d0', GradientType=0);
+	border-radius: 0 0 10px 10px;
+	overflow: auto;
+}
+
+.ly-lightbox article h3 {
+	color: #8b2323;
+	border-bottom: 1px solid #8b2323;
+}
+

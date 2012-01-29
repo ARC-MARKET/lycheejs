@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Game (Platformer)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- libraries -->
+	<link rel="stylesheet" href="../../lychee/platform/html/console.css">
+	<link rel="stylesheet" href="../../lychee/platform/html/ui.css">
+
+	<!-- game -->
+	<link rel="stylesheet" href="css/game.css">
+	<link rel="stylesheet" href="css/touch.css">
+
+	<style>
+	#game-view { z-index: 1; }
+	#game-touch { z-index: 2; }
+	#game-console { z-index: 3; }
+	</style>
+</head>
+<body>
+<div id="game-touch" class="hidden">
+	<div id="game-touch-move" class="game-abs">
+		<div id="game-touch-left"></div>
+		<div id="game-touch-right"></div>
+	</div>
+	<div id="game-touch-jump" class="game-abs"></div>
+	<div id="game-touch-shoot" class="game-abs"></div>
+</div>
+
+<!-- libraries -->
+<script src="../../lychee/core.js"></script>
+<script src="../../lychee/data/model.js"></script>
+<script src="../../lychee/data/object.js"></script>
+<script src="../../lychee/data/cache.js"></script>
+<script src="../../lychee/data/package.js"></script>
+
+<!-- platform specific stuff -->
+<script src="../../lychee/platform/2d/physics.js"></script>
+<script src="../../lychee/platform/2d/view.js"></script>
+
+<script src="../../lychee/platform/html/console.js"></script>
+<script src="../../lychee/platform/html/ui.js"></script>
+<script src="../../lychee/platform/html/renderer.js"></script>
+
+<!-- game code -->
+<script src="js/game.js"></script>
+<script src="js/game.camera.js"></script>
+<script src="js/game.physics.js"></script>
+<script src="js/game.enemy.js"></script>
+<script src="js/game.player.js"></script>
+
+<script>
+var Game;
+(function() {
+
+	var settings = {
+		debug: false,
+		base: '../../packages/game-platformer',
+		world: '01-howto'
+	};
+
+	if (window.location.hash.match(/debug/)) {
+		settings.debug = true;
+	}
+
+	Game = new game(settings);
+
+})();
+</script>
+</body>
+</html>   

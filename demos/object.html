@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Object Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- libraries -->
+	<script src="../lychee/core.js"></script>
+	<script src="../lychee/data/model.js"></script>
+	<script src="../lychee/data/object.js"></script>
+	<script src="../lychee/platform/html/ui.js"></script>
+	<link rel="stylesheet" href="../lychee/platform/html/ui.css">
+
+	<!-- demo -->
+	<link rel="stylesheet" href="assets/layout.css">
+
+</head>
+<body>
+
+<div id="demo">
+	<div id="demo-navi"></div>
+	<canvas id="demo-canvas" width="400" height="400"></canvas>
+</div>
+
+<script>
+var Demo = {};
+(function() {
+
+	var data = {
+		angle: { x: 1, y: 0, z: 0 }
+	};
+
+	data.model = new ly.model({
+		id: 'test',
+		sprite: './notfound-110.png',
+
+		'states': {
+			'default': {
+
+				'sprite': {
+					id: 1,
+					animated: false,
+					x: -21,
+					y: -21
+				},
+
+				'polygon': [
+					{ x: -2.0, y: -0.5 },
+					{ x:  2.0, y: -0.5 },
+					{ x:  2.0, y:  0.5 },
+					{ x: -2.0, y:  0.5 }
+				]
+
+			}
+		}
+	});
+
+	data.object = new ly.object('test', {
+		position: { x: 1, y: 2, z: 3 },
+		angle: data.angle,
+		type: 'static'
+	}, data.model);
+		
+	// Defaults
+	var navi = document.getElementById('demo-navi');
+
+	new ly.ui.input('number', data.angle.x, function(value) {
+		data.angle.x = value;
+	}, this).addTo(navi);
+
+
+	new ly.ui.input('number', data.angle.y, function(value) {
+		data.angle.y = value;
+	}, this).addTo(navi);
+
+
+	new ly.ui.button('refresh', function() {
+		Demo.refresh(data.angle);
+	}, this).addTo(navi);
+
+
+
+	Demo = {
+
+		model: data.model,
+		object: data.object,
+
+		canvas: document.getElementById('demo-canvas'),
+
+		sprite: data.model.get('sprite'),
+
+		tile: 50,
+
+		translate: function(x, y) {
+
+			var center = {
+				x: this.canvas.width / 2,
+				y: this.canvas.height / 2
+			};
+
+			return {
+				x: center.x + x * this.tile,
+				y: center.y + y * this.tile
+			};
+
+		},
+
+		refresh: function(angle) {
+
+			var ctx = this.canvas.getContext('2d'),
+				center = {
+					x: this.canvas.width / 2,
+					y: this.canvas.height / 2
+				},
+				obj = this.object,
+				polygon,
+				bb,
+				firstPoint,
+				point;
+
+
+			obj.rotate(angle);
+
+			polygon = obj.get('polygon');
+			bb = obj.get('boundingBox');
+
+
+			ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+			ctx.beginPath();
+
+
+			firstPoint = null;
+			point = null;
+			for (var pId in polygon) {
+				point = this.translate(polygon[pId].x, polygon[pId].y);
+				if (firstPoint === null) {
+					firstPoint = point;
+					ctx.moveTo(point.x, point.y);
+				} else {
+					ctx.lineTo(point.x, point.y);
+				}
+			}
+
+			if (firstPoint !== null) {
+				ctx.lineTo(firstPoint.x, firstPoint.y);
+			}
+
+
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = 'red';
+			ctx.stroke();
+			ctx.closePath();
+
+
+			ctx.beginPath();
+
+
+			firstPoint = this.translate(bb.minX, bb.minY);
+			ctx.moveTo(firstPoint.x, firstPoint.y);
+
+			point = this.translate(bb.maxX, bb.minY);
+			ctx.lineTo(point.x, point.y);
+
+			point = this.translate(bb.maxX, bb.maxY);
+			ctx.lineTo(point.x, point.y);
+
+			point = this.translate(bb.minX, bb.maxY);
+			ctx.lineTo(point.x, point.y);
+
+			ctx.lineTo(firstPoint.x, firstPoint.y);
+
+
+			ctx.lineWidth = 2;
+			ctx.strokeStyle = 'yellow';
+			ctx.stroke();
+			ctx.closePath();
+
+
+//			console.log(bb, polygon);
+
+//			ctx.drawImage()
+
+		}
+
+	};
+
+
+	var intervalId = window.setInterval(function() {
+		Demo.refresh(data.angle, data.tile);
+	}, 50);
+
+
+})();
+</script>
+</body>
+</html>   

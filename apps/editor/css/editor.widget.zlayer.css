@@ -1,0 +1,40 @@
+#editor-widget-zlayer {
+	width: 32px;
+	height: 70px;
+	border-radius: 60px;
+}
+
+#editor-widget-zlayer div {
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	color: #fff;
+	font-size: 30px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+	left: 3px;
+}
+
+#editor-widget-zlayer div:hover,
+#editor-widget-zlayer div:focus {
+	color: #000;
+}
+
+#editor-widget-zlayer #editor-widget-zlayer-top {
+	top: 0px;
+}
+
+#editor-widget-zlayer #editor-widget-zlayer-bottom {
+	bottom: 0px;
+}
+
+#editor-widget-zlayer-input {
+	position: absolute;
+	width: 22px;
+	margin: 0;
+	top: 23px;
+	left: -1px;
+	text-align: center;
+}
+

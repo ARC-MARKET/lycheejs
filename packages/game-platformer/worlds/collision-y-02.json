@@ -1,0 +1,14 @@
+{
+	"id": "collision-y-02",
+	"gravity": 0,
+	"objects": [{
+		"position": { "x": 4, "y": 9.5 },
+		"speed": { "y": -10 },
+		"model": "test-110"
+	}, {
+		"position": { "x": 4, "y": 1 },
+		"speed": { "y": 10 },
+		"type": "static",
+		"model": "test-110"
+	}]
+}

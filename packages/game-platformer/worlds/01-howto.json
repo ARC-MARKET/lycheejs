@@ -1,0 +1,28 @@
+{
+	"id": "01-howto",
+	"modelset": "test",
+	"gravity": 1.0,
+	"zCollision": "layer",
+	"boundaries": {
+		"minX": -25,
+		"maxX": 25,
+		"minY": 0,
+		"maxY": 25
+	},
+	"objects": [{
+		"id": "player",
+		"position": { "x": 1, "y": 5 },
+		"speed": { "x": 30 },
+		"model": "test-110"
+	}, {
+		"position": { "x": 5, "y": 5 },
+		"speed": { "x": -20 },
+		"model": "test-110",
+		"enemy": {
+			"health": 2
+		}
+	}, {
+		"position": { "x": 5, "y": 3 },
+		"model": "test-310"
+	}]
+}

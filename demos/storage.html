@@ -1,0 +1,179 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Storage Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- libraries -->
+	<script src="../lychee/core.js"></script>
+	<script src="../lychee/platform/html/storage.js"></script>
+	<script src="../lychee/platform/html/ui.js"></script>
+	<link rel="stylesheet" href="../lychee/platform/html/ui.css">
+
+	<!-- demo -->
+	<link rel="stylesheet" href="assets/layout.css">
+
+	<style>
+		.demo-data {
+			color: #333;
+			background: #ccc;
+			padding: 0.5em 1em;
+			list-style: none;
+			border-radius: 10px;
+		}
+
+		.demo-data li {
+			margin: 0;
+			padding: 0;
+		}
+
+	</style>
+</head>
+<body>
+
+<div id="demo">
+
+	<div id="demo-navi"></div>
+
+	<p class="notification">
+		Use the navi above to modify the data.
+		Reload this site to refresh previews.
+	</p>
+
+	<section>
+		<b>ly.storage('demo-local', 'local')</b>
+		<p>
+			This is a local storage, it will keep data until
+			you clear the browser cache or history.
+		</p>
+		<ul class="demo-data" id="demo-local"></ul>
+	</section>
+
+	<section>
+		<b>ly.storage('demo-session', 'session')</b>
+		<p>
+			This is the session storage, it will keep data until
+			you restart or close your browser.
+		</p>
+		<ul class="demo-data" id="demo-session"></ul>
+	</section>
+
+	<section>
+		<b>ly.storage('demo-none')</b>
+		<p>
+			This is the default storage object, it will keep data
+			only until you reload or close the tab.
+		</p>
+		<ul class="demo-data" id="demo-none"></ul>
+	</section>
+
+</div>
+
+<script>
+var Demo = {};
+(function() {
+
+	// Defaults
+	var data = {
+		storage: 'local',
+		key: 'key',
+		value: 'value'
+	};
+
+	var navi = document.getElementById('demo-navi');
+
+	new ly.ui.input('text', data.key, function(value) {
+		data.key = value;
+	}, this).addTo(navi);
+
+	new ly.ui.input('text', data.value, function(value) {
+		data.value = value;
+	}, this).addTo(navi);
+
+	var select = new ly.ui.select(function(value) {
+		data.storage = value;
+	}, this);
+
+	new ly.ui.option('local', 'local').addTo(select);
+	new ly.ui.option('session', 'session').addTo(select);
+	new ly.ui.option('none', 'none').addTo(select);
+	select.set(data.storage);
+	select.addTo(navi);
+
+	new ly.ui.button('set', function() {
+		Demo.set(data.storage, data.key, data.value);
+		Demo.refresh();
+	}, this).addTo(navi);
+
+	new ly.ui.button('get', function() {
+		var value = Demo.get(data.storage, data.key);
+		window.alert('Value of ' + data.key + ' in ly.storage(\'' + data.storage + '\') is: ' + value);
+	}, this).addTo(navi);
+
+	new ly.ui.button('remove', function() {
+		Demo.remove(data.storage, data.key);
+		Demo.refresh();
+	}, this).addTo(navi);
+
+
+	Demo = {
+		local: new ly.storage('demo-local', 'local'),
+		session: new ly.storage('demo-session', 'session'),
+		none: new ly.storage('demo-none'),
+
+		__ui: {
+			local: new ly.ui(document.getElementById('demo-local')),
+			session: new ly.ui(document.getElementById('demo-session')),
+			none: new ly.ui(document.getElementById('demo-none'))
+		}
+	};
+
+	Demo.set = function(storage, key, value) {
+		console.log('Set: ' + storage + ' > ' + key + ':' + value);
+		this[storage].set(key, value);
+	};
+
+	Demo.get = function(storage, key) {
+		console.log('Get: ' + storage + ' < ' + key);
+		return this[storage].get(key);
+	};
+
+	Demo.remove = function(storage, key) {
+		console.log('Remove: ' + storage + ' x ' + key);
+		this[storage].remove(key);
+	};
+
+	Demo.refresh = function() {
+
+		this.refreshUI('local');
+		this.refreshUI('session');
+		this.refreshUI('none');
+
+	};
+
+	Demo.refreshUI = function(storage) {
+
+		var all = this[storage].all();
+		var html = '';
+
+		for (var key in all) {
+			html += '<b>' + key + '</b>: ' + all[key] + '<br>\n';
+		}
+
+		if (html === '') {
+			html = 'No contents';
+		}
+
+		this.__ui[storage].clear();
+		this.__ui[storage].set(html);
+
+	};
+
+
+	// Initial refresh
+	Demo.refresh();
+
+})();
+</script>
+</body>
+</html>   

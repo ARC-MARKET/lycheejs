@@ -1,0 +1,101 @@
+
+@font-face {
+	font-family: 'gui-iconset';
+	src: url('gui-iconset.ttf');
+}
+
+.gui-iconset {
+	font-family: 'gui-iconset';
+	font-size: 40px;
+	font-weight: normal;
+	line-height: 40px;
+}
+
+/*
+ * Widgets
+ */
+.gui-widget {
+	display: block;
+	position: relative;
+	float: left;
+	bottom: 0px;
+	width: auto;
+	height: auto;
+	margin: 0 10px 5px 10px;
+	float: left;
+	border: 1px solid #fff;
+	border-radius: 10px;
+}
+
+
+
+/*
+ * Lightboxes (and their content)
+ */
+.ly-lightbox h4 {
+	margin: 0.25em 0 0.5em 0;
+	color: #cd3333;
+}
+.ly-lightbox article ul {
+	margin: 0.25em 0.5em;
+	padding: 0;
+}
+
+.ly-lightbox article li {
+	list-style: none;
+}
+
+.ly-lightbox article li:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.ly-lightbox article li .ly-checkbox,
+.ly-lightbox article li span {
+	float: left;
+}
+
+.ly-lightbox article li .ly-checkbox {
+	margin: 0 0.5em 0 0;
+}
+
+
+
+.gui-gallery {
+	display: block;
+	position: relative;
+	height: 120px;
+	top: 0px;
+	right: 0px;
+	bottom: auto;
+	left: 0px;
+	overflow-x: scroll;
+	overflow-y: hidden;
+}
+
+.gui-gallery > div {
+	position: relative;
+	width: 100%;
+	background: #222;
+}
+
+.gui-gallery > div > div {
+	display: block;
+	float: left;
+	margin: 2px;
+	padding: 2px;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	border: 1px dotted #999;
+}
+
+.gui-gallery img {
+	display: inline-block;
+	max-width: 96px;
+	max-height: 96px;
+	border: 0 none;
+	cursor: pointer;
+}
+ 

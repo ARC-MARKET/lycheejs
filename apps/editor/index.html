@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Package Editor</title>
+
+	<!-- libraries -->
+	<link rel="stylesheet" href="../../lychee/platform/html/ui.css">
+
+	<!-- editor -->
+	<link rel="stylesheet" href="css/gui.css">
+	<link rel="stylesheet" href="css/editor.css">
+	<link rel="stylesheet" href="css/editor.canvas.css">
+	<link rel="stylesheet" href="css/editor.widget.shift.css">
+	<link rel="stylesheet" href="css/editor.widget.zlayer.css">
+
+</head>
+<body>
+<div id="editor-sidebar-base"></div>
+<div id="editor">
+	<ul id="editor-tabs"></ul>
+	<div id="editor-canvas"></div>
+	<div id="editor-widgets"></div>
+</div>
+<div id="editor-sidebars">
+	<div id="editor-sidebar-model" class="editor-sidebar"></div>
+	<div id="editor-sidebar-world" class="editor-sidebar"></div>
+</div>
+
+
+
+<!-- libraries -->
+<script src="../../lychee/core.js"></script>
+<script src="../../lychee/data/model.js"></script>
+<script src="../../lychee/data/cache.js"></script>
+<script src="../../lychee/data/package.js"></script>
+
+<script src="../../lychee/platform/html/console.js"></script>
+<script src="../../lychee/platform/html/ui.js"></script>
+
+<!-- editor -->
+<script src="js/editor.js"></script>
+<script src="js/editor.canvas.js"></script>
+<script src="js/editor.canvas.layer.js"></script>
+<script src="js/editor.ui.js"></script>
+
+<!-- editor plugins -->
+<script src="js/base/package.js"></script>
+<script src="js/base/canvas.js"></script>
+<script src="js/model/data.js"></script>
+<script src="js/model/polygon.js"></script>
+<script src="js/model/sprite.js"></script>
+<script src="js/world/data.js"></script>
+<script src="js/world/objects.js"></script>
+
+<!-- editor widgets -->
+<script src="js/editor.widget.shift.js"></script>
+<script src="js/editor.widget.zlayer.js"></script>
+
+<script>
+var Editor;
+(function() {
+
+	var settings = {
+		base: '../../packages/game-platformer'
+	};
+
+	Editor = new editor(settings);
+	
+	window.setTimeout(function() {
+		Editor.openModel('world', 'test-editor', true);
+	}, 1000);
+
+})();
+</script>
+</body>
+</html>

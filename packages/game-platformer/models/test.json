@@ -1,0 +1,61 @@
+[{
+
+	"id": "test-110",
+	"type": "dynamic",
+	"mass": 75,
+
+	"sprite": "test-110.png",
+
+	"states": {
+
+		"default": {
+
+			"sprite": {
+				"id": 1,
+				"animated": false,
+				"x": -21,
+				"y": -21
+			},
+
+			"polygon": [
+				{ "x": -0.5, "y": -0.5 },
+				{ "x": 0.5, "y": -0.5 },
+				{ "x": 0.5, "y": 0.5 },
+				{ "x": -0.5, "y": 0.5 }
+			]
+
+		}
+
+	}
+
+}, {
+
+	"id": "test-310",
+	"type": "static",
+	"mass": 225,
+
+	"sprite": "test-310.png",
+
+	"states": {
+
+		"default": {
+
+			"sprite": {
+				"id": 1,
+				"animated": false,
+				"x": -63,
+				"y": -21
+			},
+
+			"polygon": [
+				{ "x": -1.5, "y": -0.5 },
+				{ "x": 1.5, "y": -0.5 },
+				{ "x": 1.5, "y": 0.5 },
+				{ "x": -1.5, "y": 0.5 }
+			]
+
+		}
+
+	}
+
+}]

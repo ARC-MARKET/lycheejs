@@ -1,0 +1,42 @@
+#editor-widget-shift {
+	width: 70px;
+	height: 70px;
+	border-radius: 60px;
+}
+
+#editor-widget-shift div {
+	position: absolute;
+	width: 26px;
+	height: 26px;
+	color: #fff;
+	font-size: 30px;
+	line-height: 30px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#editor-widget-shift div:hover,
+#editor-widget-shift div:focus {
+	color: #000;
+}
+
+#editor-widget-shift #editor-widget-shift-top {
+	top: 0;
+	left: 22px;
+}
+
+#editor-widget-shift #editor-widget-shift-right {
+	top: 22px;
+	right: 2px;
+}
+
+#editor-widget-shift #editor-widget-shift-bottom {
+	bottom: 0;
+	left: 22px;
+}
+
+#editor-widget-shift #editor-widget-shift-left {
+	top: 22px;
+	left: 0px;
+}
+

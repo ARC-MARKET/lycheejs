@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Preloader Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- libraries -->
+	<script src="../lychee/core.js"></script>
+	<script src="../lychee/platform/html/storage.js"></script>
+	<script src="../lychee/platform/html/preloader.js"></script>
+
+</head>
+<body>
+
+<div id="demo">
+	<p class="notification">Take a look at the Web console!</p>
+</div>
+
+<script>
+var Preloader;
+(function() {
+
+	Preloader = new ly.preloader(null, function(event, id, data, node) {
+		console.log(event, id); // log "data" if you want to. Huge strings :)
+	}, this);
+
+	Preloader.add('../lychee/data/cache.js');
+	Preloader.add('../lychee/data/model.js');
+	Preloader.add('../lychee/data/object.js');
+	Preloader.add('../lychee/data/package.js');
+
+	Preloader.add('../lychee/math/vector.js');
+	Preloader.add('../lychee/math/line.js');
+	Preloader.add('../lychee/math/plane.js');
+	Preloader.add('../lychee/math/matrix.js');
+
+	Preloader.add('../lychee/platform/html/console.js');
+	Preloader.add('../lychee/platform/html/console.css');
+
+	Preloader.add('../lychee/platform/html/ui.js');
+	Preloader.add('../lychee/platform/html/ui.css');
+
+})();
+</script>
+</body>
+</html>   

@@ -1,0 +1,17 @@
+
+body {
+	background: #444 url('../img/woven.png');
+}
+
+#game-view {
+	display: block;
+	position: relative;
+	margin: 0 auto;
+	background: #f93;
+	border: 1px solid #fff;
+}
+
+#game-console:not(.hidden) {
+	top: 50%;
+	max-height: inherit;
+}

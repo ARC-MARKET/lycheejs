@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+	<title>LycheeJS Package Demo</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- libraries -->
+	<script src="../lychee/core.js"></script>
+	<script src="../lychee/data/cache.js"></script>
+	<script src="../lychee/data/model.js"></script>
+	<script src="../lychee/data/package.js"></script>
+
+	<!-- demo -->
+	<link rel="stylesheet" href="assets/layout.css">
+
+</head>
+<body>
+
+<div id="demo">
+	<p class="notification">Take a look at the Web console!</p>
+</div>
+
+<script>
+var Package;
+(function() {
+
+	Package = new ly.package({
+		models: true,
+		worlds: true,
+		source: true
+	});
+
+	Package.load('../packages/game-platformer', function(cache) {
+		console.log(cache);
+	}, this);
+
+})();
+</script>
+</body>
+</html>   

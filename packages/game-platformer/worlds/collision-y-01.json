@@ -1,0 +1,15 @@
+{
+	"id": "collision-y-01",
+	"modelset": "test",
+	"gravity": 1.2,
+	"objects": [{
+		"position": { "x": 4, "y": 9.5 },
+		"id": "player",
+		"model": "test-110",
+		"sticky": true
+	}, {
+		"position": { "x": 4, "y": 2.75 },
+		"type": "static",
+		"model": "test-130"
+	}]
+}

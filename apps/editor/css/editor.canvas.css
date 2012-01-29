@@ -1,0 +1,25 @@
+#editor-canvas {
+	position: relative;
+	margin: 0 auto;
+	width: 600px;
+	height: 300px;
+	background: #fff;
+}
+
+#editor-canvas,
+#editor-canvas > .editor-canvas-layer {
+	border-radius: 15px;
+}
+
+#editor-canvas > .editor-canvas-layer {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
+
+#editor-canvas > .editor-canvas-layer.hidden {
+	display: none;
+}
+

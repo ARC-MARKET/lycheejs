@@ -1,0 +1,15 @@
+{
+	"id": "collision-x-01",
+	"modelset": "test",
+	"gravity": 1.0,
+	"zCollision": "layer",
+	"objects": [{
+		"position": { "x": 1, "y": 5 },
+		"speed": { "x": 30 },
+		"model": "test-110"
+	}, {
+		"position": { "x": 5, "y": 5 },
+		"speed": { "x": -20 },
+		"model": "test-110"
+	}]
+}

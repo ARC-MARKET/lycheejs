@@ -1,0 +1,27 @@
+{
+	"meta": {
+		"name": "Test Package",
+		"author": "Christoph Martens (lycheeJS)"
+	},
+	"models": {
+		"test": "models/test.json"
+	},
+	"worlds": {
+		"01-howto": "worlds/01-howto.json"
+	},
+	"source": [
+		"booster-forest-01.png",
+		"booster-forest-02.png",
+		"booster-forest-03.png",
+		"booster-forest-04.png",
+		"booster-forest-05.png",
+		"booster-forest-06.png",
+		"booster-forest-07.png",
+		"booster-forest-08.png",
+		"booster-forest-09.png",
+		"booster-forest-10.png",
+		"booster-forest-11.png",
+		"booster-forest-12.png",
+		"booster-forest-13.png"
+	]
+}

@@ -1,0 +1,78 @@
+.ly-console {
+	position: fixed;
+	top: auto;
+	right: 0;
+	bottom: 0;
+	left: auto;
+	width: auto;
+	margin: 0;
+	padding: 10px 10px 10px 10px;
+	font-size: 14px;
+	color: #222;
+	background: rgba(255,255,255,0.5);
+	border: 1px solid #888;
+	border-radius: 15px 15px 0px 0px;
+	min-height: 30px;
+	max-height: 15%;
+	overflow-x: none;
+	overflow-y: scroll;
+	-webkit-transition-property: 'all';
+	-webkit-transition-duration: 500ms;
+	-webkit-transition-timing-function: ease-out;
+}
+
+.ly-console:hover {
+	background: rgba(255,255,255,1.0);
+	-webkit-transition-property: 'all';
+	-webkit-transition-duration: 500ms;
+	-webkit-transition-timing-function: ease-out;
+}
+
+.ly-console.hidden {
+	display: block;
+	width: 80px;
+	right: 0px;
+	overflow: hidden;
+	background: rgba(255,255,255,1.0);
+	border-radius: 15px 0px 0px 0px;
+}
+
+.ly-console .ly-console-status {
+	display: none;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	color: #cc3333;
+	font-size: 40px;
+	font-weight: bold;
+	line-height: 40px;
+	text-align: center;
+	border: 0 none;
+}
+
+.ly-console.hidden .ly-console-status {
+	display: block;
+}
+
+.ly-console li {
+	margin: 2px 0;
+	padding: 2px 5px;
+	border: 1px dotted #888;
+	border-radius: 4px 4px 4px 4px;
+	list-style: none;
+}
+
+.ly-console li.high b {
+	color: #c33;
+}
+
+.ly-console li.low {
+	color: #444;
+}
+
+.ly-console.hidden li {
+	display: none;
+}
+ 
