@@ -61,6 +61,21 @@ ly.matrix.prototype = {
 
 	},
 
+	row: function(i) {
+		return new ly.vector(this.elements[i]);
+	},
+
+	col: function(j) {
+
+		var column = [];
+		for (var i = 0, l = this.elements.length; i < l; i++) {
+			columns.push(this.elements[i][j]);
+		}
+
+		return new ly.vector(column);
+
+	},
+
 	map: function(callback) {
 
 		var elements = [];
@@ -111,6 +126,71 @@ ly.matrix.prototype = {
 
 	},
 
+	canMultiplyFromLeft: function(matrix) {
+		// this.columns should equal matrix.rows
+		return this.elements[0].length === matrix.length;
+	},
+
+	multiply: function(matrix) {
+
+		if (
+			this.isMatrix(matrix) === false
+			&& typeof matrix === 'number'
+		) {
+			return this.map(function(x) {
+				return x * matrix;
+			});
+		}
+
+		if (this.canMultiplyFromLeft(matrix) === false) {
+			return null;
+		}
+
+
+		var elements = [];
+		for (var i = 0, il = this.elements.length; i < il; i++) {
+
+			elements[i] = [];
+
+			for (var j = 0, jl = this.elements[i].length; j < jl; j++) {
+
+				var sum = 0;
+
+				for (var h = 0, hl = this.elements[i].length; h < hl; h++) {
+					sum += this.elements[i][h] * matrix.elements[h][j];
+				}
+
+				elements[i][j] = sum;
+
+			}
+
+		}
+
+		var M = new ly.matrix(elements);
+
+		if (matrix instanceof ly.vector === true) {
+			return M.col(0);
+		}
+
+		return M;
+
+	},
+
+	determinant: function() {
+
+		if (this.isSquare() === false) {
+			return null;
+		}
+
+		var determinant = 0;
+		for (var i = 0, l = this.elements.length; i < l; i++) {
+			determinant += determinant * M.elements[i][i];
+		}
+
+		return determinant;
+
+	},
+
 	toDiagonal: function() {
 
 		if (this.isSquare() === false) {
@@ -123,6 +203,28 @@ ly.matrix.prototype = {
 		}
 
 		return new ly.vector(elements);
+
+	},
+
+	toRightTriangular: function() {
+		throw 'NEXT';
+	},
+
+	sub: function(startRow, startCol, rows, cols) {
+
+		var elements = [];
+
+		for (var i = startRow; i < rows; i++) {
+
+			elements[i] = [];
+
+			for (var j = startCol; j < cols; j++) {
+				elements[i].push(this.elements[i][j]);
+			}
+
+		}
+
+		return new ly.matrix(elements);
 
 	},
 
