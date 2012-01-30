@@ -289,6 +289,11 @@ game.prototype = {
 
 		}
 
+
+		if (Object.prototype.toString.call(world.quests) === '[object Array]') {
+			this.quests = new game.quests(world.quests);
+		}
+
 	}
 
 };

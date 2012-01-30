@@ -24,5 +24,16 @@
 	}, {
 		"position": { "x": 5, "y": 3 },
 		"model": "test-310"
+	}],
+	"quests": [{
+		"type": "collect",
+		"criteria": {
+			"coins": 3,
+			"stars": 3
+		},
+		"success": {
+		},
+		"failure": {
+		}
 	}]
 }
