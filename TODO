@@ -1,0 +1,13 @@
+
+- ly.renderer:
+Move basics to platform-specific renderers.
+Game needs an own renderer that allows usage of game.status,
+which is game code and shouldn't be placed inside the
+ly.renderer...
+
+- game.renderer:
+Start rendering UI, make a proof of concept of how
+to abstract typical layouting stuff like borders,
+positions, relative coordinate translation etc.
+(maybe like the canvas plugin in editor?)
+

@@ -20,6 +20,10 @@ game = function(settings) {
 		this.console = null;
 	}
 
+
+	this.status = new game.status(this.settings.status);
+
+
 	if (this.settings.base !== null) {
 
 		this.loadPackage(this.settings.base, function() {
@@ -93,7 +97,8 @@ game.prototype = {
 				objects = this._world.objects.all();
 
 
-			this.renderer.clear();
+			// This will also refresh UI layers
+			this.renderer.refresh(delta);
 
 			for (var e in enemies) {
 				enemies[e].refresh(delta);
@@ -107,7 +112,7 @@ game.prototype = {
 
 			for (var o in objects) {
 				this.physics.refresh(objects[o], delta);
-				this.renderer.refresh(objects[o], delta);
+				this.renderer.refreshObject(objects[o], delta);
 			}
 
 
@@ -139,7 +144,7 @@ game.prototype = {
 		if (this.__state === 'running') return;
 
 		if (this.__state === 'ready') {
-			this.renderer = new ly.renderer(this.view, this.settings.debug);
+			this.renderer = new game.renderer(this.view, this.status, this.settings.debug);
 			this.renderer.start();
 		}
 
