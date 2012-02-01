@@ -98,7 +98,7 @@ game.prototype = {
 
 
 			// This will also refresh UI layers
-			this.renderer.refresh(delta);
+			this.renderer.clear();
 
 			for (var e in enemies) {
 				enemies[e].refresh(delta);
@@ -112,7 +112,7 @@ game.prototype = {
 
 			for (var o in objects) {
 				this.physics.refresh(objects[o], delta);
-				this.renderer.refreshObject(objects[o], delta);
+				this.renderer.drawObject(objects[o], delta);
 			}
 
 
@@ -144,8 +144,16 @@ game.prototype = {
 		if (this.__state === 'running') return;
 
 		if (this.__state === 'ready') {
-			this.renderer = new game.renderer(this.view, this.status, this.settings.debug);
+
+			var viewport = this.view.get('viewport');
+
+			this.renderer = new game.renderer(this.view, this.settings.debug);
+			this.renderer.reset(viewport.tile * viewport.size.x, viewport.tile * viewport.size.y, true);
+
+			this.view.setContext(this.renderer.context);
+
 			this.renderer.start();
+
 		}
 
 		this.__state = 'running';

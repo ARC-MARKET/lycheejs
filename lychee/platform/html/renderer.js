@@ -1,19 +1,9 @@
 
-ly.renderer = function(view, debug) {
+ly.renderer = function(debug) {
 
-	if (!view instanceof ly.view) {
-		throw 'Need a View instance to work properly';
-	}
-
-
-	this._view = view;
 	this.debug = debug || null;
 
 	this.__state = null;
-
-	// TODO: Does it makes sense to have an initial reset?
-	// Maybe dependend on the view?
-	// this.reset();
 
 };
 
@@ -39,19 +29,17 @@ ly.renderer.prototype = {
 
 	reset: function(width, height, resetCache) {
 
+
 		if (resetCache === true) {
 			this.__cache = {};
 		}
 
-		var viewport = this._view.get('viewport');
 
 		this.__canvas = document.createElement('canvas');
 		this.__ctx = this.__canvas.getContext('2d');
 
 		this.__canvas.width = width;
 		this.__canvas.height = height;
-
-		this._view.setContext(this.__canvas);
 
 		// required for requestAnimationFrame
 		this.context = this.__canvas;
@@ -76,16 +64,18 @@ ly.renderer.prototype = {
 
 	drawSprite: function(sprite, x, y, index) {
 
-		sprite = Object.prototype.toString.call(sprite) === '[object Object]' ? sprite : null;
-		index = typeof index === 'number' ? index : 0;
+		if (sprite instanceof Image) {
+			index = null;
+		} else if (Object.prototype.toString.call(sprite) === '[object Object]') {
+			index = typeof index === 'number' ? index : null;
+		}
 
-		if (sprite === null) return;
 
-		this.__ctx.drawImage(
-			sprite[index],
-			x,
-			y
-		);
+		if (index === null) {
+			this.__ctx.drawImage(sprite, x, y);
+		} else {
+			this.__ctx.drawImage(sprite[index], x, y);
+		}
 
 	},
 

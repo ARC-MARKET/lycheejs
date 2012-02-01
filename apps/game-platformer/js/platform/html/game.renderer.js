@@ -20,6 +20,17 @@ game.renderer = function(view, debug) {
 
 ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 
+	reset: function(width, height, resetCache) {
+
+		ly.renderer.prototype.reset.apply(this, arguments);
+
+
+		if (resetCache === true) {
+			this.__cache.sprites = {};
+		}
+
+	},
+
 	/*
 	 * This function will render per-Object.
 	 * The delta is used for animation timings.
@@ -46,9 +57,9 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 
 
 		// Render available Sprite
-		if (this.__spriteCache[model.id] !== undefined) {
+		if (this.__cache.sprites[model.id] !== undefined) {
 
-			var sprite = this.__spriteCache[model.id],
+			var sprite = this.__cache.sprites[model.id],
 				spriteState = model.getState(model.get('state')).sprite;
 
 			this.drawSprite(sprite.image, posX + spriteState.x, posY + spriteState.y);
@@ -56,8 +67,8 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 		} else {
 
 			var sprite = model.sprite;
-			if (sprite !== null) {
-				this.__spriteCache[model.id] = sprite;
+			if (sprite && sprite.image !== undefined) {
+				this.__cache.sprites[model.id] = sprite;
 			}
 
 		}
