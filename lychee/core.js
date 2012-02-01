@@ -29,6 +29,27 @@ if (typeof Date.now !== 'function') {
 }
 
 
+ly.extend = function(obj) {
+
+	for (var a = 1, al = arguments.length; a < al; a++) {
+
+		var obj2 = arguments[a];
+		if (obj2) {
+
+			for (var prop in obj2) {
+				obj[prop] = obj2[prop];
+			}
+
+		}
+
+	}
+
+
+	return obj;
+
+};
+
+
 ly.load = function(url, callback, scope) {
 
 	if (typeof url !== 'string') return;

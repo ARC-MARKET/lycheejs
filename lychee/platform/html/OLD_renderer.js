@@ -1,5 +1,5 @@
 
-game.renderer = function(view, debug) {
+ly.renderer = function(view, debug) {
 
 	if (!view instanceof ly.view) {
 		throw 'Need a View instance to work properly';
@@ -10,15 +10,64 @@ game.renderer = function(view, debug) {
 	this.debug = debug || null;
 
 	this.__state = null;
-
-	// TODO: Does it makes sense to have an initial reset?
-	// Maybe dependend on the view?
-	// this.reset();
+	this.__init();
+	this.reset();
 
 };
 
 
-ly.extend(game.renderer.prototype, ly.renderer.prototype, {
+ly.renderer.prototype = {
+
+	/*
+	 * PRIVATE API
+	 */
+	__init: function() {
+
+		var viewport = this._view.get('viewport');
+		this.__canvas = document.createElement('canvas');
+		this.__ctx = this.__canvas.getContext('2d');
+
+		this.__canvas.width = viewport.size.x * viewport.tile;
+		this.__canvas.height = viewport.size.y * viewport.tile;
+		this._view.setContext(this.__canvas);
+
+
+		// Required for requestAnimationFrame()
+		this.context = this.__canvas;
+
+	},
+
+
+
+	/*
+	 * PUBLIC API
+	 */
+	start: function() {
+		if (this.__state !== 'running') {
+			this.__state = 'running';
+		}
+	},
+
+	stop: function() {
+		this.__state = 'stopped';
+	},
+
+	isRunning: function() {
+		return this.__state === 'running';
+	},
+
+	clear: function() {
+
+		if (this.__state !== 'running') return;
+
+		var viewport = this._view.get('viewport');
+		this.__ctx.clearRect(0, 0, viewport.size.x * viewport.tile, viewport.size.y * viewport.tile);
+
+	},
+
+	reset: function() {
+		this.__spriteCache = {};
+	},
 
 	/*
 	 * This function will render per-Object.
@@ -27,7 +76,7 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 	 * @param {ly.object} object The rendered Object
 	 * @param {Number} delta The delta in milliseconds
 	 */
-	drawObject: function(object, delta) {
+	refresh: function(object, delta) {
 
 		if (this.__state !== 'running') return;
 
@@ -51,7 +100,11 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 			var sprite = this.__spriteCache[model.id],
 				spriteState = model.getState(model.get('state')).sprite;
 
-			this.drawSprite(sprite.image, posX + spriteState.x, posY + spriteState.y);
+			this.__ctx.drawImage(
+				sprite.image,
+				posX + spriteState.x,
+				posY + spriteState.y
+			);
 
 		} else {
 
@@ -63,7 +116,6 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 		}
 
 
-		// TODO: Render boundingBoxes for debugging
 		if (bb !== null && this.debug !== null) {
 
 			// Render Position Rectangle
@@ -88,5 +140,4 @@ ly.extend(game.renderer.prototype, ly.renderer.prototype, {
 
 	}
 
-});
-
+};
