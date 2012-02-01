@@ -1,5 +1,5 @@
 
-game.renderer = function(view, status, debug) {
+game.renderer = function(view, debug) {
 
 	if (!view instanceof ly.view) {
 		throw 'Need a View instance to work properly';
@@ -7,38 +7,18 @@ game.renderer = function(view, status, debug) {
 
 
 	this._view = view;
-	this._status = status;
 	this.debug = debug || null;
 
 	this.__state = null;
-	this.__init();
-	this.reset();
+
+	// TODO: Does it makes sense to have an initial reset?
+	// Maybe dependend on the view?
+	// this.reset();
 
 };
 
 
 game.renderer.prototype = {
-
-	/*
-	 * PRIVATE API
-	 */
-	__init: function() {
-
-		var viewport = this._view.get('viewport');
-		this.__canvas = document.createElement('canvas');
-		this.__ctx = this.__canvas.getContext('2d');
-
-		this.__canvas.width = viewport.size.x * viewport.tile;
-		this.__canvas.height = viewport.size.y * viewport.tile;
-		this._view.setContext(this.__canvas);
-
-
-		// Required for requestAnimationFrame()
-		this.context = this.__canvas;
-
-	},
-
-
 
 	/*
 	 * PUBLIC API
@@ -57,9 +37,73 @@ game.renderer.prototype = {
 		return this.__state === 'running';
 	},
 
-	reset: function() {
-		this.__spriteCache = {};
+	reset: function(width, height, resetCache) {
+
+		if (resetCache === true) {
+			this.__cache = {};
+		}
+
+		var viewport = this._view.get('viewport');
+
+		this.__canvas = document.createElement('canvas');
+		this.__ctx = this.__canvas.getContext('2d');
+
+		this.__canvas.width = width;
+		this.__canvas.height = height;
+
+		this._view.setContext(this.__canvas);
+
+		// required for requestAnimationFrame
+		this.context = this.__canvas;
+
 	},
+
+	clear: function() {
+
+		if (this.__state !== 'running') return;
+
+		this.__ctx.clearRect(0, 0, this.__canvas.width, this.__canvas.height);
+
+	},
+
+	drawBox: function(x1, y1, x2, y2, color) {
+
+		color = typeof color === 'string' ? color : '#000';
+
+		throw 'Not implemented yet';
+
+	},
+
+	drawSprite: function(sprite, x, y, index) {
+
+		sprite = Object.prototype.toString.call(sprite) === '[object Object]' ? sprite : null;
+		index = typeof index === 'number' ? index : 0;
+
+		if (sprite === null) return;
+
+		this.__ctx.drawImage(
+			sprite[index],
+			x,
+			y
+		);
+
+	},
+
+	drawText: function(text, x, y, sprite, color) {
+
+		sprite = Object.prototype.toString.call(sprite) === '[object Object]' ? sprite : null;
+		color = typeof color === 'string' ? color : '#000';
+
+		// bitmap rendering
+		if (sprite !== null) {
+
+		} else {
+		}
+
+	},
+
+
+
 
 	refresh: function(delta) {
 
@@ -75,7 +119,7 @@ game.renderer.prototype = {
 
 			var score = this._status.get('score');
 
-			throw "NEXT TODO: render UI and its abstraction layer for layouting.";
+			// throw "NEXT TODO: render UI and its abstraction layer for layouting.";
 
 		}
 
