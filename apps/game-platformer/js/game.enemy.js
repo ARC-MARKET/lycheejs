@@ -1,5 +1,5 @@
 
-game.enemy = function(settings, object, world) {
+game.enemy = function(settings, object, world, game) {
 
 	this.settings = {};
 
@@ -18,6 +18,7 @@ game.enemy = function(settings, object, world) {
 	this.__object.enemy = this;
 
 	this._world = world;
+	this._game = game;
 
 	this.__init();
 
@@ -57,6 +58,8 @@ game.enemy.prototype = {
 		this._world.objects.remove(this.__object.id);
 
 		this.__destroyed = true;
+
+		this._game.onDestroy(this);
 
 	},
 

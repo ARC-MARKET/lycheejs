@@ -1,5 +1,5 @@
 
-game.player = function(settings, object, world) {
+game.player = function(settings, object, world, game) {
 
 	this.settings = {
 		controls: {
@@ -44,6 +44,7 @@ game.player = function(settings, object, world) {
 	this.id = this.__object.id;
 
 	this._world = world;
+	this._game = game;
 
 	this.__init();
 
@@ -170,7 +171,7 @@ game.player.prototype = {
 
 		this.__destroyed = true;
 
-		console.warn('Player ' + this.__object.id + ' died.');
+		this._game.onDestroy(this);
 
 	},
 

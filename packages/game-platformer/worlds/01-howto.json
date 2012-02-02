@@ -26,10 +26,10 @@
 		"model": "test-310"
 	}],
 	"quests": [{
+		"description": "Kill someone!",
 		"type": "collect",
 		"criteria": {
-			"coins": 3,
-			"stars": 3
+			"kills": 1
 		},
 		"success": {
 		},

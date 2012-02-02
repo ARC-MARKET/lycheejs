@@ -1,21 +1,16 @@
 
-game.quests = function(settings, status) {
+game.quests = function(quests, status) {
 
-	if (Object.prototype.toString.call(settings) !== '[object Object]') {
-		return;
-	}
-
+	this._status = status;
 
 	var questId = 0;
-
-	this.__status = status;
 	this.__quests = {};
 
-	if (Object.prototype.toString.call(settings.quests) === '[object Array]') {
+	if (Object.prototype.toString.call(quests) === '[object Array]') {
 
-		for (var q = 0, l = settings.quests.length; q < l; q++) {
+		for (var q = 0, l = quests.length; q < l; q++) {
 
-			var quest = settings.quests[q];
+			var quest = quests[q];
 
 			if (this.isValidQuest(quest) === true) {
 				this.__quests[questId++] = quest;
@@ -25,28 +20,22 @@ game.quests = function(settings, status) {
 
 	}
 
-	this.__init();
-
 };
 
 game.quests.prototype = {
-
-	defaults: {
-		onSuccess: null,
-		onFailure: null
-	},
-
-
 
 	/*
 	 * PRIVATE API
 	 */
 	__onSuccess: function(quest) {
 
-		console.log('onsuccess', quest.id, quest);
+		console.log('quest success', quest.id, quest);
 
 	},
 
+	/*
+	 * PUBLIC API
+	 */
 	refresh: function() {
 
 		for (var id in this.__quests) {
@@ -78,7 +67,7 @@ game.quests.prototype = {
 		if (quest.type === 'collect') {
 
 			for (var property in quest.criteria) {
-				if (this.__status.get(property) < quest.criteria) {
+				if (this._status.get(property) < quest.criteria[property]) {
 					completed = false;
 				}
 			}

@@ -114,9 +114,11 @@ game.prototype = {
 			}
 
 			this.camera.refresh(delta);
-
 			this.physics.refresh(this._world.objects, delta);
+			this.quests.refresh();
 
+
+			// draw everything now
 			for (var o in objects) {
 				this.renderer.drawObject(objects[o], delta);
 			}
@@ -262,7 +264,8 @@ game.prototype = {
 					this._world.players.add(new game.player(
 						this.settings.player,
 						object,
-						this._world
+						this._world,
+						this
 					));
 
 				} else if (data.enemy !== undefined) {
@@ -270,7 +273,8 @@ game.prototype = {
 					this._world.enemies.add(new game.enemy(
 						data.enemy,
 						object,
-						this._world
+						this._world,
+						this
 					));
 
 				}
@@ -303,8 +307,24 @@ game.prototype = {
 
 
 		if (Object.prototype.toString.call(world.quests) === '[object Array]') {
-			this.quests = new game.quests(world.quests);
+			this.quests = new game.quests(world.quests, this.status);
 		}
+
+	},
+
+
+
+	/*
+	 * "EVENTS"
+	 */
+	onDestroy: function(object) {
+
+		if (object instanceof game.enemy) {
+			this.status.add('score', 100);
+			this.status.add('kills', 1);
+		}
+
+		console.log(object, 'destroyed');
 
 	}
 
