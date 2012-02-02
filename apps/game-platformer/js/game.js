@@ -214,16 +214,9 @@ game.prototype = {
 
 		this.console !== null && this.console.log('Loading World', world.id);
 
-
-		// Update Physics Gravity
-		this.physics.setGravity(
-			typeof world.gravity === 'number' ? world.gravity : 1
-		);
-
-
-		// Update the Z-Collision Type
-		// FIXME: Improve defaults to 3D Z-Collision
-		this.physics.setZCollision(world.zCollision || 'layer');
+		// Update Physics
+		this.physics.set('gravity',    world.gravity || 1);
+		this.physics.set('zCollision', world.zCollision || 'layer');
 
 
 		if (Object.prototype.toString.call(world.objects) === '[object Array]') {
@@ -302,8 +295,8 @@ game.prototype = {
 
 
 			this.console !== null && this.console.log('> Setting Boundaries', boundaries);
+			this.physics.set('boundaries', boundaries);
 
-			this.physics.setBoundaries(boundaries);
 			this.__state = 'ready';
 
 		}

@@ -278,7 +278,10 @@ ly.physics.prototype = {
 			// 2. apply collisions
 			for (var ooId in objects) {
 
-				if (this.__collisions[ooId] !== undefined) {
+				if (
+					this.__collisions[ooId] !== undefined
+					|| objects[oId] === objects[ooId]
+				) {
 					continue;
 				}
 
@@ -356,6 +359,34 @@ ly.physics.prototype = {
 	/*
 	 * SETTINGS
 	 */
+	set: function(property, data) {
+
+		var method = 'set' + property.charAt(0).toUpperCase() + property.substr(1);
+		if (this[method] instanceof Function) {
+			return this[method](data);
+		}
+
+		if (this.settings[property] !== undefined) {
+
+			if (
+				Object.prototype.toString.call(this.settings[property]) === '[object Object]'
+				&& Object.prototype.toString.call(data) === '[object Object]'
+			) {
+				for (var d in data) {
+					this.settings[property][d] = data[d];
+				}
+			} else {
+				this.settings[property] = data;
+			}
+
+			return true;
+
+		}
+
+		return false;
+
+	},
+
 	setBoundaries: function(boundaries) {
 
 		if (Object.prototype.toString.call(boundaries) === '[object Object]' || boundaries === null) {
@@ -377,28 +408,6 @@ ly.physics.prototype = {
 		}
 
 		return false;
-
-	},
-
-	setGravity: function(value) {
-
-		if (typeof value === 'number') {
-			this.settings.gravity = value;
-			return true;
-		}
-
-		return false;
-
-	},
-
-	setZCollision: function(type) {
-
-		if (type !== true && type !== false && type !== 'layer') {
-			return false;
-		}
-
-		this.settings.zCollision = type;
-		return true;
 
 	}
 
