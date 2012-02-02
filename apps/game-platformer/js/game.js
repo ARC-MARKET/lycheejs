@@ -31,7 +31,7 @@ game = function(settings) {
 			this.resetWorld();
 
 			this.view = new ly.view(this.settings.view);
-			this.physics = new game.physics(this._world, this);
+			this.physics = new game.physics(this.settings.physics, this);
 
 			this.loadWorld(this.settings.world);
 
@@ -70,6 +70,11 @@ game.prototype = {
 			size: {
 				x: 20, y: 10
 			}
+		},
+		physics: {
+			gravity: 1.2,
+			boundaries: null,
+			zCollision: 'layer'
 		},
 
 		// Game Settings

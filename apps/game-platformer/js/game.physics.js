@@ -1,44 +1,20 @@
 
-game.physics = function(world, game) {
+game.physics = function(settings, game) {
 
-	this._world = world;
 	this._game = game;
 
-
-	var that = this;
-
-	this._physics = new ly.physics(this._world.objects, {
-		onCollision: function(delta, a, b) {
-			return that.__onCollision(delta, a, b);
-		}
-	});
+	// Initialize settings
+	ly.physics.call(this, settings);
 
 };
 
 
-
-game.physics.prototype = {
+ly.extend(game.physics.prototype, ly.physics.prototype, {
 
 	/*
-	 * ly.physics wrapper API
+	 * PRIVATE API
 	 */
-	refresh: function(cache, delta) {
-		this._physics.refresh(cache, delta);
-	},
-
-	setBoundaries: function(boundaries) {
-		this._physics.setBoundaries(boundaries);
-	},
-
-	setGravity: function(gravity) {
-		this._physics.setGravity(gravity);
-	},
-
-	setZCollision: function(type) {
-		this._physics.setZCollision(type);
-	},
-
-	__collide: function(direction, delta, object, oObject) {
+	__applyCollision: function(direction, delta, object, oObject) {
 
 		var overallSpeed = Math.abs(object.speed[direction]) + Math.abs(oObject.speed[direction]),
 			overallMass = object.get('mass') + oObject.get('mass'),
@@ -60,7 +36,12 @@ game.physics.prototype = {
 
 	},
 
-	__onCollision: function(delta, object, oObject) {
+
+
+	/*
+	 * PUBLIC API
+	 */
+	onCollision: function(delta, object, oObject) {
 
 		// Player has jumped on an enemy
 		if (
@@ -83,7 +64,7 @@ game.physics.prototype = {
 				object.player.hit();
 			}
 
-			this.__collide('x', delta.x, object, oObject);
+			this.__applyCollision('x', delta.x, object, oObject);
 			return true;
 
 		}
@@ -98,7 +79,7 @@ game.physics.prototype = {
 				return true;
 
 			} else {
-				this.__collide('y', delta.x, object, oObject);
+				this.__applyCollision('y', delta.x, object, oObject);
 				return true;
 			}
 
@@ -111,5 +92,5 @@ game.physics.prototype = {
 
 	}
 
-};
+});
 

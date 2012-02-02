@@ -33,91 +33,6 @@ ly.physics.prototype = {
 	/*
 	 * PRIVATE API
 	 */
-	__checkCollisions: function(object, oObject, delta) {
-
-		var collisionDelta = this.__getCollisionDelta(object, oObject, delta);
-
-		if (collisionDelta.x !== null || collisionDelta.y !== null || collisionDelta.z !== null) {
-			return this.onCollision(collisionDelta, object, oObject);
-		}
-
-	},
-
-	onCollision: function(collisionDelta, object, oObject) {
-
-		if (oObject.get('type') !== 'static') {
-			var mass = object.get('mass'),
-				oMass = oObject.get('mass'),
-				massBalance = mass / (mass + oMass),
-				oMassBalance = oMass / (mass + oMass);
-		}
-
-
-		/*
-		 * TODO: Z-Collision
-		 */
-
-
-		/*
-		 * Y-Collision
-		 */
-		if (collisionDelta.y) {
-
-			if (oObject.get('type') === 'static') {
-				object.position.y += collisionDelta.y;
-				object.speed.y = 0;
-			} else {
-
-				var overallSpeed = Math.abs(object.speed.y) + Math.abs(oObject.speed.y),
-					speedBalance = Math.abs(object.speed.y) / overallSpeed,
-					oSpeedBalance = Math.abs(oObject.speed.y) / overallSpeed;
-
-				object.position.y -= collisionDelta.y * speedBalance;
-				oObject.position.y += collisionDelta.y * oSpeedBalance;
-
- 				object.speed.y = -1 * object.speed.y + -1 * collisionDelta.y * massBalance;
-				oObject.speed.y = -1 * oObject.speed.y + collisionDelta.y * oMassBalance;
-			}
-
-		}
-
-
-		/*
-		 * X-Collision
-		 */
-		if (collisionDelta.x) {
-
-			if (oObject.get('type') === 'static') {
-				object.position.x += collisionDelta.x;
-				object.speed.x = 0;
-			} else {
-
-				var overallSpeed = Math.abs(object.speed.x) + Math.abs(oObject.speed.x),
-					speedBalance = Math.abs(object.speed.x) / overallSpeed,
-					oSpeedBalance = Math.abs(oObject.speed.x) / overallSpeed;
-
-				object.position.x -= collisionDelta.x * speedBalance;
-				oObject.position.x += collisionDelta.x * oSpeedBalance;
-
-				object.speed.x = -1 * object.speed.x + -1 * collisionDelta.x * massBalance;
-				oObject.speed.x = -1 * oObject.speed.x + collisionDelta.x * oMassBalance;
-			}
-
-		}
-
-		if (collisionDelta.x !== null || collisionDelta.y !== null) {
-			return true;
-		}
-
-	},
-
-	__updateGravity: function(object, delta) {
-
-		var gravity = this.settings.gravity;
-		object.speed.y = object.speed.y - (object.get('mass') * delta * gravity);
-
-	},
-
 	__getCollisionDelta: function(object, otherObject, delta) {
 
 		var bb = object.model.getBoundingBox(),
@@ -249,10 +164,91 @@ ly.physics.prototype = {
 	},
 
 
+
 	/*
 	 * PUBLIC API
 	 */
+	onCollision: function(collisionDelta, object, oObject) {
+
+		if (oObject.get('type') !== 'static') {
+
+			var mass = object.get('mass'),
+				oMass = oObject.get('mass'),
+				massBalance = mass / (mass + oMass),
+				oMassBalance = oMass / (mass + oMass);
+
+		}
+
+
+		/*
+		 * TODO: Z-Collision
+		 */
+
+
+		/*
+		 * Y-Collision
+		 */
+		if (collisionDelta.y) {
+
+			if (oObject.get('type') === 'static') {
+
+				object.position.y += collisionDelta.y;
+				object.speed.y = 0;
+
+			} else {
+
+				var overallSpeed = Math.abs(object.speed.y) + Math.abs(oObject.speed.y),
+					speedBalance = Math.abs(object.speed.y) / overallSpeed,
+					oSpeedBalance = Math.abs(oObject.speed.y) / overallSpeed;
+
+				object.position.y -= collisionDelta.y * speedBalance;
+				oObject.position.y += collisionDelta.y * oSpeedBalance;
+
+ 				object.speed.y = -1 * object.speed.y + -1 * collisionDelta.y * massBalance;
+				oObject.speed.y = -1 * oObject.speed.y + collisionDelta.y * oMassBalance;
+
+			}
+
+		}
+
+
+		/*
+		 * X-Collision
+		 */
+		if (collisionDelta.x) {
+
+			if (oObject.get('type') === 'static') {
+
+				object.position.x += collisionDelta.x;
+				object.speed.x = 0;
+
+			} else {
+
+				var overallSpeed = Math.abs(object.speed.x) + Math.abs(oObject.speed.x),
+					speedBalance = Math.abs(object.speed.x) / overallSpeed,
+					oSpeedBalance = Math.abs(oObject.speed.x) / overallSpeed;
+
+				object.position.x -= collisionDelta.x * speedBalance;
+				oObject.position.x += collisionDelta.x * oSpeedBalance;
+
+				object.speed.x = -1 * object.speed.x + -1 * collisionDelta.x * massBalance;
+				oObject.speed.x = -1 * oObject.speed.x + collisionDelta.x * oMassBalance;
+
+			}
+
+		}
+
+		if (collisionDelta.x !== null || collisionDelta.y !== null) {
+			return true;
+		}
+
+	},
+
 	refresh: function(cache, timeDelta) {
+
+		// Nothing to do
+		if (timeDelta === 0) return;
+
 
 		var delta = timeDelta / 1000;
 
@@ -275,7 +271,7 @@ ly.physics.prototype = {
 
 			// 1. apply gravity
 			if (object.stickedX === undefined && object.stickedY === undefined){
-				this.__updateGravity(object, delta);
+				this.refreshGravity(object, delta);
 			}
 
 
@@ -288,7 +284,13 @@ ly.physics.prototype = {
 
 				var otherObject = objects[ooId];
 
-				var collided = this.__checkCollisions(object, otherObject, delta);
+				var collisionDelta = this.__getCollisionDelta(object, otherObject, delta),
+					collided = false;
+
+				if (collisionDelta.x !== null || collisionDelta.y !== null || collisionDelta.z !== null) {
+					collided = this.onCollision(collisionDelta, object, otherObject);
+				}
+
 				if (collided === true) {
 					this.__collisions[oId] = ooId;
 					this.__collisions[ooId] = oId;
@@ -297,36 +299,63 @@ ly.physics.prototype = {
 			}
 
 			// 3. update position
-			this.updatePosition(object, delta);
+			this.refreshPosition(object, delta);
 
 		}
 
 	},
 
-	OLD____refresh: function(object, timeDelta) {
+	refreshGravity: function(object, delta) {
 
-		if (typeof timeDelta !== 'number' || timeDelta <= 0) {
+		var gravity = this.settings.gravity;
+		object.speed.y = object.speed.y - (object.get('mass') * delta * gravity);
+
+	},
+
+	refreshPosition: function(object, delta) {
+
+		// Skip if position was already updated by collision deltas
+		if (this.__collisions[object.id] !== undefined) {
 			return;
 		}
 
-		// Physics are all in tile-delta
-		var delta = timeDelta / 1000;
+		var boundaries = this.settings.boundaries,
+			newPosition = {
+				x: object.position.x + object.speed.x * delta,
+				y: object.position.y + object.speed.y * delta,
+				z: object.position.z + object.speed.z * delta
+			};
 
-		this.__collisionCache = {};
 
-		if (object.get('type') === 'dynamic') {
+		if (boundaries !== null) {
 
-			if (object.stickedX === undefined && object.stickedY === undefined){
-				this.__updateGravity(object, delta);
+			var bb = object.model.getBoundingBox();
+			newPosition.x = Math.min(boundaries.maxX - bb.maxX, Math.max(Math.abs(bb.minX), newPosition.x));
+			newPosition.y = Math.min(boundaries.maxY - bb.maxY, Math.max(Math.abs(bb.minY), newPosition.y));
+			newPosition.z = Math.min(boundaries.maxZ - bb.maxZ, Math.max(Math.abs(bb.minZ), newPosition.z));
+
+
+			if (newPosition.x === Math.abs(bb.minX) || newPosition.x === (boundaries.maxX - bb.maxX)) {
+				object.speed.x = 0;
 			}
 
-			this.__checkCollisions(object, delta);
-			this.updatePosition(object, delta);
+			if (newPosition.y === Math.abs(bb.minY) || newPosition.y === (boundaries.maxY - bb.maxY)) {
+				object.speed.y = 0;
+			}
+
+			// FIXME: Think about a configuration for z-layered boundaries.
 
 		}
 
+		object.position = newPosition;
+
 	},
 
+
+
+	/*
+	 * SETTINGS
+	 */
 	setBoundaries: function(boundaries) {
 
 		if (Object.prototype.toString.call(boundaries) === '[object Object]' || boundaries === null) {
@@ -371,45 +400,7 @@ ly.physics.prototype = {
 		this.settings.zCollision = type;
 		return true;
 
-	},
-
-	updatePosition: function(object, delta) {
-
-		// Skip if position was already updated by collision deltas
-		if (this.__collisions[object.id] !== undefined) {
-			return;
-		}
-
-		var boundaries = this.settings.boundaries,
-			newPosition = {
-				x: object.position.x + object.speed.x * delta,
-				y: object.position.y + object.speed.y * delta,
-				z: object.position.z + object.speed.z * delta
-			};
-
-
-		if (boundaries !== null) {
-
-			var bb = object.model.getBoundingBox();
-			newPosition.x = Math.min(boundaries.maxX - bb.maxX, Math.max(Math.abs(bb.minX), newPosition.x));
-			newPosition.y = Math.min(boundaries.maxY - bb.maxY, Math.max(Math.abs(bb.minY), newPosition.y));
-			newPosition.z = Math.min(boundaries.maxZ - bb.maxZ, Math.max(Math.abs(bb.minZ), newPosition.z));
-
-
-			if (newPosition.x === Math.abs(bb.minX) || newPosition.x === (boundaries.maxX - bb.maxX)) {
-				object.speed.x = 0;
-			}
-
-			if (newPosition.y === Math.abs(bb.minY) || newPosition.y === (boundaries.maxY - bb.maxY)) {
-				object.speed.y = 0;
-			}
-
-			// FIXME: Think about a configuration for z-layered boundaries.
-
-		}
-
-		object.position = newPosition;
-
 	}
 
-}
+};
+
