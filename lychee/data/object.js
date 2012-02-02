@@ -106,7 +106,7 @@ ly.object.prototype = {
 
 				// This is kinda false... but havent figured out why.
 				x: point.x * Math.cos(tx) + point.y * Math.sin(tx),
-				y: point.x * Math.sin(tx) + point.y * Math.cos(tx)
+				y: - point.x * Math.sin(tx) + point.y * Math.cos(tx)
 
 //				var Xx =  Math.cos(angle) * this.w, Xy = Math.sin(angle) * this.w,
 //              Yx = -Math.sin(angle) * this.h, Yy = Math.cos(angle) * this.h;
