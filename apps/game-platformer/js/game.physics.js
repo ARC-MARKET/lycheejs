@@ -22,8 +22,8 @@ game.physics.prototype = {
 	/*
 	 * ly.physics wrapper API
 	 */
-	refresh: function(object, delta) {
-		this._physics.refresh(object, delta);
+	refresh: function(cache, delta) {
+		this._physics.refresh(cache, delta);
 	},
 
 	setBoundaries: function(boundaries) {

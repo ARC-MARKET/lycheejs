@@ -110,8 +110,9 @@ game.prototype = {
 
 			this.camera.refresh(delta);
 
+			this.physics.refresh(this._world.objects, delta);
+
 			for (var o in objects) {
-				this.physics.refresh(objects[o], delta);
 				this.renderer.drawObject(objects[o], delta);
 			}
 

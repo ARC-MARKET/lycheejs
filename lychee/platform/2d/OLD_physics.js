@@ -1,5 +1,11 @@
 
-ly.physics = function(settings) {
+ly.physics = function(cache, settings) {
+
+	if (!cache instanceof ly.cache) {
+		throw 'Need a Cache to work properly';
+	}
+
+	this._cache = cache;
 
 	this.settings = {};
 	for (var d in this.defaults) {
@@ -10,6 +16,12 @@ ly.physics = function(settings) {
 		for (var s in settings) {
 			this.settings[s] = settings[s];
 		}
+	}
+
+	if (this.settings.onCollision instanceof Function) {
+		this.onCollision = this.settings.onCollision;
+	} else {
+		this.onCollision = this.__onCollision;
 	}
 
 };
@@ -33,17 +45,40 @@ ly.physics.prototype = {
 	/*
 	 * PRIVATE API
 	 */
-	__checkCollisions: function(object, oObject, delta) {
+	__checkCollisions: function(object, delta) {
 
-		var collisionDelta = this.__getCollisionDelta(object, oObject, delta);
+		var otherObjects = this._cache.all();
 
-		if (collisionDelta.x !== null || collisionDelta.y !== null || collisionDelta.z !== null) {
-			return this.onCollision(collisionDelta, object, oObject);
+		for (var o in otherObjects) {
+
+			var oObject = otherObjects[o];
+
+			// Ignore applied collisions for current Physics delta
+			if (
+				object === oObject
+				|| this.__collisionCache[object.id] === oObject.id
+			) {
+				continue;
+			}
+
+
+			var collisionDelta = this.__getCollisionDelta(object, oObject, delta);
+
+			if (collisionDelta.x !== null || collisionDelta.y !== null || collisionDelta.z !== null) {
+
+				var collided = this.onCollision(collisionDelta, object, oObject);
+				if (collided === true) {
+					this.__collisionCache[object.id] = oObject.id;
+					this.__collisionCache[oObject.id] = object.id;
+				}
+
+			}
+
 		}
 
 	},
 
-	onCollision: function(collisionDelta, object, oObject) {
+	__onCollision: function(collisionDelta, object, oObject) {
 
 		if (oObject.get('type') !== 'static') {
 			var mass = object.get('mass'),
@@ -252,58 +287,7 @@ ly.physics.prototype = {
 	/*
 	 * PUBLIC API
 	 */
-	refresh: function(cache, timeDelta) {
-
-		var delta = timeDelta / 1000;
-
-		this.__collisions = {};
-
-		var objects = cache.all();
-
-		// object to check against
-		for (var oId in objects) {
-
-			if (
-				this.__collisions[oId] !== undefined
-				|| objects[oId].get('type') === 'static'
-			) {
-				continue;
-			}
-
-			var object = objects[oId];
-
-
-			// 1. apply gravity
-			if (object.stickedX === undefined && object.stickedY === undefined){
-				this.__updateGravity(object, delta);
-			}
-
-
-			// 2. apply collisions
-			for (var ooId in objects) {
-
-				if (this.__collisions[ooId] !== undefined) {
-					continue;
-				}
-
-				var otherObject = objects[ooId];
-
-				var collided = this.__checkCollisions(object, otherObject, delta);
-				if (collided === true) {
-					this.__collisions[oId] = ooId;
-					this.__collisions[ooId] = oId;
-				}
-
-			}
-
-			// 3. update position
-			this.updatePosition(object, delta);
-
-		}
-
-	},
-
-	OLD____refresh: function(object, timeDelta) {
+	refresh: function(object, timeDelta) {
 
 		if (typeof timeDelta !== 'number' || timeDelta <= 0) {
 			return;
@@ -376,7 +360,7 @@ ly.physics.prototype = {
 	updatePosition: function(object, delta) {
 
 		// Skip if position was already updated by collision deltas
-		if (this.__collisions[object.id] !== undefined) {
+		if (this.__collisionCache[object.id] !== undefined) {
 			return;
 		}
 
