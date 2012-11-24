@@ -70,6 +70,11 @@ lychee.define('Input').tags({
 			27: 'escape',
 			32: 'space',
 
+			37: 'left',
+			38: 'up',
+			39: 'right',
+			40: 'down',
+
 			48: '0',
 			49: '1',
 			50: '2',
