@@ -460,11 +460,12 @@ lychee.define('Renderer').tags({
 
 		},
 
-		drawText: function(x1, y1, text, font) {
+		drawText: function(x1, y1, text, font, center) {
 
 			if (this.__state !== 'running') return;
 
 			font = font instanceof lychee.Font ? font : null;
+			center = center === true;
 
 
 			if (font !== null) {
@@ -475,27 +476,24 @@ lychee.define('Renderer').tags({
 
 				var chr, t, l;
 
-				// Measure text if we have to center it later
-				if (x1 === 'center' || y1 === 'center') {
+				if (center === true) {
 
-					var width = 0,
-						height = 0;
+					var textwidth  = 0;
+					var textheight = 0;
 
-					for (t = 0, l = text.length; t < l; t++)  {
+					for (t = 0, l = text.length; t < l; t++) {
 						chr = font.get(text[t]);
-						width += chr.real + settings.kerning;
-						height = Math.max(height, chr.height);
+						textwidth += chr.real + settings.kerning;
+						textheight = Math.max(textheight, chr.height);
 					}
 
-					if (x1 === 'center') {
-						x1 = (this.__width / 2) - (width / 2);
-					}
-
-					if (y1 === 'center') {
-						y1 = (this.__height / 2) - (height / 2);
-					}
+					x1 -= textwidth / 2;
+					y1 -= (textheight - settings.baseline) / 2;
 
 				}
+
+
+				y1 -= settings.baseline / 2;
 
 
 				var margin = 0;
@@ -525,7 +523,7 @@ lychee.define('Renderer').tags({
 						chr.width,
 						chr.height,
 						x1 + margin - settings.spacing,
-						y1 + settings.baseline,
+						y1,
 						chr.width,
 						chr.height
 					);

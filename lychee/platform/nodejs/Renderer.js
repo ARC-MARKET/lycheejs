@@ -125,7 +125,7 @@ lychee.define('Renderer').tags({
 
 		drawSprite: function(x1, y1, sprite, map) {},
 
-		drawText: function(x1, y1, text, font) {},
+		drawText: function(x1, y1, text, font, center) {},
 
 		drawTriangle: function(x1, y1, x2, y2, x3, y3, color, background, lineWidth) {}
 
