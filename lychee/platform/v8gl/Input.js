@@ -369,7 +369,20 @@ lychee.define('Input').tags({
 
 		__processTouch: function(id, x, y) {
 
-			if (this.__fireTouch === false) return;
+			if (
+				this.__fireTouch === false
+				&& this.__fireSwipe === true
+			) {
+
+				if (this.__swipes[id] === null) {
+					this.__processSwipe(id, 'start', x, y);
+				}
+
+				return;
+
+			} else if (this.__fireTouch === false) {
+				return;
+			}
 
 
 			// 1. Only fire after the enforced delay
