@@ -404,11 +404,7 @@ lychee.define('Input').tags({
 			}
 
 
-			// Don't cancel the swipe event by default
-			var cancelSwipe = this.trigger(
-				'touch',
-				[ id, { x: x, y: y }, delta ]
-			) === true;
+			this.trigger('touch', [ id, { x: x, y: y }, delta ]);
 
 
 			// 2. Fire known Touchareas
@@ -435,10 +431,7 @@ lychee.define('Input').tags({
 
 
 			// 3. Fire Swipe Start, but only for tracked touches
-			if (
-				cancelSwipe !== true
-				&& this.__swipes[id] === null
-			) {
+			if (this.__swipes[id] === null) {
 				this.__processSwipe(id, 'start', x, y);
 			}
 
