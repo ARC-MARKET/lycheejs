@@ -5,7 +5,7 @@ lychee.define('tool.FontGenerator').tags({
 	'lychee.Font',
 	'ui.Main'
 ]).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).exports(function(lychee, global) {
 
 	var Class = function(canvas) {
@@ -13,7 +13,7 @@ lychee.define('tool.FontGenerator').tags({
 		this.__canvas = canvas instanceof HTMLCanvasElement ? canvas : document.createElement('canvas');
 		this.__ctx = this.__canvas.getContext('2d');
 
-		lychee.Events.call(this, 'fonttool');
+		lychee.event.Emitter.call(this, 'fonttool');
 
 	};
 

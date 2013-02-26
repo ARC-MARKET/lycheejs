@@ -2,7 +2,7 @@
 lychee.define('Input').tags({
 	platform: 'nodejs'
 }).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
 	if (
@@ -97,7 +97,7 @@ lychee.define('Input').tags({
 		this.reset();
 
 
-		lychee.Events.call(this, 'input');
+		lychee.event.Emitter.call(this, 'input');
 
 		_instances.push(this);
 

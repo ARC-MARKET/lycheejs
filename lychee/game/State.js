@@ -1,6 +1,6 @@
 
 lychee.define('lychee.game.State').includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).exports(function(lychee) {
 
 	var Class = function(game, id) {
@@ -8,7 +8,7 @@ lychee.define('lychee.game.State').includes([
 		this.game = game;
 		this.id = id;
 
-		lychee.Events.call(this, 'state-' + id);
+		lychee.event.Emitter.call(this, 'state-' + id);
 
 	};
 

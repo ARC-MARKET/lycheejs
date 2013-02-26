@@ -1,6 +1,6 @@
 
 lychee.define('lychee.game.Loop').includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
 	if (typeof setInterval === 'function') {
@@ -68,7 +68,7 @@ lychee.define('lychee.game.Loop').includes([
 		this.__intervals = {};
 		this.__state = 'running';
 
-		lychee.Events.call(this, 'loop');
+		lychee.event.Emitter.call(this, 'loop');
 
 
 		var ok = this.reset(settings.update, settings.render);

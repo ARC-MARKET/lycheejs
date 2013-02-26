@@ -6,7 +6,7 @@ lychee.define('tool.UIGenerator').tags({
 	'lychee.ui.Text',
 	'lychee.ui.Sprite'
 ]).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).exports(function(lychee, global) {
 
 	var Class = function() {
@@ -14,7 +14,7 @@ lychee.define('tool.UIGenerator').tags({
 		this.__canvas = document.createElement('canvas');
 		this.__context = this.__canvas.getContext('2d');
 
-		lychee.Events.call(this, 'uigenerator');
+		lychee.event.Emitter.call(this, 'uigenerator');
 
 	};
 

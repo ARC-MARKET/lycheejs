@@ -1,6 +1,6 @@
 
 lychee.define('ui.Textarea').includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).tags({
 	platform: 'html'
 }).exports(function(lychee, global) {
@@ -37,7 +37,7 @@ lychee.define('ui.Textarea').includes([
 
 		};
 
-		lychee.Events.call(this, 'textarea');
+		lychee.event.Emitter.call(this, 'textarea');
 
 		this.set(value);
 

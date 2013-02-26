@@ -2,7 +2,7 @@
 lychee.define('Viewport').tags({
 	platform: 'v8gl'
 }).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
 	if (global.glut) {
@@ -82,7 +82,7 @@ lychee.define('Viewport').tags({
 		this.__height = 0;
 
 
-		lychee.Events.call(this, 'viewport');
+		lychee.event.Emitter.call(this, 'viewport');
 
 		_instances.push(this);
 

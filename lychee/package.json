@@ -57,6 +57,11 @@
 
 		},
 
+		"event": {
+			"Emitter": [ "js" ],
+			"Promise": [ "js" ]
+		},
+
 		"game": {
 			"Entity": [ "js" ],
 			"Graph": [ "js" ],
@@ -90,8 +95,7 @@
 			"Tile": [ "js" ]
 		},
 
-		"Font": [ "js" ],
-		"Events": [ "js" ]
+		"Font": [ "js" ]
 
 	}
 

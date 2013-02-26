@@ -2,7 +2,7 @@
 lychee.define('lychee.game.Loop').tags({
 	platform: 'v8gl'
 }).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
 	if (
@@ -34,7 +34,7 @@ lychee.define('lychee.game.Loop').tags({
 		this.__timeouts = {};
 		this.__intervals = {};
 
-		lychee.Events.call(this, 'loop');
+		lychee.event.Emitter.call(this, 'loop');
 
 
 		this.reset(settings.update, settings.render);

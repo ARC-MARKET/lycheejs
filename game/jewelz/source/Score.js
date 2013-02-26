@@ -1,6 +1,6 @@
 
 lychee.define('game.Score').includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).exports(function(lychee, global) {
 
 	var Class = function() {
@@ -10,7 +10,7 @@ lychee.define('game.Score').includes([
 			time:   0
 		};
 
-		lychee.Events.call(this, 'score');
+		lychee.event.Emitter.call(this, 'score');
 
 	};
 

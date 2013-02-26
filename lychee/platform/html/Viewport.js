@@ -2,7 +2,7 @@
 lychee.define('Viewport').tags({
 	platform: 'html'
 }).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
 	if (
@@ -145,7 +145,7 @@ lychee.define('Viewport').tags({
 		this.__height = global.innerHeight;
 
 
-		lychee.Events.call(this, 'viewport');
+		lychee.event.Emitter.call(this, 'viewport');
 
 		_instances.push(this);
 

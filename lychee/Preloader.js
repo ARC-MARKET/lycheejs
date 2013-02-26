@@ -129,7 +129,7 @@
 		/*
 		 * EVENT BINDINGS
 		 *
-		 * (not using lychee.Events
+		 * (not using lychee.event.Emitter
 		 *  due to no-dependency
 		 *  reasons)
 		 */

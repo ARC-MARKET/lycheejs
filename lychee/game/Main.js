@@ -2,7 +2,7 @@
 lychee.define('lychee.game.Main').requires([
 	'lychee.game.Loop'
 ]).includes([
-	'lychee.Events'
+	'lychee.event.Emitter'
 ]).exports(function(lychee) {
 
 	var Class = function(settings) {
@@ -12,7 +12,7 @@ lychee.define('lychee.game.Main').requires([
 		this.states = {};
 		this.__state = null;
 
-		lychee.Events.call(this, 'game');
+		lychee.event.Emitter.call(this, 'game');
 
 	};
 
