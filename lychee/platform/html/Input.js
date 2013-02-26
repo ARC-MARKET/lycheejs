@@ -384,8 +384,8 @@ lychee.define('Input').tags({
 
 
 			// allow bind('key') and bind('ctrl-a');
-			this.trigger('key', [ key, name, delta ]);
-			this.trigger(name, [ delta ]);
+			this.trigger('key', [ key, name, delta, event]);
+			this.trigger(name, [ delta, event]);
 
 
 			this.__clock.key = Date.now();
