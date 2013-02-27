@@ -1,4 +1,3 @@
-
 # lycheeJS (v0.6)
 
 Web Documentation: [http://martens.ms/lycheeJS](http://martens.ms/lycheeJS)
@@ -83,7 +82,7 @@ The lycheeJS framework is licensed under MIT License.
 
 # Examples and Game Boilerplate
 
-There is the [Game Boilerplate](http://martens.ms/lycheeJS/game/boilerplate)
+There is the [Game Boilerplate](https://github.com/martensms/lycheeJS/tree/master/game/boilerplate/)
 and the [Jewelz Game](http://martens.ms/lycheeJS/game/jewelz) that show you
 how to develop a real cross-platform game and best practices in high-performance
 JavaScript code.
