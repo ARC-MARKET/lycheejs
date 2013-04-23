@@ -1,0 +1,23 @@
+{
+	"tags": {},
+
+	"tree": {
+
+		"entity": {
+			"Text": [ "js" ],
+			"Faun": [ "js" ],
+			"Otter": [ "js" ]
+		},
+
+		"state": {
+			"Game": [ "js" ],
+			"Menu": [ "js" ]
+		},
+
+		"DeviceSpecificHacks": [ "js" ],
+		"Jukebox": [ "js" ],
+		"Main": [ "js", "css" ],
+		"Renderer": [ "js" ]
+
+	}
+}
