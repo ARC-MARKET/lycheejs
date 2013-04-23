@@ -2,7 +2,7 @@
 lychee.define('game.entity.Text').requires([
 	'lychee.Font'
 ]).includes([
-	'lychee.game.Entity'
+	'lychee.ui.Entity'
 ]).exports(function(lychee, global) {
 
 	var _font = lychee.Font;
@@ -25,7 +25,7 @@ lychee.define('game.entity.Text').requires([
 		settings.height = this.height;
 
 
-		lychee.game.Entity.call(this, settings);
+		lychee.ui.Entity.call(this, 'game-text', settings);
 
 	};
 

@@ -1,17 +1,23 @@
 
-lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
+lychee.define('lychee.physics.Particle').requires([
+	'lychee.math.Vector3'
+]).exports(function(lychee, global) {
+
+	var _vector3 = lychee.math.Vector3;
+
 
 	var Class = function(data) {
 
 		var settings = lychee.extend({}, data);
 
 
-		this.__force    = { x: 0, y: 0, z: 0 };
-		this.__position = { x: 0, y: 0, z: 0 };
-		this.__velocity = { x: 0, y: 0, z: 0 };
+		this.__force    = new _vector3();
+		this.__position = new _vector3();
+		this.__velocity = new _vector3();
 
 		this.__damping     = 1;
 		this.__inverseMass = null;
+		this.__inverseForce = new _vector3();
 
 
 		this.setForce(settings.force);
@@ -40,22 +46,13 @@ lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
 			var t = delta / 1000;
 			if (t > 0) {
 
-				this.__position.x += this.__velocity.x * t;
-				this.__position.y += this.__velocity.y * t;
-				this.__position.z += this.__velocity.z * t;
+				this.__position.interpolateAdd(
+					this.__velocity, t
+				);
 
-
-				this.__velocity.x += (this.__force.x * this.__inverseMass) * t;
-				this.__velocity.y += (this.__force.y * this.__inverseMass) * t;
-				this.__velocity.z += (this.__force.z * this.__inverseMass) * t;
-
-
-				// This is a Math.pow(this.__damping, t) in bitwise arithmetic
-				// var damping = (this.__damping << delta) / 1000;
-
-				// this.__velocity.x *= damping;
-				// this.__velocity.y *= damping;
-				// this.__velocity.z *= damping;
+				this.__velocity.interpolateAdd(
+					this.__inverseForce, t
+				);
 
 			}
 
@@ -93,9 +90,17 @@ lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
 
 			if (force instanceof Object) {
 
-				this.__force.x = typeof force.x === 'number' ? force.x : this.__force.x;
-				this.__force.y = typeof force.y === 'number' ? force.y : this.__force.y;
-				this.__force.z = typeof force.z === 'number' ? force.z : this.__force.z;
+				var d = this.__force.data;
+
+				d[0] = typeof force.x === 'number' ? force.x : d[0];
+				d[1] = typeof force.y === 'number' ? force.y : d[1];
+				d[2] = typeof force.z === 'number' ? force.z : d[2];
+
+
+				this.__inverseForce.interpolateSet(
+					this.__force, this.__inverseMass
+				);
+
 
 				return true;
 
@@ -120,8 +125,16 @@ lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
 		setMass: function(mass) {
 
 			if (mass !== 0) {
+
 				this.__inverseMass = 1 / mass;
+				this.__inverseForce.interpolateSet(
+					this.__force,
+					this.__inverseMass
+				);
+
+
 				return true;
+
 			}
 
 
@@ -137,9 +150,12 @@ lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
 
 			if (position instanceof Object) {
 
-				this.__position.x = typeof position.x === 'number' ? position.x : this.__position.x;
-				this.__position.y = typeof position.y === 'number' ? position.y : this.__position.y;
-				this.__position.z = typeof position.z === 'number' ? position.z : this.__position.z;
+				var d = this.__position._data;
+
+				d[0] = typeof position.x === 'number' ? position.x : d[0];
+				d[1] = typeof position.y === 'number' ? position.y : d[1];
+				d[2] = typeof position.z === 'number' ? position.z : d[2];
+
 
 				return true;
 
@@ -158,9 +174,12 @@ lychee.define('lychee.physics.Particle').exports(function(lychee, global) {
 
 			if (velocity instanceof Object) {
 
-				this.__velocity.x = typeof velocity.x === 'number' ? velocity.x : this.__velocity.x;
-				this.__velocity.y = typeof velocity.y === 'number' ? velocity.y : this.__velocity.y;
-				this.__velocity.z = typeof velocity.z === 'number' ? velocity.z : this.__velocity.z;
+				var d = this.__velocity._data;
+
+				d[0] = typeof velocity.x === 'number' ? velocity.x : d[0];
+				d[1] = typeof velocity.y === 'number' ? velocity.y : d[1];
+				d[2] = typeof velocity.z === 'number' ? velocity.z : d[2];
+
 
 				return true;
 

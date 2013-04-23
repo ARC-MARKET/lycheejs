@@ -158,21 +158,21 @@ lychee.define('lychee.net.Server').tags({
 		 * PUBLIC API
 		 */
 
-		listen: function(port, hostname) {
+		listen: function(port, host) {
 
-			port     = typeof port === 'number' ? port : 80;
-			hostname = typeof hostname === 'string' ? hostname : undefined;
+			port = typeof port === 'number' ? port : 80;
+			host = typeof host === 'string' ? host : null;
 
 
 			if (lychee.debug === true) {
-				console.log('lychee.net.Server: Listening on ' + hostname + ':' + port);
+				console.log('lychee.net.Server: Listening on ' + host + ':' + port);
 			}
 
 
 			var that = this;
 
 			this.__server = new http.Server();
-			this.__server.listen(port, hostname);
+			this.__server.listen(port, host);
 			this.__server.on('upgrade', function(request, socket, headers) {
 
 				if (that.__upgrade(request, socket, headers) === false) {

@@ -31,7 +31,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 
 			var d = this._data;
 
-
 			d[0] = x;
 			d[1] = y;
 			d[2] = z;
@@ -42,7 +41,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 
 			var d = this._data;
 			var v = vector._data;
-
 
 			d[0] += v[0];
 			d[1] += v[1];
@@ -55,7 +53,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 			var d = this._data;
 			var v = vector._data;
 
-
 			d[0] -= v[0];
 			d[1] -= v[1];
 			d[2] -= v[2];
@@ -66,7 +63,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 
 			var d = this._data;
 			var v = vector._data;
-
 
 			d[0] *= v[0];
 			d[1] *= v[1];
@@ -79,7 +75,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 			var d = this._data;
 			var v = vector._data;
 
-
 			d[0] /= v[0];
 			d[1] /= v[1];
 			d[2] /= v[2];
@@ -90,7 +85,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 
 			var d = this._data;
 			var v = vector._data;
-
 
 			d[0] = Math.min(d[0], v[0]);
 			d[1] = Math.min(d[1], v[1]);
@@ -103,7 +97,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 			var d = this._data;
 			var v = vector._data;
 
-
 			d[0] = Math.max(d[0], v[0]);
 			d[1] = Math.max(d[1], v[1]);
 			d[2] = Math.max(d[2], v[2]);
@@ -114,7 +107,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 
 			var d = this._data;
 			var v = vector._data;
-
 
 			d[0] *= scale;
 			d[1] *= scale;
@@ -179,7 +171,6 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 		invert: function() {
 
 			var d = this._data;
-
 
 			d[0] *= -1;
 			d[1] *= -1;
@@ -248,10 +239,31 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global) {
 			var d = this._data;
 			var v = vector._data;
 
-
 			d[0] += t * (v[0] - d[0]);
 			d[1] += t * (v[1] - d[1]);
 			d[2] += t * (v[2] - d[2]);
+
+		},
+
+		interpolateAdd: function(vector, t) {
+
+			var d = this._data;
+			var v = vector._data;
+
+ 			d[0] += t * v[0];
+			d[1] += t * v[1];
+			d[2] += t * v[2];
+
+		},
+
+		interpolateSet: function(vector, t) {
+
+			var d = this._data;
+			var v = vector._data;
+
+ 			d[0] = t * v[0];
+			d[1] = t * v[1];
+			d[2] = t * v[2];
 
 		},
 

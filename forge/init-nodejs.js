@@ -28,7 +28,6 @@ lychee.build(function(lychee, global) {
 
 	var settings = {
 		base: './asset',
-		host: 'localhost',
 		port: 1337
 	};
 

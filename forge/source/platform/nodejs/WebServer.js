@@ -21,6 +21,7 @@ lychee.define('game.WebServer').tags({
 }).exports(function(lychee, global) {
 
 	var http = require('http');
+	var zlib = require('zlib');
 
 	var _template = game.webserver.Template;
 	var _mod = game.webserver.mod;
@@ -52,15 +53,42 @@ lychee.define('game.WebServer').tags({
 		this.__mods.fs.walk(this.__root);
 
 
+		if (lychee.debug === true) {
+			console.log('game.WebServer: Listening on ' + this.__host + ':' + this.__port);
+		}
+
+
 		var that = this;
 
 		this.__server = http.createServer(function(request, response) {
 
+			var accept_encoding = request.headers['accept-encoding'] || "";
+
 			that.__handleRequest(request, function(data) {
-				data.header['Content-Length'] = data.body.length;
-				response.writeHead(data.status, data.header);
-				response.write(data.body);
-				response.end();
+
+
+				if (accept_encoding.match(/\bgzip\b/)) {
+
+					data.header['Content-Encoding'] = 'gzip';
+					response.writeHead(data.status, data.header);
+
+					zlib.gzip(data.body, function(err, buffer) {
+
+						if (!err) { response.write(buffer); }
+						response.end();
+
+					});
+
+				} else {
+
+					data.header['Content-Length'] = data.body.length;
+
+					response.writeHead(data.status, data.header);
+					response.write(data.body);
+					response.end();
+
+				}
+
 			});
 
 		});

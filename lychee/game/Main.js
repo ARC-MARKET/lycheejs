@@ -3,7 +3,7 @@ lychee.define('lychee.game.Main').requires([
 	'lychee.game.Loop'
 ]).includes([
 	'lychee.event.Emitter'
-]).exports(function(lychee) {
+]).exports(function(lychee, global) {
 
 	var Class = function(settings) {
 

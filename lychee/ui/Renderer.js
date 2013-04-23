@@ -21,7 +21,7 @@ lychee.define('lychee.ui.Renderer').requires([
 
 	Class.prototype = {
 
-		__renderUIEntity: function(entity, offsetX, offsetY) {
+		renderEntity: function(entity, offsetX, offsetY) {
 
 			if (entity instanceof _area) {
 				this.renderUIArea(entity, offsetX, offsetY);
@@ -48,7 +48,7 @@ lychee.define('lychee.ui.Renderer').requires([
 			var children = entity.getChildren();
 
 			for (var c = 0, cl = children.length; c < cl; c++) {
-				this.__renderUIEntity(children[c], realX, realY);
+				this.renderEntity(children[c], realX, realY);
 			}
 
 		},

@@ -258,6 +258,30 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global) {
 
 		},
 
+		interpolateAdd: function(vector, t) {
+
+			var d = this._data;
+			var v = vector._data;
+
+ 			d[0] += t * v[0];
+			d[1] += t * v[1];
+			d[2] += t * v[2];
+			d[3] += t * v[3];
+
+		},
+
+		interpolateSet: function(vector, t) {
+
+			var d = this._data;
+			var v = vector._data;
+
+ 			d[0] = t * v[0];
+			d[1] = t * v[1];
+			d[2] = t * v[2];
+			d[3] = t * v[3];
+
+		},
+
 		applyMatrix4: function(matrix) {
 
 			var d = this._data;

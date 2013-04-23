@@ -171,7 +171,23 @@ lychee.define('game.webserver.mod.FS').tags({
 		read: function(url, callback, scope) {
 
 			fs.readFile(url, function(err, data) {
-				callback.call(scope, err, data);
+
+				if (err) {
+					callback.call(scope, null);
+				} else {
+
+					fs.stat(url, function(err, stat) {
+
+						if (err) {
+							callback.call(scope, null);
+						} else {
+							callback.call(scope, data, stat.mtime);
+						}
+
+					});
+
+				}
+
 			});
 
 		},

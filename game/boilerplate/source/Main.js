@@ -51,7 +51,7 @@ lychee.define('game.Main').requires([
 
 
 			this.preloader = new lychee.Preloader({
-				timeout: 3000
+				timeout: Infinity
 			});
 
 			this.preloader.bind('ready', function(assets) {

@@ -13,12 +13,13 @@ lychee.define('lychee.ui.Entity').includes([
 		this.radius = typeof settings.radius === 'number' ? settings.radius : 0;
 
 
-		this.__clock    = null;
-		this.__opacity  = 0;
-		this.__position = { x: 0, y: 0 };
-		this.__state    = 'default';
-		this.__states   = { 'default' : null };
-		this.__visibility  = {
+		this.__clock      = null;
+		this.__opacity    = 0;
+		this.__position   = { x: 0, y: 0 };
+		this.__shape      = Class.SHAPE.rectangle;
+		this.__state      = 'default';
+		this.__states     = { 'default' : null };
+		this.__visibility = {
 			active:   false,
 			start:    null,
 			duration: 0,
@@ -39,6 +40,7 @@ lychee.define('lychee.ui.Entity').includes([
 
 
 		this.setPosition(settings.position);
+		this.setShape(settings.shape);
 		this.setState(settings.state);
 
 
@@ -46,6 +48,13 @@ lychee.define('lychee.ui.Entity').includes([
 
 		settings = null;
 
+	};
+
+
+	// Same ENUM values as lychee.game.Entity
+	Class.SHAPE = {
+		circle:    0,
+		rectangle: 2
 	};
 
 
@@ -184,6 +193,36 @@ lychee.define('lychee.ui.Entity').includes([
 
 
 			return false;
+
+		},
+
+		getShape: function() {
+			return this.__shape;
+		},
+
+		setShape: function(shape) {
+
+			if (typeof shape !== 'number') return false;
+
+
+			var found = false;
+
+			for (var id in Class.SHAPE) {
+
+				if (shape === Class.SHAPE[id]) {
+					found = true;
+					break;
+				}
+
+			}
+
+
+			if (found === true) {
+				this.__shape = shape;
+			}
+
+
+			return found;
 
 		}
 

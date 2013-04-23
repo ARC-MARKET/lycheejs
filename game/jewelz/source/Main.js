@@ -251,11 +251,13 @@ lychee.define('game.Main').requires([
 
 
 			// This is apparently a one-time HACK
+			/*
 			this.input.bind('touch', function() {
 				if (this.settings.fullscreen === true) {
 					this.viewport.enterFullscreen();
 				}
 			}, this, true);
+			*/
 
 
 			this.states.gameboard  = new game.state.GameBoard(this);

@@ -223,16 +223,9 @@ lychee.define('game.state.Menu').includes([
 			cache.y = height / 2;
 			this.__root.setPosition(cache);
 
-
-			this.__input.bind('touch', this.__processTouch, this);
-			this.__renderer.start();
-
 		},
 
 		leave: function() {
-
-			this.__renderer.stop();
-			this.__input.unbind('touch', this.__processTouch);
 
 			lychee.game.State.prototype.leave.call(this);
 

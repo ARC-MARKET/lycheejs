@@ -4,6 +4,7 @@
 	"tree": {
 
 		"entity": {
+			"Circle": [ "js" ],
 			"Text": [ "js" ]
 		},
 

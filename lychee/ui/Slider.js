@@ -19,17 +19,33 @@ lychee.define('lychee.ui.Slider').includes([
 
 
 		settings.radius = typeof settings.radius === 'number' ? settings.radius : 50;
+		settings.shape  = lychee.ui.Entity.SHAPE.circle;
 
 		delete settings.range;
 
 		lychee.ui.Entity.call(this, 'ui-slider', settings);
 
 
+		/*
+		 * INITIALIZATION
+		 */
+
 		if (settings.value !== undefined) {
 			this.setValue(settings.value);
 		} else {
 			this.setValue(this.__range.from);
 		}
+
+
+		this.bind('touch', function(id, position, delta) {
+
+		}, this);
+
+		this.bind('swipe', function(id, type, position, delta, swipe) {
+
+console.log(position.x, position.y);
+
+		}, this);
 
 
 		settings = null;

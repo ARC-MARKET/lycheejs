@@ -1,5 +1,5 @@
 
-lychee.define('lychee.game.Graph').exports(function(lychee) {
+lychee.define('lychee.game.Graph').exports(function(lychee, global) {
 
 	var _Node = function(entity, parent) {
 

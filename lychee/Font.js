@@ -1,5 +1,5 @@
 
-lychee.define('Font').exports(function(lychee) {
+lychee.define('Font').exports(function(lychee, global) {
 
 	var Class = function(spriteOrImages, settings) {
 

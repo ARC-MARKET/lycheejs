@@ -14,14 +14,14 @@ lychee.define('game.webserver.mod.File').requires([
 
 		'default': { encoding: 'binary', type: 'application/octet-stream' },
 
-		'html': { encoding: 'utf8',   type: 'text/html' },
-		'css':  { encoding: 'utf8',   type: 'text/css' },
-		'js':   { encoding: 'utf8',   type: 'application/javascript' },
-		'json': { encoding: 'utf8',   type: 'application/json' },
+		'html':    { encoding: 'utf8',   type: 'text/html' },
+		'css':     { encoding: 'utf8',   type: 'text/css' },
+		'js':      { encoding: 'utf8',   type: 'application/javascript' },
+		'json':    { encoding: 'utf8',   type: 'application/json' },
 
-		'png':  { encoding: 'binary', type: 'image/png' },
-		'mp3':  { encoding: 'binary', type: 'audio/mp3' },
-		'ogg':  { encoding: 'binary', type: 'application/ogg' }
+		'png':     { encoding: 'binary', type: 'image/png' },
+		'mp3':     { encoding: 'binary', type: 'audio/mp3' },
+		'ogg':     { encoding: 'binary', type: 'application/ogg' }
 
 	};
 
@@ -46,10 +46,13 @@ lychee.define('game.webserver.mod.File').requires([
 			}
 
 
+
 			var response = {
 				status: 200,
 				header: {
-					'Content-Type': mime.type
+					'Cache-Control': 'no-transform',
+					'Content-Type':  mime.type,
+					'Vary':          'Accept-Encoding'
 				},
 				body: ''
 			};
@@ -59,13 +62,25 @@ lychee.define('game.webserver.mod.File').requires([
 			var fsmod    = this.__webserver.getMod('fs');
 			if (fsmod !== null) {
 
-				fsmod.read(url, function(err, data) {
+				fsmod.read(url, function(data, modtime) {
 
-					if (err && errormod !== null) {
-						errormod.execute(403, url, callback);
+					var expires = Date.now() + 1000 * 60 * 60 * 24 * 7; // 7 days
+
+					response.header['Expires']       = new Date(expires).toUTCString();
+					response.header['Last-Modified'] = modtime;
+
+
+					if (data === null) {
+
+						if (errormod !== null) {
+							errormod.execute(403, url, callback);
+						}
+
 					} else {
+
 						response.body = data;
 						callback(response);
+
 					}
 
 				}, this);

@@ -54,8 +54,6 @@ lychee.define('game.webserver.mod.Welcome').requires([
 
 				} catch(e) {
 
-console.error(e);
-
 					content = '';
 
 				}
@@ -66,8 +64,7 @@ console.error(e);
 			callback({
 				status: 200,
 				header: {
-					'Content-Type':   'text/html',
-					'Content-Length': content.length
+					'Content-Type':   'text/html'
 				},
 				body: content
 			});

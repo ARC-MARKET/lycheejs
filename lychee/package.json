@@ -81,6 +81,7 @@
 		"game": {
 			"Entity": [ "js" ],
 			"Graph": [ "js" ],
+			"Layer": [ "js" ],
 			"Loop": [ "js" ],
 			"Main": [ "js" ],
 			"Sprite": [ "js" ],

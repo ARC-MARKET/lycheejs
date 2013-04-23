@@ -16,8 +16,6 @@ lychee.define('game.Main').requires([
 
 		this.fonts = {};
 
-		this.__offset = { x: 0, y: 0 };
-
 		this.load();
 
 	};
@@ -47,7 +45,7 @@ lychee.define('game.Main').requires([
 
 
 			this.preloader = new lychee.Preloader({
-				timeout: 3000
+				timeout: Infinity
 			});
 
 			this.preloader.bind('ready', function(assets) {
@@ -114,8 +112,6 @@ lychee.define('game.Main').requires([
 
 			this.renderer.reset(this.settings.width, this.settings.height, false);
 
-			this.__offset = env.offset; // Linked
-
 		},
 
 		init: function() {
@@ -157,7 +153,7 @@ lychee.define('game.Main').requires([
 				fireModifier: false,
 				fireKey:      false, // change to true for NodeJS support
 				fireTouch:    true,
-				fireSwipe:    false
+				fireSwipe:    true
 			});
 
 
@@ -167,10 +163,6 @@ lychee.define('game.Main').requires([
 
 			this.start();
 
-		},
-
-		getOffset: function() {
-			return this.__offset;
 		}
 
 	};

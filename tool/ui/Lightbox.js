@@ -3,7 +3,7 @@ lychee.define('ui.Lightbox').tags({
 	platform: 'html'
 }).requires([
 	'ui.Button'
-]).exports(function(lychee) {
+]).exports(function(lychee, global) {
 
 	var Class = function(id, title) {
 

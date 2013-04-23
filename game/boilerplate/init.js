@@ -1,6 +1,6 @@
 
 // Set to true to see lychee debug messages
-// lychee.debug = true;
+lychee.debug = true;
 
 
 // Rebase required namespaces for inclusion
