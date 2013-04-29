@@ -33,11 +33,12 @@ lychee.define('Font').exports(function(lychee, global) {
 
 		defaults: {
 			// default charset from 32-126
-			charset: ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
-			baseline: 0,
-			spacing: 0,
-			kerning: 0,
-			map: null
+			charset:    ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~',
+			baseline:   0,
+			spacing:    0,
+			kerning:    0,
+			lineheight: 0,
+			map:        null
 		},
 
 		__init: function() {

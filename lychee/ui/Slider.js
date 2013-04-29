@@ -37,13 +37,18 @@ lychee.define('lychee.ui.Slider').includes([
 		}
 
 
-		this.bind('touch', function(id, position, delta) {
-
+		this.bind('focus', function() {
+			this.setState('active');
 		}, this);
+
+		this.bind('blur', function() {
+			this.setState('default');
+		}, this);
+
 
 		this.bind('swipe', function(id, type, position, delta, swipe) {
 
-console.log(position.x, position.y);
+			console.log(position);
 
 		}, this);
 
@@ -102,6 +107,9 @@ console.log(position.x, position.y);
 				this.__drag.y = Math.cos(index * 2 * Math.PI) * (radius - 24);
 
 				this.__value = value;
+
+
+				return true;
 
 			}
 

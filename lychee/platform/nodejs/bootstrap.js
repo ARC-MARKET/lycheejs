@@ -186,9 +186,9 @@
 		};
 
 
-		// Enter
+		// Return
 		if (str === '\r' || str === '\n') {
-			key.name = 'enter';
+			key.name = 'return';
 
 		// Tab
 		} else if (str === '\t') {

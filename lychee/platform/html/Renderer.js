@@ -133,7 +133,17 @@ lychee.define('Renderer').tags({
 
 		},
 
-		flush: function() {
+		flush: function(all) {
+
+			all = all === true;
+
+
+			if (all === true) {
+
+
+			} else {
+				this.__ctx.restore();
+			}
 
 		},
 
@@ -190,6 +200,16 @@ lychee.define('Renderer').tags({
 
 			this.__background = color;
 			this.__canvas.style.backgroundColor = color;
+
+		},
+
+		setBoundaries: function(x1, y1, x2, y2) {
+
+			this.__ctx.rect(
+				x1,      y1,
+				x2 - x1, y2 - y1
+			);
+			this.__ctx.clip();
 
 		},
 

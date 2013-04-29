@@ -1,6 +1,7 @@
 
 lychee.define('game.state.Test').requires([
-	'lychee.ui.Slider'
+	'lychee.ui.Slider',
+	'lychee.ui.Textarea'
 ]).includes([
 	'lychee.game.State'
 ]).exports(function(lychee, global) {
@@ -33,7 +34,7 @@ lychee.define('game.state.Test').requires([
 					x: 200,
 					y: 200
 				},
-				value: 20
+				value: 0
 			}));
 
 			layer.addEntity(new lychee.ui.Slider({
@@ -58,10 +59,21 @@ lychee.define('game.state.Test').requires([
 				},
 				radius: 50,
 				position: {
-					x: 800,
+					x: 650,
 					y: 200
 				},
-				value: 90
+				value: 180
+			}));
+
+			layer.addEntity(new lychee.ui.Textarea({
+				font:   this.game.fonts.normal,
+				value:  ':)',
+				width:  200,
+				height: 100,
+				position: {
+					x: 850,
+					y: 200
+				}
 			}));
 
 
@@ -72,6 +84,7 @@ lychee.define('game.state.Test').requires([
 		enter: function() {
 
 			lychee.game.State.prototype.enter.call(this);
+
 
 /*
 			this.__loop.interval(25, function(clock, delta) {

@@ -118,6 +118,8 @@ lychee.define('game.state.Game').requires([
 
 			this.__locked = true;
 
+			lychee.game.State.prototype.leave.call(this);
+
 		}
 
 	};

@@ -5,6 +5,9 @@ lychee.define('lychee.ui.Button').requires([
 	'lychee.ui.Entity'
 ]).exports(function(lychee, global) {
 
+	var _font = lychee.Font;
+
+
 	var Class = function(data) {
 
 		var settings = lychee.extend({}, data);
@@ -50,7 +53,7 @@ lychee.define('lychee.ui.Button').requires([
 		setLabel: function(label, font) {
 
 			label = typeof label === 'string' ? label : null;
-			font  = font instanceof lychee.Font ? font : this.__font;
+			font  = font instanceof _font ? font : this.__font;
 
 
 			if (label !== null && font !== null) {

@@ -120,6 +120,7 @@
 			"Entity": [ "js" ],
 			"Renderer": [ "js" ],
 			"Slider": [ "js" ],
+			"Textarea": [ "js" ],
 			"Wizard": [ "js" ]
 		},
 

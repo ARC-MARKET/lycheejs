@@ -18,7 +18,10 @@ lychee.define('lychee.ui.Entity').includes([
 		this.__position   = { x: 0, y: 0 };
 		this.__shape      = Class.SHAPE.rectangle;
 		this.__state      = 'default';
-		this.__states     = { 'default' : null };
+		this.__states     = {
+			'default': null,
+			'active':  null
+		};
 		this.__visibility = {
 			active:   false,
 			start:    null,
