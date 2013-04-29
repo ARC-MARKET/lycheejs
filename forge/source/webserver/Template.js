@@ -33,7 +33,14 @@ lychee.define('game.webserver.Template').exports(function(lychee, global) {
 
 					if (chunk.indexOf('\n') !== -1) {
 
-						var subchunks = chunk.split('\n');
+						var subchunks;
+						if (chunk.indexOf('\r') !== -1) {
+							subchunks = chunk.split('\r\n');
+						} else {
+							subchunks = chunk.split('\n');
+						}
+
+
 						for (var s = 0, sl = subchunks.length; s < sl; s++) {
 
 							var subchunk = subchunks[s];

@@ -34,8 +34,15 @@ lychee.build(function(lychee, global) {
 	new game.Server(settings);
 
 
-	var root = __dirname.split('/');
-	root.splice(root.length - 1, 1)
+	var root = __dirname;
+	if (root.substr(0, 2) === 'C:') {
+		root = root.split(/\\/).join('/');
+		root = root.substr(2, root.length - 2);
+	}
+
+
+	root = root.split('/');
+	root.splice(root.length - 1, 1);
 	root = root.join('/');
 
 
