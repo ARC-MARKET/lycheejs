@@ -160,6 +160,11 @@ lychee.define('game.WebServer').tags({
 				resolved = fs.resolve(this.__root + url);
 
 
+				if (lychee.debug === true) {
+					console.log('Handling Request: ' + this.__root + url + ' <> ' + resolved);
+				}
+
+
 				if (url === '/') {
 
 					welcome.execute(url, callback);
