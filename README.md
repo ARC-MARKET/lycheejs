@@ -127,7 +127,7 @@ lycheeJS Dashboard.
 
 ## Documentation
 
-The documentation is available online at [http://lycheejs.org/docs](http://lycheejs.org/docs).
+The documentation is available online at [http://lycheejs.org/documentation/](http://lycheejs.org/documentation/).
 
 
 ## Roadmap
