@@ -156,9 +156,9 @@ lychee.define('tool.state.Status').includes([
 							project_hosts.forEach(function(host) {
 
 								if (sorbet !== null && sorbet.details[host] === null) {
-									project_actions.push('<a class="button ico-browser ico-only" href="lycheejs://web=' + host + ':' + port + '/projects/' + project.identifier + '"></a>');
+									project_actions.push('<a class="button ico-browser ico-only" href="lycheejs://web=http://' + host + ':' + port + '/projects/' + project.identifier + '"></a>');
 								} else {
-									project_actions.push('<a class="button ico-browser ico-only" href="lycheejs://web=' + host + ':' + port + '"></a>');
+									project_actions.push('<a class="button ico-browser ico-only" href="lycheejs://web=http://' + host + ':' + port + '"></a>');
 								}
 
 							});

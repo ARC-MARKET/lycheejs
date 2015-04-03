@@ -1,10 +1,10 @@
 #!/bin/bash
 
+rm -rf ./helper/osx/helper.app
+osacompile -o ./helper/osx/helper.app ./helper/osx/helper.applescript;
 
-osacompile -o ./helper.app ./helper.applescript;
+cp ./helper/osx/Info.plist ./helper/osx/helper.app/Contents;
+cp ./helper/osx/applet.icns ./helper/osx/helper.app/Contents/Resources/applet.icns;
 
-cp ./helper/osx/Info.plist ./helper.app/Contents;
-cp ./helper/osx/applet.icns ./helper.app/Contents/Resources/applet.icns;
-
-open ./helper.app;
+open ./helper/osx/helper.app;
 
