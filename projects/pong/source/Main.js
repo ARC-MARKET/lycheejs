@@ -3,7 +3,7 @@ lychee.define('game.Main').requires([
 	'game.state.Game'
 ]).includes([
 	'lychee.app.Main'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	var Class = function(data) {
 
