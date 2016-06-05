@@ -102,9 +102,29 @@ lychee.define('app.state.Chat').requires([
 		}
 
 
-		room.messages.forEach(function(obj) {
-			this.__cache.messages.push(obj);
-		}.bind(this));
+		for (var m = 0, ml = room.messages.length; m < ml; m++) {
+
+			var user    = room.messages[m].user;
+			var message = room.messages[m].message;
+
+			if (user !== null && message !== null) {
+
+				var found = this.__cache.messages.find(function(other) {
+					return other.user === user && other.message === message;
+				}) || null;
+
+				if (found === null) {
+
+					this.__cache.messages.push({
+						user:    user,
+						message: message
+					});
+
+				}
+
+			}
+
+		}
 
 
 		this.jukebox.play(_SOUNDS.message);
