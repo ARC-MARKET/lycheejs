@@ -1,12 +1,16 @@
 
-lychee.define('app.net.Client').requires([
-	'app.net.client.Ping'
+lychee.define('harvester.net.Client').requires([
+	'harvester.net.client.Library',
+	'harvester.net.client.Profile',
+	'harvester.net.client.Project',
+	'lychee.codec.JSON'
 ]).includes([
 	'lychee.net.Client'
 ]).exports(function(lychee, global, attachments) {
 
+	var _JSON   = lychee.import('lychee.codec.JSON');
 	var _Client = lychee.import('lychee.net.Client');
-	var _Ping   = lychee.import('app.net.client.Ping');
+	var _remote = lychee.import('harvester.net.remote');
 
 
 
@@ -17,6 +21,10 @@ lychee.define('app.net.Client').requires([
 	var Class = function(data) {
 
 		var settings = lychee.extend({
+			host:      'localhost',
+			port:      4848,
+			codec:     _JSON,
+			type:      _Client.TYPE.HTTP,
 			reconnect: 10000
 		}, data);
 
@@ -33,10 +41,13 @@ lychee.define('app.net.Client').requires([
 
 		this.bind('connect', function() {
 
-			this.addService(new _Ping(this));
+			this.addService(new _remote.Library(this));
+			this.addService(new _remote.Profile(this));
+			this.addService(new _remote.Project(this));
+
 
 			if (lychee.debug === true) {
-				console.log('app.net.Client: Remote connected');
+				console.log('harvester.net.Client: Remote connected');
 			}
 
 		}, this);
@@ -44,7 +55,7 @@ lychee.define('app.net.Client').requires([
 		this.bind('disconnect', function(code) {
 
 			if (lychee.debug === true) {
-				console.log('app.net.Client: Remote disconnected (' + code + ')');
+				console.log('harvester.net.Client: Remote disconnected (' + code + ')');
 			}
 
 		}, this);
@@ -66,7 +77,7 @@ lychee.define('app.net.Client').requires([
 		serialize: function() {
 
 			var data = _Client.prototype.serialize.call(this);
-			data['constructor'] = 'app.net.Client';
+			data['constructor'] = 'harvester.net.Client';
 
 
 			return data;

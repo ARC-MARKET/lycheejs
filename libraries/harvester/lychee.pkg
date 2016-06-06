@@ -131,12 +131,23 @@
 				"Admin": [
 					"js"
 				],
+				"Client": [
+					"js"
+				],
 				"Remote": [
 					"js"
 				],
 				"Server": [
 					"js"
 				],
+				"client": {
+					"Library": [
+						"js"
+					],
+					"Project": [
+						"js"
+					]
+				},
 				"remote": {
 					"Library": [
 						"js"

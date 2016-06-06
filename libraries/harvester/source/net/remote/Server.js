@@ -129,7 +129,7 @@ lychee.define('harvester.net.remote.Server').includes([
 
 				tunnel.send(projects, {
 					id:    this.id,
-					event: 'index'
+					event: 'sync'
 				});
 
 			}

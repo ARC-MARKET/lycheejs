@@ -2,6 +2,7 @@
 lychee.define('harvester.net.Admin').requires([
 	'harvester.net.Remote',
 	'harvester.net.remote.Library',
+	'harvester.net.remote.Profile',
 	'harvester.net.remote.Project',
 	'harvester.net.remote.Server',
 	'lychee.codec.JSON'
@@ -23,6 +24,8 @@ lychee.define('harvester.net.Admin').requires([
 	var Class = function(data) {
 
 		var settings = lychee.extend({
+			host:   'localhost',
+			port:   4848,
 			codec:  _JSON,
 			remote: _Remote,
 			type:   _Server.TYPE.HTTP
@@ -42,6 +45,7 @@ lychee.define('harvester.net.Admin').requires([
 		this.bind('connect', function(remote) {
 
 			remote.addService(new _remote.Library(remote));
+			remote.addService(new _remote.Profile(remote));
 			remote.addService(new _remote.Project(remote));
 			remote.addService(new _remote.Server(remote));
 

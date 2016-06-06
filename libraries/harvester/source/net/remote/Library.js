@@ -155,7 +155,7 @@ lychee.define('harvester.net.remote.Library').requires([
 
 				tunnel.send(libraries, {
 					id:    this.id,
-					event: 'index'
+					event: 'sync'
 				});
 
 			}

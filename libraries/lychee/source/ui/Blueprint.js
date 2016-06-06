@@ -200,6 +200,45 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 					this.__scroll.max_x = Math.min(this.__scroll.max_x, -1 * (x1 + pos_x + entity.width / 2 + 32));
 
+				} else if (this.entities.length === 1) {
+
+					entity        = this.entities[0];
+					entity.width  = 320;
+					entity.height = this.height;
+
+					pos_x = x1 + 32 + entity.width / 2;
+					pos_y = y1 + entity.height / 2;
+
+					entity.trigger('relayout');
+					entity.setOrder(1);
+
+
+					if (fade === true) {
+
+						entity.setPosition({
+							x: pos_x,
+							y: pos_y - 3/2 * this.height
+						});
+
+						entity.addEffect(new lychee.effect.Position({
+							type:     lychee.effect.Position.TYPE.easeout,
+							delay:    100,
+							duration: 300,
+							position: {
+								x: pos_x,
+								y: pos_y
+							}
+						}));
+
+					} else {
+
+						entity.setPosition({
+							x: pos_x,
+							y: pos_y
+						});
+
+					}
+
 				}
 
 			} else if (type === Class.TYPE.full) {

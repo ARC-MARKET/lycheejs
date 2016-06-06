@@ -578,6 +578,9 @@
 					"Network": [
 						"js"
 					],
+					"Search": [
+						"js"
+					],
 					"Stash": [
 						"js"
 					],

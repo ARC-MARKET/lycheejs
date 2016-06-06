@@ -54,7 +54,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 
 		if (this.options.length > 1) {
-			this.height = this.options.length * settings.height;
+			this.height = this.options.length * this.height;
 		}
 
 		if (this.value === '') {
@@ -398,7 +398,11 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 			if (options !== null) {
 
-				this.height  = (this.height / this.options.length) * options.length;
+				var height = this.height || null;
+				if (height !== null) {
+					this.height = (height / this.options.length) * options.length;
+				}
+
 				this.options = options.map(function(option) {
 					return '' + option;
 				});
