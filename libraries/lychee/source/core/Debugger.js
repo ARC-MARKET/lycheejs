@@ -63,7 +63,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 	};
 
-	var _report = function(environment, data) {
+	var _report_error = function(environment, data) {
 
 		var main = environment.global.MAIN || null;
 		if (main !== null) {
@@ -73,7 +73,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				var service = client.getService('debugger');
 				if (service !== null) {
-					service.report('lychee.Debugger', data);
+					service.report('lychee.Debugger: Report from ' + data.file + '#L' + data.line + ' in ' + data.method + '', data);
 				}
 
 			}
@@ -207,7 +207,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 				}
 
 
-				_report(environment, data);
+				_report_error(environment, data);
 
 
 				return true;

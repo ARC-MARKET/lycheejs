@@ -20,7 +20,7 @@ lychee.define('harvester.mod.Server').requires([
 	 * HELPERS
 	 */
 
-	var _report = function(text) {
+	var _report_error = function(text) {
 
 		var lines   = text.split('\n');
 		var line    = null;
@@ -145,7 +145,7 @@ lychee.define('harvester.mod.Server').requires([
 
 					_LOG_PROJECT = project;
 					console.error('harvester.mod.Server: FAILURE ("' + project + ' | ' + host + ':' + port + '")');
-					_report(stderr);
+					_report_error(stderr);
 
 				}
 

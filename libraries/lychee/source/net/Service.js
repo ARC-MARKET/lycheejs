@@ -366,31 +366,6 @@ lychee.define('lychee.net.Service').includes([
 
 		},
 
-		report: function(message, blob) {
-
-			message = typeof message === 'string' ? message : null;
-			blob    = blob instanceof Object      ? blob    : null;
-
-
-			if (message !== null) {
-
-				var tunnel = this.tunnel;
-				if (tunnel !== null) {
-
-					tunnel.send({
-						message: message,
-						blob:    blob
-					}, {
-						id:    this.id,
-						event: 'error'
-					});
-
-				}
-
-			}
-
-		},
-
 		setMulticast: function(multicast) {
 
 			if (multicast instanceof Array) {

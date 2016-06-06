@@ -63,7 +63,7 @@ lychee.define('lychee.net.remote.Session').includes([
 
 					} else if (session.active === true) {
 
-						this.report('Session is active', {
+						this.reject('Session is active', {
 							sid: sid,
 							min: session.min,
 							max: session.max
@@ -71,7 +71,7 @@ lychee.define('lychee.net.remote.Session').includes([
 
 					} else {
 
-						this.report('Session is full', {
+						this.reject('Session is full', {
 							sid: sid,
 							min: session.min,
 							max: session.max

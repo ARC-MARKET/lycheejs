@@ -9,6 +9,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 	var _JSON       = lychee.import('lychee.codec.JSON');
 	var _Filesystem = lychee.import('harvester.data.Filesystem');
 	var _Service    = lychee.import('lychee.net.Service');
+	var _filesystem = new _Filesystem('/bin/harvester');
 
 
 
@@ -16,9 +17,8 @@ lychee.define('harvester.net.remote.Profile').requires([
 	 * FEATURE DETECTION
 	 */
 
-	(function(cache) {
+	(function(cache, filesystem) {
 
-		var filesystem  = new _Filesystem('/bin/harvester');
 		var identifiers = filesystem.dir('/').map(function(value) {
 			return value.split('.').slice(0, -1).join('.');
 		});
@@ -37,13 +37,31 @@ lychee.define('harvester.net.remote.Profile').requires([
 
 		}
 
-	})(_CACHE);
+	})(_CACHE, _filesystem);
 
 
 
 	/*
 	 * HELPERS
 	 */
+
+	var _update_profile = function(profile) {
+
+		var path = '/' + profile.identifier + '.json';
+		var data = _JSON.encode(profile);
+
+		if (data !== null) {
+
+			_filesystem.write(path, data);
+
+			return true;
+
+		}
+
+
+		return false;
+
+	};
 
 	var _serialize = function(profile) {
 
@@ -57,13 +75,26 @@ lychee.define('harvester.net.remote.Profile').requires([
 
 	var _on_update = function(data) {
 
-// TODO: Update profile data
-
 		var identifier = data.identifier || null;
 		if (identifier !== null) {
 
 			var profile = _CACHE[identifier] || null;
 			if (profile !== null) {
+
+				var host = data.host || null;
+				var port = data.port || null;
+
+				if (host !== null) {
+					profile.host = host;
+				}
+
+				if (port !== null) {
+					profile.port = port;
+				}
+
+
+				_update_profile(profile);
+
 
 				this.accept('Profile updated ("' + identifier + '")');
 

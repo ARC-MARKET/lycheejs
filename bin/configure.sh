@@ -183,6 +183,9 @@ else
 			_fertilize node/dist /libraries/fertilizer;
 			# _fertilize node-sdl/dist /libraries/fertilizer;
 
+			_fertilize html/dist /libraries/harvester;
+			_fertilize html-nwjs/dist /libraries/harvester;
+			_fertilize html-webview/dist /libraries/harvester;
 			_fertilize node/dist /libraries/harvester;
 			# _fertilize node-sdl/dist /libraries/harvester;
 
