@@ -188,7 +188,10 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 					_connect_socket.call(that, connection, protocol);
 
-					connection.connect();
+					connection.connect({
+						host: host,
+						port: port
+					});
 
 				}
 

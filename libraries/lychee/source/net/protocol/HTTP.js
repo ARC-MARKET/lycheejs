@@ -100,16 +100,16 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 		if (/text\//g.test(content_type) === true) {
 
 			buffer = new Buffer(headers_length + payload_length + 2);
-			buffer.write(headers_data, 0);
-			payload.copy(buffer, headers_length);
-			buffer.write('\r\n', headers_length + payload_length);
+			buffer.write(headers_data, 0, headers_length, 'utf8');
+			payload_data.copy(buffer, headers_length, 0, payload_length);
+			buffer.write('\r\n', headers_length + payload_length, 2, 'utf8');
 
 		} else {
 
 			buffer = new Buffer(headers_length + payload_length + 2);
-			buffer.write(headers_data, 0);
-			payload.copy(buffer, headers_length);
-			buffer.write('\r\n', headers_length + payload_length);
+			buffer.write(headers_data, 0, headers_length, 'utf8');
+			payload_data.copy(buffer, headers_length, 0, payload_length);
+			buffer.write('\r\n', headers_length + payload_length, 2, 'utf8');
 
 		}
 

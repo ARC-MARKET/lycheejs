@@ -59,7 +59,7 @@ lychee.define('lychee.net.socket.WS').tags({
 				}
 
 
-				// XXX: HTML WebSockets don't support Buffer data
+				// XXX: HTML WebSocket doesn't support Buffer data
 				// var chunks = protocol.receive(blob);
 				var chunks = [ temp ];
 				if (chunks.length > 0) {

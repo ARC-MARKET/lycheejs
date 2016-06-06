@@ -54,8 +54,8 @@ lychee.define('harvester.net.server.File').requires([
 
 		var headers = {
 			'status':          '200 OK',
-			'e-tag':           '"' + info.length + '-' + Date.parse(info.time) + '"',
-			'last-modified':   new Date(info.time).toUTCString(),
+			'e-tag':           '"' + info.length + '-' + Date.parse(info.mtime) + '"',
+			'last-modified':   new Date(info.mtime).toUTCString(),
 			'content-control': 'no-transform',
 			'content-type':    mime.type,
 			'expires':         new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toUTCString(),
