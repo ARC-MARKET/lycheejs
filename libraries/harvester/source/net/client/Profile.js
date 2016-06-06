@@ -1,5 +1,5 @@
 
-lychee.define('harvester.net.client.Project').includes([
+lychee.define('harvester.net.client.Profile').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
@@ -32,7 +32,7 @@ lychee.define('harvester.net.client.Project').includes([
 
 	var Class = function(client) {
 
-		_Service.call(this, 'project', client, _Service.TYPE.client);
+		_Service.call(this, 'profile', client, _Service.TYPE.client);
 
 
 		this.bind('sync', _on_sync, this);
@@ -49,7 +49,7 @@ lychee.define('harvester.net.client.Project').includes([
 		serialize: function() {
 
 			var data = _Service.prototype.serialize.call(this);
-			data['constructor'] = 'harvester.net.client.Project';
+			data['constructor'] = 'harvester.net.client.Profile';
 
 
 			return data;

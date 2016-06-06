@@ -49,25 +49,24 @@ lychee.define('harvester.net.remote.Library').requires([
 	var _on_start = function(data) {
 
 		var identifier = data.identifier || null;
-		var tunnel     = this.tunnel;
-
-		if (_MAIN !== null && tunnel !== null && identifier !== null) {
+		if (identifier !== null && _MAIN !== null) {
 
 			var library = _MAIN._libraries[identifier] || null;
 			if (library !== null && library.server === null) {
 
 				_Server.process(library);
 
-
-				tunnel.send({
-					message: 'SUCCESS: Started server ("' + identifier + '")'
-				});
+				this.accept('Server started ("' + identifier + '")');
 
 			} else {
 
-				this.report('FAILURE: No server ("' + identifier + '")');
+				this.reject('No server ("' + identifier + '")');
 
 			}
+
+		} else {
+
+			this.reject('No Identifier');
 
 		}
 
@@ -76,9 +75,7 @@ lychee.define('harvester.net.remote.Library').requires([
 	var _on_stop = function(data) {
 
 		var identifier = data.identifier || null;
-		var tunnel     = this.tunnel;
-
-		if (_MAIN !== null && tunnel !== null && identifier !== null) {
+		if (identifier !== null && _MAIN !== null) {
 
 			var library = _MAIN._libraries[identifier] || null;
 			if (library !== null && library.server !== null) {
@@ -86,16 +83,17 @@ lychee.define('harvester.net.remote.Library').requires([
 				library.server.destroy();
 				library.server = null;
 
-
-				tunnel.send({
-					message: 'SUCCESS: Stopped server ("' + identifier + '")'
-				});
+				this.accept('Server stopped ("' + identifier + '")');
 
 			} else {
 
-				this.report('FAILURE: No server ("' + identifier + '")');
+				this.reject('No Server ("' + identifier + '")');
 
 			}
+
+		} else {
+
+			this.reject('No Identifier');
 
 		}
 

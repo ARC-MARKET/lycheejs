@@ -74,25 +74,24 @@ lychee.define('harvester.net.remote.Project').requires([
 	var _on_start = function(data) {
 
 		var identifier = data.identifier || null;
-		var tunnel     = this.tunnel;
-
-		if (_MAIN !== null && tunnel !== null && identifier !== null) {
+		if (identifier !== null && _MAIN !== null) {
 
 			var project = _MAIN._projects[identifier] || null;
 			if (project !== null && project.server === null) {
 
 				_Server.process(project);
 
-
-				tunnel.send({
-					message: 'SUCCESS: Started server ("' + identifier + '")'
-				});
+				this.accept('Server started ("' + identifier + '")');
 
 			} else {
 
-				this.report('FAILURE: No server ("' + identifier + '")');
+				this.reject('No Server ("' + identifier + '")');
 
 			}
+
+		} else {
+
+			this.reject('No Identifier');
 
 		}
 
@@ -101,9 +100,7 @@ lychee.define('harvester.net.remote.Project').requires([
 	var _on_stop = function(data) {
 
 		var identifier = data.identifier || null;
-		var tunnel     = this.tunnel;
-
-		if (_MAIN !== null && tunnel !== null && identifier !== null) {
+		if (identifier !== null && _MAIN !== null) {
 
 			var project = _MAIN._projects[identifier] || null;
 			if (project !== null && project.server !== null) {
@@ -111,16 +108,17 @@ lychee.define('harvester.net.remote.Project').requires([
 				project.server.destroy();
 				project.server = null;
 
-
-				tunnel.send({
-					message: 'SUCCESS: Stopped server ("' + identifier + '")'
-				});
+				this.accept('Server stopped ("' + identifier + '")');
 
 			} else {
 
-				this.report('FAILURE: No server ("' + identifier + '")');
+				this.reject('No Server ("' + identifier + '")');
 
 			}
+
+		} else {
+
+			this.reject('No Identifier');
 
 		}
 

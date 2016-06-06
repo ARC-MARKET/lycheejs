@@ -30,9 +30,9 @@ lychee.define('harvester.net.client.Library').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Class = function(client) {
 
-		_Service.call(this, 'library', remote, _Service.TYPE.client);
+		_Service.call(this, 'library', client, _Service.TYPE.client);
 
 
 		this.bind('sync', _on_sync, this);

@@ -119,7 +119,6 @@ lychee.define('harvester.net.remote.Server').includes([
 		index: function(data) {
 
 			var tunnel = this.tunnel;
-
 			if (tunnel !== null && _MAIN !== null) {
 
 				var projects = Object.values(_MAIN._projects).filter(function(project) {
@@ -153,13 +152,13 @@ lychee.define('harvester.net.remote.Server').includes([
 
 				} else {
 
-					this.report('FAILURE: No server ("' + identifier + '")');
+					this.reject('No Server ("' + identifier + '")');
 
 				}
 
 			} else {
 
-				this.report('FAILURE: No identifier');
+				this.reject('No Identifier');
 
 			}
 
