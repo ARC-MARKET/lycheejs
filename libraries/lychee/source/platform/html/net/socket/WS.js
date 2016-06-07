@@ -229,9 +229,11 @@ lychee.define('lychee.net.socket.WS').tags({
 
 				if (connection !== null && protocol !== null) {
 
-					// XXX: HTML WebSockets don't support Buffer data
+					// XXX: HTML WebSocket does not support Buffer data
 					// var chunk = protocol.send(payload, headers, binary);
-					var enc   = binary === true ? 'binary' : 'utf8';
+					// var enc   = binary === true ? 'binary' : 'utf8';
+
+
 					var chunk = _JSON.encode({
 						headers: headers,
 						payload: payload
@@ -239,7 +241,7 @@ lychee.define('lychee.net.socket.WS').tags({
 
 					if (chunk !== null) {
 
-						if (enc === 'binary') {
+						if (binary === true) {
 
 							var blob = new ArrayBuffer(chunk.length);
 							var view = new Uint8Array(blob);

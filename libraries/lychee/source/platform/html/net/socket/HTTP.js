@@ -30,137 +30,130 @@ lychee.define('lychee.net.socket.HTTP').tags({
 	 * HELPERS
 	 */
 
-	var _send_xhr = function(chunk, enc) {
+	var _uppercase = function(str) {
 
-		var tmp1    = chunk.toString('utf8').split('\r\n\r\n')[0];
-		var tmp2    = chunk.toString('utf8').split('\r\n\r\n')[1];
-		var tmp3    = chunk.toString('utf8').split('\n')[0].split(' ');
-		var headers = tmp1.split('\n').slice(1);
-		var payload = null;
-		var socket  = new _XHR();
-		var that    = this;
+		var tmp = str.split('-');
+
+		for (var t = 0, tl = tmp.length; t < tl; t++) {
+			var ch = tmp[t];
+			tmp[t] = ch.charAt(0).toUpperCase() + ch.substr(1);
+		}
+
+		return tmp.join('-');
+
+	};
+
+	var _receive_xhr = function(raw_headers, raw_payload) {
+
+		var blob = null;
+		var view = null;
 
 
-		if (enc === 'binary') {
+		if (typeof raw_payload === 'string') {
 
-			payload = (function(data) {
+			blob = new Buffer(raw_payload, 'utf8');
 
-				var blob = new ArrayBuffer(data.length);
-				var view = new Uint8Array(blob);
+		} else if (raw_payload instanceof ArrayBuffer) {
 
-				for (var d = 0, dl = data.length; d < dl; d++) {
-					view[d] = data[d];
-				}
+			blob = new Buffer(raw_payload.byteLength);
+			view = new Uint8Array(raw_payload);
 
-				return blob;
-
-			})(new Buffer(tmp2, 'utf8'));
-
-			socket.open(tmp3[0], tmp3[1], true);
-			socket.responseType = 'arraybuffer';
-
-			headers.forEach(function(line) {
-
-				var key = line.substr(0, line.indexOf(':')).trim();
-				var val = line.substr(line.indexOf(':') + 1).trim();
-
-				if (key.length > 0 && /Connection|Content-Length/g.test(key) === false) {
-					socket.setRequestHeader(key, val);
-				}
-
-			});
-
-		} else {
-
-			payload = tmp2;
-
-			socket.open(tmp3[0], tmp3[1], true);
-			socket.responseType = 'text';
-
-			headers.forEach(function(line) {
-
-				var key = line.substr(0, line.indexOf(':')).trim();
-				var val = line.substr(line.indexOf(':') + 1).trim();
-
-				if (key.length > 0 && /Connection|Content-Length/g.test(key) === false) {
-					socket.setRequestHeader(key, val);
-				}
-
-			});
+			for (var v = 0, vl = blob.length; v < vl; v++) {
+				blob[v] = view[v];
+			}
 
 		}
 
 
-		socket.onload = function() {
+		var headers = {};
+		var payload = blob;
 
-			var head = {};
-			var blob = null;
-			var view = null;
+		raw_headers.split('\r\n').forEach(function(line) {
 
-			if (typeof socket.response === 'string') {
+			var i1 = line.indexOf(':');
+			if (i1 !== -1) {
 
-				blob = new Buffer(socket.response, 'utf8');
+				var key = line.substr(0, i1).trim().toLowerCase();
+				var val = line.substr(i1 + 1).trim();
 
-			} else if (socket.response instanceof ArrayBuffer) {
+				if (key.substr(0, 2) === 'x-') {
+					headers['@' + key.substr(2)] = val;
+				} else if (key.length > 0) {
+					headers[key.toLowerCase()] = val;
+				}
 
-				blob = new Buffer(socket.response.byteLength);
-				view = new Uint8Array(socket.response);
+			}
 
-				for (var v = 0, vl = blob.length; v < vl; v++) {
-					blob[v] = view[v];
+		});
+
+
+		return [{
+			headers: headers,
+			payload: payload
+		}];
+
+	};
+
+	var _reconnect_xhr = function(chunk, headers, binary) {
+
+		var connection = this.__connection;
+		if (connection !== null) {
+
+			var tmp    = chunk.toString('utf8').split('\n')[0].trim().split(' ');
+			var method = tmp[0];
+			var url    = 'http://' + connection.host + ':' + connection.port + tmp[1];
+			var socket = new _XHR();
+			var that   = this;
+
+
+			socket.open(method, url, true);
+			socket.responseType = binary === true ? 'arraybuffer' : 'text';
+
+			socket.onload = function() {
+
+				var chunks = _receive_xhr.call(that, socket.getAllResponseHeaders(), socket.response);
+				if (chunks.length > 0) {
+
+					for (var c = 0, cl = chunks.length; c < cl; c++) {
+
+						var chunk = chunks[c];
+						if (chunk.payload !== null) {
+							that.trigger('receive', [ chunk.payload, chunk.headers ]);
+						}
+
+					}
+
+				}
+
+			};
+
+			socket.onerror = function() {
+				that.trigger('error');
+				that.disconnect();
+			};
+
+			socket.ontimeout = function() {
+				that.trigger('error');
+				that.disconnect();
+			};
+
+			for (var key in headers) {
+
+				if (key.charAt(0) === '@') {
+					socket.setRequestHeader(_uppercase('x-' + key.substr(1)), headers[key]);
+				} else {
+					socket.setRequestHeader(_uppercase(key), headers[key]);
 				}
 
 			}
 
 
-			var tmp = socket.getAllResponseHeaders().split('\r\n');
-			if (tmp.length > 0) {
+			return socket;
 
-				tmp.forEach(function(line) {
-
-					var key = line.substr(0, line.indexOf(':')).trim();
-					var val = line.substr(line.indexOf(':') + 1).trim();
-
-					if (key.length > 0) {
-						head[key.toLowerCase()] = val;
-					}
-
-				});
-
-			}
+		}
 
 
-			// XXX: HTML XHR doesn't support Buffer data
-			// var chunks = protocol.receive(blob);
-			var temp   = { headers: head, payload: blob };
-			var chunks = [ temp ];
-			if (chunks.length > 0) {
-
-				for (var c = 0, cl = chunks.length; c < cl; c++) {
-
-					var chunk = chunks[c];
-					if (chunk.payload !== null) {
-						that.trigger('receive', [ chunk.payload, chunk.headers ]);
-					}
-
-				}
-
-			}
-
-		};
-
-		socket.onerror = function() {
-			that.trigger('error');
-			that.disconnect();
-		};
-
-		socket.ontimeout = function() {
-			that.trigger('error');
-			that.disconnect();
-		};
-
-
-		socket.send(payload);
+		return null;
 
 	};
 
@@ -271,7 +264,10 @@ lychee.define('lychee.net.socket.HTTP').tags({
 				} else {
 
 					protocol   = new _Protocol(_Protocol.TYPE.client);
-					connection = {};
+					connection = {
+						host: host,
+						port: port
+					};
 
 
 					_connect_socket.call(that, connection, protocol);
@@ -296,11 +292,35 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 				if (connection !== null && protocol !== null) {
 
+					// XXX: HTML XHR does not support Buffer data
 					var chunk = protocol.send(payload, headers, binary);
-					var enc   = binary === true ? 'binary' : 'utf8';
+					// var enc   = binary === true ? 'binary' : 'utf8';
 
-					if (chunk !== null) {
-						_send_xhr.call(this, chunk, enc);
+
+					// XXX: Web XHR does not support halfopen Sockets
+					connection = _reconnect_xhr.call(this, chunk, headers, binary);
+					chunk      = payload;
+
+
+					if (connection !== null && chunk !== null) {
+
+						if (binary === true) {
+
+							var blob = new ArrayBuffer(chunk.length);
+							var view = new Uint8Array(blob);
+
+							for (var c = 0, cl = chunk.length; c < cl; c++) {
+								view[c] = chunk[c];
+							}
+
+							connection.send(blob);
+
+						} else {
+
+							connection.send(chunk.toString('utf8'));
+
+						}
+
 					}
 
 				}

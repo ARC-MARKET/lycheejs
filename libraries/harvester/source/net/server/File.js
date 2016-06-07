@@ -28,7 +28,8 @@ lychee.define('harvester.net.server.File').requires([
 		'txt':     { binary: false, type: 'text/plain'                    },
 		'png':     { binary: true,  type: 'image/png'                     },
 		'svg':     { binary: true,  type: 'image/svg+xml'                 },
-		'woff':    { binary: false, type: 'application/font-woff'         },
+		'woff':    { binary: true,  type: 'application/font-woff'         },
+		'woff2':   { binary: true,  type: 'application/font-woff'         },
 		'xml':     { binary: false, type: 'text/xml'                      },
 		'zip':     { binary: true,  type: 'application/zip'               }
 

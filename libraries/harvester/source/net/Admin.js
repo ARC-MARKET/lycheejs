@@ -57,7 +57,7 @@ lychee.define('harvester.net.Admin').requires([
 
 					remote.send({}, {
 						'status':                       '200 OK',
-						'access-control-allow-headers': 'Content-Type',
+						'access-control-allow-headers': 'Content-Type, X-Service-Id, X-Service-Method, X-Service-Event',
 						'access-control-allow-origin':  '*',
 						'access-control-allow-methods': 'GET, POST',
 						'access-control-max-age':       '3600'

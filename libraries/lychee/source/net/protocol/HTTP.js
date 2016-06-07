@@ -66,10 +66,13 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 			headers_data += 'Content-Length: ' + payload_length + '\r\n';
 
 			for (var key in headers) {
-				if (key.charAt(0) === '@') continue;
-				if (key === 'url') continue;
-				if (key === 'method') continue;
-				headers_data += '' + _uppercase(key) + ': ' + headers[key] + '\r\n';
+
+				if (key.charAt(0) === '@') {
+					headers_data += '' + _uppercase('x-' + key.substr(1)) + ': ' + headers[key] + '\r\n';
+				} else if (/url|method/g.test(key) === false) {
+					headers_data += '' + _uppercase(key) + ': ' + headers[key] + '\r\n';
+				}
+
 			}
 
 			headers_data  += '\r\n';
@@ -77,7 +80,8 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 		} else {
 
-			var status = headers['status'] || Class.STATUS.normal_okay;
+			var status  = headers['status'] || Class.STATUS.normal_okay;
+			var exposed = [ 'Content-Type' ];
 
 
 			headers_data  = 'HTTP/1.1 ' + status + '\r\n';
@@ -85,11 +89,17 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 			headers_data += 'Content-Length: ' + payload_length + '\r\n';
 
 			for (var key in headers) {
-				if (key.charAt(0) === '@') continue;
-				if (key === 'status') continue;
-				headers_data += '' + _uppercase(key) + ': ' + headers[key] + '\r\n';
+
+				if (key.charAt(0) === '@') {
+					headers_data += '' + _uppercase('x-' + key.substr(1)) + ': ' + headers[key] + '\r\n';
+					exposed.push(_uppercase('x-' + key.substr(1)));
+				} else if (/status/g.test(key) === false) {
+					headers_data += '' + _uppercase(key) + ': ' + headers[key] + '\r\n';
+				}
+
 			}
 
+			headers_data  += 'Access-Control-Expose-Headers: ' + exposed.join(', ') + '\r\n';
 			headers_data  += '\r\n';
 			headers_length = headers_data.length;
 
@@ -169,6 +179,10 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 				} else if (/access-control/g.test(key) === true) {
 
 					chunk.headers[key] = val;
+
+				} else if (key.substr(0, 2) === 'x-') {
+
+					chunk.headers['@' + key.substr(2)] = val;
 
 				}
 
