@@ -1,5 +1,6 @@
 
 lychee.define('harvester.net.remote.Profile').requires([
+	'harvester.data.Filesystem',
 	'lychee.codec.JSON'
 ]).includes([
 	'lychee.net.Service'
@@ -120,7 +121,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 
 	var Class = function(remote) {
 
-		_Service.call(this, 'project', remote, _Service.TYPE.remote);
+		_Service.call(this, 'profile', remote, _Service.TYPE.remote);
 
 
 		this.bind('update', _on_update, this);
@@ -137,7 +138,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 		serialize: function() {
 
 			var data = _Service.prototype.serialize.call(this);
-			data['constructor'] = 'harvester.net.remote.Project';
+			data['constructor'] = 'harvester.net.remote.Profile';
 
 
 			return data;
