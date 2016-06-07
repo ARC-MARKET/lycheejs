@@ -4,30 +4,16 @@
 	},
 	"build": {
 		"environments": {
-			"html/main": {
-				"build": "tool.Main",
-				"debug": false,
-				"packages": [
-					[
-						"tool",
-						"./lychee.pkg"
-					]
-				],
-				"sandbox": false,
-				"tags": {
-					"platform": [
-						"html"
-					]
-				},
-				"variant": "application"
-			},
 			"html-nwjs/main": {
-				"build": "tool.Main",
+				"build": "app.Main",
 				"debug": false,
 				"packages": [
 					[
-						"tool",
+						"app",
 						"./lychee.pkg"
+					], [
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
 					]
 				],
 				"sandbox": false,
@@ -37,7 +23,83 @@
 						"html"
 					]
 				},
-				"variant": "application"
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/cultivator/editor",
+					"server": "/api/server/connect?identifier=/projects/cultivator/editor"
+				}
+			},
+			"html-webview/main": {
+				"build": "app.Main",
+				"debug": false,
+				"packages": [
+					[
+						"app",
+						"./lychee.pkg"
+					], [
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-webview",
+						"html"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/cultivator/editor",
+					"server": "/api/server/connect?identifier=/projects/cultivator/editor"
+				}
+			},
+			"html/main": {
+				"build": "app.Main",
+				"debug": false,
+				"packages": [
+					[
+						"app",
+						"./lychee.pkg"
+					], [
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/cultivator/editor",
+					"server": "/api/server/connect?identifier=/projects/cultivator/editor"
+				}
+			},
+			"node/main": {
+				"build": "app.Main",
+				"debug": false,
+				"packages": [
+					[
+						"app",
+						"./lychee.pkg"
+					], [
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": null
+				}
 			}
 		},
 		"files": {}
@@ -48,15 +110,28 @@
 			"Main": [
 				"js"
 			],
-			"Main__OLD": [
-				"js"
-			],
-			"state": {
-				"Project": [
+			"net": {
+				"Client": [
 					"js"
 				],
-				"Scene": [
+				"Server": [
 					"js"
+				],
+				"client": {
+					"Ping": [
+						"js"
+					]
+				},
+				"remote": {
+					"Ping": [
+						"js"
+					]
+				}
+			},
+			"state": {
+				"Welcome": [
+					"js",
+					"json"
 				]
 			}
 		},
