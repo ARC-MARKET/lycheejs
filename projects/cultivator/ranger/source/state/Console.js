@@ -33,20 +33,10 @@ lychee.define('app.state.Console').requires([
 			}
 
 
-			var stdout = table.getEntity('0');
-			if (stdout !== null) {
-				stdout.width  = table.width / 2;
-				stdout.height = table.height - 96;
+			var blueprint = this.queryLayer('ui', 'console');
+			if (blueprint !== null) {
+				blueprint.trigger('relayout');
 			}
-
-			var stderr = table.getEntity('1');
-			if (stderr !== null) {
-				stderr.width  = table.width / 2;
-				stderr.height = table.height - 96;
-			}
-
-
-			table.trigger('relayout');
 
 		}
 
@@ -104,11 +94,11 @@ lychee.define('app.state.Console').requires([
 							var right = entity.getEntity('1');
 							if (left !== null && right !== null) {
 
-								left.width   = entity.width / 2;
+								left.width   = entity.width / 2 - 4;
 								left.height  = entity.height - 96;
 								left.trigger('relayout');
 
-								right.width  = entity.width / 2;
+								right.width  = entity.width / 2 - 4;
 								right.height = entity.height - 96;
 								right.trigger('relayout');
 

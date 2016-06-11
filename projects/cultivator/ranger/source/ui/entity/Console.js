@@ -18,9 +18,9 @@ lychee.define('app.ui.entity.Console').includes([
 		if (font !== null && font.texture !== null) {
 
 			if (this.__buffer !== null) {
-				this.__buffer.resize(this.width - 16, this.height - 16);
+				this.__buffer.resize(this.width, this.height);
 			} else {
-				this.__buffer = renderer.createBuffer(this.width - 16, this.height - 16);
+				this.__buffer = renderer.createBuffer(this.width, this.height);
 			}
 
 
@@ -166,8 +166,8 @@ lychee.define('app.ui.entity.Console').includes([
 			var position = this.position;
 			var x        = position.x + offsetX;
 			var y        = position.y + offsetY;
-			var hwidth   = (this.width  - 2) / 2;
-			var hheight  = (this.height - 2) / 2;
+			var hwidth   = this.width  / 2;
+			var hheight  = this.height / 2;
 
 
 			if (alpha !== 1) {
@@ -179,9 +179,8 @@ lychee.define('app.ui.entity.Console').includes([
 				y - hheight,
 				x + hwidth,
 				y + hheight,
-				'#32afe5',
-				false,
-				2
+				'#1f2726',
+				true
 			);
 
 			if (alpha !== 1) {
@@ -201,8 +200,8 @@ lychee.define('app.ui.entity.Console').includes([
 			if (this.__buffer !== null) {
 
 				renderer.drawBuffer(
-					x - hwidth  + 8,
-					y - hheight + 8,
+					x - hwidth,
+					y - hheight,
 					this.__buffer
 				);
 
