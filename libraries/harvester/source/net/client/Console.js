@@ -74,5 +74,8 @@ lychee.define('harvester.net.client.Console').includes([
 
 	};
 
+
+	return Class;
+
 });
 
