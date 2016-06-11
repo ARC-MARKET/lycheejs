@@ -45,7 +45,8 @@ var _print_help = function() {
 	console.log('                                                            ');
 	console.log('Available Flags:                                            ');
 	console.log('                                                            ');
-	console.log('   --sandbox        Disables Fertilizer and Strainer Modules');
+	console.log('   --debug          Debug Mode with verbose debug messages  ');
+	console.log('   --sandbox        Sandbox Mode without software bots      ');
 	console.log('                                                            ');
 	console.log('Examples:                                                   ');
 	console.log('                                                            ');
