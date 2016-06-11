@@ -92,6 +92,8 @@ var _settings = (function() {
 
 				if (json !== null) {
 					settings.profile = json;
+					settings.debug   = json.debug   === true;
+					settings.sandbox = json.sandbox === true;
 				}
 
 			}

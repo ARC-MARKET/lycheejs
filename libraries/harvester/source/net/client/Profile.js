@@ -74,6 +74,32 @@ lychee.define('harvester.net.client.Profile').includes([
 
 			}
 
+		},
+
+		save: function(data) {
+
+			if (data instanceof Object) {
+
+				var profile = {
+					identifier: typeof data.identifier === 'string' ? data.identifier : null,
+					host:       typeof data.host === 'string'       ? data.host       : null,
+					port:       typeof data.port === 'string'       ? data.port       : null,
+					debug:      data.debug   === true,
+					sandbox:    data.sandbox === true
+				};
+
+				var tunnel = this.tunnel;
+				if (tunnel !== null && profile.identifier !== null && profile.host !== null && profile.port !== null) {
+
+					tunnel.send(profile, {
+						id:    this.id,
+						event: 'save'
+					});
+
+				}
+
+			}
+
 		}
 
 	};

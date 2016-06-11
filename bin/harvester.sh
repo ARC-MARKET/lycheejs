@@ -62,12 +62,12 @@ case "$1" in
 	start)
 
 		SANDBOX_FLAG="";
-		if [ "$3" == "--sandbox" ]; then
+		if [ "$3" == "--sandbox" ] || [ "$4" == "--sandbox" ]; then
 			SANDBOX_FLAG="--sandbox";
 		fi;
 
 		DEBUG_FLAG="";
-		if [ "$4" == "--debug" ]; then
+		if [ "$3" == "--debug" ] || [ "$4" == "--debug" ]; then
 			DEBUG_FLAG="--debug";
 		fi;
 

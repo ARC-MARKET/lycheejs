@@ -4,7 +4,8 @@ lychee.define('app.state.Profile').requires([
 	'lychee.ui.Blueprint',
 	'lychee.ui.Element',
 	'lychee.ui.entity.Helper',
-	'lychee.ui.entity.Input'
+	'lychee.ui.entity.Input',
+	'lychee.ui.entity.Switch'
 ]).includes([
 	'lychee.ui.State'
 ]).exports(function(lychee, global, attachments) {
@@ -46,6 +47,8 @@ lychee.define('app.state.Profile').requires([
 				entity.setLabel(profile.identifier);
 				entity.getEntity('host').setValue(profile.host);
 				entity.getEntity('port').setValue(profile.port);
+				entity.getEntity('debug').setValue(profile.debug === true ? 'on' : 'off');
+				entity.getEntity('sandbox').setValue(profile.sandbox === true ? 'on' : 'off');
 
 			});
 
@@ -60,13 +63,17 @@ lychee.define('app.state.Profile').requires([
 			var identifier = entity.label;
 			var host       = entity.getEntity('host').value;
 			var port       = entity.getEntity('port').value;
+			var debug      = entity.getEntity('debug').value;
+			var sandbox    = entity.getEntity('sandbox').value;
 			var profile    = _CACHE[identifier] || null;
 			if (profile !== null) {
 
 				profile = _CACHE[identifier] = {
 					identifier: identifier,
 					host:       host,
-					port:       port
+					port:       port,
+					debug:      debug   === 'on',
+					sandbox:    sandbox === 'on'
 				};
 
 
