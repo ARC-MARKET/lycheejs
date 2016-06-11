@@ -86,7 +86,7 @@ lychee.define('app.state.Welcome').requires([
 
 			if (value.length > 0) {
 
-				var table = this.queryLayer('ui', 'welcome > status').__content[0] || null;
+				var table = this.queryLayer('ui', 'welcome > status > 0');
 				if (table !== null) {
 					table.setValue(value);
 				}

@@ -1,0 +1,63 @@
+{
+	"layers": {
+		"ui": {
+			"constructor": "lychee.ui.Layer",
+			"arguments": [{}],
+			"blob": {
+				"entities": [{
+					"constructor": "lychee.ui.Blueprint",
+					"arguments": [{
+						"visible": true,
+						"type": 2
+					}],
+					"blob": {
+						"entities": [{
+							"constructor": "lychee.ui.Element",
+							"arguments": [{
+								"label":    "CONSOLE",
+								"options":  [],
+								"width":    640,
+								"height":   480,
+								"position": {
+									"x": 0,
+									"y": 0
+								}
+							}],
+							"blob": {
+								"entities": [{
+									"constructor": "lychee.ui.layer.Table",
+									"arguments": [{
+										"width":  608,
+										"height": 384,
+										"position": {
+											"x":  0,
+											"y": 32
+										}
+									}],
+									"blob": {
+										"model": {
+											"stdout": {
+												"constructor": "app.ui.layer.Console",
+												"arguments": [{}]
+											},
+											"stderr": {
+												"constructor": "app.ui.layer.Console",
+												"arguments": [{}]
+											}
+										}
+									}
+								}]
+							}
+						}],
+						"map": {
+							"status": 0
+						}
+					}
+				}],
+				"map": {
+					"console": 0
+				}
+			}
+		}
+	}
+}

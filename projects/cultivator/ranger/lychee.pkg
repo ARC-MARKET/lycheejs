@@ -79,6 +79,10 @@
 				"js"
 			],
 			"state": {
+				"Console": [
+					"js",
+					"json"
+				],
 				"Profile": [
 					"js",
 					"json"
