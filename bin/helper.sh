@@ -40,47 +40,48 @@ fi;
 
 _print_help() {
 
-	echo "                                                           ";
+	echo "                                                                ";
 	echo -e "\u001b[37m\u001b[42mlycheeJS Helper\u001b[49m\u001b[39m";
-	echo "                                                           ";
-	echo " Usage: lycheejs-helper [lycheejs://Action]                ";
-	echo "        lycheejs-helper [env:Platform]                     ";
-	echo "                                                           ";
-	echo "                                                           ";
-	echo " Available Actions:                                        ";
-	echo "                                                           ";
-	echo "    boot=[Profile]                                         ";
-	echo "    profile=[Profile]&data=[JSON]                          ";
-	echo "    unboot                                                 ";
-	echo "                                                           ";
-	echo "    start=[Library/Project]                                ";
-	echo "    stop=[Library/Project]                                 ";
-	echo "    file=[Library/Project]                                 ";
-	echo "    edit=[Library/Project]                                 ";
-	echo "                                                           ";
-	echo "    cmd=[Command]&data=[JSON]                              ";
-	echo "    web=[URL]                                              ";
-	echo "                                                           ";
-	echo "                                                           ";
-	echo " Available Platforms:                                      ";
-	echo "                                                           ";
-	echo "    html, html-nwjs, node, node-sdl                        ";
-	echo "                                                           ";
-	echo " Examples:                                                 ";
-	echo "                                                           ";
-	echo "    lycheejs-helper lycheejs://start=/projects/boilerplate ";
-	echo "    lycheejs-helper lycheejs://cmd=lycheejs-ranger         ";
-	echo "    lycheejs-helper lycheejs://web=http://lycheejs.org     ";
-	echo "                                                           ";
-	echo "    lycheejs-helper env:node /path/to/program.js           ";
-	echo "                                                           ";
-	echo " Notes:                                                    ";
-	echo "                                                           ";
-	echo " The [JSON] data is encoded as base64 only.                ";
-	echo "                                                           ";
-	echo " The \"env:\" can be used as a Shebang in shell scripts:   ";
-	echo " #!/usr/local/bin/lycheejs-helper env:node                 ";
-	echo "                                                           ";
+	echo "                                                                ";
+	echo " Usage: lycheejs-helper [lycheejs://Action]                     ";
+	echo "        lycheejs-helper [env:Platform]                          ";
+	echo "                                                                ";
+	echo "                                                                ";
+	echo " Available Actions:                                             ";
+	echo "                                                                ";
+	echo "    boot=[Profile]                                              ";
+	echo "    profile=[Profile]?data=[base64]                             ";
+	echo "    unboot                                                      ";
+	echo "                                                                ";
+	echo "    start=[Library/Project]                                     ";
+	echo "    stop=[Library/Project]                                      ";
+	echo "    file=[Library/Project]                                      ";
+	echo "    edit=[Library/Project]                                      ";
+	echo "                                                                ";
+	echo "    cmd=[Command]?data=[JSON]                                   ";
+	echo "    web=[URL]                                                   ";
+	echo "                                                                ";
+	echo "                                                                ";
+	echo " Available Platforms:                                           ";
+	echo "                                                                ";
+	echo "    html, html-nwjs, node, node-sdl                             ";
+	echo "                                                                ";
+	echo " Examples:                                                      ";
+	echo "                                                                ";
+	echo "    lycheejs-helper lycheejs://start=/projects/boilerplate      ";
+	echo "    lycheejs-helper lycheejs://cmd=lycheejs-ranger              ";
+	echo "    lycheejs-helper lycheejs://profile=production?data=[base64] ";
+	echo "    lycheejs-helper lycheejs://web=http://lycheejs.org          ";
+	echo "                                                                ";
+	echo "    lycheejs-helper env:node /path/to/program.js                ";
+	echo "                                                                ";
+	echo " Notes:                                                         ";
+	echo "                                                                ";
+	echo " The [JSON] data is encoded as base64 only.                     ";
+	echo "                                                                ";
+	echo " The \"env:\" can be used as a Shebang in shell scripts:        ";
+	echo " #!/usr/local/bin/lycheejs-helper env:node                      ";
+	echo "                                                                ";
 
 }
 
@@ -120,8 +121,7 @@ _put_api_project () {
 
 _put_api_profile () {
 
-	blob=$(echo $3 | base64 --decode);
-	data="{\"identifier\":\"$1\",\"data\":\"$blob\"}";
+	data=$(echo $3 | base64 --decode);
 	apiurl="http://localhost:4848/api/profile/$2";
 
 	curl -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1;
@@ -150,12 +150,13 @@ if [ "$protocol" == "lycheejs" ]; then
 
 	if [ "$action" == "profile" ]; then
 		# XXX: base64 encoded strings end with = (8 Bit) or == (16 Bit)
+		resource=$(echo $resource | cut -d"?" -f 1);
 		data=$(echo $1 | cut -d"=" -f 3-5);
 	elif [ "$action" == "unboot" ]; then
 		resource="DUMMY";
 	elif [ "$action" == "cmd" ]; then
 		# XXX: base64 encoded strings end with = (8 Bit) or == (16 Bit)
-		resource=$(echo $1 | cut -d"&" -f 1 | cut -d"=" -f 2);
+		resource=$(echo $1 | cut -d"?" -f 1 | cut -d"=" -f 2);
 		data=$(echo $1 | cut -d"=" -f 3-5);
 	elif [ "$action" == "web" ]; then
 		resource=$(echo $1 | cut -c 16-);
