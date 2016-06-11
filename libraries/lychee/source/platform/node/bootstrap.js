@@ -67,10 +67,12 @@
 	 * POLYFILLS
 	 */
 
-	var _log   = console.log   || function() {};
-	var _info  = console.info  || console.log;
-	var _warn  = console.warn  || console.log;
-	var _error = console.error || console.log;
+	var _log     = console.log   || function() {};
+	var _info    = console.info  || console.log;
+	var _warn    = console.warn  || console.log;
+	var _error   = console.error || console.log;
+	var _std_out = '';
+	var _std_err = '';
 
 
 	console.log = function() {
@@ -87,6 +89,7 @@
 		args.push(' ');
 
 		_log.apply(console, args);
+		_std_out += args.join('\n');
 
 	};
 
@@ -106,6 +109,7 @@
 		args.push('\u001b[39m');
 
 		_info.apply(console, args);
+		_std_out += args.join('\n');
 
 	};
 
@@ -125,6 +129,7 @@
 		args.push('\u001b[39m');
 
 		_warn.apply(console, args);
+		_std_out += args.join('\n');
 
 	};
 
@@ -144,6 +149,35 @@
 		args.push('\u001b[39m');
 
 		_error.apply(console, args);
+		_std_err += args.join('\n');
+
+	};
+
+	console.deserialize = function(blob) {
+
+		if (typeof blob.stdout === 'string') {
+			_std_out = blob.stdout;
+		}
+
+		if (typeof blob.stderr === 'string') {
+			_std_err = blob.stderr;
+		}
+
+	};
+
+	console.serialize = function() {
+
+		var blob = {};
+
+
+		if (_std_out.length > 0) blob.stdout = _std_out;
+		if (_std_err.length > 0) blob.stderr = _std_err;
+
+
+		return {
+			'reference': 'console',
+			'blob':      Object.keys(blob).length > 0 ? blob : null
+		};
 
 	};
 

@@ -215,6 +215,9 @@
 					"js"
 				],
 				"client": {
+					"Console": [
+						"js"
+					],
 					"Library": [
 						"js"
 					],
@@ -226,6 +229,9 @@
 					]
 				},
 				"remote": {
+					"Console": [
+						"js"
+					],
 					"Library": [
 						"js"
 					],

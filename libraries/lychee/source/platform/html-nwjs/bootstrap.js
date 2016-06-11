@@ -27,7 +27,7 @@
 
 
 			if (cwd !== '') {
-				lychee.ROOT.project = cwd;
+				lychee.ROOT.project = cwd === '/' ? '' : cwd;
 			}
 
 		} else if (proto.match(/app|file/g) !== null) {
@@ -127,71 +127,93 @@
 	 * POLYFILLS
 	 */
 
-	var _log = console.log || function() {};
+	var _log     = console.log   || function() {};
+	var _info    = console.info  || console.log;
+	var _warn    = console.warn  || console.log;
+	var _error   = console.error || console.log;
+	var _std_out = '';
+	var _std_err = '';
 
 
-	if (typeof console.info === 'undefined') {
+	console.log = function() {
 
-		console.info = function() {
+		var al   = arguments.length;
+		var args = new Array(al);
+		for (var a = 0; a < al; a++) {
+			args[a] = arguments[a];
+		}
 
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
+		_log.apply(console, args);
+		_std_out += args.join('\n');
+
+	};
+
+	console.info = function() {
+
+		var al   = arguments.length;
+		var args = new Array(al);
+		for (var a = 0; a < al; a++) {
+			args[a] = arguments[a];
+		}
+
+		_info.apply(console, args);
+		_std_out += args.join('\n');
+
+	};
+
+	console.warn = function() {
+
+		var al   = arguments.length;
+		var args = new Array(al);
+		for (var a = 0; a < al; a++) {
+			args[a] = arguments[a];
+		}
+
+		_warn.apply(console, args);
+		_std_out += args.join('\n');
+
+	};
+
+	console.error = function() {
+
+		var al   = arguments.length;
+		var args = new Array(al);
+		for (var a = 0; a < al; a++) {
+			args[a] = arguments[a];
+		}
+
+		_error.apply(console, args);
+		_std_err += args.join('\n');
+
+	};
+
+	console.deserialize = function(blob) {
+
+		if (typeof blob.stdout === 'string') {
+			_std_out = blob.stdout;
+		}
+
+		if (typeof blob.stderr === 'string') {
+			_std_err = blob.stderr;
+		}
+
+	};
+
+	console.serialize = function() {
+
+		var blob = {};
 
 
-			args.reverse();
-			args.push('[INFO]');
-			args.reverse();
+		if (_std_out.length > 0) blob.stdout = _std_out;
+		if (_std_err.length > 0) blob.stderr = _std_err;
 
-			_log.apply(console, args);
 
+		return {
+			'reference': 'console',
+			'blob':      Object.keys(blob).length > 0 ? blob : null
 		};
 
-	}
-
-
-	if (typeof console.warn === 'undefined') {
-
-		console.warn = function() {
-
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
-
-			args.reverse();
-			args.push('[WARN]');
-			args.reverse();
-
-			_log.apply(console, args);
-
-		};
-
-	}
-
-
-	if (typeof console.error === 'undefined') {
-
-		console.error = function() {
-
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
-
-			args.reverse();
-			args.push('[ERROR]');
-			args.reverse();
-
-			_log.apply(console, args);
-
-		};
-
-	}
+	};
 
 
 

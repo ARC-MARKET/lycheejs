@@ -1,6 +1,7 @@
 
 lychee.define('harvester.net.Admin').requires([
 	'harvester.net.Remote',
+	'harvester.net.remote.Console',
 	'harvester.net.remote.Library',
 	'harvester.net.remote.Profile',
 	'harvester.net.remote.Project',
@@ -44,6 +45,7 @@ lychee.define('harvester.net.Admin').requires([
 
 		this.bind('connect', function(remote) {
 
+			remote.addService(new _remote.Console(remote));
 			remote.addService(new _remote.Library(remote));
 			remote.addService(new _remote.Profile(remote));
 			remote.addService(new _remote.Project(remote));
