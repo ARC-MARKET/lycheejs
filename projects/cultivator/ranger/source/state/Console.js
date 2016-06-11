@@ -85,41 +85,42 @@ lychee.define('app.state.Console').requires([
 				viewport.relay('reshape', this.queryLayer('ui', 'console > status'));
 
 
-				entity = this.queryLayer('ui', 'console > status');
-				entity.bind('#reshape', function(entity, orientation, rotation, width, height) {
+				entity = this.queryLayer('ui', 'console');
+				entity.bind('#relayout', function(blueprint) {
 
-					var menu = this.queryLayer('ui', 'menu');
-					var w    = (((width - menu.width) / 512) | 0) * 512;
-					var h    = ((height               / 128) | 0) * 128;
+					var element = this.queryLayer('ui', 'console > status');
+					if (element !== null) {
 
+						element.width  = blueprint.width - 64;
+						element.height = blueprint.height;
 
-					entity.width  = w;
-					entity.height = h;
+						var entity = element.getEntity('0');
+						if (entity !== null) {
 
+							entity.width  = element.width  - 32;
+							entity.height = element.height - 96;
 
-					var table = entity.getEntity('0');
-					if (table !== null) {
+							var left  = entity.getEntity('0');
+							var right = entity.getEntity('1');
+							if (left !== null && right !== null) {
 
-						table.width  = w - 32;
-						table.height = h - 96;
+								left.width   = entity.width / 2;
+								left.height  = entity.height - 96;
+								left.trigger('relayout');
 
+								right.width  = entity.width / 2;
+								right.height = entity.height - 96;
+								right.trigger('relayout');
 
-						var stdout = table.getEntity('0');
-						if (stdout !== null) {
-							stdout.width  = table.width / 2;
-							stdout.height = table.height - 96;
+							}
+
+							entity.trigger('relayout');
+
 						}
 
-						var stderr = table.getEntity('1');
-						if (stderr !== null) {
-							stderr.width  = table.width / 2;
-							stderr.height = table.height - 96;
-						}
+						element.trigger('relayout');
 
 					}
-
-
-					entity.trigger('relayout');
 
 				}, this);
 

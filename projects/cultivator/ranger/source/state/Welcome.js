@@ -4,7 +4,6 @@ lychee.define('app.state.Welcome').requires([
 	'lychee.ui.entity.Label',
 	'lychee.ui.layer.Table',
 	'app.ui.entity.Identifier',
-	'app.ui.entity.Status',
 	'app.ui.layer.Control',
 	'app.ui.layer.Web'
 ]).includes([
@@ -76,7 +75,6 @@ lychee.define('app.state.Welcome').requires([
 
 				return {
 					identifier: project.identifier,
-					status:     project.server !== null ? 'Online' : 'Offline',
 					control:    control,
 					web:		web
 				};
@@ -156,31 +154,21 @@ lychee.define('app.state.Welcome').requires([
 			var viewport = this.viewport;
 			if (viewport !== null) {
 
-				viewport.relay('reshape', this.queryLayer('ui', 'welcome > status'));
+				entity = this.queryLayer('ui', 'welcome');
+				entity.bind('#relayout', function(blueprint) {
 
-
-				entity = this.queryLayer('ui', 'welcome > status');
-				entity.bind('#reshape', function(entity, orientation, rotation, width, height) {
-
-					var menu = this.queryLayer('ui', 'menu');
-					var w    = (((width - menu.width) / 512) | 0) * 512;
-					var h    = ((height               / 128) | 0) * 128;
-
-
-					entity.width  = w;
-					entity.height = h;
-
-
-					var table = entity.getEntity('0');
-					if (table !== null) {
-
-						table.width  = w - 32;
-						table.height = h - 96;
-
+					var element = this.queryLayer('ui', 'welcome > status');
+					if (element !== null) {
+						element.width  = blueprint.width - 64;
+						element.height = blueprint.height;
+						element.trigger('relayout');
 					}
 
-
-					entity.trigger('relayout');
+					var entity = element.getEntity('0');
+					if (entity !== null && element !== null) {
+						entity.width  = element.width  - 32;
+						entity.height = element.height - 96;
+					}
 
 				}, this);
 

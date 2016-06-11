@@ -94,6 +94,10 @@
 			},
 			"ui": {
 				"entity": {
+					"Console": [
+						"fnt",
+						"js"
+					],
 					"Identifier": [
 						"js"
 					],
