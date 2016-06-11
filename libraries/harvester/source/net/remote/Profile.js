@@ -46,7 +46,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 	 * HELPERS
 	 */
 
-	var _update_profile = function(profile) {
+	var _save_profile = function(profile) {
 
 		var path = '/' + profile.identifier + '.json';
 		var data = _JSON.encode(profile);
@@ -74,7 +74,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 
 	};
 
-	var _on_update = function(data) {
+	var _on_save = function(data) {
 
 		var identifier = data.identifier || null;
 		if (identifier !== null) {
@@ -94,7 +94,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 				}
 
 
-				_update_profile(profile);
+				_save_profile(profile);
 
 
 				this.accept('Profile updated ("' + identifier + '")');
@@ -124,7 +124,7 @@ lychee.define('harvester.net.remote.Profile').requires([
 		_Service.call(this, 'profile', remote, _Service.TYPE.remote);
 
 
-		this.bind('update', _on_update, this);
+		this.bind('save', _on_save, this);
 
 	};
 
@@ -168,6 +168,10 @@ lychee.define('harvester.net.remote.Profile').requires([
 
 			}
 
+		},
+
+		sync: function() {
+			this.index();
 		}
 
 	};

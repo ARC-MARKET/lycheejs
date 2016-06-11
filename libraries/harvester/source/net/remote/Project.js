@@ -183,6 +183,10 @@ lychee.define('harvester.net.remote.Project').requires([
 
 			}
 
+		},
+
+		sync: function() {
+			this.index();
 		}
 
 	};

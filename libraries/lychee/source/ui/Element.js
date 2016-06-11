@@ -108,6 +108,7 @@ lychee.define('lychee.ui.Element').requires([
 		entity.position.y = y1 + 32 - 1;
 
 		entity            = layout[1];
+		entity.width      = this.width - 48 - order_w;
 		entity.position.x = x1 + 32 + order_w + entity.width / 2;
 		entity.position.y = y1 + 32;
 
@@ -166,6 +167,8 @@ lychee.define('lychee.ui.Element').requires([
 		 * INITIALIZATION
 		 */
 
+		var content = this.__content.slice(0);
+
 		lychee.ui.Layer.prototype.setEntity.call(this, '@order', new lychee.ui.entity.Label({
 			font:  _FONTS.order,
 			value: '' + this.order
@@ -187,7 +190,7 @@ lychee.define('lychee.ui.Element').requires([
 		}));
 
 
-		this.__content = [];
+		this.__content = content;
 		this.unbind('relayout');
 		this.bind('relayout', _on_relayout, this);
 
@@ -236,6 +239,36 @@ lychee.define('lychee.ui.Element').requires([
 			if (this.label !== 'CONTENT')                 settings.label   = this.label;
 			if (this.options.join(',') !== 'Okay,Cancel') settings.options = this.options.slice(0, this.options.length);
 			if (this.order !== 1)                         settings.order   = this.order;
+
+
+			if (this.__content.length > 0) {
+
+				var entities = this.__content.filter(function(value, index) {
+					return index % 2 === 0;
+				});
+
+				var map = Object.map(this.__map, function(val, key) {
+
+					var index = entities.indexOf(val);
+					if (index !== -1) {
+						return index;
+					}
+
+
+					return undefined;
+
+				}, this);
+
+
+				blob.entities = entities.map(lychee.serialize);
+				blob.map      = map;
+
+			} else {
+
+				delete blob.entities;
+				delete blob.map;
+
+			}
 
 
 			data['blob'] = Object.keys(blob).length > 0 ? blob : null;

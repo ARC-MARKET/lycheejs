@@ -3,13 +3,15 @@ lychee.define('app.Main').requires([
 	'app.state.Welcome',
 	'app.state.Profile',
 //	'app.state.Console',
-//	'app.state.Remote'
+//	'app.state.Remote,'
+	'harvester.net.Client'
 ]).includes([
 	'lychee.app.Main'
 ]).exports(function(lychee, global, attachments) {
 
 	var _lychee = lychee.import('lychee');
 	var _app    = lychee.import('app');
+	var _Client = lychee.import('harvester.net.Client');
 	var _Main   = lychee.import('lychee.app.Main');
 
 
@@ -22,14 +24,13 @@ lychee.define('app.Main').requires([
 
 		var settings = lychee.extend({
 
-			client: null,
+			client: {},
 			server: null
 
 		}, data);
 
 
 		this.config  = null;
-		this.profile = null;
 
 
 		_Main.call(this, settings);
@@ -42,13 +43,20 @@ lychee.define('app.Main').requires([
 
 		this.bind('load', function(oncomplete) {
 
-			this.reload(function(config, profile) {
-				oncomplete(true);
-			}, this);
+			this.settings.apiclient = this.settings.client;
+			this.settings.client    = null;
+
+			oncomplete(true);
 
 		}, this, true);
 
 		this.bind('init', function() {
+
+			var apiclient = this.settings.apiclient || null;
+			if (apiclient !== null) {
+				this.client = new _Client(apiclient, this);
+			}
+
 
 			this.setState('welcome', new _app.state.Welcome(this));
 			this.setState('profile', new _app.state.Profile(this));
@@ -96,7 +104,6 @@ lychee.define('app.Main').requires([
 
 			var that    = this;
 			var config  = new Config('http://localhost:4848/api/project/index?timestamp=' + Date.now());
-			var profile = new Config('http://localhost:4848/api/profile/index?timestamp=' + Date.now());
 
 
 			config.onload = function(result) {
@@ -105,19 +112,9 @@ lychee.define('app.Main').requires([
 					that.config = this;
 				}
 
-				profile.load();
+				callback.call(scope, that.config);
 
 			};
-
-			profile.onload = function(result) {
-
-				if (this.buffer !== null) {
-					that.profile = this;
-				}
-
-				callback.call(scope, that.config, that.profile);
-
-			}
 
 			config.load();
 

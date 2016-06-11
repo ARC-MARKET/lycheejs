@@ -2,85 +2,66 @@
 	"layers": {
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.ui.Blueprint",
-					"arguments": [{
-						"visible": false,
-						"type": 1
-					}],
-					"blob": {
-						"entities": [{
-							"constructor": "lychee.ui.Element",
-							"arguments": [{
-								"label": "SELECT",
-								"options": [ "Save" ]
-							}],
-							"blob": {
-								"entities": [{
-									"constructor": "lychee.ui.entity.Select",
-									"arguments": [{
-										"options": [ "development", "production" ],
-										"value":   "development"
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Input",
-									"arguments": [{
-										"type":  1,
-										"min":   1,
-										"max":   49151,
-										"value": 8080
-									}]
-								}],
-								"map": {
-									"profile": 0,
-									"port":    1
-								}
+				"entities": [
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": false,
+								"type": 0
 							}
-						}, {
-							"constructor": "lychee.ui.Element",
-							"arguments": [{
-								"label": "MODIFY",
-								"options": []
-							}],
-							"blob": {
-								"entities": [{
-									"constructor": "lychee.ui.layer.Table",
-									"arguments": [{
-										"width":  448,
-										"height": 384
-									}],
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "lychee.ui.Element",
+									"arguments": [
+										{
+											"label": "development",
+											"options": [
+												"Save"
+											]
+										}
+									],
 									"blob": {
-										"model": {
-											"host": {
+										"entities": [
+											{
 												"constructor": "lychee.ui.entity.Input",
-												"arguments": [{}]
-											},
-											"project": {
+												"arguments": [
+													{
+														"type": 0,
+														"value": "localhost"
+													}
+												]
+											}, {
 												"constructor": "lychee.ui.entity.Input",
-												"arguments": [{}]
-											},
-											"action": {
-												"constructor": "lychee.ui.entity.Button",
-												"arguments": [{
-													"label": "Remove"
-												}]
+												"arguments": [
+													{
+														"type": 1,
+														"max": 49151,
+														"min": 0,
+														"value": 8080
+													}
+												]
 											}
+										],
+										"map": {
+											"host": 0,
+											"port": 1
 										}
 									}
-								}, {
-									"constructor": "app.ui.layer.Profile",
-									"arguments": [{}]
-								}]
+								}
+							],
+							"map": {
+								"development": 0
 							}
-						}],
-						"map": {
-							"select": 0,
-							"modify": 1
 						}
 					}
-				}],
+				],
 				"map": {
 					"profile": 0
 				}

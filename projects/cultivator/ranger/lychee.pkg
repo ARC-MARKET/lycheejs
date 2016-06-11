@@ -11,6 +11,10 @@
 					[
 						"app",
 						"./lychee.pkg"
+					],
+					[
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
 					]
 				],
 				"sandbox": false,
@@ -29,6 +33,10 @@
 					[
 						"app",
 						"./lychee.pkg"
+					],
+					[
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
 					]
 				],
 				"sandbox": false,
@@ -47,6 +55,10 @@
 					[
 						"app",
 						"./lychee.pkg"
+					],
+					[
+						"harvester",
+						"/libraries/harvester/lychee.pkg"
 					]
 				],
 				"sandbox": false,
@@ -87,9 +99,6 @@
 				},
 				"layer": {
 					"Control": [
-						"js"
-					],
-					"Profile": [
 						"js"
 					],
 					"Web": [

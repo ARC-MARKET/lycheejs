@@ -2,6 +2,7 @@
 lychee.define('app.state.Welcome').requires([
 	'lychee.ui.entity.Helper',
 	'lychee.ui.entity.Label',
+	'lychee.ui.layer.Table',
 	'app.ui.entity.Identifier',
 	'app.ui.entity.Status',
 	'app.ui.layer.Control',
@@ -21,80 +22,78 @@ lychee.define('app.state.Welcome').requires([
 	 * HELPERS
 	 */
 
-	var _update_projects = function() {
+	var _on_sync = function(projects) {
 
-		this.main.reload(function(config, profile) {
-
-			var projects = config.buffer || null;
-			if (projects instanceof Array) {
-
-				var value = projects.map(function(project) {
-
-					var control = {
-						label: [],
-						value: []
-					};
-
-					var web     = {
-						label: [],
-						value: []
-					};
+		this.queryLayer('ui', 'welcome > dialog').setVisible(false);
+		this.queryLayer('ui', 'welcome > status').setVisible(true);
 
 
-					control.label.push('Edit');
-					control.value.push('edit=' + project.identifier);
+		if (projects instanceof Array) {
+
+			var value = projects.map(function(project) {
+
+				var control = {
+					label: [],
+					value: []
+				};
+
+				var web     = {
+					label: [],
+					value: []
+				};
 
 
-					if (project.filesystem !== null) {
-						control.label.push('File');
-						control.value.push('file=' + project.identifier);
-					}
+				control.label.push('Edit');
+				control.value.push('edit=' + project.identifier);
 
 
-					if (project.server !== null) {
-						control.label.push('Stop');
-						control.value.push('stop=' + project.identifier);
-					} else if (project.harvester === true) {
-						control.label.push('Start');
-						control.value.push('start=' + project.identifier);
-					}
+				if (project.filesystem !== null) {
+					control.label.push('File');
+					control.value.push('file=' + project.identifier);
+				}
 
 
-					project.web.forEach(function(obj) {
+				if (project.server !== null) {
+					control.label.push('Stop');
+					control.value.push('stop=' + project.identifier);
+				} else if (project.harvester === true) {
+					control.label.push('Start');
+					control.value.push('start=' + project.identifier);
+				}
 
-						var val = 'http://' + obj.host;
-						if (obj.cultivator === true) {
-							val = 'http://' + obj.host + project.identifier;
-						}
+
+				if (project.web.length > 0) {
+
+					project.web.forEach(function(value) {
 
 						web.label.push('Web');
-						web.value.push('web=' + val);
+						web.value.push('web=' + value);
 
 					});
 
-
-					return {
-						identifier: project.identifier,
-						status:     project.server !== null ? 'Online' : 'Offline',
-						control:    control,
-						web:		web
-					};
-
-				});
+				}
 
 
-				if (value.length > 0) {
+				return {
+					identifier: project.identifier,
+					status:     project.server !== null ? 'Online' : 'Offline',
+					control:    control,
+					web:		web
+				};
 
-					var table = this.queryLayer('ui', 'welcome > status').__content[0] || null;
-					if (table !== null) {
-						table.setValue(value);
-					}
+			});
 
+
+			if (value.length > 0) {
+
+				var table = this.queryLayer('ui', 'welcome > status').__content[0] || null;
+				if (table !== null) {
+					table.setValue(value);
 				}
 
 			}
 
-		}, this);
+		}
 
 	};
 
@@ -144,11 +143,7 @@ lychee.define('app.state.Welcome').requires([
 						this.queryLayer('ui', 'welcome > dialog').setVisible(false);
 
 						this.loop.setTimeout(3000, function() {
-
-							this.reload(function(config, profile) {
-								this.changeState('welcome');
-							}, this);
-
+							this.changeState('welcome');
 						}, this.main);
 
 					}
@@ -175,8 +170,13 @@ lychee.define('app.state.Welcome').requires([
 					entity.width  = w;
 					entity.height = h;
 
-					entity.__content[0].width  = h - 32;
-					entity.__content[0].height = h - 96;
+
+					var table = entity.getEntity('0');
+					if (table !== null) {
+						table.width  = h - 32;
+						table.height = h - 96;
+					}
+
 
 					entity.trigger('relayout');
 
@@ -198,18 +198,18 @@ lychee.define('app.state.Welcome').requires([
 
 		enter: function(oncomplete, data) {
 
-			var config = this.main.config;
-			if (config === null || config.buffer === null) {
+			this.queryLayer('ui', 'welcome > dialog').setVisible(true);
+			this.queryLayer('ui', 'welcome > status').setVisible(false);
 
-				this.queryLayer('ui', 'welcome > dialog').setVisible(true);
-				this.queryLayer('ui', 'welcome > status').setVisible(false);
 
-			} else {
+			var client = this.client;
+			if (client !== null) {
 
-				this.queryLayer('ui', 'welcome > dialog').setVisible(false);
-				this.queryLayer('ui', 'welcome > status').setVisible(true);
-
-				_update_projects.call(this);
+				var service = client.getService('project');
+				if (service !== null) {
+					service.bind('sync', _on_sync, this);
+					service.sync();
+				}
 
 			}
 
@@ -220,8 +220,14 @@ lychee.define('app.state.Welcome').requires([
 
 		leave: function(oncomplete) {
 
-			if (this.__interval !== null) {
-				this.loop.removeInterval(this.__interval);
+			var client = this.client;
+			if (client !== null) {
+
+				var service = client.getService('project');
+				if (service !== null) {
+					service.unbind('sync', _on_sync, this);
+				}
+
 			}
 
 
