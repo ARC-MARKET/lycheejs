@@ -1,6 +1,6 @@
 
 lychee.define('app.state.Console').requires([
-	'app.ui.layer.Console',
+	'app.ui.entity.Console',
 	'lychee.ui.entity.Label',
 	'lychee.ui.layer.Table'
 ]).includes([
@@ -31,6 +31,22 @@ lychee.define('app.state.Console').requires([
 			if (table !== null) {
 				table.setValue(value);
 			}
+
+
+			var stdout = table.getEntity('0');
+			if (stdout !== null) {
+				stdout.width  = table.width / 2;
+				stdout.height = table.height - 96;
+			}
+
+			var stderr = table.getEntity('1');
+			if (stderr !== null) {
+				stderr.width  = table.width / 2;
+				stderr.height = table.height - 96;
+			}
+
+
+			table.trigger('relayout');
 
 		}
 
@@ -79,6 +95,29 @@ lychee.define('app.state.Console').requires([
 
 					entity.width  = w;
 					entity.height = h;
+
+
+					var table = entity.getEntity('0');
+					if (table !== null) {
+
+						table.width  = w - 32;
+						table.height = h - 96;
+
+
+						var stdout = table.getEntity('0');
+						if (stdout !== null) {
+							stdout.width  = table.width / 2;
+							stdout.height = table.height - 96;
+						}
+
+						var stderr = table.getEntity('1');
+						if (stderr !== null) {
+							stderr.width  = table.width / 2;
+							stderr.height = table.height - 96;
+						}
+
+					}
+
 
 					entity.trigger('relayout');
 

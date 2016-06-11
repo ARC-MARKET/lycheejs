@@ -138,12 +138,12 @@
 	console.log = function() {
 
 		var al   = arguments.length;
-		var args = [ '(L)\t' ];
+		var args = [ '(L)' ];
 		for (var a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\n') + '\n';
+		_std_out += args.join('\t') + '\n';
 		_log.apply(console, args);
 
 	};
@@ -151,12 +151,12 @@
 	console.info = function() {
 
 		var al   = arguments.length;
-		var args = [ '(I)\t' ];
+		var args = [ '(I)' ];
 		for (var a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\n') + '\n';
+		_std_out += args.join('\t') + '\n';
 		_info.apply(console, args);
 
 	};
@@ -164,12 +164,12 @@
 	console.warn = function() {
 
 		var al   = arguments.length;
-		var args = [ '(W)\t' ];
+		var args = [ '(W)' ];
 		for (var a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
-		_std_out += args.join('\n') + '\n';
+		_std_out += args.join('\t') + '\n';
 		_warn.apply(console, args);
 
 	};
@@ -177,12 +177,12 @@
 	console.error = function() {
 
 		var al   = arguments.length;
-		var args = [ '(E)\t' ];
+		var args = [ '(E)' ];
 		for (var a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
-		_std_err += args.join('\n') + '\n';
+		_std_err += args.join('\t') + '\n';
 		_error.apply(console, args);
 
 	};

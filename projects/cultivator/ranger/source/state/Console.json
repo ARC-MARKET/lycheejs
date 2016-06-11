@@ -37,11 +37,11 @@
 									"blob": {
 										"model": {
 											"stdout": {
-												"constructor": "app.ui.layer.Console",
+												"constructor": "app.ui.entity.Console",
 												"arguments": [{}]
 											},
 											"stderr": {
-												"constructor": "app.ui.layer.Console",
+												"constructor": "app.ui.entity.Console",
 												"arguments": [{}]
 											}
 										}

@@ -173,8 +173,10 @@ lychee.define('app.state.Welcome').requires([
 
 					var table = entity.getEntity('0');
 					if (table !== null) {
-						table.width  = h - 32;
+
+						table.width  = w - 32;
 						table.height = h - 96;
+
 					}
 
 

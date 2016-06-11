@@ -1,11 +1,11 @@
 
 lychee.define('tool.data.FNT').requires([
-	'lychee.data.JSON'
+	'lychee.codec.JSON'
 ]).tags({
 	platform: 'html'
 }).exports(function(lychee, tool, global, attachments) {
 
-	var _JSON = lychee.data.JSON;
+	var _JSON = lychee.import('lychee.codec.JSON');
 
 
 
@@ -31,8 +31,8 @@ lychee.define('tool.data.FNT').requires([
 
 	var _Buffer = function(data, mode) {
 
-		data = typeof data === 'string'          ? _JSON.decode(data) : null;
-		mode = lychee.enumof(_Buffer.MODE, mode) ? mode               : 0;
+		data = typeof data === 'string' ? _JSON.decode(new Buffer(data, 'utf8')) : null;
+		mode = lychee.enumof(_Buffer.MODE, mode) ? mode : 0;
 
 
 		var settings = lychee.extend({}, data);
