@@ -64,7 +64,6 @@ lychee.define('lychee.ui.element.Search').requires([
 
 		}, this);
 
-
 		this.__select = new lychee.ui.entity.Select({
 			options: this.data,
 			value:   this.data[0]

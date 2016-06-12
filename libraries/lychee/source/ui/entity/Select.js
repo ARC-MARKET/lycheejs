@@ -400,7 +400,13 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 				var height = this.height || null;
 				if (height !== null) {
-					this.height = (height / this.options.length) * options.length;
+
+					if (this.options.length > 0) {
+						this.height = (height / this.options.length) * options.length;
+					} else {
+						this.height = height * options.length;
+					}
+
 				}
 
 				this.options = options.map(function(option) {
