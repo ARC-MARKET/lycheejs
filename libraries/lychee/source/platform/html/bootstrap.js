@@ -685,6 +685,21 @@
 
 	};
 
+	var _hex_to_string = function(buffer, start, end) {
+
+		end = Math.min(buffer.length, end);
+
+
+		var str = '';
+
+		for (var b = start; b < end; b++) {
+			str += String.fromCharCode(buffer[i]);
+		}
+
+		return str;
+
+	};
+
 	var _copy_buffer = function(source, target, offset, length) {
 
 		var i = 0;
@@ -701,6 +716,37 @@
 		return i;
 
 	};
+
+	var _copy_hexadecimal = function(source, target, offset, length) {
+
+		var strlen = source.length;
+		if (strlen % 2 !== 0) {
+			throw new Error('Invalid hex string');
+		}
+
+		if (length > strlen / 2) {
+			length = strlen / 2;
+		}
+
+
+		var i = 0;
+
+		for (i = 0; i < length; i++) {
+
+			var num = parseInt(source.substr(i * 2, 2), 16);
+			if (isNaN(num)) {
+				return i;
+			}
+
+			target[i + offset] = num;
+
+		}
+
+
+		return i;
+
+	};
+
 
 
 	var Buffer = function(subject, encoding) {
@@ -757,7 +803,10 @@
 			length = _base64_to_bytes(str).length;
 		} else if (encoding === 'binary') {
 			length = str.length;
+		} else if (encoding === 'hex') {
+			length = str.length >>> 1;
 		}
+
 
 		return length;
 
@@ -867,6 +916,8 @@
 				diff = _copy_buffer(_base64_to_bytes(str), this, offset, length);
 			} else if (encoding === 'binary') {
 				diff = _copy_buffer(_binary_to_bytes(str), this, offset, length);
+			} else if (encoding === 'hex') {
+				diff = _copy_hexadecimal(str, this, offset, length);
 			}
 
 
@@ -894,7 +945,10 @@
 				str = _base64_to_string(this, start, end);
 			} else if (encoding === 'binary') {
 				str = _binary_to_string(this, start, end);
+			} else if (encoding === 'hex') {
+				str = _hex_to_string(this, start, end);
 			}
+
 
 			return str;
 
