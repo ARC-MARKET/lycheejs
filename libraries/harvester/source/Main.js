@@ -147,8 +147,9 @@ lychee.define('harvester.Main').requires([
 		this._projects  = _PROJECTS;
 
 
-		settings.host = typeof settings.host === 'string' ? settings.host       : null;
-		settings.port = typeof settings.port === 'number' ? (settings.port | 0) : 8080;
+		settings.host    = typeof settings.host === 'string' ? settings.host       : null;
+		settings.port    = typeof settings.port === 'number' ? (settings.port | 0) : 8080;
+		settings.sandbox = settings.sandbox === true;
 
 
 		lychee.event.Emitter.call(this);

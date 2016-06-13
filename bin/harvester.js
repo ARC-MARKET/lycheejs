@@ -118,6 +118,7 @@ var _settings = (function() {
 		settings.sandbox = true;
 	}
 
+
 	return settings;
 
 })();
@@ -209,10 +210,11 @@ var _bootup = function(settings) {
 
 			// This allows using #MAIN in JSON files
 			sandbox.MAIN = new harvester.Main(settings);
-			sandbox.MAIN.init();
-			sandbox.MAIN.bind('destroy', function() {
+			sandbox.MAIN.bind('destroy', function(code) {
 				process.exit(0);
 			});
+
+			sandbox.MAIN.init();
 			_write_pid();
 
 
@@ -266,7 +268,7 @@ var _bootup = function(settings) {
 
 	if (action === 'start' && has_profile) {
 
-		settings.profile.debug   = settings.debug === true;
+		settings.profile.debug   = settings.debug   === true;
 		settings.profile.sandbox = settings.sandbox === true;
 
 		_bootup(settings.profile);

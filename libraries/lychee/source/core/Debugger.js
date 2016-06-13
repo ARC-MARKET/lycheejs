@@ -174,7 +174,41 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 				};
 
 
-				if (typeof Error.captureStackTrace === 'function') {
+				if (typeof error.stack === 'string') {
+
+					var callsite = error.stack.split('\n')[0].trim();
+					if (callsite.charAt(0) === '/') {
+
+						data.file = callsite.split(':')[0];
+						data.line = callsite.split(':')[1] || '';
+
+					} else {
+
+						callsite = error.stack.split('\n').find(function(val) {
+							return val.trim().substr(0, 2) === 'at';
+						});
+
+						if (typeof callsite === 'string') {
+
+							var tmp1 = callsite.split(' ');
+							var tmp2 = tmp1[2];
+
+							if (tmp2.charAt(0) === '(')               tmp2 = tmp2.substr(1);
+							if (tmp2.charAt(tmp2.length - 1) === ')') tmp2 = tmp2.substr(0, tmp2.length - 1);
+
+
+							var tmp3 = tmp2.split(':');
+
+							data.file   = tmp3[0];
+							data.line   = tmp3[1];
+							data.code   = '';
+							data.method = tmp1[1];
+
+						}
+
+					}
+
+				} else if (typeof Error.captureStackTrace === 'function') {
 
 					var orig = Error.prepareStackTrace;
 
@@ -186,11 +220,9 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 					var callsite = stack.shift();
 					var FILTER   = [ 'module.js', 'vm.js', 'internal/module.js' ];
 
-
 					while (callsite !== undefined && FILTER.indexOf(callsite.getFileName()) !== -1) {
 						callsite = stack.shift();
 					}
-
 
 					if (callsite !== undefined) {
 
@@ -200,7 +232,6 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 						data.method = callsite.getFunctionName() || callsite.getMethodName();
 
 					}
-
 
 					Error.prepareStackTrace = orig;
 
