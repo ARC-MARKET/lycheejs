@@ -200,7 +200,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 			}
 
 
-			return new Buffer(hash, 'utf8');
+			return new Buffer(hash, 'hex');
 
 		}
 
