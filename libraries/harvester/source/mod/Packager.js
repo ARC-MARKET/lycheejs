@@ -1,5 +1,5 @@
 
-lychee.define('harvester.mod.Package').requires([
+lychee.define('harvester.mod.Packager').requires([
 	'harvester.data.Package'
 ]).exports(function(lychee, global, attachments) {
 
@@ -130,7 +130,7 @@ lychee.define('harvester.mod.Package').requires([
 		serialize: function() {
 
 			return {
-				'reference': 'harvester.mod.Package',
+				'reference': 'harvester.mod.Packager',
 				'arguments': []
 			};
 

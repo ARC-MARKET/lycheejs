@@ -194,10 +194,13 @@
 				"Fertilizer": [
 					"js"
 				],
-				"Package": [
+				"Packager": [
 					"js"
 				],
 				"Server": [
+					"js"
+				],
+				"Updater": [
 					"js"
 				]
 			},
