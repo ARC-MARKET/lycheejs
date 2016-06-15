@@ -119,16 +119,6 @@ lychee.define('app.state.Welcome').includes([
 			}
 
 
-			this.queryLayer('ui', 'welcome > select').setData([
-				'foo',
-				'foo1',
-				'foo2',
-				'foo3',
-				'foo4',
-				'foo5'
-			]);
-
-
 			this.queryLayer('ui', 'welcome > select').bind('change', function(value) {
 
 console.log('SELECTED', value);

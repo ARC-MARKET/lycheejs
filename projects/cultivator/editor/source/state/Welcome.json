@@ -22,9 +22,7 @@
 									"arguments": [
 										{
 											"label": "Select",
-											"data": [
-												"- No results -"
-											]
+											"data": []
 										}
 									]
 								}, {
