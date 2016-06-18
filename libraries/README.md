@@ -7,7 +7,7 @@ bots but allows the easy deployment and installation of
 additional libraries from the `Bot Peer Cloud`.
 
 The libraries of the lychee.js ecosystem and the automatic
-build/deploy/test system is available at [garden.lycheejs.org](http://garden.lycheejs.org).
+build/deploy/test system is available at [harvester.artificial.engineering](https://harvester.artificial.engineering).
 
 
 

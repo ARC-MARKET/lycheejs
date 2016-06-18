@@ -151,10 +151,10 @@ lychee.define('app.state.Chat').requires([
 			users:    [],
 			messages: [{
 				user:    'system',
-				message: 'Welcome to the lycheeJS Anonymous Chat.'
+				message: 'Welcome to the lychee.js Anonymous Chat.'
 			}, {
 				user:    'system',
-				message: 'Touch on lycheeJS logo to randomize username.'
+				message: 'Touch on lychee.js Logo to randomize username.'
 			}]
 		};
 

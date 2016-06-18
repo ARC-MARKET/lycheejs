@@ -71,7 +71,7 @@ _print_help() {
 	echo "    lycheejs-helper lycheejs://start=/projects/boilerplate      ";
 	echo "    lycheejs-helper lycheejs://cmd=lycheejs-ranger              ";
 	echo "    lycheejs-helper lycheejs://profile=production?data=[base64] ";
-	echo "    lycheejs-helper lycheejs://web=http://lycheejs.org          ";
+	echo "    lycheejs-helper lycheejs://web=https://lychee.js.org        ";
 	echo "                                                                ";
 	echo "    lycheejs-helper env:node /path/to/program.js                ";
 	echo "                                                                ";
