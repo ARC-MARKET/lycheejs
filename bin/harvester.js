@@ -1,4 +1,4 @@
-#!/usr/bin/lycheejs-helper env:node
+#!/usr/local/bin/lycheejs-helper env:node
 
 
 var root = require('path').resolve(__dirname, '../');
