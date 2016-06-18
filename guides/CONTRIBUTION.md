@@ -74,7 +74,7 @@ name for a feature is the name of the equivalent issue title or its title
 shrinked down to the minimum quintessence.
 
 ```bash
-git clone git@github.com:YourName/lycheeJS.git /opt/lycheejs;
+git clone git@github.com:YourName/lycheejs.git /opt/lycheejs;
 
 cd /opt/lycheejs;
 git checkout development;
@@ -87,7 +87,7 @@ git commit -m "Meaningful description";
 # END of your own work
 
 # After some days of work, make sure you are up-to-date
-git pull https://github.com/Artificial-Engineering/lycheeJS.git development;
+git pull https://github.com/Artificial-Engineering/lycheejs.git development;
 
 # The final push to your github repository before your pull request
 git push origin fancy-feature;
@@ -108,7 +108,7 @@ git-defaulted one.
 ![How to use Triangular git Workflow](./asset/contribution-workflow.png)
 
 ```bash
-git remote add upstream git@github.com:Artificial-Engineering/lycheeJS.git;
+git remote add upstream git@github.com:Artificial-Engineering/lycheejs.git;
 git pull upstream development;
 ```
 
@@ -208,6 +208,6 @@ We look forward to hearing from you!
 
 * Twitter: https://twitter.com/lycheejs
 * Reddit:  https://reddit.com/r/lycheejs
-* YouTube: https://www.youtube.com/user/lycheeJS
+* YouTube: https://www.youtube.com/user/lycheejs
 * Email:   robot@artificial.engineering
 

@@ -27,7 +27,7 @@ var _print_help = function() {
 
 
 	console.log('                                                            ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Harvester');
+	console.info('lychee.js ' + lychee.VERSION + ' Harvester');
 	console.log('                                                            ');
 	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]         ');
 	console.log('                                                            ');

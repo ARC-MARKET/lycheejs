@@ -11,11 +11,11 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 The following repositories are related to the lychee.js project:
 
-- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheeJS-bundle.git) generates the OS-ready bundles.
-- [lychee.js Future](https://github.com/Artificial-Engineering/lycheeJS-future.git) contains concepts and ideas not yet finished.
-- [lychee.js Library](https://github.com/Artificial-Engineering/lycheeJS-library.git) contains the lychee.js Library (for `bower` and `npm`).
-- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheeJS-runtime.git) contains all pre-compiled runtimes (fertilizers).
-- [lychee.js Website](https://github.com/Artificial-Engineering/lycheeJS-website.git) contains the lychee.js website.
+- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready bundles.
+- [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains concepts and ideas not yet finished.
+- [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (for `bower` and `npm`).
+- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled runtimes (fertilizers).
+- [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js website.
 
 
 lychee.js is a [Next-Gen Isomorphic Application Engine](https://lychee.js.org/#!vision)
@@ -64,11 +64,11 @@ app and use the `html` platform adapter.
 
 The lychee.js Bundles (such as Debian package, OSX package or lycheeOS
 image) are being deprecated, but can be built by anyone using the
-[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheeJS-bundle)
+[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
 repository.
 
 The lychee.js Library (available via `bower` and `npm`) is available
-in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheeJS-library)
+in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
 repository.
 
 
@@ -148,7 +148,7 @@ git pull origin master;
 
 These are the guides that should help you to get started as easy as possible.
 
-Please let us know if we can improve anything in these documents [by opening an Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheeJS/issues/new).  
+Please let us know if we can improve anything in these documents [by opening an Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheejs/issues/new).  
 
 - [Contribution Guide](./guides/CONTRIBUTION.md)
 - [Codestyle Guide](./guides/CODESTYLE.md)

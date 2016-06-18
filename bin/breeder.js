@@ -35,7 +35,7 @@ var _print_help = function() {
 
 
 	console.log('                                                   ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Breeder');
+	console.info('lychee.js ' + lychee.VERSION + ' Breeder');
 	console.log('                                                   ');
 	console.log('Usage: lycheejs-breeder [Action] [Library/Project] ');
 	console.log('                                                   ');

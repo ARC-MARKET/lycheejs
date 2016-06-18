@@ -37,7 +37,7 @@ var _print_help = function() {
 
 
 	console.log('                                                              ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Fertilizer');
+	console.info('lychee.js ' + lychee.VERSION + ' Fertilizer');
 	console.log('                                                              ');
 	console.log('Usage: lycheejs-fertilizer [Target] [Library/Project] [Flag]  ');
 	console.log('                                                              ');

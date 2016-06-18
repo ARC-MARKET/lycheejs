@@ -147,7 +147,7 @@ else
 			echo "Your system is not officially supported.";
 			echo "Feel free to modify this script to add the dependencies!";
 			echo "";
-			echo "Also, please let us know about this at https://github.com/Artificial-Engineering/lycheeJS/issues";
+			echo "Also, please let us know about this at https://github.com/Artificial-Engineering/lycheejs/issues";
 			echo "";
 
 			exit 1;
@@ -160,7 +160,7 @@ else
 	if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
 		echo "";
-		echo "> Building lycheeJS core and fertilizers";
+		echo "> Building lychee.js core and fertilizers";
 		echo "";
 
 

@@ -35,7 +35,7 @@ var _print_help = function() {
 
 
 	console.log('                                                    ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Strainer');
+	console.info('lychee.js ' + lychee.VERSION + ' Strainer');
 	console.log('                                                    ');
 	console.log('Usage: lycheejs-strainer [Action] [Library/Project] ');
 	console.log('                                                    ');
