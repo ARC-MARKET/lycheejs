@@ -77,8 +77,11 @@ elif [ "$LYCHEEJS_CHANGE" == "" ]; then
 
 else
 
+	echo "";
+	echo "lychee.js Update Tool";
+	echo "";
 	echo "Cannot update lychee.js if you have local changes.";
 	echo "Please commit changes to prevent merge conflicts.";
-	exit 0;
+	exit 1;
 
 fi;
