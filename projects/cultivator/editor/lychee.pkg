@@ -11,7 +11,8 @@
 					[
 						"app",
 						"./lychee.pkg"
-					], [
+					],
+					[
 						"harvester",
 						"/libraries/harvester/lychee.pkg"
 					]
@@ -36,7 +37,8 @@
 					[
 						"app",
 						"./lychee.pkg"
-					], [
+					],
+					[
 						"harvester",
 						"/libraries/harvester/lychee.pkg"
 					]
@@ -61,7 +63,8 @@
 					[
 						"app",
 						"./lychee.pkg"
-					], [
+					],
+					[
 						"harvester",
 						"/libraries/harvester/lychee.pkg"
 					]
@@ -85,7 +88,8 @@
 					[
 						"app",
 						"./lychee.pkg"
-					], [
+					],
+					[
 						"harvester",
 						"/libraries/harvester/lychee.pkg"
 					]
@@ -133,6 +137,13 @@
 					"js",
 					"json"
 				]
+			},
+			"ui": {
+				"element": {
+					"Project": [
+						"js"
+					]
+				}
 			}
 		},
 		"tags": {}

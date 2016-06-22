@@ -27,26 +27,24 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	 * HELPERS
 	 */
 
-	var _MIME = {
-		'Config':  { name: 'Entity', ext: 'json',    mime: 'application/json'         },
-		'Font':    { name: 'Entity', ext: 'fnt',     mime: 'application/json'         },
-//		'Music':   {
-//			'mp3': { name: 'Entity', ext: 'msc.mp3', mime: 'audio/mp3'                },
-//			'ogg': { name: 'Entity', ext: 'msc.ogg', mime: 'application/ogg'          },
-//		},
-//		'Sound':   {
-//			'mp3': { name: 'Entity', ext: 'snd.mp3', mime: 'audio/mp3'                },
-//			'ogg': { name: 'Entity', ext: 'snd.ogg', mime: 'application/ogg'          },
-//		},
-		'Texture': { name: 'Entity', ext: 'png',     mime: 'image/png'                },
-		'Stuff':   { name: 'Entity', ext: 'stuff',   mime: 'application/octet-stream' }
-	};
-
+	var _MIME_TYPE = [
+		null,
+		'json',
+		'fnt',
+		'msc',
+		'snd',
+		'png',
+		'*'
+	];
 
 	var _wrap = function(instance) {
 
-		var allowed = [ 'fnt', 'json', 'fnt', 'png', 'js' ];
+		var allowed = [ 'json', 'fnt', 'msc', 'snd', 'png', 'js', 'tpl' ];
 		var element = global.document.createElement('input');
+
+		if (instance.type !== Class.TYPE.all) {
+			allowed = [ _MIME_TYPE[instance.type] ];
+		}
 
 		element.setAttribute('accept',   allowed.map(function(v) { return '.' + v; }).join(','));
 		element.setAttribute('type',     'file');
@@ -111,11 +109,14 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		}, data);
 
 
+		this.type  = Class.TYPE.asset;
 		this.value = [];
 
 
+		this.setType(settings.type);
 		this.setValue(settings.value);
 
+		delete settings.type;
 		delete settings.value;
 
 
@@ -146,7 +147,36 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	};
 
 
+	Class.TYPE = {
+		all:     0,
+		config:  1,
+		font:    2,
+		music:   3,
+		sound:   4,
+		texture: 5,
+		stuff:   6
+	};
+
+
 	Class.prototype = {
+
+		setType: function(type) {
+
+			type = lychee.enumof(Class.TYPE, type) ? type : null;
+
+
+			if (type !== null) {
+
+				this.type = type;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
 
 		setValue: function(value) {
 
