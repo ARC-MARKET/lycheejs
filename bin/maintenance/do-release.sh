@@ -66,11 +66,11 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo "organization and you will be questioned again when";
 	echo "the release is ready for publishing.";
 	echo "";
-	echo "lychee.js Folder: $LYCHEEJS_FOLDER";
+	echo "lychee.js Folder: $LYCHEEJS_ROOT and $LYCHEEJS_FOLDER";
 	echo "lychee.js Branch: $LYCHEEJS_BRANCH";
 	echo "";
-	echo "Old lychee.js version: $OLD_VERSION";
-	echo "New lychee.js version: $NEW_VERSION";
+	echo "Old lychee.js Version: $OLD_VERSION";
+	echo "New lychee.js Version: $NEW_VERSION";
 	echo "";
 
 	read -p "Continue (y/n)? " -r
