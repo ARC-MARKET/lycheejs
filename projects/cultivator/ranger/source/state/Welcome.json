@@ -32,7 +32,7 @@
 								}, {
 									"constructor": "lychee.ui.entity.Text",
 									"arguments": [{
-										"value": "Select a Profile to boot lycheeJS.\nIf you have no clue, select \"development\"."
+										"value": "Select a Profile to boot the lychee.js Harvester.\nIf you have no clue, select \"development\"."
 									}]
 								}, {
 									"constructor": "lychee.ui.entity.Select",

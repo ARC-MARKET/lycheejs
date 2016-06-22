@@ -283,7 +283,7 @@
 		if (libraries.indexOf('./libraries/lychee') !== -1) {
 			console.log('\tprocess cwd: OKAY');
 		} else {
-			console.log('\tprocess cwd: FAIL (' + _root + ' is not the lycheeJS directory)');
+			console.log('\tprocess cwd: FAIL (' + _root + ' is not the lychee.js directory)');
 			errors++;
 		}
 
@@ -340,7 +340,7 @@
 		}
 
 
-		console.log('> Cleaning lycheeJS builds');
+		console.log('> Cleaning lychee.js builds');
 
 		libraries.forEach(function(path) {
 
@@ -390,7 +390,7 @@
 
 	(function() {
 
-		console.log('> Distributing lycheeJS library');
+		console.log('> Distributing lychee.js library');
 
 
 		var dist = _package_definitions(_package).filter(function(value) {
@@ -470,7 +470,7 @@
 		}
 
 
-		console.log('> Generating lycheeJS core');
+		console.log('> Generating lychee.js core');
 
 
 		files.forEach(function(file) {
@@ -519,7 +519,7 @@
 		var platforms = Object.keys(_package.source.tags.platform);
 
 
-		console.log('> Generating lycheeJS platform adapters');
+		console.log('> Generating lychee.js platform adapters');
 
 
 		assets.forEach(function(path) {

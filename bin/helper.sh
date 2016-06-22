@@ -41,7 +41,7 @@ fi;
 _print_help() {
 
 	echo "                                                                ";
-	echo -e "\u001b[37m\u001b[42mlycheeJS Helper\u001b[49m\u001b[39m";
+	echo -e "\u001b[37m\u001b[42mlychee.js Helper\u001b[49m\u001b[39m";
 	echo "                                                                ";
 	echo " Usage: lycheejs-helper [lycheejs://Action]                     ";
 	echo "        lycheejs-helper [env:Platform]                          ";
@@ -71,7 +71,7 @@ _print_help() {
 	echo "    lycheejs-helper lycheejs://start=/projects/boilerplate      ";
 	echo "    lycheejs-helper lycheejs://cmd=lycheejs-ranger              ";
 	echo "    lycheejs-helper lycheejs://profile=production?data=[base64] ";
-	echo "    lycheejs-helper lycheejs://web=http://lycheejs.org          ";
+	echo "    lycheejs-helper lycheejs://web=https://lychee.js.org        ";
 	echo "                                                                ";
 	echo "    lycheejs-helper env:node /path/to/program.js                ";
 	echo "                                                                ";

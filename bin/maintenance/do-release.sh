@@ -66,11 +66,11 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo "organization and you will be questioned again when";
 	echo "the release is ready for publishing.";
 	echo "";
-	echo "lychee.js Folder: $LYCHEEJS_FOLDER";
+	echo "lychee.js Folder: $LYCHEEJS_ROOT and $LYCHEEJS_FOLDER";
 	echo "lychee.js Branch: $LYCHEEJS_BRANCH";
 	echo "";
-	echo "Old lychee.js version: $OLD_VERSION";
-	echo "New lychee.js version: $NEW_VERSION";
+	echo "Old lychee.js Version: $OLD_VERSION";
+	echo "New lychee.js Version: $NEW_VERSION";
 	echo "";
 
 	read -p "Continue (y/n)? " -r
@@ -92,10 +92,10 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	fi;
 
 	mkdir $LYCHEEJS_FOLDER;
-	git clone git@github.com:Artificial-Engineering/lycheeJS.git $LYCHEEJS_FOLDER;
+	git clone git@github.com:Artificial-Engineering/lycheejs.git $LYCHEEJS_FOLDER;
 
 	mkdir $LYCHEEJS_FOLDER/bin/runtime;
-	git clone --single-branch --branch master --depth 1 git@github.com:Artificial-Engineering/lycheeJS-runtime.git $LYCHEEJS_FOLDER/bin/runtime;
+	git clone --single-branch --branch master --depth 1 git@github.com:Artificial-Engineering/lycheejs-runtime.git $LYCHEEJS_FOLDER/bin/runtime;
 
 
 	cd $LYCHEEJS_FOLDER;
@@ -123,7 +123,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 	rm -rf .git/;
 	git init;
-	git remote add origin git@github.com:Artificial-Engineering/lycheeJS-runtime.git;
+	git remote add origin git@github.com:Artificial-Engineering/lycheejs-runtime.git;
 	git add ./;
 	git commit -m "lychee.js $NEW_VERSION release";
 
@@ -134,7 +134,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	#
 
 	cd $LYCHEEJS_FOLDER;
-	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheeJS-library.git $LYCHEEJS_FOLDER/projects/lycheejs-library;
+	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-library.git $LYCHEEJS_FOLDER/projects/lycheejs-library;
 
 	cd $LYCHEEJS_FOLDER/projects/lycheejs-library;
 	./bin/build.sh;
@@ -146,7 +146,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	#
 
 	cd $LYCHEEJS_FOLDER;
-	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheeJS-website.git $LYCHEEJS_FOLDER/projects/lycheejs-website;
+	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-website.git $LYCHEEJS_FOLDER/projects/lycheejs-website;
 	$LYCHEEJS_FOLDER/bin/fertilizer.sh html/main /projects/lycheejs-website;
 
 

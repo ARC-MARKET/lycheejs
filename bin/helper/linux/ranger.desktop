@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=lycheeJS Ranger
+Name=lychee.js Ranger
 Exec=__ROOT__/bin/ranger.sh
 Icon=lycheejs
 Type=Application

@@ -66,7 +66,7 @@ elif [ "$LYCHEEJS_CHANGE" == "" ]; then
 	if [ ! -d $LYCHEEJS_FOLDER/bin/runtime ]; then
 
 		cd $LYCHEEJS_FOLDER;
-		git clone --depth 1 https://github.com/Artificial-Engineering/lycheeJS-runtime --branch master --single-branch ./bin/runtime;
+		git clone --depth 1 https://github.com/Artificial-Engineering/lycheejs-runtime.git --branch master --single-branch ./bin/runtime;
 
 	else
 
