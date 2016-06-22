@@ -151,6 +151,39 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 	}
 
+	if (typeof Object.assign !== 'function') {
+
+		Object.assign = function(object /*, ... sources */) {
+
+			if (object !== Object(object)) {
+				throw new TypeError('Object.assign called on a non-object');
+			}
+
+
+			for (var a = 1, al = arguments.length; a < al; a++) {
+
+				var source = arguments[a];
+				if (source != null) {
+
+					for (var key in source) {
+
+						if (Object.prototype.hasOwnProperty.call(source, key) === true) {
+							object[key] = source[key];
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return object;
+
+		};
+
+	}
+
 	if (typeof Object.filter !== 'function') {
 
 		Object.filter = function(object, predicate/*, thisArg */) {
