@@ -43,6 +43,9 @@ due to lack of developer and debugging tools.
 We ain't doing HTML5 websites here.
 
 
+## Platform / Fertilizer Support
+
+
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
 |:-------------|:-----------------------------|:----------|:-----:|:-----:|:-------:|
 | Browser      | html                         | zip, html |   ✓   |   ✓   |    ✓    |
