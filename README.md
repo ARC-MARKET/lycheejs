@@ -15,7 +15,8 @@ The following repositories are related to the lychee.js project:
 - [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains concepts and ideas not yet finished.
 - [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (for `bower` and `npm`).
 - [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled runtimes (fertilizers).
-- [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js website.
+- [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (standalone fork of `/libraries/harvester`).
+- [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js Website.
 
 
 lychee.js is a [Next-Gen Isomorphic Application Engine](https://lychee.js.org/#!vision)
@@ -114,8 +115,8 @@ auto-synchronization of all lychee.js libraries and projects.
 ```bash
 cd /opt/lycheejs;
 
-sudo ./bin/configure.sh;              # --sandbox if you want a sandboxed installation
-lycheejs-harvester start development; # --sandbox if you want a sandboxed harvester
+sudo ./bin/configure.sh;              # --sandbox for isolated (non system-wide) installation
+lycheejs-harvester start development; # --sandbox to force sandbox mode
 ```
 
 The above commands will look similar to this if everything went fine.

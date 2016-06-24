@@ -111,8 +111,16 @@ lychee.define('harvester.net.server.File').requires([
 			var mime    = _MIME[url.split('.').pop()] || _MIME['default'];
 
 
+			// Single-project mode
+			if (lychee.ROOT.lychee !== lychee.ROOT.project) {
+
+				identifier = lychee.ROOT.project;
+				path       = url;
+				project    = lychee.import('MAIN')._projects[identifier] || null;
+
+
 			// Multi-library mode /libraries/*
-			if (url.substr(0, 10) === '/libraries') {
+			} else if (url.substr(0, 10) === '/libraries') {
 
 				identifier = url.split('/').slice(0, 3).join('/');
 				path       = '/' + url.split('/').slice(3).join('/');
@@ -140,14 +148,6 @@ lychee.define('harvester.net.server.File').requires([
 
 				identifier = url.split('/').slice(0, 3).join('/');
 				path       = '/' + url.split('/').slice(3).join('/');
-				project    = lychee.import('MAIN')._projects[identifier] || null;
-
-
-			// Single-project mode
-			} else if (lychee.ROOT.lychee !== lychee.ROOT.project) {
-
-				identifier = lychee.ROOT.project;
-				path       = url;
 				project    = lychee.import('MAIN')._projects[identifier] || null;
 
 

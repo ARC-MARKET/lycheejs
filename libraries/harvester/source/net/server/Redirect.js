@@ -27,7 +27,36 @@ lychee.define('harvester.net.server.Redirect').exports(function(lychee, global, 
 			var tunnel = this.tunnel;
 			var url    = headers['url'];
 
-			if (url === '/index.html' || url === '/') {
+
+			// Single-project mode
+			if (lychee.ROOT.lychee !== lychee.ROOT.project) {
+
+				var identifier = lychee.ROOT.project;
+				var project    = lychee.import('MAIN')._projects[identifier] || null;
+				if (project !== null) {
+
+					var path = url;
+					if (path === '' || path === '/') {
+
+						var info = project.filesystem.info('/index.html');
+						if (info !== null) {
+
+							tunnel.send('', {
+								'status':   '301 Moved Permanently',
+								'location': '/index.html'
+							});
+
+							return true;
+
+						}
+
+					}
+
+				}
+
+
+			// Multi-project mode /projects/cultivator/*
+			} else if (url === '/index.html' || url === '/') {
 
 				tunnel.send('SHIT', {
 					'status':   '301 Moved Permanently',
@@ -36,6 +65,8 @@ lychee.define('harvester.net.server.Redirect').exports(function(lychee, global, 
 
 				return true;
 
+
+			// Multi-project mode /projects/*
 			} else if (url.substr(0, 9) === '/projects') {
 
 				var identifier = url.split('/').slice(0, 3).join('/');
