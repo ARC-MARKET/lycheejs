@@ -16,7 +16,7 @@ lychee.define('lychee.net.socket.WS').tags({
 			return true;
 		}
 
-	} catch(e) {
+	} catch(err) {
 	}
 
 

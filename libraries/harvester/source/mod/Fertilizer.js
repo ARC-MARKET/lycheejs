@@ -11,7 +11,7 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 		return true;
 
-	} catch(e) {
+	} catch(err) {
 
 	}
 

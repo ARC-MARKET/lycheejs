@@ -35,7 +35,7 @@ lychee.define('harvester.Main').requires([
 
 		try {
 			os = require('os');
-		} catch(e) {
+		} catch(err) {
 		}
 
 

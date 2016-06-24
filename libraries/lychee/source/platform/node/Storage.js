@@ -46,7 +46,7 @@ lychee.define('Storage').tags({
 				var raw = null;
 				try {
 					raw = _fs.readFileSync(url, 'utf8');
-				} catch(e) {
+				} catch(err) {
 					raw = null;
 				}
 
@@ -54,7 +54,7 @@ lychee.define('Storage').tags({
 				var buffer = null;
 				try {
 					buffer = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 					buffer = null;
 				}
 
@@ -90,7 +90,7 @@ lychee.define('Storage').tags({
 				var result = false;
 				try {
 					result = _fs.writeFileSync(url, buffer, 'utf8');
-				} catch(e) {
+				} catch(err) {
 					result = false;
 				}
 

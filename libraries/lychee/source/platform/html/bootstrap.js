@@ -501,7 +501,7 @@
 
 		try {
 			return decodeURIComponent(str);
-		} catch(e) {
+		} catch(err) {
 			return String.fromCharCode(0xFFFD);
 		}
 
@@ -1056,7 +1056,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -1324,7 +1324,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -1573,7 +1573,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 				if (this.buffer.currentTime === 0) {
@@ -1612,7 +1612,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 			}
@@ -1868,7 +1868,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 				if (this.buffer.currentTime === 0) {
@@ -1907,7 +1907,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 			}

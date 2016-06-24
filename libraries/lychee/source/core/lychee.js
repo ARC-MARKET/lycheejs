@@ -795,7 +795,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 			try {
 				data = JSON.parse(JSON.stringify(data));
-			} catch(e) {
+			} catch(err) {
 				data = null;
 			}
 
@@ -907,7 +907,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 						try {
 							data = JSON.parse(JSON.stringify(definition));
-						} catch(e) {
+						} catch(err) {
 							data = null;
 						}
 

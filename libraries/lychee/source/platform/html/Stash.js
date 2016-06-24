@@ -13,7 +13,7 @@ lychee.define('Stash').tags({
 				return true;
 			}
 
-		} catch(e) {
+		} catch(err) {
 			return false;
 		}
 
@@ -76,13 +76,13 @@ lychee.define('Stash').tags({
 
 		try {
 			local = 'localStorage' in global;
-		} catch(e) {
+		} catch(err) {
 			local = false;
 		}
 
 		try {
 			session = 'sessionStorage' in global;
-		} catch(e) {
+		} catch(err) {
 			session = false;
 		}
 

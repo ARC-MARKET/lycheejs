@@ -15,7 +15,7 @@ lychee.define('lychee.net.Server').tags({
 
 		return true;
 
-	} catch(e) {
+	} catch(err) {
 	}
 
 

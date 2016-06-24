@@ -13,7 +13,7 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 		return true;
 
-	} catch(e) {
+	} catch(err) {
 	}
 
 

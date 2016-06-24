@@ -527,7 +527,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -793,7 +793,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 

@@ -12,7 +12,7 @@ lychee.define('fertilizer.data.Shell').tags({
 
 			return true;
 
-		} catch(e) {
+		} catch(err) {
 		}
 
 	}

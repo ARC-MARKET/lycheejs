@@ -238,7 +238,7 @@ lychee.define('harvester.mod.Server').requires([
 
 			};
 
-		} catch(e) {
+		} catch(err) {
 
 			server = null;
 

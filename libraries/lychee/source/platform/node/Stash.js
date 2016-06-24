@@ -137,7 +137,7 @@ lychee.define('Stash').tags({
 								try {
 									_fs.writeFileSync(path, buffer, encoding);
 									result = true;
-								} catch(e) {
+								} catch(err) {
 									result = false;
 								}
 
@@ -150,7 +150,7 @@ lychee.define('Stash').tags({
 						try {
 							_fs.unlinkSync(path);
 							result = true;
-						} catch(e) {
+						} catch(err) {
 							result = false;
 						}
 
