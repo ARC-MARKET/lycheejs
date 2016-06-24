@@ -37,11 +37,10 @@ each project's or library's `lychee.pkg` file.
 
 The development process is optimized for Blink-based
 browsers (Chromium, Google Chrome, Opera) and their
-developer tools.
+developer tools. We honestly recommend NOT using Firefox
+due to lack of developer and debugging tools.
 
-We honestly recommend NOT using Firefox due to lack of
-developer tools, lack of debugging tools and lack of
-network performance.
+We ain't doing HTML5 websites here.
 
 
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
