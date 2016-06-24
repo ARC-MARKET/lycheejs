@@ -11,12 +11,12 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 The following repositories are related to the lychee.js project:
 
-- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready bundles.
-- [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains concepts and ideas not yet finished.
+- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled Runtimes (Fertilizers).
 - [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (for `bower` and `npm`).
-- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled runtimes (fertilizers).
-- [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (standalone fork of `/libraries/harvester`).
-- [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js Website.
+- [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (fork of `/libraries/harvester`).
+- [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js Website (hosted at [https://lychee.js.org](https://lychee.js.org)).
+- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready bundles (available in the [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
+- [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains concepts and ideas not yet finished.
 
 
 lychee.js is a [Next-Gen Isomorphic Application Engine](https://lychee.js.org/#!vision)
@@ -57,19 +57,20 @@ network performance.
 | Ubuntu Touch | html-webview, node           | deb, bin  |   ✓   |   ✓   |    ✓    |
 
 The iOS Fertilizer has currently no support for cross-compilation
-due to XCode limitations. You can still create an own WebView iOS
-app and use the `html` platform adapter.
+due to XCode limitations. You can still create an own WebView
+iOS app and use the `html` platform adapter.
 
 
 # Install lychee.js
 
-The lychee.js Bundles (such as Debian package, OSX package or lycheeOS
-image) are being deprecated, but can be built by anyone using the
-[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
-repository.
+The lychee.js Bundles (such as a Debian package, OSX package or
+the Raspberry Pi image) are being deprecated, but can be built
+and downloaded by anyone using the [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
+repository. These bundles don't have auto-updates because they
+require a git installation as we distribute all updates via SSH.
 
-The lychee.js Library (available via `bower` and `npm`) is available
-in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
+The lychee.js Library (available via `bower` and `npm`) is
+available in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
 repository.
 
 
@@ -77,9 +78,11 @@ repository.
 ## Install lychee.js Engine (Developer Machine)
 
 The netinstaller shell script allows to automatically install
-the lychee.js Engine on any UNIX-compatible machine (arm, x86 or amd64).
+the lychee.js Engine on any UNIX-compatible machine (arm, x86
+or amd64).
 
-The only requirements beforehand are working `bash`, `git` and `curl`.
+The only requirements beforehand are working `bash`, `curl`
+and `git`.
 
 ```bash
 # This will clone lycheejs into /opt/lycheejs
@@ -87,7 +90,7 @@ The only requirements beforehand are working `bash`, `git` and `curl`.
 sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
 ```
 
-The above commands will look similar to this if everything went fine.
+The above installation procedure will look similar to this:
 
 ![Install lychee.js](./guides/asset/readme-install.gif)
 
@@ -95,31 +98,37 @@ The above commands will look similar to this if everything went fine.
 
 ## Bootup lychee.js Engine (Developer Machine)
 
-After you've installed the lychee.js Engine, you can directly start the `lycheejs-harvester`.
+After you've installed the lychee.js Engine, you can directly
+start the `lycheejs-harvester`.
 
-The `./bin/configure.sh` script has to be executed initially one time via `sudo` (not `su`)
-in order to compile down all the lychee.js core libraries and to symlink the `lycheejs-`
+The `./bin/configure.sh` script has to be executed initially
+one time via `sudo` (not `su`) in order to compile down all
+the lychee.js core libraries and to symlink the `lycheejs-`
 tools correctly into `/usr/local/bin`.
 
-We try to support as much package managers as possible inside the `./bin/configure.sh`,
-but if your package manager isn't supported - please let us know.
+We try to support as much package managers as possible inside
+the `./bin/configure.sh`, but if your package manager isn't
+supported - please let us know.
 
-If you want a sandboxed installation without the system-wide integration of the `lycheejs-`
-tools, you can use the `--sandbox` flag. The sandbox flag can also be used with the harvester
-so it does not use any native tools outside the `/opt/lycheejs` folder, which, in return is
-faster on slower machines like a Raspberry Pi.
+If you want a sandboxed installation without the system-wide
+integration of the `lycheejs-` tools, you can use the `--sandbox`
+flag. The sandbox flag can also be used with the harvester so
+it does not use any native tools outside the `/opt/lycheejs`
+folder, which, in return will use less resources and runs
+better on slower machines like a Raspberry Pi.
 
-However, the sandbox flag disables auto-testing, auto-documentation, auto-fertilization and
-auto-synchronization of all lychee.js libraries and projects.
+However, the sandbox flag disables all software bots like
+auto-testing, auto-documentation, auto-fertilization and
+auto-synchronization of all lychee.js Libraries and Projects.
 
 ```bash
 cd /opt/lycheejs;
 
-sudo ./bin/configure.sh;              # --sandbox for isolated (non system-wide) installation
-lycheejs-harvester start development; # --sandbox to force sandbox mode
+sudo ./bin/configure.sh;              # --sandbox to install in isolation
+lycheejs-harvester start development; # --sandbox to enforce sandbox mode
 ```
 
-The above commands will look similar to this if everything went fine.
+The above bootup procedure will look similar to this:
 
 ![Bootup lychee.js](./guides/asset/readme-bootup.gif)
 
@@ -127,9 +136,10 @@ The above commands will look similar to this if everything went fine.
 
 ## Update lychee.js Engine (Developer Machine)
 
-Every developer can update the lychee.js Engine Installation simply
-by using git. The development branch is the most up-to-date branch
-and the branch that our software bots are actively working on.
+Every developer can update the lychee.js Engine Installation
+simply by using git. The development branch is the most
+up-to-date branch and is the branch that both our humans and
+software bots are actively working on.
 
 ```bash
 cd /opt/lycheejs;
@@ -145,16 +155,31 @@ git pull origin master;
 
 
 
+## Maintain lychee.js Engine (Developer Machine)
+
+There are multiple maintenance scripts in the `./bin/maintenance`
+folder that will ensure an almost-automated process for our
+human and bot maintainers:
+
+- `do-release.sh` automates a lychee.js quaterly release.
+- `do-uninstall.sh` removes a lychee.js installation from the system.
+- `do-update.sh` updates a lychee.js installation.
+
+
+
 ## Guides
 
-These are the guides that should help you to get started as easy as possible.
-
-Please let us know if we can improve anything in these documents [by opening an Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheejs/issues/new).  
+These guides help developers to get started as easy as possible.
+Please let us know if we can improve anything in these documents
+by opening up an [Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheejs/issues/new).
 
 - [Contribution Guide](./guides/CONTRIBUTION.md)
 - [Codestyle Guide](./guides/CODESTYLE.md)
 - [ECMAScript Guide](./guides/ECMASCRIPT.md)
 - [Release Guide](./guides/RELEASE.md)
+
+We also have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials).
+
 
 
 ## License
