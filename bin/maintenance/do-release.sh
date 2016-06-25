@@ -179,7 +179,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# PACKAGE lycheejs
+	# PUBLISH lycheejs
 	#
 
 	cd $LYCHEEJS_FOLDER;
@@ -192,7 +192,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# DEPLOY lycheejs-runtime
+	# PUBLISH lycheejs-runtime
 	#
 
 	cd $LYCHEEJS_FOLDER/bin/runtime;
