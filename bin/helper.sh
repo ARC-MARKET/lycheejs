@@ -45,6 +45,7 @@ _print_help() {
 	echo "                                                                ";
 	echo " Usage: lycheejs-helper [lycheejs://Action]                     ";
 	echo "        lycheejs-helper [env:Platform]                          ";
+	echo "        lycheejs-helper [which:Platform]                        ";
 	echo "                                                                ";
 	echo "                                                                ";
 	echo " Available Actions:                                             ";
@@ -376,6 +377,67 @@ elif [ "$protocol" == "env" ]; then
 
 
 	exit 0;
+
+elif [ "$protocol" == "which" ]; then
+
+	platform=$(echo $content | cut -d":" -f 2);
+
+
+	if [ "$platform" == "html" ]; then
+
+		if [ "$OS" == "linux" ]; then
+
+			chrome1=`which google-chrome`;
+			chrome2=`which chromium-browser`;
+			x_www=`which x-www-browser`;
+
+			if [ -x "$chrome1" ]; then
+				echo "$chrome1";
+			elif [ -x "$chrome2" ]; then
+				echo "$chrome2";
+			elif [ "$x_www" != "" ]; then
+				echo "$(readlink -f "$x_www")";
+			fi;
+
+		elif [ "$OS" == "osx" ]; then
+
+			chrome1="/Applications/Google Chrome.app";
+			safari1="/Applications/Safari.app";
+
+			if [ -d "$chrome1" ]; then
+				echo "$chrome1/Contents/MacOS/Chrome";
+			else
+				echo "$safari1/Contents/MacOS/Safari";
+			fi;
+
+		fi;
+
+
+	elif [ "$platform" == "html-nwjs" ]; then
+
+		if [ "$OS" == "linux" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/html-nwjs/linux/$ARCH/nw;
+		elif [ "$OS" == "osx" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/html-nwjs/osx/$ARCH/nw;
+		fi;
+
+	elif [ "$platform" == "node" ]; then
+
+		if [ "$OS" == "linux" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node;
+		elif [ "$OS" == "osx" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node;
+		fi;
+
+	elif [ "$platform" == "node-sdl" ]; then
+
+		if [ "$OS" == "linux" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/node-sdl/linux/$ARCH/node;
+		elif [ "$OS" == "osx" ]; then
+			echo $LYCHEEJS_ROOT/bin/runtime/node-sdl/osx/$ARCH/node;
+		fi;
+
+	fi;
 
 else
 
