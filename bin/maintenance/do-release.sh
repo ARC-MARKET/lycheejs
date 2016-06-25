@@ -130,14 +130,22 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# BUILD lycheejs-library
+	# BUILD AND PACKAGE lycheejs-harvester
+	#
+
+	cd $LYCHEEJS_FOLDER;
+	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-harvester.git $LYCHEEJS_FOLDER/projects/lycheejs-harvester;
+	$LYCHEEJS_FOLDER/bin/fertilizer.sh node/main /projects/lycheejs-harvester;
+
+
+
+	#
+	# BUILD AND PACKAGE lycheejs-library
 	#
 
 	cd $LYCHEEJS_FOLDER;
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-library.git $LYCHEEJS_FOLDER/projects/lycheejs-library;
-
-	cd $LYCHEEJS_FOLDER/projects/lycheejs-library;
-	./bin/build.sh;
+	$LYCHEEJS_FOLDER/bin/fertilizer.sh * /projects/lycheejs-library;
 
 
 
@@ -184,7 +192,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# PACKAGE lycheejs-runtime
+	# DEPLOY lycheejs-runtime
 	#
 
 	cd $LYCHEEJS_FOLDER/bin/runtime;
@@ -193,11 +201,28 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
-	# PACKAGE lycheejs-library
+	# PUBLISH lycheejs-harvester
+	#
+
+	cd $LYCHEEJS_FOLDER/projects/lycheejs-harvester;
+	./bin/publish.sh;
+
+
+
+	#
+	# PUBLISH lycheejs-library
 	#
 
 	cd $LYCHEEJS_FOLDER/projects/lycheejs-library;
-	./bin/package.sh;
+	./bin/publish.sh;
+
+
+	#
+	# PUBLISH lycheejs-website
+	#
+
+	cd $LYCHEEJS_FOLDER/projects/lycheejs-website;
+	./bin/publish.sh;
 
 else
 
