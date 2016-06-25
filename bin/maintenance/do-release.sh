@@ -145,7 +145,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 	cd $LYCHEEJS_FOLDER;
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-library.git $LYCHEEJS_FOLDER/projects/lycheejs-library;
-	$LYCHEEJS_FOLDER/bin/fertilizer.sh * /projects/lycheejs-library;
+	$LYCHEEJS_FOLDER/bin/fertilizer.sh auto /projects/lycheejs-library;
 
 
 
