@@ -15,7 +15,7 @@ lychee.define('lychee.ui.element.Search').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.data     = [];

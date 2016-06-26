@@ -32,8 +32,8 @@ lychee.define('strainer.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = _lychee.extendunlink({}, _defaults, settings);
-		this.defaults = _lychee.extendunlink({}, this.settings);
+		this.settings = _lychee.assignunlink({}, _defaults, settings);
+		this.defaults = _lychee.assignunlink({}, this.settings);
 
 
 		_Emitter.call(this);
@@ -131,7 +131,7 @@ lychee.define('strainer.Main').requires([
 			data['constructor'] = 'strainer.Main';
 
 
-			var settings = _lychee.extendunlink({}, this.settings);
+			var settings = _lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 

@@ -43,8 +43,8 @@ lychee.define('fertilizer.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = _lychee.extendunlink({}, _defaults, settings);
-		this.defaults = _lychee.extendunlink({}, this.settings);
+		this.settings = _lychee.assignunlink({}, _defaults, settings);
+		this.defaults = _lychee.assignunlink({}, this.settings);
 
 
 		_Emitter.call(this);
@@ -65,7 +65,7 @@ lychee.define('fertilizer.Main').requires([
 
 				var platform = data.tags.platform[0] || null;
 				var variant  = data.variant || null;
-				var settings = _JSON.decode(_JSON.encode(_lychee.extend({}, data, {
+				var settings = _JSON.decode(_JSON.encode(Object.assign({}, data, {
 					debug:   false,
 					sandbox: true,
 					timeout: 5000,
@@ -330,7 +330,7 @@ lychee.define('fertilizer.Main').requires([
 			data['constructor'] = 'fertilizer.Main';
 
 
-			var settings = _lychee.extendunlink({}, this.settings);
+			var settings = _lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 

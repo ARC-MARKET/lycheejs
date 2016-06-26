@@ -73,7 +73,7 @@ lychee.define('lychee.ui.element.Input').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Input';

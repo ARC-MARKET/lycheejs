@@ -26,7 +26,7 @@ lychee.define('game.app.sprite.Tank').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id        = _IDS[(_id++ % _IDS.length)];

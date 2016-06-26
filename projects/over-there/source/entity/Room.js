@@ -16,7 +16,7 @@ lychee.define('app.entity.Room').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.properties = {};

@@ -7,7 +7,7 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.channels = 8;

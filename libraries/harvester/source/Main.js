@@ -263,8 +263,8 @@ lychee.define('harvester.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = lychee.extendunlink({}, _defaults, settings);
-		this.defaults = lychee.extendunlink({}, this.settings);
+		this.settings = lychee.assignunlink({}, _defaults, settings);
+		this.defaults = lychee.assignunlink({}, this.settings);
 
 
 		this.admin  = null;
@@ -353,7 +353,7 @@ lychee.define('harvester.Main').requires([
 			data['constructor'] = 'harvester.Main';
 
 
-			var settings = lychee.extendunlink({}, this.settings);
+			var settings = lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 

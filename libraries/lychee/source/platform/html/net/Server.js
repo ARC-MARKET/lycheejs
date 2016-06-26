@@ -36,7 +36,7 @@ lychee.define('lychee.net.Server').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.codec  = _JSON;

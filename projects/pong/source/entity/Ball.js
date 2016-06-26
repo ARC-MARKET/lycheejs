@@ -15,7 +15,7 @@ lychee.define('game.entity.Ball').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, _CONFIG, data);
+		var settings = Object.assign({}, _CONFIG, data);
 
 
 		settings.texture = _TEXTURE;

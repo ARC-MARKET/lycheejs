@@ -24,7 +24,7 @@ lychee.define('harvester.net.Admin').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			host:   'localhost',
 			port:   4848,
 			codec:  _JSON,

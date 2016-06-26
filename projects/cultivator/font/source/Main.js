@@ -55,7 +55,7 @@ lychee.define('tool.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client:   null,
 			input:    null,

@@ -20,7 +20,7 @@ lychee.define('lychee.net.Remote').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		_Tunnel.call(this, settings);

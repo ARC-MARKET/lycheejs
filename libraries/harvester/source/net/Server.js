@@ -24,7 +24,7 @@ lychee.define('harvester.net.Server').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			codec:  _CODEC,
 			remote: _Remote,
 			type:   _Server.TYPE.HTTP

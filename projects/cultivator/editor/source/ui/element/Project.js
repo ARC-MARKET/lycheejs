@@ -13,7 +13,7 @@ lychee.define('app.ui.element.Project').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Project';

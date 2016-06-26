@@ -112,7 +112,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.codec     = lychee.interfaceof(_JSON, settings.codec) ? settings.codec : _JSON;

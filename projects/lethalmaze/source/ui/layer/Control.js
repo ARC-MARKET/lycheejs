@@ -18,7 +18,7 @@ lychee.define('game.ui.layer.Control').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.relayout = false;

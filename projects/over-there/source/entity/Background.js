@@ -19,7 +19,7 @@ lychee.define('app.entity.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.map     = _CONFIG.map;

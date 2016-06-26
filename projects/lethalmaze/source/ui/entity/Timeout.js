@@ -20,7 +20,7 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.timeout = 30000;

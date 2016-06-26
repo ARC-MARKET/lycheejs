@@ -8,7 +8,7 @@ lychee.define('lychee.verlet.World').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.width   = 0;

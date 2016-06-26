@@ -113,7 +113,7 @@ lychee.define('lychee.ui.element.Viewport').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Viewport';

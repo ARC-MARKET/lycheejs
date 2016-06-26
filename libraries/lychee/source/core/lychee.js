@@ -622,31 +622,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 		},
 
-		extend: function(target) {
-
-			for (var a = 1, al = arguments.length; a < al; a++) {
-
-				var object = arguments[a];
-				if (object) {
-
-					for (var prop in object) {
-
-						if (object.hasOwnProperty(prop) === true) {
-							target[prop] = object[prop];
-						}
-
-					}
-
-				}
-
-			}
-
-
-			return target;
-
-		},
-
-		extendsafe: function(target) {
+		assignsafe: function(target) {
 
 			for (var a = 1, al = arguments.length; a < al; a++) {
 
@@ -661,11 +637,11 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							var ovalue = object[prop];
 							if (tvalue instanceof Array && ovalue instanceof Array) {
 
-								lychee.extendsafe(target[prop], object[prop]);
+								lychee.assignsafe(target[prop], object[prop]);
 
 							} else if (tvalue instanceof Object && ovalue instanceof Object) {
 
-								lychee.extendsafe(target[prop], object[prop]);
+								lychee.assignsafe(target[prop], object[prop]);
 
 							} else if (typeof tvalue === typeof ovalue) {
 
@@ -686,7 +662,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 		},
 
-		extendunlink: function(target) {
+		assignunlink: function(target) {
 
 			for (var a = 1, al = arguments.length; a < al; a++) {
 
@@ -701,10 +677,10 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							var ovalue = object[prop];
 							if (tvalue instanceof Array && ovalue instanceof Array) {
 								target[prop] = [];
-								lychee.extendunlink(target[prop], object[prop]);
+								lychee.assignunlink(target[prop], object[prop]);
 							} else if (tvalue instanceof Object && ovalue instanceof Object) {
 								target[prop] = {};
-								lychee.extendunlink(target[prop], object[prop]);
+								lychee.assignunlink(target[prop], object[prop]);
 							} else {
 								target[prop] = object[prop];
 							}
@@ -1034,7 +1010,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 				var code        = '\n';
 				var id          = lychee.ROOT.project.substr(lychee.ROOT.lychee.length) + '/custom';
-				var env_profile = lychee.extend({}, environment.profile, profile);
+				var env_profile = Object.assign({}, environment.profile, profile);
 
 
 				if (environment.id.substr(0, 19) === 'lychee-Environment-') {
@@ -1105,10 +1081,10 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							if (data instanceof Object) {
 
 								var code         = '\n';
-								var env_settings = lychee.extend({
+								var env_settings = Object.assign({
 									id: lychee.ROOT.project + '/' + identifier.split('/').pop()
 								}, data, settings);
-								var env_profile  = lychee.extend({}, data.profile, profile);
+								var env_profile  = Object.assign({}, data.profile, profile);
 								var environment  = new lychee.Environment(env_settings);
 
 
@@ -1230,7 +1206,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 	};
 
 
-	return Module.extend(lychee, Module);
+	return Object.assign(lychee, Module);
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

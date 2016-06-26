@@ -15,7 +15,7 @@ lychee.define('app.entity.Airlock').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.width   = 0;

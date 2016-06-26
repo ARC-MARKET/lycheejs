@@ -12,7 +12,7 @@ lychee.define('lychee.ui.entity.Texture').requires([
 
 	var Class = function() {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.font    = null;

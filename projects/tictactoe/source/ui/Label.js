@@ -14,7 +14,7 @@ lychee.define('game.ui.Label').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.font = _FONT;

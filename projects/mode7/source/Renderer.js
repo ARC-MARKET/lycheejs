@@ -18,7 +18,7 @@ lychee.define('game.Renderer').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 		this.camera     = null;
 		this.compositor = null;

@@ -113,7 +113,7 @@ lychee.define('app.ui.entity.Messages').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.avatar = null;

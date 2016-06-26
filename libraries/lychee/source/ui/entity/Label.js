@@ -13,7 +13,7 @@ lychee.define('lychee.ui.entity.Label').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.font  = _FONT;

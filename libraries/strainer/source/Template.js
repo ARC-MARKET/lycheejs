@@ -88,7 +88,7 @@ lychee.define('strainer.Template').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.codes    = [];

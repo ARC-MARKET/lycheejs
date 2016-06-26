@@ -35,7 +35,7 @@ lychee.define('lychee.ai.neural.Evolution').exports(function(lychee, global, att
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.fitness    = {

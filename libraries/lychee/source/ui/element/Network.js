@@ -160,7 +160,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Network';

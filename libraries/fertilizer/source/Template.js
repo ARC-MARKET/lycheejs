@@ -17,7 +17,7 @@ lychee.define('fertilizer.Template').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.environment = null;

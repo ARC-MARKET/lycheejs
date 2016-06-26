@@ -375,7 +375,7 @@ lychee.define('Stash').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id   = 'lychee-Stash-' + _id++;

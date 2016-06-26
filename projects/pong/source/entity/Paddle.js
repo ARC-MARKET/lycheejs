@@ -18,7 +18,7 @@ lychee.define('game.entity.Paddle').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, _CONFIG, data);
+		var settings = Object.assign({}, _CONFIG, data);
 
 
 		settings.texture = _TEXTURES[settings.state || 'player'];

@@ -25,7 +25,7 @@ lychee.define('app.entity.Astronaut').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.properties = {};

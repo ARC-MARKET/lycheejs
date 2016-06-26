@@ -15,7 +15,7 @@ lychee.define('game.ui.sprite.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.color   = '#050a0d';

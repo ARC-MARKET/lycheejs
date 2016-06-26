@@ -29,7 +29,7 @@ lychee.define('lychee.ui.entity.Joystick').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.value = { x: 0, y: 0 };

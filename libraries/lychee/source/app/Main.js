@@ -281,8 +281,8 @@ lychee.define('lychee.app.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = lychee.extendunlink({}, _defaults, settings);
-		this.defaults = lychee.extendunlink({}, this.settings);
+		this.settings = lychee.assignunlink({}, _defaults, settings);
+		this.defaults = lychee.assignunlink({}, this.settings);
 
 		this.client   = null;
 		this.server   = null;
@@ -349,7 +349,7 @@ lychee.define('lychee.app.Main').requires([
 			var data = lychee.event.Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.app.Main';
 
-			var settings = lychee.extendunlink({}, this.settings);
+			var settings = lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 
@@ -412,10 +412,10 @@ lychee.define('lychee.app.Main').requires([
 
 					_load_api(client_api, function(settings) {
 
-						this.settings.client = lychee.extend({}, settings);
+						this.settings.client = Object.assign({}, settings);
 
 						_load_api(server_api, function(settings) {
-							this.settings.server = lychee.extend({}, settings);
+							this.settings.server = Object.assign({}, settings);
 							oncomplete(true);
 						}, this);
 
@@ -424,14 +424,14 @@ lychee.define('lychee.app.Main').requires([
 				} else if (c === true) {
 
 					_load_api(client_api, function(settings) {
-						this.settings.client = lychee.extend({}, settings);
+						this.settings.client = Object.assign({}, settings);
 						oncomplete(true);
 					}, this);
 
 				} else if (s === true) {
 
 					_load_api(server_api, function(settings) {
-						this.settings.server = lychee.extend({}, settings);
+						this.settings.server = Object.assign({}, settings);
 						oncomplete(true);
 					}, this);
 

@@ -21,7 +21,7 @@ lychee.define('game.entity.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.origin    = { bgx: 0, bgy: 0, fgx: 0, fgy: 0 };

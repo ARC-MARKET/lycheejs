@@ -287,7 +287,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		id = typeof id === 'string' ? id : 'session';
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.session = null;

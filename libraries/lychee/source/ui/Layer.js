@@ -227,7 +227,7 @@ lychee.define('lychee.ui.Layer').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.width  = typeof settings.width  === 'number' ? settings.width  : 0;

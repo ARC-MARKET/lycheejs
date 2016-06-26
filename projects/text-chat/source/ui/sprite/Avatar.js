@@ -53,7 +53,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.value = _random_color();

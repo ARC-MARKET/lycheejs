@@ -33,7 +33,7 @@ lychee.define('app.net.Client').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			reconnect: 10000
 		}, data);
 

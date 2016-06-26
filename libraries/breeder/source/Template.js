@@ -147,7 +147,7 @@ lychee.define('breeder.Template').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.sandbox  = '';

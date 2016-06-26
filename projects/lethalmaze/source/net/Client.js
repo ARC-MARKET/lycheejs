@@ -16,7 +16,7 @@ lychee.define('game.net.Client').requires([
 
 	var Class = function(data, main) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			reconnect: 10000
 		}, data);
 

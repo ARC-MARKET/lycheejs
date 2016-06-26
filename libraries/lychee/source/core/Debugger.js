@@ -53,7 +53,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 		}
 
 
-		var diff = lychee.extend({}, cache1, cache2);
+		var diff = Object.assign({}, cache1, cache2);
 		if (Object.keys(diff).length > 0) {
 			return diff;
 		}

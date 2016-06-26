@@ -76,7 +76,7 @@ lychee.define('app.ui.layer.Web').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.label = [];

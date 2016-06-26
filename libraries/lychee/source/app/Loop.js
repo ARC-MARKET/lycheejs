@@ -235,7 +235,7 @@ lychee.define('lychee.app.Loop').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.update = 40;

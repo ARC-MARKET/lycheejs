@@ -16,7 +16,7 @@ lychee.define('game.net.Server').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 		}, data);
 
 

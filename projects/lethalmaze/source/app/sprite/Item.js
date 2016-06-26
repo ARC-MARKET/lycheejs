@@ -16,7 +16,7 @@ lychee.define('game.app.sprite.Item').includes([
 
 	var Class = function(data, main) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.collision = _Entity.COLLISION.A;

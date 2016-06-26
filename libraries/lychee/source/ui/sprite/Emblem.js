@@ -12,7 +12,7 @@ lychee.define('lychee.ui.sprite.Emblem').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.texture = _TEXTURE;

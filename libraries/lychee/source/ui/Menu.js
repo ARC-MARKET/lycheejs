@@ -22,7 +22,7 @@ lychee.define('lychee.ui.Menu').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.font    = _FONT;

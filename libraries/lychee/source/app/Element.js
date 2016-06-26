@@ -118,7 +118,7 @@ lychee.define('lychee.app.Element').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.label = 'CONTENT';

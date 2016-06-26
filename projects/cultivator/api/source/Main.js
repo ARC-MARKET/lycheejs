@@ -1,7 +1,6 @@
 
 lychee.define('tool.Main').requires([
 	'lychee.data.HTML',
-	'lychee.data.JSON',
 	'lychee.data.MD',
 	'tool.API'
 ]).includes([
@@ -21,15 +20,14 @@ lychee.define('tool.Main').requires([
 
 	return false;
 
-}).exports(function(lychee, tool, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
-	var _API             = tool.API;
+	var _API             = lychee.import('tool.API');
 	var _API_CACHE       = {};
 	var _SRC_CACHE       = {};
 	var _DATA            = {};
-	var _HTML            = lychee.data.HTML;
-	var _JSON            = lychee.data.JSON;
-	var _MD              = lychee.data.MD;
+	var _HTML            = lychee.import('lychee.data.HTML');
+	var _MD              = lychee.import('lychee.data.MD');
 
 
 
@@ -108,7 +106,7 @@ lychee.define('tool.Main').requires([
 			}
 
 
-			var stuff = new Stuff('/libraries/lychee/source/' + path + '.js?' + Date.now(), true);
+			var stuff = new Stuff('/libraries/lychee/source/' + path + '.js', true);
 
 			stuff.onload = function(result) {
 				_SRC_CACHE[identifier] = this.buffer;
@@ -336,15 +334,6 @@ lychee.define('tool.Main').requires([
 
 				}
 
-				var codes = [].slice.call(global.document.querySelectorAll('code'));
-				if (codes.length > 0) {
-
-					codes.forEach(function(code) {
-						hljs.highlightBlock(code);
-					});
-
-				}
-
 			}, 0);
 
 		}
@@ -359,7 +348,7 @@ lychee.define('tool.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client:   null,
 			input:    null,

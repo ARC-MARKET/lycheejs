@@ -13,7 +13,7 @@ lychee.define('app.ui.entity.Status').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		_Label.call(this, settings);

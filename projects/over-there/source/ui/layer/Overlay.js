@@ -18,7 +18,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.__entity = null;

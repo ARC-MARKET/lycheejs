@@ -520,7 +520,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.type = Class.TYPE.grid;

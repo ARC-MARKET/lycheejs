@@ -21,7 +21,7 @@ lychee.define('app.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client: {},
 			server: null

@@ -33,8 +33,8 @@ lychee.define('breeder.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = _lychee.extendunlink({}, _defaults, settings);
-		this.defaults = _lychee.extendunlink({}, this.settings);
+		this.settings = lychee.assignunlink({}, _defaults, settings);
+		this.defaults = lychee.assignunlink({}, this.settings);
 
 
 		_Emitter.call(this);
@@ -121,7 +121,7 @@ lychee.define('breeder.Main').requires([
 			data['constructor'] = 'breeder.Main';
 
 
-			var settings = _lychee.extendunlink({}, this.settings);
+			var settings = lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 

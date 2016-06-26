@@ -115,7 +115,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 					val = property.values[0];
 				} else {
 
-					val = lychee.extend({}, property.values[0]);
+					val = Object.assign({}, property.values[0]);
 
 					Object.keys(val).forEach(function(key, k) {
 

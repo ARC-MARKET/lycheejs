@@ -258,13 +258,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		/*
-		 * 2. Extend Class, Module or Callback
+		 * 2. Assign Class, Module or Callback
 		 */
 
 		if (template !== null) {
 
 			/*
-			 * 2.1 Extend and export Class or Module
+			 * 2.1 Assign and export Class or Module
 			 */
 
 			var includes = definition._includes;
@@ -376,7 +376,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					namespace[classId][e] = tplenums[e];
 				}
 
-				lychee.extend.apply(lychee, tplmethods);
+				Object.assign.apply(lychee, tplmethods);
 
 				Object.seal(namespace[classId].prototype);
 
@@ -598,12 +598,11 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.lychee.ROOT.project = global.lychee.ROOT.project;
 
 		[
+			'assignsafe',
+			'assignunlink',
 			'debug',
 			'diff',
 			'enumof',
-			'extend',
-			'extendsafe',
-			'extendunlink',
 			'interfaceof',
 			'deserialize',
 			'serialize',
@@ -712,7 +711,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id          = 'lychee-Environment-' + _id++;

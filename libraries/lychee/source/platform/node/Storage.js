@@ -257,7 +257,7 @@ lychee.define('Storage').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id    = 'lychee-Storage-' + _id++;
@@ -385,7 +385,7 @@ lychee.define('Storage').tags({
 		 */
 
 		create: function() {
-			return lychee.extendunlink({}, this.model);
+			return lychee.assignunlink({}, this.model);
 		},
 
 		filter: function(callback, scope) {

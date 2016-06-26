@@ -16,7 +16,7 @@ lychee.define('game.app.sprite.Terrain').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.texture = _TEXTURE;

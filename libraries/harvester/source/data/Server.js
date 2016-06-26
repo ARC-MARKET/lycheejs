@@ -7,7 +7,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.host = settings.host || null;
