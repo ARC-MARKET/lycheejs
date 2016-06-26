@@ -153,7 +153,7 @@ fyto = (function(global) {
 			var tag      = identifier.split('.').join('-');
 			var wrapper  = Object.create(HTMLDivElement.prototype);
 			var template = _polyfill_template(tag, template);
-			var instance = lychee.extend(wrapper, {
+			var instance = Object.assign(wrapper, {
 
 				attributeChangedCallback: function(name, oldvalue, newvalue) {
 
