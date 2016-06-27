@@ -60,13 +60,14 @@ elif [ "$LYCHEEJS_CHANGE" == "" ]; then
 
 
 	cd $LYCHEEJS_FOLDER;
-	git pull origin development;
+	git checkout $LYCHEEJS_BRANCH;
+	git pull origin $LYCHEEJS_BRANCH;
 
 
 	if [ ! -d $LYCHEEJS_FOLDER/bin/runtime ]; then
 
 		cd $LYCHEEJS_FOLDER;
-		git clone --depth 1 https://github.com/Artificial-Engineering/lycheejs-runtime.git --branch master --single-branch ./bin/runtime;
+		git clone --depth 1 --branch master --single-branch https://github.com/Artificial-Engineering/lycheejs-runtime.git ./bin/runtime;
 
 	else
 

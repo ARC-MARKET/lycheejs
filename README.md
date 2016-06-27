@@ -63,17 +63,25 @@ due to XCode limitations. You can still create an own WebView
 iOS app and use the `html` platform adapter.
 
 
-# Install lychee.js
+
+## Install lychee.js Engine (Bundles)
 
 The lychee.js Bundles (such as a Debian package, OSX package or
-the Raspberry Pi image) are being deprecated, but can be built
-and downloaded by anyone using the [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
-repository. These bundles don't have auto-updates because they
-require a git installation as we distribute all updates via SSH.
+the Raspberry Pi image) can be downloaded by anyone using the
+[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
+repository and its release section.
+
+These bundles ship with an integrated git repository, leading to
+auto-updates via the `master` (quarterly release-cycle) branch.
+
+If you want to change update behaviour of a lychee.js Engine 
+installation, read the [Maintain section](#maintain-lycheejs-engine)
+of this README file.
 
 The lychee.js Library (available via `bower` and `npm`) is
 available in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
-repository.
+repository and follows updates via the `master` (quarterly
+release-cycle) branch.
 
 
 
@@ -98,7 +106,7 @@ The above installation procedure will look similar to this:
 
 
 
-## Bootup lychee.js Engine (Developer Machine)
+## Bootup lychee.js Engine
 
 After you've installed the lychee.js Engine, you can directly
 start the `lycheejs-harvester`.
@@ -136,7 +144,7 @@ The above bootup procedure will look similar to this:
 
 
 
-## Update lychee.js Engine (Developer Machine)
+## Update lychee.js Engine
 
 Every developer can update the lychee.js Engine Installation
 simply by using git. The development branch is the most
@@ -157,7 +165,7 @@ git pull origin master;
 
 
 
-## Maintain lychee.js Engine (Developer Machine)
+## Maintain lychee.js Engine
 
 There are multiple maintenance scripts in the `./bin/maintenance`
 folder that will ensure an almost-automated process for our
