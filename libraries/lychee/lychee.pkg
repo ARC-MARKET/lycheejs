@@ -543,6 +543,9 @@
 								"js",
 								"json",
 								"png"
+							],
+							"Upload": [
+								"js"
 							]
 						}
 					}
@@ -631,6 +634,9 @@
 					],
 					"Textarea": [
 						"fnt",
+						"js"
+					],
+					"Texture": [
 						"js"
 					]
 				},
