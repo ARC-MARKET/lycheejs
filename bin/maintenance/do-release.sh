@@ -150,6 +150,16 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 
 	#
+	# BUILD AND PACKAGE lycheejs-bundle
+	#
+
+ 	cd $LYCHEEJS_FOLDER;
+	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-bundle.git $LYCHEEJS_FOLDER/projects/lycheejs-bundle;
+	$LYCHEEJS_FOLDER/bin/fertilizer.sh auto /projects/lycheejs-bundle;
+
+
+
+	#
 	# BUILD AND PACKAGE lycheejs-website
 	#
 
@@ -223,6 +233,18 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 	cd $LYCHEEJS_FOLDER/projects/lycheejs-website;
 	./bin/publish.sh;
+
+
+
+	echo "";
+	echo "";
+	echo "~ ~ ~ ~ ~ ~ ~ ~ ~ SUCCESS ~ ~ ~ ~ ~ ~ ~ ~ ~";
+	echo "";
+	echo "Manual Steps required to do now:";
+	echo "";
+	echo "- Create equivalent $NEW_VERSION release in the lychee.js Bundle repository.";
+	echo "- Upload and attach lychee.js Bundles (./build/*) to this release.";
+	echo "";
 
 else
 
