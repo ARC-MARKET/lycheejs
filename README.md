@@ -11,39 +11,43 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 The following repositories are related to the lychee.js project:
 
-- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled Runtimes and Fertilizers.
-- [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (installable from `bower` and `npm`).
+- [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled lychee.js Runtimes and Fertilizers.
+- [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (installable via `bower` and `npm`).
 - [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (forked from `/libraries/harvester`).
 - [lychee.js Website](https://github.com/Artificial-Engineering/lycheejs-website.git) contains the lychee.js Website (hosted at [https://lychee.js.org](https://lychee.js.org)).
-- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready bundles (published at [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
+- [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready lychee.js Bundles (published at [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
 - [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains all Concepts and Ideas not yet finished.
 
 
 lychee.js is a [Next-Gen Isomorphic Application Engine](https://lychee.js.org/#!vision)
-that offers a complete solution for prototyping and deployment
-of applications. The underlying technology stack does not
-matter (HTML5, WebGL, OpenGL, OpenGLES, libSDL) and is
-completely automated behind the scenes.
+that offers a complete solution for prototyping, development,
+maintenance and deployment of applications. The underlying
+technology stack does not matter (HTML5, WebGL, OpenGL,
+OpenGLES, libSDL) and is completely automated behind the
+scenes.
 
-The project aims to ease up and automate the design and
-development process of applications through intelligent
-software bots that learn from your application code.
+The project's goal is to ease up and automate the design
+and engineering process of applications through intelligent
+software bots that learn from your application code. In
+particular, we use an ES/HyperNEAT-architecture across a
+world-wide botnet with over 500k+ active computers
+that constantly improve and learn from your code.
+
+The development process is optimized for Blink-based
+browsers (Chromium, Google Chrome, Opera) and their
+developer tools. We honestly recommend NOT using Firefox
+due to lack of developer and debugging tools nor has it
+any remote debugging protocol.
+
+We ain't doing HTML5 websites or single-page-webapps here.
+
+
+## Platform / Fertilizer Support
 
 The target platforms are described as so-called Fertilizers.
 Those Fertilizers cross-compile everything automagically
 using a serialized `lychee.Environment` that is setup in
 each project's or library's `lychee.pkg` file.
-
-
-The development process is optimized for Blink-based
-browsers (Chromium, Google Chrome, Opera) and their
-developer tools. We honestly recommend NOT using Firefox
-due to lack of developer and debugging tools.
-
-We ain't doing HTML5 websites here.
-
-
-## Platform / Fertilizer Support
 
 
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
