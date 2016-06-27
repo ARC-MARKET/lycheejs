@@ -183,7 +183,7 @@ There are multiple maintenance scripts in the `./bin/maintenance`
 folder that will ensure an almost-automated process for our
 human and bot maintainers:
 
-- `do-release.sh` automates a lychee.js quaterly release (relevant only for lychee.js core maintainers).
+- `do-release.sh` automates a lychee.js quarterly release (relevant only for lychee.js core maintainers).
 - `do-uninstall.sh` removes a lychee.js installation from the system.
 - `do-update.sh` selects an update channel and updates a lychee.js installation.
 
