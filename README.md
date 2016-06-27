@@ -1,5 +1,5 @@
 
-# lychee.js (2016-Q1)
+# lychee.js (2016-Q2)
 
 brought to you as libre software with joy and pride by [Artificial Engineering](http://artificial.engineering).
 
