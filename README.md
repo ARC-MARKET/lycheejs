@@ -18,6 +18,11 @@ The following repositories are related to the lychee.js project:
 - [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready lychee.js Bundles (published at [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
 - [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains all Concepts and Ideas not yet finished.
 
+The following accounts are related to the lychee.js project:
+
+- [@cookiengineer](https://github.com/cookiengineer) is the core maintainer and founder of this project.
+- [@humansneednotapply](https://github.com/humansneednotapply) is the account used by our software bots.
+
 
 lychee.js is a [Next-Gen Isomorphic Application Engine](https://lychee.js.org/#!vision)
 that offers a complete solution for prototyping, development,
