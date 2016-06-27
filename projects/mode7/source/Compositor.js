@@ -1,5 +1,5 @@
 
-lychee.define('game.Compositor').exports(function(lychee, game, global, attachments) {
+lychee.define('game.Compositor').exports(function(lychee, global, attachments) {
 
 	/*
 	 * IMPLEMENTATION

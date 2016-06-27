@@ -1,9 +1,7 @@
 
-lychee.define('tool.API').requires([
-	'lychee.data.JSON'
-]).tags({
+lychee.define('tool.API').tags({
 	platform: 'html'
-}).exports(function(lychee, tool, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
 	/*
 	 * HELPERS
@@ -112,7 +110,7 @@ lychee.define('tool.API').requires([
 					val = property.values[0];
 				} else {
 
-					val = lychee.extend({}, property.values[0]);
+					val = Object.assign({}, property.values[0]);
 
 					Object.keys(val).forEach(function(key, k) {
 

@@ -1,8 +1,9 @@
 
 lychee.define('game.entity.Tile').includes([
 	'lychee.ui.Sprite'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Sprite  = lychee.import('lychee.ui.Sprite');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = attachments["json"].buffer;
 
@@ -14,11 +15,11 @@ lychee.define('game.entity.Tile').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
-		this.x     = settings.x;
-		this.y     = settings.y;
+		this.x = settings.x;
+		this.y = settings.y;
 
 
 		settings.texture = _TEXTURE;
@@ -30,7 +31,7 @@ lychee.define('game.entity.Tile').includes([
 		settings.state   = 'default';
 
 
-		lychee.ui.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 		settings = null;
 
@@ -45,7 +46,7 @@ lychee.define('game.entity.Tile').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'game.entity.Tile';
 
 
@@ -63,11 +64,11 @@ lychee.define('game.entity.Tile').includes([
 
 			if (this.state === 'default' && state !== 'default') {
 
-				return lychee.ui.Sprite.prototype.setState.call(this, state);
+				return _Sprite.prototype.setState.call(this, state);
 
 			} else if (state === 'default') {
 
-				return lychee.ui.Sprite.prototype.setState.call(this, state);
+				return _Sprite.prototype.setState.call(this, state);
 
 			}
 

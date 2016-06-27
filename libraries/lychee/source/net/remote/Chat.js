@@ -7,17 +7,17 @@ lychee.define('lychee.net.remote.Chat').includes([
 	 * HELPERS
 	 */
 
-	var _cache = {};
+	var _CACHE = {};
 
 	var _on_disconnect = function() {
 
-		for (var rId in _cache) {
+		for (var rId in _CACHE) {
 
-			var index = _cache[rId].tunnels.indexOf(this.tunnel);
+			var index = _CACHE[rId].tunnels.indexOf(this.tunnel);
 			if (index !== -1) {
-				_cache[rId].users.splice(index, 1);
-				_cache[rId].tunnels.splice(index, 1);
-				_sync_room.call(this, _cache[rId]);
+				_CACHE[rId].users.splice(index, 1);
+				_CACHE[rId].tunnels.splice(index, 1);
+				_sync_room.call(this, _CACHE[rId]);
 			}
 
 		}
@@ -35,10 +35,10 @@ lychee.define('lychee.net.remote.Chat').includes([
 
 
 			// 1. Create Room
-			var cache = _cache[room] || null;
+			var cache = _CACHE[room] || null;
 			if (cache === null) {
 
-				cache = _cache[room] = {
+				cache = _CACHE[room] = {
 					messages: [],
 					users:    [ user ],
 					tunnels:  [ this.tunnel ]
@@ -62,17 +62,17 @@ lychee.define('lychee.net.remote.Chat').includes([
 
 
 			// 3. Leave Room (only one at a time allowed)
-			for (var rId in _cache) {
+			for (var rId in _CACHE) {
 
 				if (rId === room) continue;
 
-				var index = _cache[rId].tunnels.indexOf(this.tunnel);
+				var index = _CACHE[rId].tunnels.indexOf(this.tunnel);
 				if (index !== -1) {
 
-					_cache[rId].users.splice(index, 1);
-					_cache[rId].tunnels.splice(index, 1);
+					_CACHE[rId].users.splice(index, 1);
+					_CACHE[rId].tunnels.splice(index, 1);
 
-					_sync_room.call(this, _cache[rId]);
+					_sync_room.call(this, _CACHE[rId]);
 
 				}
 
@@ -89,7 +89,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 		var message = data.message || null;
 		if (user !== null && room !== null && message !== null) {
 
-			var cache = _cache[room] || null;
+			var cache = _CACHE[room] || null;
 			if (cache !== null) {
 
 				var limit = this.limit;
@@ -146,7 +146,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.limit = 128;

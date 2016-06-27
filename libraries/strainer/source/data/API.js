@@ -1,9 +1,12 @@
 
-lychee.define('strainer.data.API').requires([
-	'lychee.data.JSON'
-]).tags({
-	platform: 'html'
-}).exports(function(lychee, tool, global, attachments) {
+lychee.define('strainer.data.API').exports(function(lychee, global, attachments) {
+
+	var _JSON = {
+		encode: JSON.stringify,
+		decode: JSON.parse
+	};
+
+
 
 	/*
 	 * HELPERS
@@ -112,7 +115,7 @@ lychee.define('strainer.data.API').requires([
 					val = property.values[0];
 				} else {
 
-					val = lychee.extend({}, property.values[0]);
+					val = Object.assign({}, property.values[0]);
 
 					Object.keys(val).forEach(function(key, k) {
 
@@ -131,7 +134,7 @@ lychee.define('strainer.data.API').requires([
 
 				}
 
-				val = JSON.stringify(val);
+				val = _JSON.encode(val);
 
 			break;
 
@@ -272,7 +275,226 @@ lychee.define('strainer.data.API').requires([
 
 	};
 
-	var _parse_enums = function(code) {
+	var _parse_head_identifier = function(code){
+
+		var that = this;
+		var i1   = code.indexOf('lychee.define(') + 14;
+		var i2   = code.indexOf(')', i1);
+		var id   = null;
+
+
+		if (i1 > 14 && i2 > i1) {
+
+			id = code.substr(i1, i2 - i1);
+
+			if (id.charAt(0) === '\'') {
+				id = id.substr(1, id.length - 2);
+			} else if (id.charAt(0) === '"') {
+				id = id.substr(1, id.length - 2);
+			} else {
+				id = null;
+			}
+
+		}
+
+
+		if (id !== null) {
+			that.identifier = id;
+		}
+
+	};
+
+	var _parse_head_tags = function(code) {
+
+		var that = this;
+		var i1   = code.indexOf('.tags(') + 6;
+		var i2   = code.indexOf(')', i1);
+
+
+		var tags = {};
+
+
+		if (i1 > 6 && i2 > i1) {
+			code = code.substr(i1, i2 - i1);
+		} else {
+			code = '';
+		}
+
+
+		if (code !== '') {
+
+			code.split('\n').map(function(line) {
+
+				line = line.replace('{', '');
+				line = line.replace('}', '');
+
+
+				var tmp = line.trim();
+				if (tmp.indexOf(':') !== -1) {
+
+					var key = tmp.split(':')[0].trim();
+					var val = tmp.split(':')[1].trim();
+
+					if (val.substr(-1) === ',') {
+						val = val.substr(0, val.length - 1);
+					}
+
+
+					var k0 = key.substr(0, 1);
+					var k1 = key.substr(-1);
+					var v0 = val.substr(0, 1);
+					var v1 = val.substr(-1);
+
+					if (k0 === '\'' && k1 === '\'') {
+						key = key.substr(1, key.length - 2);
+					} else if (k0 === '"' && k1 === '"') {
+						key = key.substr(1, key.length - 2);
+					}
+
+					if (v0 === '\'' && v1 === '\'') {
+						val = val.substr(1, val.length - 2);
+					} else if (v0 === '"' && v1 === '"') {
+						val = val.substr(1, val.length - 2);
+					}
+
+
+					return {
+						key: key,
+						val: val
+					};
+
+				} else {
+
+					return null;
+
+				}
+
+			}).filter(function(obj) {
+				return obj !== null;
+			}).forEach(function(obj) {
+
+				tags[obj.key] = obj.val;
+
+			});
+
+		}
+
+
+		if (Object.keys(tags).length > 0) {
+			that.tags = tags;
+		}
+
+	};
+
+	var _parse_head_requires = function(code) {
+
+		var that = this;
+		var i1   = code.indexOf('.requires(') + 10;
+		var i2   = code.indexOf(')', i1);
+
+
+		var requires = [];
+
+
+		if (i1 > 10 && i2 > i1) {
+			code = code.substr(i1, i2 - i1);
+		} else {
+			code = '';
+		}
+
+
+		code.split('\n').filter(function(line) {
+
+			var tmp = line.trim();
+			if (tmp === '[' || tmp === ']') {
+				return false;
+			} else if (tmp.substr(0, 2) === '//') {
+				return false;
+			}
+
+
+			return true;
+
+		}).forEach(function(line) {
+
+			var tmp = line.trim();
+			if (tmp.substr(tmp.length - 1, 1) === ',') {
+				tmp = tmp.substr(0, tmp.length - 1);
+			}
+
+			if (tmp.charAt(0) === '\'') {
+				tmp = tmp.substr(1, tmp.length - 2);
+			} else if (tmp.charAt(0) === '"') {
+				tmp = tmp.substr(1, tmp.length - 2);
+			}
+
+
+			if (tmp !== '' && requires.indexOf(tmp) === -1) {
+				requires.push(tmp);
+			}
+
+		});
+
+
+		that.requires = requires;
+
+	};
+
+	var _parse_head_includes = function(code) {
+
+		var that = this;
+		var i1   = code.indexOf('.includes(') + 10;
+		var i2   = code.indexOf(')', i1);
+
+
+		var includes = [];
+
+
+		if (i1 > 10 && i2 > i1) {
+			code = code.substr(i1, i2 - i1);
+		} else {
+			code = '';
+		}
+
+
+		code.split('\n').filter(function(line) {
+
+			var tmp = line.trim();
+			if (tmp === '[' || tmp === ']') {
+				return false;
+			} else if (tmp.substr(0, 2) === '//') {
+				return false;
+			}
+
+
+			return true;
+
+		}).forEach(function(line) {
+
+			var tmp = line.trim();
+			if (tmp.substr(tmp.length - 1, 1) === ',') {
+				tmp = tmp.substr(0, tmp.length - 1);
+			}
+
+			if (tmp.charAt(0) === '\'') {
+				tmp = tmp.substr(1, tmp.length - 2);
+			} else if (tmp.charAt(0) === '"') {
+				tmp = tmp.substr(1, tmp.length - 2);
+			}
+
+
+			if (tmp !== '' && includes.indexOf(tmp) === -1) {
+				includes.push(tmp);
+			}
+
+		});
+
+
+		that.includes = includes;
+
+	};
+
+	var _parse_body_enums = function(code) {
 
 		var that = this;
 		var i1   = code.indexOf('\n\tvar Class = ') + 14;
@@ -347,7 +569,7 @@ lychee.define('strainer.data.API').requires([
 
 	};
 
-	var _parse_events = function(code) {
+	var _parse_body_events = function(code) {
 
 		var that = this;
 
@@ -391,7 +613,7 @@ lychee.define('strainer.data.API').requires([
 
 	};
 
-	var _parse_properties = function(code) {
+	var _parse_body_properties = function(code) {
 
 		var that = this;
 		var i1   = code.indexOf('\n\tvar Class = ') + 14;
@@ -465,7 +687,7 @@ lychee.define('strainer.data.API').requires([
 
 	};
 
-	var _parse_methods = function(code) {
+	var _parse_body_methods = function(code) {
 
 		var that = this;
 		var i1   = code.indexOf('\n\tClass.prototype = {') + 21;
@@ -595,10 +817,23 @@ lychee.define('strainer.data.API').requires([
 							typ = 'Object';
 							val = line.split(':')[1].split(';')[0].trim();
 
-						} else {
+						}
 
-							if (lychee.debug === true) {
-								console.error('parse method param', method, key, line);
+					}
+
+
+					if (typ !== undefined && val !== undefined) {
+
+						var data = params.find(function(value) {
+							return value.name === key;
+						}) || null;
+
+						if (data !== null) {
+
+							data.type = typ;
+
+							if (data.values.indexOf(val) === -1) {
+								data.values.push(val);
 							}
 
 						}
@@ -606,25 +841,6 @@ lychee.define('strainer.data.API').requires([
 					}
 
 				});
-
-
-				if (typ !== undefined && val !== undefined) {
-
-					var param = params.find(function(value) {
-						return value.name === key;
-					}) || null;
-
-					if (param !== null) {
-
-						param.type = typ;
-
-						if (param.values.indexOf(val) === -1) {
-							param.values.push(val);
-						}
-
-					}
-
-				}
 
 			}
 
@@ -647,451 +863,124 @@ lychee.define('strainer.data.API').requires([
 
 
 	/*
-	 * IMPLEMENTATION
+	 * ENCODER AND DECODER
 	 */
 
-	var Class = function(identifier, code) {
+	var _encode = function() {
 
-		identifier = typeof identifier === 'string'                ? identifier : '';
-		code       = code.trim().substr(0, 13) === 'lychee.define' ? code       : '';
+// TODO: Encoding from object to string
 
+	};
 
-		this.identifier = identifier;
+	var _decode = function(stream) {
 
-		this.enums      = {};
-		this.events     = {};
-		this.properties = {};
-		this.methods    = {};
+		stream = stream.trim().substr(0, 13) === 'lychee.define' ? stream : '';
 
 
-		_parse_enums.call(this,      code);
-		_parse_events.call(this,     code);
-		_parse_properties.call(this, code);
-		_parse_methods.call(this,    code);
+		var object = {
+			TYPE: null,
+			HEAD: {
+				identifier: null,
+				tags:       {},
+				requires:   [],
+				includes:   [],
+				attaches:   [],
+				supports:   [],
+				exports:    null
+			},
+			BODY: {
+				enums:      {},
+				events:     {},
+				properties: {},
+				methods:    {}
+			}
+		};
+
+
+		if (stream.indexOf('return Class;') !== -1) {
+			object.TYPE = 'Class';
+		} else if (stream.indexOf('return Module;') !== -1) {
+			object.TYPE = 'Module';
+		}
+
+
+		_parse_head_identifier.call(object.HEAD, stream);
+		_parse_head_tags.call(      object.HEAD, stream);
+		_parse_head_requires.call(  object.HEAD, stream);
+		_parse_head_includes.call(  object.HEAD, stream);
+//		_parse_head_attaches.call(  object.HEAD, stream);
+//		_parse_head_supports.call(  object.HEAD, stream);
+//		_parse_head_exports.call(   object.HEAD, stream);
+
+		_parse_body_enums.call(     object.BODY, stream);
+		_parse_body_events.call(    object.BODY, stream);
+		_parse_body_properties.call(object.BODY, stream);
+		_parse_body_methods.call(   object.BODY, stream);
+
+
+		return object;
 
 	};
 
 
-	Class.prototype = {
 
-		toJSON: function() {
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	var Module = {
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'reference': 'strainer.data.API',
+				'blob':      null
+			};
 
 		},
 
-		toMD: function() {
+		encode: function(data) {
 
-			var identifier = this.identifier;
-			var that       = this;
-			var markdown   = [];
-			var data       = {
-				introduction: '',
-				enums:        {},
-				events:       {},
-				properties:   {},
-				methods:      {}
-			};
+			data = data instanceof Object ? data : null;
 
 
-			(function() {
+			if (data !== null) {
 
-				var code     = '={constructor}\n';
-				var settings = Object.values(that.properties).filter(function(property) {
-					return property.setting === true;
-				});
+				// TODO: This is object to string
+				// return stream.toString();
 
-
-				if (settings.length > 0) {
-
-					code += '\n';
-					code += '```javascript-constructor\n';
-					code += 'new ' + identifier + '(settings);\n';
-					code += '```\n';
-					code += '\n';
-
-					code += 'This implementation returns an instance of `' + identifier + '`.\n';
-					code += 'The `settings` object consists of the following properties:\n';
-					code += '\n';
-
-					code += '\n' + settings.map(function(property) {
-
-						var chunk  = '- `(' + property.type + ') ' + property.name + '`';
-						var method = 'set' + property.name.charAt(0).toUpperCase() + property.name.substr(1);
-
-						if (property.method === true) {
-							chunk += ' which will be passed to [' + method + '](#methods-' + method + ')';
-						}
-
-						return chunk + '.';
-
-					}).join('\n') + '\n';
+			}
 
 
-					var example_settings = settings.map(function(property) {
+			return null;
 
-						return {
-							name:  property.name,
-							value: _readable_value.call(that, property, true)
-						};
+		},
 
-					});
+		decode: function(data) {
 
-					var pretty_length = Math.max.apply(null, example_settings.map(function(property) {
-						return property.name.length;
-					}));
+			data = typeof data === 'string' ? data : null;
 
 
-					code += '\n';
-					code += '```javascript\n';
-					code += 'var settings = {\n';
-					code += example_settings.map(function(setting) {
-						var ws = _WHITESPACE.slice(0, pretty_length - setting.name.length);
-						return '\t' + setting.name + ': ' + ws + setting.value;
-					}).join(',\n') + '\n';
-					code += '};\n';
-					code += 'var instance = new ' + identifier + '(settings);\n';
-					code += '```\n';
-					code += '\n';
+			if (data !== null) {
 
-				} else {
-
-					code += '```javascript-constructor\n';
-					code += '' + identifier + ';\n';
-					code += '```\n';
-					code += '\n';
-
-					code += 'This implementation is a Module and has no constructor.\n';
-					code += '\n';
-
-					code += '\n';
-					code += '```javascript\n';
-					code += '' + identifier + '; // ' + identifier + ' reference\n';
-					code += '```\n';
-					code += '\n';
-
+				var object = _decode(data);
+				if (object !== undefined) {
+					return object;
 				}
 
+			}
 
-				code += '\n';
-				code += '#### Implementation Notes\n';
-				code += '\n';
-				code += 'TODO: IMPLEMENTATION NOTES\n';
 
-
-				data.introduction = code;
-
-			})();
-
-			Object.values(this.enums).forEach(function(enam) {
-
-				var code = '={enums-' + enam.name + '}\n';
-
-				code += '\n';
-				code += '```javascript-enum\n';
-				code += '(Enum) ' + identifier + '.' + enam.name + ';\n';
-				code += '```\n';
-				code += '\n';
-
-				code += 'The `(Enum) ' + enam.name + '` enum consists of the following properties:\n';
-				code += '\n';
-
-				code += '\n' + enam.values.map(function(value) {
-					return '- `(' + value.type + ') ' + value.name + '` reflects (TODO: DESCRIPTION).';
-				}).join('\n') + '\n';
-
-
-				code += '\n';
-				code += 'If the instance is set to (TODO: DESCRIPTION).\n';
-
-
-				data.enums[enam.name] = code;
-
-			});
-
-			Object.values(this.events).forEach(function(event) {
-
-				var params = _readable_params(event.params) || 'void';
-				var code   = '={events-' + event.name + '}\n';
-
-				code += '\n';
-				code += '```javascript-event\n';
-				code += 'new ' + identifier + '().bind(\'' + event.name + '\', function(' + params + ') {}, scope);\n';
-				code += '```\n';
-				code += '\n';
-
-				code += 'The `' + event.name + '` event is triggered on (TODO: CALLS).\n';
-				code += '\n';
-
-				code += '\n' + event.params.map(function(param) {
-					return '- `(' + param.type + ') ' + param.name + '` is the (TODO: DESCRIPTION).';
-				}).join('\n') + '\n';
-
-
-				code += '\n';
-				code += 'If the instance is set to (TODO: DESCRIPTION).\n';
-
-				code += '\n';
-				code += '```javascript\n';
-				code += 'var instance = new ' + identifier + '();\n';
-				code += '\n';
-				code += 'instance.bind(function(' + params + ') {\n';
-				code += '\tconsole.log(' + params + ');\n';
-				code += '}, this);\n';
-				code += '```\n';
-
-
-				data.events[event.name] = code;
-
-			});
-
-			Object.values(this.properties).forEach(function(property) {
-
-				var enam   = that.enums[property.name.toUpperCase()] || null;
-				var event  = that.events[property.name] || null;
-				var method = that.methods['set' + property.name.charAt(0).toUpperCase() + property.name.substr(1)] || null;
-				var type   = _readable_type(property.type) || 'void';
-				var code   = '={properties-' + property.name + '}\n';
-
-
-				code += '\n';
-				code += '```javascript-property\n';
-				code += '(' + type + ') new ' + identifier + '().' + property.name + ';\n';
-				code += '```\n';
-				code += '\n';
-
-				code += 'The `(' + property.type + ') ' + property.name + '` property is (TODO: DESCRIPTION).\n';
-				code += '\n';
-
-
-				if (enam !== null) {
-					code += 'It is part of the [' + enam.name + '](#enums-' + enam.name + ') enum.\n';
-					code += '\n';
-				}
-
-				if (event !== null) {
-					code += 'It influences the [' + event.name + '](#events-' + event.name + ') event.\n';
-					code += '\n';
-				}
-
-
-				var default_value = _readable_value.call(that, property, true);
-				var example_value = _readable_value.call(that, property, false);
-
-
-				if (property.setting === true && property.method === true) {
-
-					code += 'It is set via `settings.' + property.name + '` in the [constructor](#constructor) or via [' + method.name + '](#methods-' + method.name + ').\n';
-					code += '\n';
-
-					code += '```javascript\n';
-					code += 'var instance = new ' + identifier + '({\n';
-					code += '\t' + property.name + ': ' + default_value + '\n';
-					code += '});\n';
-					code += '\n';
-					code += 'instance.' + property.name + '; // ' + default_value + '\n';
-					code += 'instance.' + method.name + '(' + example_value + '); // true\n';
-					code += 'instance.' + property.name + '; // ' + example_value + '\n';
-					code += '```\n';
-
-				} else if (property.setting === true) {
-
-					code += 'It is set via `settings.' + property.name + '` in the [constructor](#constructor).\n';
-					code += '\n';
-
-					code += '```javascript\n';
-					code += 'var instance = new ' + identifier + '({\n';
-					code += '\t' + property.name + ': ' + default_value + '\n';
-					code += '});\n';
-					code += '\n';
-					code += 'instance.' + property.name + '; // ' + default_value + '\n';
-					code += 'instance.' + property.name + ' = ' + example_value + ';\n';
-					code += 'instance.' + property.name + '; // ' + example_value + '\n';
-					code += '```\n';
-
-				} else if (property.method === true) {
-
-					code += 'It is set via via [' + method.name + '()](#methods-' + method.name + ').\n';
-					code += '\n';
-
-					code += '```javascript\n';
-					code += 'var instance = new ' + identifier + '();\n';
-					code += '\n';
-					code += 'instance.' + property.name + '; // ' + default_value + '\n';
-					code += 'instance.' + method.name + '(' + example_value + '); // true\n';
-					code += 'instance.' + property.name + '; // ' + example_value + '\n';
-					code += '```\n';
-
-				} else {
-
-					code += '```javascript\n';
-					code += 'var instance = new ' + identifier + '();\n';
-					code += '\n';
-					code += '// TODO: DEMO CODE\n';
-					code += '```\n';
-
-				}
-
-
-				data.properties[property.name] = code;
-
-			});
-
-			Object.values(this.methods).forEach(function(method) {
-
-				var params = _readable_params(method.params) || 'void';
-				var types  = _readable_types(method.types)   || 'void';
-				var code   = '={methods-' + method.name + '}\n';
-
-
-				code += '\n';
-				code += '```javascript-method\n';
-				code += '(' + types + ') ' + identifier + '.prototype.' + method.name + '(' + params + ');\n';
-				code += '```\n';
-				code += '\n';
-
-
-				var params_list = method.params.map(function(param) {
-
-					var chunk = '- `(' + param.type + ') ' + param.name + '`';
-
-					if (param.type !== undefined) {
-
-						if (param.type.match(/Array|Object/)) {
-							chunk += ' is an `' + param.type + ' instance`.';
-						} else if (param.type.match(/(lychee\.*)/)) {
-							chunk += ' is an `[' + param.type + '](' + param.type + ')` instance.';
-						} else if (param.type === 'Boolean') {
-							chunk += ' is a flag. If set to `true`, the method will (TODO: DESCRIPTION).';
-						} else if (param.type === 'Enum') {
-							chunk += ' is an `Enum value` of the `[' + param.name.toUpperCase() + '](#enums-' + param.name.toUpperCase() + ')` enum.';
-						} else if (param.type === 'Number') {
-							chunk += ' is a number.';
-						} else if (param.type === 'String') {
-							chunk += ' is a string.';
-						}
-
-					}
-
-					if (param.values.length > 0) {
-						chunk += ' It is defaulted with `' + param.values[0] + '`.';
-					}
-
-					return chunk;
-
-				});
-
-
-				if (params_list.length !== 0) {
-					code += params_list.join('\n') + '\n';
-				} else {
-					code += '- This method has no arguments\n';
-				}
-
-
-				code += '\n';
-
-				if (types === 'void') {
-
-					code += 'This method returns nothing.\n';
-					code += '\n';
-
-				} else if (types === 'Boolean') {
-
-					code += 'This method returns `true` on success and `false` on failure.\n';
-					code += '\n';
-
-				} else if (types.indexOf('||') !== -1) {
-
-					var tmp = types.split('||').map(function(val) { return val.trim(); });
-					code += 'This method returns `' + tmp[0] +'` on success and `' + tmp[1] + '` on failure.\n';
-					code += '\n';
-
-				} else if (method.name.match(/serialize|deserialize/g)) {
-
-					code += 'This method is not intended for direct usage.\n';
-					code += 'You can serialize an instance using the [lychee.serialize](lychee#methods-serialize) method.\n';
-					code += '\n';
-
-				} else {
-
-					code += 'This method returns `TODO` on success and `TODO` on failure.\n';
-					code += '\n';
-
-					if (lychee.debug === true) {
-						console.error('describe method', method);
-					}
-
-				}
-
-
-				var example_params = JSON.parse(JSON.stringify(method.params));
-
-				if (method.name.substr(0, 3) === 'set') {
-
-					example_params.forEach(function(param) {
-
-						if (param.type === 'Object') {
-
-							var property = that.properties[param.name] || null;
-							if (property !== null) {
-								param.values = property.values;
-							}
-
-						}
-
-					});
-
-				}
-
-				var example_values = _readable_values.call(that, example_params, false);
-
-
-				code += '```javascript\n';
-				code += 'var instance = new ' + identifier + '();\n';
-				code += '\n';
-				code += 'instance.' + method.name + '(' + example_values + '); // true\n';
-				code += '```\n';
-
-
-				data.methods[method.name] = code;
-
-			});
-
-
-			markdown.push(data.introduction);
-
-			markdown.push.apply(markdown, Object.keys(this.enums).sort().map(function(id) {
-				return data.enums[id] || '';
-			}));
-
-			markdown.push.apply(markdown, Object.keys(this.events).sort().map(function(id) {
-				return data.events[id] || '';
-			}));
-
-			markdown.push.apply(markdown, Object.keys(this.properties).sort().map(function(id) {
-				return data.properties[id] || '';
-			}));
-
-			markdown.push.apply(markdown, [ 'deserialize', 'serialize', 'update', 'render' ].map(function(id) {
-				return data.methods[id] || '';
-			}));
-
-			markdown.push.apply(markdown, Object.keys(this.methods).filter(function(id) {
-				return id.match(/deserialize|serialize|update|render/g) ? false : true;
-			}).sort().map(function(id) {
-				return data.methods[id] || '';
-			}));
-
-
-			return markdown.filter(function(val) {
-				return val !== '';
-			}).join('\n\n\n\n');
+			return null;
 
 		}
 
 	};
 
 
-	return Class;
+	return Module;
 
 });
 

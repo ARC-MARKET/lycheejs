@@ -23,16 +23,21 @@ lychee.define('lychee.app.Main').requires([
 
 	(function(location) {
 
-		var origin = location.origin || '';
-		var proto  = origin.split(':')[0];
+		var hostname = location.hostname || '';
+		var origin   = location.origin   || '';
+		var proto    = origin.split(':')[0];
 
 		if (proto.match(/app|file/g)) {
 
-			_api_origin = 'http://harvester.lycheejs.org:8080';
+			_api_origin = 'http://harvester.artificial.engineering:4848';
+
+		} else if (hostname === 'localhost') {
+
+			_api_origin = 'http://localhost:4848';
 
 		} else if (proto.match(/http|https/g)) {
 
-			_api_origin = location.origin;
+			_api_origin = location.origin + ':4848';
 
 		}
 
@@ -41,10 +46,15 @@ lychee.define('lychee.app.Main').requires([
 
 	var _load_api = function(url, callback, scope) {
 
-		url = typeof url === 'string' ? url : '/api/Server?identifier=boilerplate';
+		url = typeof url === 'string' ? url : '/api/server/connect?identifier=boilerplate';
 
 
-		var config = new Config(_api_origin + url);
+		if (/^http(s)\:\/\//g.test(url) === false) {
+			url = _api_origin + url;
+		}
+
+
+		var config = new Config(url);
 
 		config.onload = function(result) {
 			callback.call(scope, result === true ? this.buffer : null);
@@ -271,8 +281,8 @@ lychee.define('lychee.app.Main').requires([
 
 	var Class = function(settings) {
 
-		this.settings = lychee.extendunlink({}, _defaults, settings);
-		this.defaults = lychee.extendunlink({}, this.settings);
+		this.settings = lychee.assignunlink({}, _defaults, settings);
+		this.defaults = lychee.assignunlink({}, this.settings);
 
 		this.client   = null;
 		this.server   = null;
@@ -339,7 +349,7 @@ lychee.define('lychee.app.Main').requires([
 			var data = lychee.event.Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.app.Main';
 
-			var settings = lychee.extendunlink({}, this.settings);
+			var settings = lychee.assignunlink({}, this.settings);
 			var blob     = data['blob'] || {};
 
 
@@ -402,10 +412,10 @@ lychee.define('lychee.app.Main').requires([
 
 					_load_api(client_api, function(settings) {
 
-						this.settings.client = lychee.extend({}, settings);
+						this.settings.client = Object.assign({}, settings);
 
 						_load_api(server_api, function(settings) {
-							this.settings.server = lychee.extend({}, settings);
+							this.settings.server = Object.assign({}, settings);
 							oncomplete(true);
 						}, this);
 
@@ -414,14 +424,14 @@ lychee.define('lychee.app.Main').requires([
 				} else if (c === true) {
 
 					_load_api(client_api, function(settings) {
-						this.settings.client = lychee.extend({}, settings);
+						this.settings.client = Object.assign({}, settings);
 						oncomplete(true);
 					}, this);
 
 				} else if (s === true) {
 
 					_load_api(server_api, function(settings) {
-						this.settings.server = lychee.extend({}, settings);
+						this.settings.server = Object.assign({}, settings);
 						oncomplete(true);
 					}, this);
 

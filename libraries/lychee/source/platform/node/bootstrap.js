@@ -19,6 +19,13 @@
 			lychee.ROOT.lychee = selfpath.substr(0, tmp1);
 		}
 
+
+		var tmp2 = selfpath.split('/').slice(0, 3).join('/');
+		if (tmp2.substr(0, 13) === '/opt/lycheejs') {
+			lychee.ROOT.lychee = tmp2;
+		}
+
+
 		if (cwd !== '') {
 			lychee.ROOT.project = cwd;
 		}
@@ -60,19 +67,23 @@
 	 * POLYFILLS
 	 */
 
-	var _log   = console.log   || function() {};
-	var _info  = console.info  || console.log;
-	var _warn  = console.warn  || console.log;
-	var _error = console.error || console.log;
+	var _log     = console.log   || function() {};
+	var _info    = console.info  || console.log;
+	var _warn    = console.warn  || console.log;
+	var _error   = console.error || console.log;
+	var _std_out = '';
+	var _std_err = '';
 
 
 	console.log = function() {
 
 		var al   = arguments.length;
-		var args = new Array(al);
+		var args = [ '(L)' ];
 		for (var a = 0; a < al; a++) {
-			args[a] = arguments[a];
+			args.push(arguments[a]);
 		}
+
+		_std_out += args.join('\t') + '\n';
 
 		args.reverse();
 		args.push(' ');
@@ -86,10 +97,12 @@
 	console.info = function() {
 
 		var al   = arguments.length;
-		var args = new Array(al);
+		var args = [ '(I)' ];
 		for (var a = 0; a < al; a++) {
-			args[a] = arguments[a];
+			args.push(arguments[a]);
 		}
+
+		_std_out += args.join('\t') + '\n';
 
 		args.reverse();
 		args.push('\u001b[37m');
@@ -105,10 +118,12 @@
 	console.warn = function() {
 
 		var al   = arguments.length;
-		var args = new Array(al);
+		var args = [ '(W)' ];
 		for (var a = 0; a < al; a++) {
-			args[a] = arguments[a];
+			args.push(arguments[a]);
 		}
+
+		_std_out += args.join('\t') + '\n';
 
 		args.reverse();
 		args.push('\u001b[37m');
@@ -124,10 +139,12 @@
 	console.error = function() {
 
 		var al   = arguments.length;
-		var args = new Array(al);
+		var args = [ '(E)' ];
 		for (var a = 0; a < al; a++) {
-			args[a] = arguments[a];
+			args.push(arguments[a]);
 		}
+
+		_std_err += args.join('\t') + '\n';
 
 		args.reverse();
 		args.push('\u001b[37m');
@@ -137,6 +154,34 @@
 		args.push('\u001b[39m');
 
 		_error.apply(console, args);
+
+	};
+
+	console.deserialize = function(blob) {
+
+		if (typeof blob.stdout === 'string') {
+			_std_out = blob.stdout;
+		}
+
+		if (typeof blob.stderr === 'string') {
+			_std_err = blob.stderr;
+		}
+
+	};
+
+	console.serialize = function() {
+
+		var blob = {};
+
+
+		if (_std_out.length > 0) blob.stdout = _std_out;
+		if (_std_err.length > 0) blob.stderr = _std_err;
+
+
+		return {
+			'reference': 'console',
+			'blob':      Object.keys(blob).length > 0 ? blob : null
+		};
 
 	};
 
@@ -482,7 +527,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -748,7 +793,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -1336,6 +1381,39 @@
 
 	};
 
+	var _execute_stuff = function(callback, stuff) {
+
+		var type = stuff.url.split('/').pop().split('.').pop();
+		if (type === 'js' && stuff.__ignore === false) {
+
+			_filename = stuff.url;
+
+			var cid = lychee.environment.resolve(stuff.url);
+			if (require.cache[cid] !== undefined) {
+				delete require.cache[cid];
+			}
+
+
+			try {
+				require(cid);
+			} catch(err) {
+				lychee.Debugger.report(lychee.environment, err, stuff);
+			}
+
+
+			_filename = null;
+
+
+			callback.call(stuff, true);
+
+		} else {
+
+			callback.call(stuff, true);
+
+		}
+
+	};
+
 
 	var Stuff = function(url, ignore) {
 
@@ -1404,72 +1482,43 @@
 
 			if (this.__load === false) {
 
-				if (this.onload instanceof Function) {
-					this.onload(true);
-					this.onload = null;
-				}
+				_execute_stuff(function(result) {
+
+					if (this.onload instanceof Function) {
+						this.onload(result);
+						this.onload = null;
+					}
+
+				}, this);
+
 
 				return;
 
 			}
 
 
-			var that = this;
-			var type = this.url.split('/').pop().split('.').pop();
-			if (type === 'js' && this.__ignore === false) {
+			_load_asset({
+				url:      this.url,
+				encoding: 'utf8'
+			}, function(raw) {
 
-				_load_asset({
-					url:      this.url,
-					encoding: 'utf8'
-				}, function(raw) {
+				if (raw !== null) {
+					this.buffer = raw.toString('utf8');
+				} else {
+					this.buffer = '';
+				}
 
-					if (raw !== null) {
-						that.buffer = raw.toString('utf8');
-					} else {
-						that.buffer = '';
+
+				_execute_stuff(function(result) {
+
+					if (this.onload instanceof Function) {
+						this.onload(result);
+						this.onload = null;
 					}
 
+				}, this);
 
-					_filename = that.url;
-
-					var cid = lychee.environment.resolve(that.url);
-					if (require.cache[cid] !== undefined) {
-						delete require.cache[cid];
-					}
-
-					require(cid);
-					_filename = null;
-
-
-					if (that.onload instanceof Function) {
-						that.onload(raw !== null);
-						that.onload = null;
-					}
-
-				});
-
-			} else {
-
-				_load_asset({
-					url:      this.url,
-					encoding: 'utf8'
-				}, function(raw) {
-
-					if (raw !== null) {
-						that.buffer = raw.toString('utf8');
-					} else {
-						that.buffer = '';
-					}
-
-
-					if (that.onload instanceof Function) {
-						that.onload(raw !== null);
-						that.onload = null;
-					}
-
-				});
-
-			}
+			}, this);
 
 		}
 

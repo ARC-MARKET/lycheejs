@@ -12,6 +12,7 @@
 
 /projects/*
 /projects/*/lychee.store
+/projects/cultivator/*/lychee.store
 !/projects/README.md
 
 

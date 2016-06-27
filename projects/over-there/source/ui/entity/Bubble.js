@@ -1,8 +1,9 @@
 
 lychee.define('app.ui.entity.Bubble').includes([
 	'lychee.ui.Entity'
-]).exports(function(lychee, global, app, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Entity  = lychee.import('lychee.ui.Entity');
 	var _CONFIG  = attachments["json"].buffer;
 	var _FONT    = attachments["fnt"];
 	var _TEXTURE = attachments["png"];
@@ -19,7 +20,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.key   = 'urine';
@@ -36,10 +37,10 @@ lychee.define('app.ui.entity.Bubble').includes([
 
 		settings.alpha  = 1.0;
 		settings.radius = 32;
-		settings.shape  = lychee.ui.Entity.SHAPE.circle;
+		settings.shape  = _Entity.SHAPE.circle;
 
 
-		lychee.ui.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 		settings = null;
 
@@ -54,7 +55,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			var data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.entity.Bubble';
 
 

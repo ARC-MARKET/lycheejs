@@ -1,5 +1,11 @@
 
-lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachments) {
+lychee.define('lychee.net.protocol.WS').requires([
+	'lychee.codec.JSON'
+]).exports(function(lychee, global, attachments) {
+
+	var _JSON = lychee.import('lychee.codec.JSON');
+
+
 
 	/*
 	 * HELPERS
@@ -28,16 +34,70 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 	 *
 	 */
 
+	var _on_ping_frame = function() {
 
-	var _encode_buffer = function(data, binary) {
+		var type = this.type;
+		if (type === Class.TYPE.remote) {
 
-		var type           = this.type;
+			var buffer = new Buffer(2);
+
+			// FIN, Pong
+			// Unmasked, 0 payload
+
+			buffer[0] = 128 + 0x0a;
+			buffer[1] =   0 + 0x00;
+
+
+			return buffer;
+
+		}
+
+
+		return null;
+
+	};
+
+	var _on_pong_frame = function() {
+
+		var type = this.type;
+		if (type === Class.TYPE.client) {
+
+			var buffer = new Buffer(6);
+
+			// FIN, Ping
+			// Masked, 0 payload
+
+			buffer[0] = 128 + 0x09;
+			buffer[1] = 128 + 0x00;
+
+			buffer[2] = (Math.random() * 0xff) | 0;
+			buffer[3] = (Math.random() * 0xff) | 0;
+			buffer[4] = (Math.random() * 0xff) | 0;
+			buffer[5] = (Math.random() * 0xff) | 0;
+
+
+			return buffer;
+
+		}
+
+
+		return null;
+
+	};
+
+
+	var _encode_buffer = function(payload, headers, binary) {
+
 		var buffer         = null;
-
-		var payload_length = data.length;
+		var data           = _JSON.encode({
+			headers: headers,
+			payload: payload
+		});
 		var mask           = false;
 		var mask_data      = null;
 		var payload_data   = null;
+		var payload_length = data.length;
+		var type           = this.type;
 
 
 		if (type === Class.TYPE.client) {
@@ -152,11 +212,17 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 	var _decode_buffer = function(buffer) {
 
-		var parsed_bytes = -1;
-		var type         = this.type;
+		var fragment = this.__fragment;
+		var type     = this.type;
+		var chunk    = {
+			bytes:   -1,
+			headers: {},
+			payload: null
+		};
+
 
 		if (buffer.length <= 2) {
-			return parsed_bytes;
+			return chunk;
 		}
 
 
@@ -175,11 +241,11 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 			if (mask === true) {
 				mask_data    = buffer.slice(2, 6);
 				payload_data = buffer.slice(6, 6 + payload_length);
-				parsed_bytes = 6 + payload_length;
+				chunk.bytes  = 6 + payload_length;
 			} else {
 				mask_data    = null;
 				payload_data = buffer.slice(2, 2 + payload_length);
-				parsed_bytes = 2 + payload_length;
+				chunk.bytes  = 2 + payload_length;
 			}
 
 		} else if (payload_length === 126) {
@@ -189,11 +255,11 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 			if (mask === true) {
 				mask_data    = buffer.slice(4, 8);
 				payload_data = buffer.slice(8, 8 + payload_length);
-				parsed_bytes = 8 + payload_length;
+				chunk.bytes  = 8 + payload_length;
 			} else {
 				mask_data    = null;
 				payload_data = buffer.slice(4, 4 + payload_length);
-				parsed_bytes = 4 + payload_length;
+				chunk.bytes  = 4 + payload_length;
 			}
 
 		} else if (payload_length === 127) {
@@ -206,11 +272,11 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 			if (mask === true) {
 				mask_data    = buffer.slice(10, 14);
 				payload_data = buffer.slice(14, 14 + payload_length);
-				parsed_bytes = 14 + payload_length;
+				chunk.bytes  = 14 + payload_length;
 			} else {
 				mask_data    = null;
 				payload_data = buffer.slice(10, 10 + payload_length);
-				parsed_bytes = 10 + payload_length;
+				chunk.bytes  = 10 + payload_length;
 			}
 
 		}
@@ -230,24 +296,23 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 			if (fin === true) {
 
-				if (this.__fragment.operator === 0x01) {
-					this.ondata(this.__fragment.payload.toString('utf8'));
-				} else if (this.__fragment.operator === 0x02) {
-					this.ondata(this.__fragment.payload.toString('binary'));
+				var tmp0 = _JSON.decode(fragment.payload);
+				if (tmp0 !== null) {
+					chunk.headers = tmp0.headers || {};
+					chunk.payload = tmp0.payload || null;
 				}
 
-
-				this.__fragment.operator = 0x00;
-				this.__fragment.payload  = new Buffer(0);
+				fragment.operator = 0x00;
+				fragment.payload  = new Buffer(0);
 
 			} else if (payload_data !== null) {
 
-				var payload = new Buffer(this.__fragment.payload.length + payload_length);
+				var payload = new Buffer(fragment.payload.length + payload_length);
 
-				this.__fragment.payload.copy(payload, 0);
-				payload_data.copy(payload, this.__fragment.payload.length);
+				fragment.payload.copy(payload, 0);
+				payload_data.copy(payload, fragment.payload.length);
 
-				this.__fragment.payload = payload;
+				fragment.payload = payload;
 
 			}
 
@@ -257,12 +322,16 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 			if (fin === true) {
 
-				this.ondata(payload_data.toString('utf8'));
+				var tmp1 = _JSON.decode(payload_data);
+				if (tmp1 !== null) {
+					chunk.headers = tmp1.headers || {};
+					chunk.payload = tmp1.payload || null;
+				}
 
 			} else {
 
-				this.__fragment.operator = operator;
-				this.__fragment.payload  = payload_data;
+				fragment.operator = operator;
+				fragment.payload  = payload_data;
 
 			}
 
@@ -272,12 +341,16 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 			if (fin === true) {
 
-				this.ondata(payload_data.toString('binary'));
+				var tmp2 = _JSON.decode(payload_data);
+				if (tmp2 !== null) {
+					chunk.headers = tmp2.headers || {};
+					chunk.payload = tmp2.payload || null;
+				}
 
 			} else {
 
-				this.__fragment.operator = operator;
-				this.__fragment.payload  = payload_data;
+				fragment.operator = operator;
+				fragment.payload  = payload_data;
 
 			}
 
@@ -285,58 +358,30 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 		// 8: Connection Close
 		} else if (operator === 0x08) {
 
-			this.close(Class.STATUS.normal_closure);
+			chunk.payload = this.close(Class.STATUS.normal_closure);
 
 
 		// 9: Ping Frame
 		} else if (operator === 0x09) {
 
-			this.__lastping = Date.now();
-
-			if (type === Class.TYPE.remote) {
-				this.pong();
-			}
+			chunk.payload = _on_ping_frame.call(this);
 
 
 		// 10: Pong Frame
 		} else if (operator === 0x0a) {
 
-			this.__lastpong = Date.now();
-
-			if (type === Class.TYPE.client) {
-				_reset_ping.call(this);
-			}
+			chunk.payload = _on_pong_frame.call(this);
 
 
 		// 3-7: Reserved Non-Control Frames, 11-15: Reserved Control Frames
 		} else {
 
-			this.close(Class.STATUS.protocol_error);
+			chunk.payload = this.close(Class.STATUS.protocol_error);
 
 		}
 
 
-		return parsed_bytes;
-
-	};
-
-	var _reset_ping = function() {
-
-		var type = this.type;
-		if (type === Class.TYPE.client) {
-
-			if (this.__interval !== null) {
-				clearInterval(this.__interval);
-			}
-
-
-			var that = this;
-
-			this.__interval = setInterval(function() {
-				that.ping();
-			}, 60000);
-
-		}
+		return chunk;
 
 	};
 
@@ -346,21 +391,16 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(socket, type) {
+	var Class = function(type) {
 
 		type = lychee.enumof(Class.TYPE, type) ? type : null;
 
 
-		this.socket  = socket;
-		this.type    = type;
-		this.ondata  = function() {};
-		this.onclose = function(err) {};
+		this.type = type;
 
 
+		this.__buffer   = new Buffer(0);
 		this.__fragment = { operator: 0x00, payload: new Buffer(0) };
-		this.__lastping = 0;
-		this.__lastpong = 0;
-		this.__interval = null;
 		this.__isClosed = false;
 
 
@@ -372,67 +412,6 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 		}
 
-
-
-		/*
-		 * INITIALIZATION
-		 */
-
-		var that = this;
-		var temp = new Buffer(0);
-
-		this.socket.on('data', function(data) {
-
-			if (data.length > Class.FRAMESIZE) {
-
-				that.close(Class.STATUS.message_too_big);
-
-			} else if (that.__isClosed === false) {
-
-				// Use a temporary Buffer for easier parsing
-				var tmp = new Buffer(temp.length + data.length);
-				temp.copy(tmp);
-				data.copy(tmp, temp.length);
-				temp = tmp;
-
-
-				var parsed_bytes = _decode_buffer.call(that, temp);
-
-				while (parsed_bytes !== -1) {
-
-					tmp = new Buffer(temp.length - parsed_bytes);
-					temp.copy(tmp, 0, parsed_bytes);
-					temp = tmp;
-
-					parsed_bytes = _decode_buffer.call(that, temp);
-
-				}
-
-			}
-
-		});
-
-		this.socket.on('error', function() {
-			that.__isClosed = true;
-			this.end();
-			this.destroy();
-		}.bind(this.socket));
-
-		this.socket.on('timeout', function() {
-			that.close(Class.STATUS.going_away);
-		});
-
-		this.socket.on('end', function() {
-			that.close(Class.STATUS.normal_closure);
-		});
-
-		this.socket.on('close', function() {
-			that.close(Class.STATUS.normal_closure);
-		});
-
-
-		_reset_ping.call(this);
-
 	};
 
 
@@ -443,24 +422,26 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 	Class.STATUS = {
 
 		// IESG_HYBI
-		normal_closure:     1000,
-		going_away:         1001,
-		protocol_error:     1002,
-		unsupported_data:   1003,
-		no_status_received: 1005,
-		abnormal_closure:   1006,
-		invalid_payload:    1007,
-		policy_violation:   1008,
-		message_too_big:    1009,
-		missing_extension:  1010,
-		internal_error:     1011,
-
-		// IESG_HYBI Current
-		service_restart:    1012,
-		service_overload:   1013,
+		normal_closure:  1000,
+		protocol_error:  1002,
+		message_too_big: 1009
 
 		// IESG_HYBI
-		tls_handshake:      1015
+		// going_away:         1001,
+		// unsupported_data:   1003,
+		// no_status_received: 1005,
+		// abnormal_closure:   1006,
+		// invalid_payload:    1007,
+		// policy_violation:   1008,
+		// missing_extension:  1010,
+		// internal_error:     1011,
+
+		// IESG_HYBI Current
+		// service_restart:    1012,
+		// service_overload:   1013,
+
+		// IESG_HYBI
+		// tls_handshake:      1015
 
 	};
 
@@ -474,102 +455,84 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 	Class.prototype = {
 
-		ping: function() {
+		/*
+		 * PROTOCOL API
+		 */
 
-			var type = this.type;
-			if (type === Class.TYPE.client) {
+		send: function(payload, headers, binary) {
 
-				if (Date.now() > this.__lastping + 10000) {
-
-					var buffer = new Buffer(6);
-
-					// FIN, Ping
-					// Masked, 0 payload
-
-					buffer[0] = 128 + 0x09;
-					buffer[1] = 128 + 0x00;
-
-					buffer[2] = (Math.random() * 0xff) | 0;
-					buffer[3] = (Math.random() * 0xff) | 0;
-					buffer[4] = (Math.random() * 0xff) | 0;
-					buffer[5] = (Math.random() * 0xff) | 0;
+			payload = payload instanceof Buffer ? payload : null;
+			headers = headers instanceof Object ? headers : null;
+			binary  = binary === true;
 
 
-					return this.socket.write(buffer);
+			if (payload !== null) {
 
-
+				if (this.__isClosed === false) {
+					return _encode_buffer.call(this, payload, headers, binary);
 				}
 
 			}
 
 
-			return false;
+			return null;
 
 		},
 
-		pong: function() {
+		receive: function(blob) {
 
-			var type = this.type;
-			if (type === Class.TYPE.remote) {
-
-				if (Date.now() > this.__lastping) {
-
-					var buffer = new Buffer(2);
-
-					// FIN, Pong
-					// Unmasked, 0 payload
-
-					buffer[0] = 128 + 0x0a;
-					buffer[1] =   0 + 0x00;
+			blob = blob instanceof Buffer ? blob : null;
 
 
-					return this.socket.write(buffer);
-
-				}
-
-			}
-
-
-			return false;
-
-		},
-
-		send: function(payload, binary) {
-
-			binary = binary === true;
-
-
-			var blob = null;
-
-			if (typeof payload === 'string') {
-				blob = new Buffer(payload, 'utf8');
-			} else if (payload instanceof Buffer) {
-				blob = payload;
-			}
+			var chunks = [];
 
 
 			if (blob !== null) {
 
-				if (this.__isClosed === false) {
+				if (blob.length > Class.FRAMESIZE) {
 
-					var buffer = _encode_buffer.call(this, blob, binary);
-					if (buffer !== null) {
+					chunks.push({
+						payload: this.close(Class.STATUS.message_too_big)
+					});
 
-						this.socket.write(buffer);
+				} else if (this.__isClosed === false) {
 
-						buffer = null;
-						blob   = null;
+					var buf = this.__buffer;
+					var tmp = new Buffer(buf.length + blob.length);
 
-						return true;
+
+					buf.copy(tmp);
+					blob.copy(tmp, buf.length);
+					buf = tmp;
+
+
+					var chunk = _decode_buffer.call(this, buf);
+
+					while (chunk.bytes !== -1) {
+
+						if (chunk.payload !== null) {
+							chunks.push(chunk);
+						}
+
+
+						tmp = new Buffer(buf.length - chunk.bytes);
+						buf.copy(tmp, 0, chunk.bytes);
+						buf = tmp;
+
+						chunk = null;
+						chunk = _decode_buffer.call(this, buf);
 
 					}
+
+
+					this.__buffer = buf;
 
 				}
 
 			}
 
 
-			return false;
+			return chunks;
 
 		},
 
@@ -587,23 +550,27 @@ lychee.define('lychee.net.protocol.WS').exports(function(lychee, global, attachm
 
 				buffer.write(String.fromCharCode((status >> 8) & 0xff) + String.fromCharCode((status >> 0) & 0xff), 2, 'binary');
 
-
-				this.socket.write(buffer, function(err) {
-					this.end();
-					this.destroy();
-				}.bind(this.socket));
-
-
 				this.__isClosed = true;
-				this.onclose(status);
 
 
-				return true;
+				return buffer;
 
 			}
 
 
-			return false;
+			return null;
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
+
+		ping: function() {
+
+			return _on_pong_frame.call(this);
 
 		}
 

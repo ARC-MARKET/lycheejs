@@ -8,7 +8,7 @@ OS=`lowercase \`uname\``;
 ARCH=`lowercase \`uname -m\``;
 
 LYCHEEJS_NODE="";
-LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
+LYCHEEJS_ROOT="/opt/lycheejs";
 
 
 if [ "$ARCH" == "x86_64" -o "$ARCH" == "amd64" ]; then
@@ -27,11 +27,13 @@ fi;
 if [ "$OS" == "darwin" ]; then
 
 	OS="osx";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(greadlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node";
 
 elif [ "$OS" == "linux" ]; then
 
 	OS="linux";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node";
 
 fi;
@@ -53,10 +55,21 @@ fi;
 
 if [ -d "$LYCHEEJS_ROOT/$2" ]; then
 
-	cd $LYCHEEJS_ROOT;
-	$LYCHEEJS_NODE ./bin/fertilizer.js "$1" "$2";
+	SANDBOX_FLAG="";
+	if [ "$3" == "--sandbox" ] || [ "$4" == "--sandbox" ]; then
+		SANDBOX_FLAG="--sandbox";
+	fi;
 
-	exit 0;
+	DEBUG_FLAG="";
+	if [ "$3" == "--debug" ] || [ "$4" == "--debug" ]; then
+		DEBUG_FLAG="--debug";
+	fi;
+
+
+	cd $LYCHEEJS_ROOT;
+	$LYCHEEJS_NODE ./bin/fertilizer.js "$1" "$2" "$SANDBOX_FLAG" "$DEBUG_FLAG";
+
+	exit $?;
 
 else
 

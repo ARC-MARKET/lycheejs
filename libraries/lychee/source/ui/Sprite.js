@@ -9,7 +9,7 @@ lychee.define('lychee.ui.Sprite').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.frame   = 0;
@@ -22,7 +22,10 @@ lychee.define('lychee.ui.Sprite').includes([
 			duration: 0,
 			loop:     false
 		};
-		this.__map = {};
+		this.__map = {
+			'default': null,
+			'active':  null
+		};
 
 
 		this.setAnimation(settings.animation);
@@ -151,7 +154,7 @@ lychee.define('lychee.ui.Sprite').includes([
 
 				} else {
 
-					var hw = (this.width / 2)  || this.radius;
+					var hw = (this.width  / 2) || this.radius;
 					var hh = (this.height / 2) || this.radius;
 
 					x1 = position.x + offsetX - hw;

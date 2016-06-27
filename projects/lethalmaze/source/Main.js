@@ -5,11 +5,21 @@ lychee.define('game.Main').requires([
 	'game.state.Game'
 ]).includes([
 	'lychee.app.Main'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _lychee = lychee.import('lychee');
+	var _game   = lychee.import('game');
+	var _Main   = lychee.import('lychee.app.Main');
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			input: {
 				delay:       0,
@@ -39,7 +49,7 @@ lychee.define('game.Main').requires([
 		}, data);
 
 
-		lychee.app.Main.call(this, settings);
+		_Main.call(this, settings);
 
 
 		this.bind('load', function(oncomplete) {
@@ -59,7 +69,7 @@ lychee.define('game.Main').requires([
 			var gameclient = this.settings.gameclient;
 			if (gameclient !== null) {
 
-				this.client = new game.net.Client(gameclient, this);
+				this.client = new _game.net.Client(gameclient, this);
 				this.client.bind('connect', function() {
 					this.changeState('game');
 				}, this);
@@ -68,7 +78,7 @@ lychee.define('game.Main').requires([
 
 			var gameserver = this.settings.gameserver;
 			if (gameserver !== null) {
-				this.server = new game.net.Server(gameserver, this);
+				this.server = new _game.net.Server(gameserver, this);
 			}
 
 
@@ -76,7 +86,7 @@ lychee.define('game.Main').requires([
 			this.viewport.unbind('hide');
 
 
-			this.setState('game', new game.state.Game(this));
+			this.setState('game', new _game.state.Game(this));
 
 		}, this, true);
 
@@ -93,7 +103,7 @@ lychee.define('game.Main').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.Main.prototype.serialize.call(this);
+			var data = _Main.prototype.serialize.call(this);
 			data['constructor'] = 'game.Main';
 
 			var settings = data['arguments'][0] || {};

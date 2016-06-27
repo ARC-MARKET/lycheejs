@@ -1,10 +1,10 @@
 
 lychee.define('app.net.Client').requires([
-	'lychee.data.BitON'
 ]).includes([
 	'lychee.net.Client'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Client  = lychee.import('lychee.net.Client');
 	var _CONFIG  = attachments["json"].buffer;
 	var _ROOMS   = ['node1', 'fgb', 'node0', 'sm', 'node3', 'crewlock', 'destiny', 'harmony', 'columbus', 'jem'];
 	var _SENSORS = {
@@ -33,15 +33,14 @@ lychee.define('app.net.Client').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
-			codec:     lychee.data.BitON,
+		var settings = Object.assign({
 			reconnect: 10000
 		}, data);
 
 		var _timelineManager = null;
 		var _pushPage        = null;
 
-		lychee.net.Client.call(this, settings);
+		_Client.call(this, settings);
 
 
 
@@ -121,7 +120,7 @@ lychee.define('app.net.Client').requires([
 
 		serialize: function() {
 
-			var data = lychee.net.Client.prototype.serialize.call(this);
+			var data = _Client.prototype.serialize.call(this);
 			data['constructor'] = 'app.net.Client';
 
 

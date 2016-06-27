@@ -1,10 +1,11 @@
 
 lychee.define('game.ui.sprite.Background').includes([
 	'lychee.ui.sprite.Background'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _TEXTURE = attachments["png"];
-	var _CONFIG  = attachments["json"].buffer;
+	var _TEXTURE    = attachments["png"];
+	var _CONFIG     = attachments["json"].buffer;
+	var _Background = lychee.import('lychee.ui.sprite.Background');
 
 
 
@@ -14,7 +15,7 @@ lychee.define('game.ui.sprite.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.color   = '#050a0d';
@@ -24,7 +25,7 @@ lychee.define('game.ui.sprite.Background').includes([
 		settings.state   = 'default';
 
 
-		lychee.ui.sprite.Background.call(this, settings);
+		_Background.call(this, settings);
 
 		settings = null;
 
@@ -39,7 +40,7 @@ lychee.define('game.ui.sprite.Background').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.sprite.Background.prototype.serialize.call(this);
+			var data = _Background.prototype.serialize.call(this);
 			data['constructor'] = 'game.ui.sprite.Background';
 
 

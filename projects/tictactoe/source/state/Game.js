@@ -6,8 +6,9 @@ lychee.define('game.state.Game').requires([
 	'game.ui.Label'
 ]).includes([
 	'lychee.app.State'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _State = lychee.import('lychee.app.State');
 	var _BLOB  = attachments["json"].buffer;
 	var _MUSIC = attachments["msc"];
 	var _SOUND = attachments["snd"];
@@ -181,7 +182,7 @@ lychee.define('game.state.Game').requires([
 
 	var Class = function(main) {
 
-		lychee.app.State.call(this, main);
+		_State.call(this, main);
 
 
 		this.__player = 'x';
@@ -231,7 +232,7 @@ lychee.define('game.state.Game').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'game.state.Game';
 
 
@@ -241,7 +242,7 @@ lychee.define('game.state.Game').requires([
 
 		deserialize: function(blob) {
 
-			lychee.app.State.prototype.deserialize.call(this, blob);
+			_State.prototype.deserialize.call(this, blob);
 
 
 			this.queryLayer('ui', 'board').entities.forEach(function(entity) {
@@ -258,7 +259,7 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
-			lychee.app.State.prototype.enter.call(this, oncomplete);
+			_State.prototype.enter.call(this, oncomplete);
 
 
 			this.__player   = 'x';
@@ -288,7 +289,7 @@ lychee.define('game.state.Game').requires([
 			this.jukebox.stop(_MUSIC);
 
 
-			lychee.app.State.prototype.leave.call(this, oncomplete);
+			_State.prototype.leave.call(this, oncomplete);
 
 		}
 

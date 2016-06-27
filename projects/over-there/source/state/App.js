@@ -11,9 +11,14 @@ lychee.define('app.state.App').requires([
 	'app.ui.layer.Overlay'
 ]).includes([
 	'lychee.app.State'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _BLOB = attachments["json"].buffer;
+	var _Alpha     = lychee.import('lychee.effect.Alpha');
+	var _Astronaut = lychee.import('app.entity.Astronaut');
+	var _Position  = lychee.import('lychee.effect.Position');
+	var _Room      = lychee.import('app.entity.Room');
+	var _State     = lychee.import('lychee.app.State');
+	var _BLOB      = attachments["json"].buffer;
 
 
 
@@ -24,7 +29,7 @@ lychee.define('app.state.App').requires([
 	var _get_room = function(name) {
 
 		var entities = this.queryLayer('foreground', 'ship').entities.filter(function(val) {
-			return val instanceof app.entity.Room && val.state === name;
+			return val instanceof _Room && val.state === name;
 		});
 
 
@@ -61,8 +66,8 @@ lychee.define('app.state.App').requires([
 			}
 
 
-			astronaut.addEffect(new lychee.effect.Position({
-				type:     lychee.effect.Position.TYPE.linear,
+			astronaut.addEffect(new _Position({
+				type:     _Position.TYPE.linear,
 				duration: 6000,
 				origin:   {
 					x: astronaut.position.x,
@@ -86,7 +91,7 @@ lychee.define('app.state.App').requires([
 
 	var Class = function(main) {
 
-		lychee.app.State.call(this, main);
+		_State.call(this, main);
 
 
 		this.__entity = null;
@@ -140,7 +145,7 @@ lychee.define('app.state.App').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'app.state.App';
 
 
@@ -150,7 +155,7 @@ lychee.define('app.state.App').requires([
 
 		deserialize: function(blob) {
 
-			lychee.app.State.prototype.deserialize.call(this, blob);
+			_State.prototype.deserialize.call(this, blob);
 
 
 			var entity = null;
@@ -179,8 +184,8 @@ lychee.define('app.state.App').requires([
 
 					entity = this.queryLayer('midground', 'midground');
 					entity.alpha = 1.0;
-					entity.addEffect(new lychee.effect.Alpha({
-						type:     lychee.effect.Alpha.TYPE.easeout,
+					entity.addEffect(new _Alpha({
+						type:     _Alpha.TYPE.easeout,
 						alpha:    0.1,
 						duration: 300
 					}));
@@ -190,16 +195,16 @@ lychee.define('app.state.App').requires([
 
 						if (other !== target) {
 
-							other.addEffect(new lychee.effect.Alpha({
-								type:     lychee.effect.Alpha.TYPE.easeout,
+							other.addEffect(new _Alpha({
+								type:     _Alpha.TYPE.easeout,
 								alpha:    0.1,
 								duration: 300
 							}));
 
 						} else {
 
-							other.addEffect(new lychee.effect.Alpha({
-								type:     lychee.effect.Alpha.TYPE.easeout,
+							other.addEffect(new _Alpha({
+								type:     _Alpha.TYPE.easeout,
 								alpha:    1.0,
 								duration: 300
 							}));
@@ -216,8 +221,8 @@ lychee.define('app.state.App').requires([
 
 					entity = this.queryLayer('midground', 'midground');
 					entity.alpha = 0.1;
-					entity.addEffect(new lychee.effect.Alpha({
-						type:     lychee.effect.Alpha.TYPE.easeout,
+					entity.addEffect(new _Alpha({
+						type:     _Alpha.TYPE.easeout,
 						alpha:    1.0,
 						duration: 500
 					}));
@@ -225,8 +230,8 @@ lychee.define('app.state.App').requires([
 					entity = this.queryLayer('foreground', 'ship');
 					entity.entities.forEach(function(other) {
 
-						other.addEffect(new lychee.effect.Alpha({
-							type:     lychee.effect.Alpha.TYPE.easeout,
+						other.addEffect(new _Alpha({
+							type:     _Alpha.TYPE.easeout,
 							alpha:    1.0,
 							duration: 300
 						}));
@@ -253,7 +258,7 @@ lychee.define('app.state.App').requires([
 
 
 			this.queryLayer('foreground', 'ship').entities.filter(function(val) {
-				return val instanceof app.entity.Room;
+				return val instanceof _Room;
 			}).forEach(function(room) {
 				room.properties['name'] = room.state;
 			});
@@ -275,7 +280,7 @@ lychee.define('app.state.App').requires([
 						z: 2
 					};
 
-					var astronaut = new app.entity.Astronaut({
+					var astronaut = new _Astronaut({
 						state:      state,
 						position:   position,
 						properties: {
@@ -290,8 +295,8 @@ lychee.define('app.state.App').requires([
 
 					astronaut.room  = room;
 					astronaut.alpha = 0.0;
-					astronaut.addEffect(new lychee.effect.Alpha({
-						type:     lychee.effect.Alpha.TYPE.easeout,
+					astronaut.addEffect(new _Alpha({
+						type:     _Alpha.TYPE.easeout,
 						alpha:    1.0,
 						duration: 600,
 						delay:    astronauts.length * 300
@@ -339,40 +344,13 @@ lychee.define('app.state.App').requires([
 			}
 
 
-			lychee.app.State.prototype.update.call(this, clock, delta);
+			_State.prototype.update.call(this, clock, delta);
 
 		},
 
 		render: function(clock, delta) {
 
-			lychee.app.State.prototype.render.call(this, clock, delta);
-
-/*
-			var entity   = this.__entity;
-			var renderer = this.renderer;
-
-			if (entity !== null) {
-
-				renderer.clear();
-
-				renderer.setAlpha(0.5);
-				this.getLayer('background').render(renderer, 0, 0);
-
-				renderer.setAlpha(0.5);
-				this.getLayer('midground').render(renderer, 0, 0);
-
-				renderer.setAlpha(0.5);
-				this.getLayer('foreground').render(renderer, 0, 0);
-
-				renderer.setAlpha(1);
-				this.getLayer('ui').render(renderer, 0, 0);
-
-				renderer.flush();
-
-			}
-
-*/
-
+			_State.prototype.render.call(this, clock, delta);
 
 		}
 

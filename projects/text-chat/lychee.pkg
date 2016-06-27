@@ -22,8 +22,8 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/text-chat",
-					"server": "/api/Server?identifier=/projects/text-chat"
+					"client": "/api/server/connect?identifier=/projects/text-chat",
+					"server": "/api/server/connect?identifier=/projects/text-chat"
 				}
 			},
 			"html/main": {
@@ -43,8 +43,8 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/text-chat",
-					"server": "/api/Server?identifier=/projects/text-chat"
+					"client": "/api/server/connect?identifier=/projects/text-chat",
+					"server": "/api/server/connect?identifier=/projects/text-chat"
 				}
 			},
 			"node/main": {

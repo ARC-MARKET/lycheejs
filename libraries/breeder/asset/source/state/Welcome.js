@@ -6,9 +6,10 @@ lychee.define('app.state.Welcome').includes([
 	'lychee.ui.Element',
 	'lychee.ui.Layer',
 	'lychee.ui.entity.Text'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _blob = attachments["json"].buffer;
+	var _State = lychee.import('lychee.ui.State');
+	var _BLOB  = attachments["json"].buffer;
 
 
 
@@ -18,7 +19,10 @@ lychee.define('app.state.Welcome').includes([
 
 	var Class = function(main) {
 
-		lychee.ui.State.call(this, main);
+		_State.call(this, main);
+
+
+		this.deserialize(_BLOB);
 
 	};
 
@@ -31,7 +35,7 @@ lychee.define('app.state.Welcome').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'app.state.Welcome';
 
 
@@ -41,22 +45,21 @@ lychee.define('app.state.Welcome').includes([
 
 		deserialize: function(blob) {
 
-			lychee.ui.State.prototype.deserialize.call(this, blob);
-			lychee.app.State.prototype.deserialize.call(this, _blob);
+			_State.prototype.deserialize.call(this, blob);
+
+
+			this.queryLayer('ui', 'menu').setHelpers([
+				'refresh'
+			]);
 
 
 			this.queryLayer('ui', 'welcome > dialog').bind('change', function(value) {
 
-				if (this.main.getState(value) !== null) {
+				var menu = this.queryLayer('ui', 'menu');
+				if (menu !== null) {
 
-					this.main.changeState(value);
-
-				} else if (this.queryLayer('ui', value) !== null) {
-
-					var val = value.charAt(0).toUpperCase() + value.substr(1);
-
-					this.queryLayer('ui', 'menu').setValue(val);
-					this.queryLayer('ui', 'menu').trigger('change', [ value ]);
+					menu.setValue(value);
+					menu.trigger('change', [ value ]);
 
 				}
 

@@ -1,11 +1,14 @@
 
 lychee.define('game.ui.layer.Control').requires([
 	'lychee.ui.entity.Button',
-	'lychee.ui.entity.Joystick',
-	'game.app.sprite.Tank'
+	'lychee.ui.entity.Joystick'
 ]).includes([
 	'lychee.ui.Layer'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Button   = lychee.import('lychee.ui.entity.Button');
+	var _Joystick = lychee.import('lychee.ui.entity.Joystick');
+	var _Layer    = lychee.import('lychee.ui.Layer');
 
 
 
@@ -15,13 +18,13 @@ lychee.define('game.ui.layer.Control').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.relayout = false;
 
 
-		lychee.ui.Layer.call(this, settings);
+		_Layer.call(this, settings);
 
 		settings = null;
 
@@ -211,7 +214,7 @@ lychee.define('game.ui.layer.Control').requires([
 		}, this);
 
 
-		this.setEntity('@joystick', new lychee.ui.entity.Joystick({
+		this.setEntity('@joystick', new _Joystick({
 			width:  128,
 			height: 128
 		}));
@@ -252,7 +255,7 @@ lychee.define('game.ui.layer.Control').requires([
 
 		}, this);
 
-		this.setEntity('@button', new lychee.ui.entity.Button({
+		this.setEntity('@button', new _Button({
 			label:  'Shoot',
 			value:  'shoot',
 			width:  96,
@@ -279,7 +282,7 @@ lychee.define('game.ui.layer.Control').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Layer.prototype.serialize.call(this);
+			var data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'game.ui.layer.Control';
 
 

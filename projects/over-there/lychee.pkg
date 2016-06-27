@@ -22,8 +22,8 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/over-there",
-					"server": "/api/Server?identifier=/projects/over-there"
+					"client": "/api/server/connect?identifier=/projects/over-there",
+					"server": "/api/server/connect?identifier=/projects/over-there"
 				}
 			},
 			"html/main": {
@@ -43,8 +43,8 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/over-there",
-					"server": "/api/Server?identifier=/projects/over-there"
+					"client": "/api/server/connect?identifier=/projects/over-there",
+					"server": "/api/server/connect?identifier=/projects/over-there"
 				}
 			},
 			"node/main": {

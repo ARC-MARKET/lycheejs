@@ -1,14 +1,22 @@
 
 lychee.define('app.ui.entity.Identifier').includes([
 	'lychee.ui.entity.Label'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Label = lychee.import('lychee.ui.entity.Label');
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
-		lychee.ui.entity.Label.call(this, settings);
+		_Label.call(this, settings);
 
 		settings = null;
 
@@ -23,7 +31,7 @@ lychee.define('app.ui.entity.Identifier').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.entity.Label.prototype.serialize.call(this);
+			var data = _Label.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.entity.Identifier';
 
 

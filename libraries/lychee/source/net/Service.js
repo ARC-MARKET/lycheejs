@@ -316,7 +316,7 @@ lychee.define('lychee.net.Service').includes([
 
 		},
 
-		report: function(message, blob) {
+		accept: function(message, blob) {
 
 			message = typeof message === 'string' ? message : null;
 			blob    = blob instanceof Object      ? blob    : null;
@@ -324,9 +324,35 @@ lychee.define('lychee.net.Service').includes([
 
 			if (message !== null) {
 
-				if (this.tunnel !== null) {
+				var tunnel = this.tunnel;
+				if (tunnel !== null) {
 
-					this.tunnel.send({
+					tunnel.send({
+						message: message,
+						blob:    blob
+					}, {
+						id:    this.id,
+						event: 'success'
+					});
+
+				}
+
+			}
+
+		},
+
+		reject: function(message, blob) {
+
+			message = typeof message === 'string' ? message : null;
+			blob    = blob instanceof Object      ? blob    : null;
+
+
+			if (message !== null) {
+
+				var tunnel = this.tunnel;
+				if (tunnel !== null) {
+
+					tunnel.send({
 						message: message,
 						blob:    blob
 					}, {

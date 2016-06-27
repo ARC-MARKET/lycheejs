@@ -1,8 +1,9 @@
 
 lychee.define('app.entity.Midground').includes([
 	'lychee.app.Sprite'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Sprite  = lychee.import('lychee.app.Sprite');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = {
 		states: { 'default': 0 },
@@ -17,7 +18,7 @@ lychee.define('app.entity.Midground').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.repeat  = false;
@@ -27,7 +28,7 @@ lychee.define('app.entity.Midground').includes([
 		settings.position = { x: 0, y: 0};
 
 
-		lychee.app.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 		settings = null;
 
@@ -42,7 +43,7 @@ lychee.define('app.entity.Midground').includes([
 
 		serialize: function() {
 
-			var data = lychee.app.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'app.entity.Midground';
 
 

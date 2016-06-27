@@ -1,13 +1,14 @@
 
 lychee.define('game.entity.Paddle').includes([
 	'lychee.app.Sprite'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	var _CONFIG   = attachments["json"].buffer;
 	var _TEXTURES = {
 		player: attachments["player.png"],
 		enemy:  attachments["enemy.png"]
 	};
+	var _Sprite   = lychee.import('lychee.app.Sprite');
 
 
 
@@ -17,13 +18,13 @@ lychee.define('game.entity.Paddle').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, _CONFIG, data);
+		var settings = Object.assign({}, _CONFIG, data);
 
 
 		settings.texture = _TEXTURES[settings.state || 'player'];
 
 
-		lychee.app.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 		settings = null;
 
@@ -38,7 +39,7 @@ lychee.define('game.entity.Paddle').includes([
 
 		serialize: function() {
 
-			var data = lychee.app.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'game.entity.Paddle';
 
 

@@ -5,7 +5,13 @@ lychee.define('app.Main').requires([
 	'app.state.Welcome'
 ]).includes([
 	'lychee.app.Main'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _lychee = lychee.import('lychee');
+	var _app    = lychee.import('app');
+	var _Main   = lychee.import('lychee.app.Main');
+
+
 
 	/*
 	 * IMPLEMENTATION
@@ -13,7 +19,7 @@ lychee.define('app.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			input: {
 				delay:       0,
@@ -41,7 +47,7 @@ lychee.define('app.Main').requires([
 		}, data);
 
 
-		lychee.app.Main.call(this, settings);
+		_Main.call(this, settings);
 
 
 
@@ -65,16 +71,16 @@ lychee.define('app.Main').requires([
 
 			var appclient = this.settings.appclient || null;
 			if (appclient !== null) {
-				this.client = new app.net.Client(appclient, this);
+				this.client = new _app.net.Client(appclient, this);
 			}
 
 			var appserver = this.settings.appserver || null;
 			if (appserver !== null) {
-				this.server = new app.net.Server(appserver, this);
+				this.server = new _app.net.Server(appserver, this);
 			}
 
 
-			this.setState('welcome', new app.state.Welcome(this));
+			this.setState('welcome', new _app.state.Welcome(this));
 
 
 			this.changeState('welcome');
@@ -94,7 +100,7 @@ lychee.define('app.Main').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.Main.prototype.serialize.call(this);
+			var data = _Main.prototype.serialize.call(this);
 			data['constructor'] = 'app.Main';
 
 

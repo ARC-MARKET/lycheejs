@@ -1,15 +1,15 @@
 
 lychee.define('tool.Main').requires([
-	'lychee.data.JSON',
+	'lychee.codec.JSON',
 	'tool.data.FNT'
 ]).includes([
 	'lychee.app.Main'
 ]).tags({
 	platform: 'html'
-}).exports(function(lychee, tool, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
-	var _FNT  = tool.data.FNT;
-	var _JSON = lychee.data.JSON;
+	var _FNT  = lychee.import('tool.data.FNT');
+	var _JSON = lychee.import('lychee.codec.JSON');
 
 
 
@@ -55,7 +55,7 @@ lychee.define('tool.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client:   null,
 			input:    null,

@@ -4,7 +4,13 @@ lychee.define('app.ui.layer.Overlay').requires([
 	'app.ui.entity.Bubble'
 ]).includes([
 	'lychee.ui.Layer'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Alpha  = lychee.import('lychee.effect.Alpha');
+	var _Bubble = lychee.import('app.ui.entity.Bubble');
+	var _Layer  = lychee.import('lychee.ui.Layer');
+
+
 
 	/*
 	 * IMPLEMENTATION
@@ -12,14 +18,14 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.__entity = null;
 		this.__orbit  = null;
 
 
-		lychee.ui.Layer.call(this, settings);
+		_Layer.call(this, settings);
 
 		settings = null;
 
@@ -34,7 +40,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Layer.prototype.serialize.call(this);
+			var data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.layer.Overlay';
 
 
@@ -44,7 +50,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 		update: function(clock, delta) {
 
-			lychee.ui.Layer.prototype.update.call(this, clock, delta);
+			_Layer.prototype.update.call(this, clock, delta);
 
 
 
@@ -97,7 +103,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 			}
 
 
-			lychee.ui.Layer.prototype.render.call(this, renderer, offsetX, offsetY);
+			_Layer.prototype.render.call(this, renderer, offsetX, offsetY);
 
 		},
 
@@ -121,15 +127,15 @@ lychee.define('app.ui.layer.Overlay').requires([
 
 					for (var key in properties) {
 
-						var bubble = new app.ui.entity.Bubble({
+						var bubble = new _Bubble({
 							key:   key,
 							value: properties[key]
 						});
 
 
 						bubble.alpha = 0;
-						bubble.addEffect(new lychee.effect.Alpha({
-							type:     lychee.effect.Alpha.TYPE.easeout,
+						bubble.addEffect(new _Alpha({
+							type:     _Alpha.TYPE.easeout,
 							duration: 600,
 							delay:    entities.length * 200
 						}));

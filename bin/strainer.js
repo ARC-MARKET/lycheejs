@@ -1,4 +1,4 @@
-#!/usr/bin/lycheejs-helper env:node
+#!/usr/local/bin/lycheejs-helper env:node
 
 
 var root = require('path').resolve(__dirname, '../');
@@ -35,14 +35,14 @@ var _print_help = function() {
 
 
 	console.log('                                                    ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Strainer');
+	console.info('lychee.js ' + lychee.VERSION + ' Strainer');
 	console.log('                                                    ');
 	console.log('Usage: lycheejs-strainer [Action] [Library/Project] ');
 	console.log('                                                    ');
 	console.log('                                                    ');
 	console.log('Available Actions:                                  ');
 	console.log('                                                    ');
-	console.log('    init, stash                                     ');
+	console.log('    stash                                           ');
 	console.log('                                                    ');
 	console.log('Available Libraries:                                ');
 	console.log('                                                    ');
@@ -60,9 +60,7 @@ var _print_help = function() {
 	console.log('                                                    ');
 	console.log('Examples:                                           ');
 	console.log('                                                    ');
-	console.log('    lycheejs-strainer init /libraries/lychee;       ');
 	console.log('    lycheejs-strainer stash /libraries/lychee;      ');
-	console.log('    lycheejs-strainer init /projects/boilerplate;   ');
 	console.log('    lycheejs-strainer stash /projects/boilerplate;  ');
 	console.log('                                                    ');
 
@@ -88,13 +86,8 @@ var _settings = (function() {
 	}
 
 
-	// init /projects/boilerplate
-	if (raw_arg0 === 'init') {
-
-		settings.action = 'init';
-
 	// stash /projects/boilerplate
-	} else if (raw_arg0 === 'stash') {
+	if (raw_arg0 === 'stash') {
 
 		settings.action = 'stash';
 
@@ -110,11 +103,11 @@ var _bootup = function(settings) {
 	console.info('BOOTUP (' + process.pid + ')');
 
 	var environment = new lychee.Environment({
-		id:      'strainer',
-		debug:   false,
-		sandbox: false,
-		build:   'strainer.Main',
-		timeout: 1000,
+		id:       'strainer',
+		debug:    false,
+		sandbox:  true,
+		build:    'strainer.Main',
+		timeout:  3000,
 		packages: [
 			new lychee.Package('lychee',     '/libraries/lychee/lychee.pkg'),
 			new lychee.Package('fertilizer', '/libraries/fertilizer/lychee.pkg'),

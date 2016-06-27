@@ -21,8 +21,8 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/lethalmaze",
-					"server": "/api/Server?identifier=/projects/lethalmaze"
+					"client": "/api/server/connect?identifier=/projects/lethalmaze",
+					"server": "/api/server/connect?identifier=/projects/lethalmaze"
 				}
 			},
 			"node/main": {
@@ -89,7 +89,7 @@
 				}
 			},
 			"data": {
-				"Level": [
+				"LEVEL": [
 					"js"
 				]
 			},

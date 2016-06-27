@@ -19,7 +19,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 		if (proto.match(/app|file/g)) {
 
-			_api_origin = 'http://harvester.lycheejs.org:8080';
+			_api_origin = 'http://harvester.artificial.engineering:4848';
 
 		} else if (proto.match(/http|https/g)) {
 
@@ -32,7 +32,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	var _load_api = function(url, callback, scope) {
 
-		url = typeof url === 'string' ? url : '/api/Server?identifier=boilerplate';
+		url = typeof url === 'string' ? url : '/api/server/connect?identifier=/projects/boilerplate';
 
 
 		var config = new Config(_api_origin + url);
@@ -160,7 +160,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Network';
@@ -198,7 +198,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 		this.setEntity('API', new lychee.ui.entity.Input({
 			type:  lychee.ui.entity.Input.TYPE.text,
-			value: '/api/Server?identifier=boilerplate'
+			value: '/api/server/connect?identifier=/projects/boilerplate'
 		}));
 
 		this.getEntity('mode').bind('change', function(value) {

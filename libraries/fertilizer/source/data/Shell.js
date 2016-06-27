@@ -12,18 +12,18 @@ lychee.define('fertilizer.data.Shell').tags({
 
 			return true;
 
-		} catch(e) {
+		} catch(err) {
 		}
 
 	}
 
 	return false;
 
-}).exports(function(lychee, fertilizer, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
+	var _ROOT          = lychee.ROOT.lychee;
 	var _child_process = require('child_process');
 	var _path          = require('path');
-	var _root          = _path.resolve(__dirname + '/../../../../');
 
 
 
@@ -31,9 +31,7 @@ lychee.define('fertilizer.data.Shell').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(root) {
-
-		this.root = _root + _path.normalize(root);
+	var Class = function() {
 
 		this.__stack = [];
 
@@ -52,7 +50,7 @@ lychee.define('fertilizer.data.Shell').tags({
 
 			return {
 				'constructor': 'fertilizer.data.Shell',
-				'arguments':   [ this.root.substr(_root.length) ]
+				'arguments':   []
 			};
 
 		},
@@ -70,65 +68,50 @@ lychee.define('fertilizer.data.Shell').tags({
 
 
 			var that = this;
+			var args = command.split(' ').slice(1);
+			var cmd  = command.split(' ')[0];
+			var file = _ROOT + (cmd.charAt(0) !== '/' ? '/' : '') + cmd;
+			var ext  = file.split('.').pop();
+			var path = file.split('/').slice(0, -1).join('/');
+			if (path.split('/').pop() === 'bin') {
+				path = path.split('/').slice(0, -1).join('/');
+			}
+
+
+			if (ext === 'js') {
+
+				args.reverse();
+				args.push(file);
+				args.push('env:node');
+				args.reverse();
+
+				file = _ROOT + '/bin/helper.sh';
+
+			}
+
 
 			if (callback !== null) {
 
-				_child_process.exec(this.root + command, {
-					cwd: this.root
-				}, function(err, stdout, stderr) {
+				_child_process.execFile(file, args, {
+					cwd: path
+				}, function(error, stdout, stderr) {
 
 					that.__stack.push({
-						cwd:    this.root,
-						cmd:    this.root + command,
+						args:   args,
+						file:   file,
+						path:   path,
 						stdout: stdout.toString(),
 						stderr: stderr.toString()
 					});
 
 
-					if (err) {
+					if (error) {
 						callback.call(scope, false);
 					} else {
 						callback.call(scope, true);
 					}
 
 				});
-
-			} else {
-
-				try {
-
-					var stdout = _child_process.execSync(this.root + command, {
-						cwd: this.root
-					}).toString();
-
-
-					that.__stack.push({
-						cwd:    this.root,
-						cmd:    this.root + command,
-						stdout: stdout.toString(),
-						stderr: null
-					});
-
-
-					if (stdout.match(/SUCCESS/)) {
-						return true;
-					} else {
-						return false;
-					}
-
-				} catch(err) {
-
-					that.__stack.push({
-						cwd:    this.root,
-						cmd:    this.root + command,
-						stdout: err.stdout.toString(),
-						stderr: err.stderr.toString()
-					});
-
-
-					return false;
-
-				}
 
 			}
 
@@ -147,15 +130,31 @@ lychee.define('fertilizer.data.Shell').tags({
 
 			stack.forEach(function(context) {
 
+				var dir = context.path;
+				var cmd = context.file;
+				var out = context.stdout.trim();
+				var err = context.stderr.trim();
+
+				if (cmd.substr(0, dir.length) === dir) {
+					cmd = '.' + cmd.substr(dir.length);
+				}
+
+				if (context.args.length > 0) {
+					cmd += ' ';
+					cmd += context.args.join(' ');
+				}
+
 				console.log('');
-				console.log('cd ' + context.cwd + ';');
-				console.log(context.cmd + ';');
+				console.log('cd ' + dir + ';');
+				console.log(cmd + ';');
 				console.log('');
 
-				console.log(context.stdout.trim());
+				if (out.length > 0) {
+					console.log(out);
+				}
 
-				if (context.stderr !== null && context.stderr.trim().length > 0) {
-					console.error(context.stderr.trim());
+				if (err.length > 0) {
+					console.error(err);
 				}
 
 				console.log('');

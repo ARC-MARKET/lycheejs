@@ -3,8 +3,10 @@ lychee.define('game.entity.Board').requires([
 	'game.entity.Tile'
 ]).includes([
 	'lychee.ui.Layer'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Layer   = lychee.import('lychee.ui.Layer');
+	var _Tile    = lychee.import('game.entity.Tile');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = attachments["json"].buffer;
 
@@ -16,7 +18,7 @@ lychee.define('game.entity.Board').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.__statemap = _CONFIG.map['default'][0];
@@ -41,7 +43,7 @@ lychee.define('game.entity.Board').requires([
 			var posx = -96 + (x * 64 + 16 * x - 64);
 			var posy = -96 + (y * 64 + 16 * y - 64);
 
-			settings.entities.push(new game.entity.Tile({
+			settings.entities.push(new _Tile({
 				x:        x,
 				y:        y,
 				position: {
@@ -53,7 +55,7 @@ lychee.define('game.entity.Board').requires([
 		}
 
 
-		lychee.ui.Layer.call(this, settings);
+		_Layer.call(this, settings);
 
 		settings = null;
 
@@ -70,7 +72,7 @@ lychee.define('game.entity.Board').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Layer.prototype.serialize.call(this);
+			var data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'game.entity.Board';
 
 
@@ -115,7 +117,7 @@ lychee.define('game.entity.Board').requires([
 			}
 
 
-			lychee.ui.Layer.prototype.render.call(this, renderer, offsetX, offsetY);
+			_Layer.prototype.render.call(this, renderer, offsetX, offsetY);
 
 
 			if (alpha !== 1) {

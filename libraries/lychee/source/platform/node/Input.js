@@ -131,7 +131,7 @@ lychee.define('Input').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.delay       = 0;

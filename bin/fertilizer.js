@@ -1,4 +1,4 @@
-#!/usr/bin/lycheejs-helper env:node
+#!/usr/local/bin/lycheejs-helper env:node
 
 
 var root = require('path').resolve(__dirname, '../');
@@ -37,9 +37,9 @@ var _print_help = function() {
 
 
 	console.log('                                                              ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Fertilizer');
+	console.info('lychee.js ' + lychee.VERSION + ' Fertilizer');
 	console.log('                                                              ');
-	console.log('Usage: lycheejs-fertilizer [Target] [Library/Project]         ');
+	console.log('Usage: lycheejs-fertilizer [Target] [Library/Project] [Flag]  ');
 	console.log('                                                              ');
 	console.log('                                                              ');
 	console.log('Available Fertilizers:                                        ');
@@ -63,6 +63,11 @@ var _print_help = function() {
 		console.log('    ' + project + diff);
 	});
 	console.log('                                                              ');
+	console.log('Available Flags:                                              ');
+	console.log('                                                              ');
+	console.log('   --debug          Debug Mode with verbose debug messages    ');
+	console.log('   --sandbox        Sandbox Mode without software bots        ');
+	console.log('                                                              ');
 	console.log('Examples:                                                     ');
 	console.log('                                                              ');
 	console.log('    lycheejs-fertilizer html-nwjs/main /projects/boilerplate; ');
@@ -78,16 +83,21 @@ var _settings = (function() {
 	var settings = {
 		project:     null,
 		identifier:  null,
-		environment: null
+		environment: null,
+		debug:       false,
+		sandbox:     false
 	};
 
 
 	var raw_arg0 = process.argv[2] || '';
 	var raw_arg1 = process.argv[3] || '';
-
-
+	var raw_arg2 = process.argv[4] || '';
+	var raw_arg3 = process.argv[5] || '';
+	var raw_flag = raw_arg2 + ' ' + raw_arg3;
 	var pkg_path = root + raw_arg1 + '/lychee.pkg';
-	if (fs.existsSync(pkg_path) === true) {
+
+
+	if (raw_arg0 !== '' && raw_arg1 !== '' && fs.existsSync(pkg_path) === true) {
 
 		settings.project = raw_arg1;
 
@@ -114,6 +124,20 @@ var _settings = (function() {
 
 		}
 
+	} else if (raw_arg1 !== '' && fs.existsSync(root + raw_arg1) === true) {
+
+		settings.project    = raw_arg1;
+		settings.identifier = null;
+
+	}
+
+
+	if (/--debug/g.test(raw_flag) === true) {
+		settings.debug = true;
+	}
+
+	if (/--sandbox/g.test(raw_flag) === true) {
+		settings.sandbox = true;
 	}
 
 
@@ -126,11 +150,11 @@ var _bootup = function(settings) {
 	console.info('BOOTUP (' + process.pid + ')');
 
 	var environment = new lychee.Environment({
-		id:      'fertilizer',
-		debug:   false,
-		sandbox: false,
-		build:   'fertilizer.Main',
-		timeout: 1000,
+		id:       'fertilizer',
+		debug:    settings.debug === true,
+		sandbox:  true,
+		build:    'fertilizer.Main',
+		timeout:  3000,
 		packages: [
 			new lychee.Package('lychee',     '/libraries/lychee/lychee.pkg'),
 			new lychee.Package('fertilizer', '/libraries/fertilizer/lychee.pkg')
@@ -152,15 +176,14 @@ var _bootup = function(settings) {
 			var fertilizer = sandbox.fertilizer;
 
 
-			// Show less debug messages
+			// Show more debug messages
 			lychee.debug = true;
 
 
 			// This allows using #MAIN in JSON files
 			sandbox.MAIN = new fertilizer.Main(settings);
-
-			sandbox.MAIN.bind('destroy', function() {
-				process.exit(0);
+			sandbox.MAIN.bind('destroy', function(code) {
+				process.exit(code);
 			});
 
 			sandbox.MAIN.init();
@@ -213,9 +236,19 @@ var _bootup = function(settings) {
 	if (has_project && has_identifier && has_settings) {
 
 		_bootup({
+			debug:      settings.debug   === true,
+			sandbox:    settings.sandbox === true,
 			project:    project,
 			identifier: identifier,
 			settings:   settings
+		});
+
+	} else if (has_project) {
+
+		_bootup({
+			project:    project,
+			identifier: null,
+			settings:   null
 		});
 
 	} else {

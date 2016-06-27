@@ -37,7 +37,7 @@ lychee.define('tool.data.SPRITE').requires([
 		mode = lychee.enumof(_Buffer.MODE, mode) ? mode               : 0;
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		var config = settings.config;
@@ -82,7 +82,7 @@ lychee.define('tool.data.SPRITE').requires([
 
 		toString: function() {
 
-			var tmp = lychee.extend({}, this.__data);
+			var tmp = Object.assign({}, this.__data);
 
 			if (tmp.config !== null) {
 				tmp.config = tmp.config.url || null;
@@ -143,7 +143,7 @@ lychee.define('tool.data.SPRITE').requires([
 
 	var _encode_buffer = function(buffer, data) {
 
-		var settings = lychee.extend({}, _defaults, data);
+		var settings = Object.assign({}, _defaults, data);
 
 		var frames = [];
 		var states = {};

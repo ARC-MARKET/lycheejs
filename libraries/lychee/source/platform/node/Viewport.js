@@ -111,7 +111,7 @@ lychee.define('Viewport').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.fullscreen = false;

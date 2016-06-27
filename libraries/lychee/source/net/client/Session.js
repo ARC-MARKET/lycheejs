@@ -20,7 +20,7 @@ lychee.define('lychee.net.client.Session').includes([
 		id = typeof id === 'string' ? id : 'session';
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.admin     = false;

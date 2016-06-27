@@ -1,0 +1,135 @@
+<template id="template">
+
+	<style>
+	:host {
+		display: block;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 64px;
+		margin: 0px;
+		padding: 0px;
+	}
+
+	fyto-ui-Menu[state="active"] ~ :host {
+		left: 144px;
+		transition: 300ms 300ms left ease-out;
+	}
+ 
+	fyto-ui-Menu[state="default"] ~ :host {
+		left: 64px;
+		transition: 300ms 300ms left ease-out;
+	}
+
+	:host fyto-app-State,
+	:host fyto-ui-State {
+		display: block;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+
+	::content fyto-app-State[visible="false"],
+	::content fyto-ui-State[visible="false"] {
+		opacity: 0;
+		transition: 300ms all ease-out;
+		transform: translate(0%, -200%);
+	}
+
+	::content fyto-app-State[visible="true"],
+	::content fyto-ui-State[visible="true"] {
+		opacity: 1;
+		transition: 300ms 300ms all ease-out;
+		transform: translate(0%, 0%);
+	}
+	</style>
+
+	<content></content>
+
+</template>
+
+<script>
+(function(globaldoc, importdoc) {
+
+	/*
+	 * HELPERS
+	 */
+
+	var _on_state = function(value) {
+
+		var states = [].slice.call(this.querySelectorAll('fyto-ui-State'));
+		if (states.length > 0) {
+
+			for (var s = 0, sl = states.length; s < sl; s++) {
+
+				var state = states[s];
+				if (state.getAttribute('name').toLowerCase() === value.toLowerCase()) {
+					state.setAttribute('visible', 'true');
+				} else {
+					state.setAttribute('visible', 'false');
+				}
+
+			}
+
+		}
+
+	};
+
+
+
+	/*
+	 * DOM SHIT
+	 */
+
+	var element = fyto.define('fyto.app.Main', importdoc.querySelector('#template'));
+	if (element !== null) {
+
+		element._init = function() {
+
+			var states = [].slice.call(this.querySelectorAll('fyto-ui-State'));
+			var state  = this.getAttribute('state');
+
+
+			if (states.length > 0) {
+
+				if (state === null) {
+					state = states[0].getAttribute('name').toLowerCase();
+					this.setAttribute('state', state);
+				} else {
+					_on_state.call(this, state);
+				}
+
+			}
+
+		};
+
+		element._change = function(name, oldvalue, newvalue) {
+
+			if (oldvalue !== newvalue) {
+
+				switch (name) {
+
+					case 'state': _on_state.call(this, newvalue); break;
+
+				}
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		};
+
+	}
+
+})(document, document.currentScript.ownerDocument);
+</script>
+

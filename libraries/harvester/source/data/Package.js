@@ -1,7 +1,7 @@
 
 lychee.define('harvester.data.Package').includes([
 	'lychee.event.Emitter'
-]).exports(function(lychee, harvester, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	/*
 	 * HELPERS

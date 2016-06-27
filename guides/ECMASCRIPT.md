@@ -7,13 +7,14 @@
 -- Others (debugger, export, import, label)
 
 
-# ECMAScript Guide for lycheeJS Developers
+# ECMAScript Guide for lychee.js Developers
 
 ## Introduction
 
-In lycheeJS, we use ES5 (JavaScript or ECMAScript version 5) as
-the code language. This guide aims to be a shorthand lookup guide
-for developers worrying about how to solve problems in ES5 or ES6.
+In lychee.js, we use ES5 (JavaScript or ECMAScript version 5) as
+the code language with some approaches of the ES6 world. This guide
+aims to be a shorthand lookup guide for developers worrying about how
+to solve problems in ES5 or ES6.
 
 It can also be seen as a sort of cheat sheet that tells you what
 different features are and how they affect the VM (Virtual Machine).

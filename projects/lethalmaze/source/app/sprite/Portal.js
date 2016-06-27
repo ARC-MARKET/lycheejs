@@ -4,11 +4,15 @@ lychee.define('game.app.sprite.Portal').requires([
 	'game.effect.Lightning'
 ]).includes([
 	'lychee.app.Sprite'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _TEXTURE = attachments["png"];
-	var _CONFIG  = attachments["json"].buffer;
-	var _SOUND   = attachments["snd"];
+	var _Entity    = lychee.import('lychee.app.Entity');
+	var _Lightning = lychee.import('game.effect.Lightning');
+	var _Sound     = lychee.import('lychee.effect.Sound');
+	var _Sprite    = lychee.import('lychee.app.Sprite');
+	var _TEXTURE   = attachments["png"];
+	var _CONFIG    = attachments["json"].buffer;
+	var _SOUND     = attachments["snd"];
 
 
 
@@ -36,14 +40,14 @@ lychee.define('game.app.sprite.Portal').requires([
 			position.y = ((position.y / 32) | 0) * 32 + 16;
 
 
-			this.addEffect(new game.effect.Lightning({
-				type:     game.effect.Lightning.TYPE.linear,
+			this.addEffect(new _Lightning({
+				type:     _Lightning.TYPE.linear,
 				duration: duration,
 				delay:    delay,
 				position: position
 			}));
 
-			this.addEffect(new lychee.effect.Sound({
+			this.addEffect(new _Sound({
 				delay: delay,
 				sound: _SOUND
 			}));
@@ -60,20 +64,20 @@ lychee.define('game.app.sprite.Portal').requires([
 
 	var Class = function(data, main) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
-		settings.collision = lychee.app.Entity.COLLISION.A;
+		settings.collision = _Entity.COLLISION.A;
 		settings.texture   = _TEXTURE;
 		settings.map       = _CONFIG.map;
 		settings.width     = _CONFIG.width;
 		settings.height    = _CONFIG.height;
-		settings.shape     = lychee.app.Entity.SHAPE.rectangle;
+		settings.shape     = _Entity.SHAPE.rectangle;
 		settings.states    = _CONFIG.states;
 		settings.state     = 'default';
 
 
-		lychee.app.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 		settings = null;
 
@@ -88,7 +92,7 @@ lychee.define('game.app.sprite.Portal').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'game.app.sprite.Portal';
 
 
@@ -150,13 +154,13 @@ lychee.define('game.app.sprite.Portal').requires([
 			}
 
 
-			lychee.app.Entity.prototype.render.call(this, renderer, offsetX, offsetY);
+			_Entity.prototype.render.call(this, renderer, offsetX, offsetY);
 
 		},
 
 		update: function(clock, delta) {
 
-			lychee.app.Entity.prototype.update.call(this, clock, delta);
+			_Entity.prototype.update.call(this, clock, delta);
 
 
 			if (this.effects.length === 0) {

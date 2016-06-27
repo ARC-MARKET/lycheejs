@@ -351,6 +351,18 @@ data of an instance that was created by a previous
 This method returns a `Serialization Object` on success and `null` on failure.
 It will try to serialize the given definition.
 
+The JSON structure for a `Serialization Object` has always the same specified
+format. A serialized `Module` definition has to return a proper `reference`
+while a serialized `Class` definition has to return a proper `constructor`.
+
+```javascript
+var data_ref = lychee.serialize(lychee.data.JSON);
+var data_con = lychee.serialize(new lychee.Input({ key: true }));
+
+console.log(data_ref); // { 'reference':   'lychee.data.JSON', 'arguments': []}
+console.log(data_con); // { 'constructor': 'lychee.Input',     'arguments': [ { 'key': true }]}
+```
+
 ```javascript
 var data = lychee.serialize(new lychee.Input());
 
@@ -374,6 +386,18 @@ if (instance instanceof lychee.Input) {
 
 This method returns a `Serialization Object` on success and `null` on failure.
 It will try to serialize the given definition.
+
+The JSON structure for a `Serialization Object` has always the same specified
+format. A serialized `Module` definition has to return a proper `reference`
+while a serialized `Class` definition has to return a proper `constructor`.
+
+```javascript
+var data_ref = lychee.serialize(lychee.data.JSON);
+var data_con = lychee.serialize(new lychee.Input({ key: true }));
+
+console.log(data_ref); // { 'reference':   'lychee.data.JSON', 'arguments': []}
+console.log(data_con); // { 'constructor': 'lychee.Input',     'arguments': [ { 'key': true }]}
+```
 
 ```javascript
 var instance = new lychee.Input();
@@ -400,6 +424,36 @@ This method returns a `lychee.Definition` instance.
 It will currify the [exports](lychee.Definition#methods-exports)
 method in order to define the definition in the
 currently active [lychee.environment](#properties-environment).
+
+
+
+= methods-import
+
+```javascript
+(Object || Function || null) lychee.import(reference);
+```
+
+- `(String) reference` is the unique reference for the `lychee.Definition` export.
+
+This method returns an `Object` or `Function` on succes and `null` on failure.
+It will try to resolve the `Module` or `Class`, dependent on the reference.
+
+As every [lychee.Environment](#properties-environment) can be sandboxed, this method
+tries to resolve the namespaces and instances to the sandboxed `global` scope.
+
+```javascript
+lychee.define('foo.Main').requires([
+	'bar.Template',
+	'qux.Other'
+]).exports(function(lychee, global, attachments) {
+
+	var bar      = lychee.import('bar');
+	var qux      = lychee.import('qux');
+	var Template = lychee.import('bar.Template');
+	var Other    = lychee.import('qux.Other');
+
+});
+```
 
 
 

@@ -102,7 +102,7 @@ lychee.define('Renderer').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.alpha      = 1.0;
@@ -369,11 +369,23 @@ lychee.define('Renderer').tags({
 
 			if (buffer !== null) {
 
-				var ctx = this.__ctx;
+				var ctx    = this.__ctx;
+				var width  = buffer.width;
+				var height = buffer.height;
 
 
 				ctx.globalAlpha = this.alpha;
-				ctx.drawImage(buffer.__buffer, x1, y1);
+				ctx.drawImage(
+					buffer.__buffer,
+					0,
+					0,
+					width,
+					height,
+					x1,
+					y1,
+					width,
+					height
+				);
 
 			}
 
@@ -542,31 +554,49 @@ lychee.define('Renderer').tags({
 
 			if (texture !== null) {
 
-				var ctx = this.__ctx;
+				var ctx    = this.__ctx;
+				var width  = 0;
+				var height = 0;
+				var x      = 0;
+				var y      = 0;
 
 
 				ctx.globalAlpha = this.alpha;
 
 				if (map === null) {
 
+					width  = texture.width;
+					height = texture.height;
+
 					ctx.drawImage(
 						texture.buffer,
+						x,
+						y,
+						width,
+						height,
 						x1,
-						y1
+						y1,
+						width,
+						height
 					);
 
 				} else {
 
+					width  = map.w;
+					height = map.h;
+					x      = map.x;
+					y      = map.y;
+
 					ctx.drawImage(
 						texture.buffer,
-						map.x,
-						map.y,
-						map.w,
-						map.h,
+						x,
+						y,
+						width,
+						height,
 						x1,
 						y1,
-						map.w,
-						map.h
+						width,
+						height
 					);
 
 				}

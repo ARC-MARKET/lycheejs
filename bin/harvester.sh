@@ -8,10 +8,10 @@ OS=`lowercase \`uname\``;
 ARCH=`lowercase \`uname -m\``;
 
 LYCHEEJS_NODE="";
-LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
+LYCHEEJS_ROOT="/opt/lycheejs";
 HARVESTER_PID="$LYCHEEJS_ROOT/bin/harvester.pid";
-HARVESTER_LOG="/var/log/harvester.log";
-HARVESTER_ERR="/var/log/harvester.err";
+HARVESTER_LOG="/var/log/lycheejs-harvester.log";
+HARVESTER_ERR="/var/log/lycheejs-harvester.err";
 HARVESTER_USER=`whoami`;
 
 
@@ -31,11 +31,13 @@ fi;
 if [ "$OS" == "darwin" ]; then
 
 	OS="osx";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(greadlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node";
 
 elif [ "$OS" == "linux" ]; then
 
 	OS="linux";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node";
 
 fi;
@@ -59,18 +61,23 @@ case "$1" in
 
 	start)
 
-		INTEGRATION_FLAG="";
-		if [ "$3" == "--no-integration" ]; then
-			INTEGRATION_FLAG="--no-integration";
+		SANDBOX_FLAG="";
+		if [ "$3" == "--sandbox" ] || [ "$4" == "--sandbox" ]; then
+			SANDBOX_FLAG="--sandbox";
+		fi;
+
+		DEBUG_FLAG="";
+		if [ "$3" == "--debug" ] || [ "$4" == "--debug" ]; then
+			DEBUG_FLAG="--debug";
 		fi;
 
 
 		cd $LYCHEEJS_ROOT;
 
 		if [ "$HARVESTER_USER" == "root" ] || [ "$HARVESTER_USER" == "lycheejs-harvester" ]; then
-			$LYCHEEJS_NODE --expose-gc ./bin/harvester.js start "$2" "$INTEGRATION_FLAG" >> $HARVESTER_LOG 2>> $HARVESTER_ERR
+			$LYCHEEJS_NODE ./bin/harvester.js start "$2" "$SANDBOX_FLAG" "$DEBUG_FLAG" >> $HARVESTER_LOG 2>> $HARVESTER_ERR
 		else
-			$LYCHEEJS_NODE --expose-gc ./bin/harvester.js start "$2" "$INTEGRATION_FLAG"
+			$LYCHEEJS_NODE ./bin/harvester.js start "$2" "$SANDBOX_FLAG" "$DEBUG_FLAG"
 		fi;
 
 	;;
@@ -109,9 +116,9 @@ case "$1" in
 
 	restart)
 
-		INTEGRATION_FLAG="";
-		if [ "$3" == "--no-integration" ]; then
-			INTEGRATION_FLAG="--no-integration";
+		SANDBOX_FLAG="";
+		if [ "$3" == "--sandbox" ]; then
+			SANDBOX_FLAG="--sandbox";
 		fi;
 
 
@@ -120,9 +127,9 @@ case "$1" in
 		$LYCHEEJS_NODE ./bin/harvester.js stop;
 
 		if [ "$HARVESTER_USER" == "root" ] || [ "$HARVESTER_USER" == "lycheejs-harvester" ]; then
-			$LYCHEEJS_NODE --expose-gc ./bin/harvester.js start "$2" "$INTEGRATION_FLAG" >> $HARVESTER_LOG 2>> $HARVESTER_ERR
+			$LYCHEEJS_NODE ./bin/harvester.js start "$2" "$SANDBOX_FLAG" >> $HARVESTER_LOG 2>> $HARVESTER_ERR
 		else
-			$LYCHEEJS_NODE --expose-gc ./bin/harvester.js start "$2" "$INTEGRATION_FLAG"
+			$LYCHEEJS_NODE ./bin/harvester.js start "$2" "$SANDBOX_FLAG"
 		fi;
 
 	;;

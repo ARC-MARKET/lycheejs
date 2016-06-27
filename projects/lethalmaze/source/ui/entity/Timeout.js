@@ -1,14 +1,16 @@
 
 lychee.define('game.ui.entity.Timeout').requires([
 	'lychee.effect.Alpha',
-	'lychee.effect.Shake',
 	'lychee.effect.Visible'
 ]).includes([
 	'lychee.ui.Entity'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _FONT  = attachments["fnt"];
-	var _SOUND = attachments["snd"];
+	var _Alpha   = lychee.import('lychee.effect.Alpha');
+	var _Visible = lychee.import('lychee.effect.Visible');
+	var _Entity  = lychee.import('lychee.ui.Entity');
+	var _FONT    = attachments["fnt"];
+	var _SOUND   = attachments["snd"];
 
 
 
@@ -18,7 +20,7 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.timeout = 30000;
@@ -37,12 +39,12 @@ lychee.define('game.ui.entity.Timeout').requires([
 		delete settings.timeout;
 
 
-		settings.width  = typeof settings.width === 'number' ? settings.width : 512;
+		settings.width  = typeof settings.width === 'number'  ? settings.width  : 512;
 		settings.height = typeof settings.height === 'number' ? settings.height : 512;
-		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
+		settings.shape  = _Entity.SHAPE.rectangle;
 
 
-		lychee.ui.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 		settings = null;
 
@@ -79,7 +81,7 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			var data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'game.ui.entity.Timeout';
 
 
@@ -164,7 +166,7 @@ lychee.define('game.ui.entity.Timeout').requires([
 			}
 
 
-			lychee.ui.Entity.prototype.update.call(this, clock, delta);
+			_Entity.prototype.update.call(this, clock, delta);
 
 		},
 
@@ -207,13 +209,13 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 			if (visible === true) {
 
-				this.addEffect(new lychee.effect.Alpha({
-					type:     lychee.effect.Alpha.TYPE.easeout,
+				this.addEffect(new _Alpha({
+					type:     _Alpha.TYPE.easeout,
 					alpha:    1.0,
 					duration: 500
 				}));
 
-				this.addEffect(new lychee.effect.Visible({
+				this.addEffect(new _Visible({
 					delay:   500,
 					visible: true
 				}));
@@ -223,13 +225,13 @@ lychee.define('game.ui.entity.Timeout').requires([
 
 			} else if (visible === false) {
 
-				this.addEffect(new lychee.effect.Alpha({
-					type:     lychee.effect.Alpha.TYPE.easeout,
+				this.addEffect(new _Alpha({
+					type:     _Alpha.TYPE.easeout,
 					alpha:    0.0,
 					duration: 500
 				}));
 
-				this.addEffect(new lychee.effect.Visible({
+				this.addEffect(new _Visible({
 					delay:   500,
 					visible: false
 				}));

@@ -1,0 +1,304 @@
+<template id="template">
+	<style>
+	:host {
+		display: block;
+		position: fixed;
+		top: 0px;
+		right: auto;
+		bottom: 0px;
+		left: 0px;
+		margin: 0px;
+		padding: 16px;
+		color: #ffffff;
+		background: #363f3e;
+		overflow: hidden;
+	}
+
+	:host([state="default"]) {
+		width: 32px;
+		transition: 300ms 300ms all ease-out;
+	}
+
+	:host([state="active"]) {
+		width: 110px;
+		transition: 300ms 300ms all ease-out;
+	}
+
+	:host label {
+		display: inline-block;
+		position: absolute;
+		top: 21px;
+		right: auto;
+		bottom: auto;
+		left: 18px;
+		font-family: 'museo-sans-300';
+		font-size: 20px;
+		letter-spacing: 1px;
+		text-transform: uppercase;
+		appearance: none;
+	}
+
+	:host([state="default"]) label {
+		opacity: 0;
+		transition: 300ms all ease-out;
+	}
+
+	:host([state="active"]) label {
+		opacity: 1;
+		transition: 300ms 300ms all ease-out;
+	}
+
+	:host > b {
+		display: block;
+		position: absolute;
+		width: 32px;
+		height: 24px;
+		top: 20px;
+		right: 16px;
+		bottom: auto;
+		left: auto;
+		margin: 0px;
+		padding: 0px;
+		cursor: pointer;
+	}
+
+	:host > b > span,
+	:host > b > span:before,
+	:host > b > span:after {
+		content: "";
+		position: absolute;
+		width: 32px;
+		height: 2px;
+		right: 0px;
+		background: #ffffff;
+	}
+
+	:host > b > span {
+		top: 0px;
+	}
+
+	:host > b > span:before {
+		top: 11px;
+	}
+
+	:host > b > span:after {
+		top: 22px;
+	}
+
+	::content > option {
+		display: block;
+		position: static;
+		width: auto;
+		height: 32px;
+		min-height: inherit;
+		margin: 0px;
+		padding: 0px;
+		font-family: 'museo-sans-300';
+		font-size: 16px;
+		line-height: 32px;
+		appearance: none;
+		cursor: pointer;
+	}
+
+	/* AGAIN, FUCK THESE FUCKTARDS AT MOZILLA */
+	@-moz-document url-prefix() { 
+	
+		::content > option,
+		::content > option:checked {
+			color: #ffffff;
+			background-color: transparent;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AQQFiQjNC0PawAAAA1JREFUCNdjMLO3+w8AAxUBs+jL0ecAAAAASUVORK5CYII=');
+		}
+	
+	}
+
+	::content > option:nth-of-type(1) {
+		margin-top: 48px;
+	}
+
+	::content > option:before {
+		display: inline-block;
+		position: static;
+		box-sizing: border-box;
+		content: "";
+		width: 24px;
+		height: 24px;
+		margin: auto 8px auto 2px;
+		padding: 0px;
+		border-radius: 24px;
+		vertical-align: middle;
+	}
+
+	::content > option:before {
+		border: 2px solid #545454;
+		transition: 300ms all ease-out;
+	}
+
+	::content > option[selected]:before {
+		border: 2px solid #32afe5;
+		transition: 300ms all ease-out;
+	}
+
+	:host([state="default"]) ::content > option {
+		opacity: 0;
+		transition: 300ms all ease-out;
+	}
+
+	:host([state="active"]) ::content > option {
+		opacity: 1;
+		transition: 300ms 300ms all ease-out;
+	}
+	</style>
+
+	<label>MENU</label>
+	<b><span></span></b>
+	<content></content>
+</template>
+
+<script>
+(function(globaldoc, importdoc) {
+
+	var MAIN = globaldoc.querySelector('fyto-app-Main');
+
+
+
+	/*
+	 * HELPERS
+	 */
+
+	var _on_label = function(label) {
+
+		var element = this.querySelector('label');
+		if (element !== null) {
+			element.innerHTML = label;
+		}
+
+	};
+
+	var _on_state = function(state) {
+
+		// Do nothing
+
+	};
+
+	var _on_value = function(value) {
+
+		var options = [].slice.call(this.querySelectorAll('option'));
+		if (options.length > 0) {
+
+			for (var o = 0, ol = options.length; o < ol; o++) {
+
+				var option = options[o];
+				if (option.value.toLowerCase() === value.toLowerCase()) {
+					option.setAttribute('selected', '');
+				} else {
+					option.removeAttribute('selected');
+				}
+
+			}
+
+		}
+
+
+		if (MAIN !== null) {
+			MAIN.setAttribute('state', value);
+		}
+
+	};
+
+
+
+	/*
+	 * DOM SHIT
+	 */
+
+	var element = fyto.define('fyto.ui.Menu', importdoc.querySelector('#template'));
+	if (element !== null) {
+
+		element._init = function() {
+
+			var that    = this;
+			var label   = this.getAttribute('label');
+			var options = [].slice.call(this.querySelectorAll('option'));
+			var state   = this.getAttribute('state');
+			var value   = this.getAttribute('value');
+
+
+			_on_label.call(this, label);
+			_on_state.call(this, state);
+
+
+			var toggle = this.querySelector('b');
+			if (toggle !== null) {
+
+				toggle.onclick = function() {
+
+					var state = this.getAttribute('state');
+					if (state === 'default') {
+						this.setAttribute('state', 'active');
+					} else {
+						this.setAttribute('state', 'default');
+					}
+
+				}.bind(this);
+
+			}
+
+			if (label === null) {
+				this.setAttribute('label', 'MENU');
+			}
+
+			if (state === null) {
+				this.setAttribute('state', 'default');
+			}
+
+
+			if (options.length > 0) {
+
+				if (value === null) {
+					value = options[0].value.toLowerCase();
+					this.setAttribute('value', value);
+				} else {
+					_on_value.call(this, value);
+				}
+
+
+				options.forEach(function(option) {
+
+					option.onclick = function() {
+						that.setAttribute('value', this.value.toLowerCase());
+					};
+
+				});
+
+			}
+
+		};
+
+		element._change = function(name, oldvalue, newvalue) {
+
+			if (oldvalue !== newvalue) {
+
+				switch (name) {
+
+					case 'label': _on_label.call(this, newvalue); break;
+					case 'state': _on_state.call(this, newvalue); break;
+					case 'value': _on_value.call(this, newvalue); break;
+
+				}
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		};
+
+	}
+
+})(document, document.currentScript.ownerDocument);
+</script>
+

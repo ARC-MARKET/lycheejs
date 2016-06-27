@@ -22,7 +22,7 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/boilerplate"
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				}
 			},
 			"html-webview/main": {
@@ -43,7 +43,7 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/boilerplate"
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				}
 			},
 			"html/main": {
@@ -63,7 +63,7 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/Server?identifier=/projects/boilerplate"
+					"client": "/api/server/connect?identifier=/projects/boilerplate"
 				}
 			},
 			"node/main": {

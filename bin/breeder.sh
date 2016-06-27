@@ -9,8 +9,7 @@ OS=`lowercase \`uname\``;
 ARCH=`lowercase \`uname -m\``;
 
 LYCHEEJS_NODE="";
-LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
-PROJECT_ROOT=$(realpath --relative-to=$LYCHEEJS_ROOT $PWD);
+LYCHEEJS_ROOT="/opt/lycheejs";
 
 
 if [ "$ARCH" == "x86_64" -o "$ARCH" == "amd64" ]; then
@@ -29,12 +28,16 @@ fi;
 if [ "$OS" == "darwin" ]; then
 
 	OS="osx";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(greadlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node";
+	PROJECT_ROOT=$(realpath --relative-to=$LYCHEEJS_ROOT $PWD);
 
 elif [ "$OS" == "linux" ]; then
 
 	OS="linux";
+	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node";
+	PROJECT_ROOT=$(realpath --relative-to=$LYCHEEJS_ROOT $PWD);
 
 fi;
 

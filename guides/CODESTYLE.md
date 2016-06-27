@@ -1,5 +1,5 @@
 
-# Codestyle Guide for lycheeJS
+# Codestyle Guide for lychee.js
 
 1. [Project Layout](#project-layout)
   - [Packages](#packages)
@@ -72,9 +72,9 @@ Examples:
 
 ## Definition Layout
 
-The lycheeJS Definition system always uses so-called Definition closures in order to have advanced memory functionality among different instances. A basic layout of a Definition has (if the functionality is required) these sections:
+The lychee.js Definition system always uses so-called Definition closures in order to have advanced memory functionality among different instances. A basic layout of a Definition has (if the functionality is required) these sections:
 
-- HEADER
+- HEAD
   - `lychee.define(identifier)`
   - `.tags()`
   - `.requires()`
@@ -344,7 +344,7 @@ lychee.define('my.Definition').exports(function(lychee, my, global, attachments)
 
 ### Editorconfig
 
-There's an `.editorconfig` file in the lycheeJS root and you have to use it.
+There's an `.editorconfig` file in the lychee.js root and you have to use it.
 Use `Tab` and NOT whitespaces. Our `Tab` is equivalent to `4 Whitespaces`.
 
 ```javascript
@@ -690,7 +690,7 @@ lychee.Foo.prototype.setState = function(state) {
 
 ## Entity Layout
 
-All lycheeJS Entities and Definitions are divided in different Stacks.
+All lychee.js Entities and Definitions are divided in different Stacks.
 
 Speaking of Entities (and not Definitions) always is about Entities that can be positioned in a Graph,
 no matter if it's a Scene Graph (like `app` or `ui`) or a Timeline Graph (like `ai`, `net` or `verlet`).

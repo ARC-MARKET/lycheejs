@@ -66,7 +66,7 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 
 				if (url.substr(0, 5) === 'data:') {
 
-					asset = new construct('/tmp/Entity.' + type, ignore);
+					asset = new construct('/tmp/Asset.' + type, ignore);
 					asset.deserialize({
 						buffer: url
 					});

@@ -3,7 +3,43 @@
 		"files": {}
 	},
 	"build": {
-		"environments": {},
+		"environments": {
+			"node-sdl/dist": {
+				"build": "breeder.Main",
+				"debug": false,
+				"packages": [
+					[
+						"breeder",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node-sdl",
+						"node"
+					]
+				},
+				"variant": "library"
+			},
+			"node/dist": {
+				"build": "breeder.Main",
+				"debug": false,
+				"packages": [
+					[
+						"breeder",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"variant": "library"
+			}
+		},
 		"files": {}
 	},
 	"source": {

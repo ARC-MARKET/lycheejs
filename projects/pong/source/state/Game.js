@@ -9,7 +9,7 @@ lychee.define('game.state.Game').requires([
 	'game.ui.sprite.Welcome'
 ]).includes([
 	'lychee.app.State'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	var _BLOB   = attachments["json"].buffer;
 	var _MUSIC  = attachments["music.msc"];
@@ -19,6 +19,7 @@ lychee.define('game.state.Game').requires([
 		ping:  attachments["ping.snd"],
 		pong:  attachments["pong.snd"]
 	};
+	var _State  = lychee.import('lychee.app.State');
 
 
 
@@ -99,7 +100,7 @@ lychee.define('game.state.Game').requires([
 
 	var Class = function(main) {
 
-		lychee.app.State.call(this, main);
+		_State.call(this, main);
 
 
 		this.__ai = {
@@ -174,7 +175,7 @@ lychee.define('game.state.Game').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'game.state.Game';
 
 

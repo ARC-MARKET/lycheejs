@@ -1,9 +1,6 @@
 {
-
-	"port":  8080,
-
-	"hosts": {
-		"localhost": null
-	}
-
+	"host": "localhost",
+	"port": 8080,
+	"debug": false,
+	"sandbox": true
 }

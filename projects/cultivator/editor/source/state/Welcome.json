@@ -1,0 +1,50 @@
+{
+	"layers": {
+		"ui": {
+			"constructor": "lychee.ui.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": true,
+								"type": 1
+							}
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "lychee.ui.element.Search",
+									"arguments": [
+										{
+											"label": "Select",
+											"data": []
+										}
+									]
+								}, {
+									"constructor": "app.ui.element.Project",
+									"arguments": [
+										{
+											"label": "Modify"
+										}
+									]
+								}
+							],
+							"map": {
+								"select": 0,
+								"modify": 1
+							}
+						}
+					}
+				],
+				"map": {
+					"welcome": 0
+				}
+			}
+		}
+	}
+}

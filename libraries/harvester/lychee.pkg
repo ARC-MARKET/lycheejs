@@ -4,6 +4,59 @@
 	},
 	"build": {
 		"environments": {
+			"html-webview/dist": {
+				"build": "harvester.net.Client",
+				"debug": false,
+				"packages": [
+					[
+						"harvester",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-webview",
+						"html"
+					]
+				},
+				"variant": "library"
+			},
+			"html-nwjs/dist": {
+				"build": "harvester.net.Client",
+				"debug": false,
+				"packages": [
+					[
+						"harvester",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-nwjs",
+						"html"
+					]
+				},
+				"variant": "library"
+			},
+			"html/dist": {
+				"build": "harvester.net.Client",
+				"debug": false,
+				"packages": [
+					[
+						"harvester",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"variant": "library"
+			},
 			"node-sdl/dist": {
 				"build": "harvester.Main",
 				"debug": false,
@@ -37,17 +90,78 @@
 					]
 				},
 				"variant": "library"
+			},
+			"node-sdl/main": {
+				"build": "harvester.Main",
+				"debug": false,
+				"packages": [
+					[
+						"harvester",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node-sdl",
+						"node"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"port": 8080,
+					"hosts": {
+						"localhost": null
+					}
+				}
+			},
+			"node/main": {
+				"build": "harvester.Main",
+				"debug": false,
+				"packages": [
+					[
+						"harvester",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"port": 8080,
+					"hosts": {
+						"localhost": null
+					}
+				}
 			}
 		},
 		"files": {
-			"node": {
+			"html": {
 				"dist": {
 					"index": [
 						"js"
 					]
 				}
 			},
-			"node-sdl": {
+			"html-nwjs": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			},
+			"html-webview": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			},
+			"node": {
 				"dist": {
 					"index": [
 						"js"
@@ -66,9 +180,6 @@
 				"Filesystem": [
 					"js"
 				],
-				"Host": [
-					"js"
-				],
 				"Package": [
 					"js"
 				],
@@ -83,32 +194,47 @@
 				"Fertilizer": [
 					"js"
 				],
-				"Package": [
+				"Packager": [
 					"js"
 				],
 				"Server": [
 					"js"
+				],
+				"Updater": [
+					"js"
 				]
 			},
 			"net": {
+				"Admin": [
+					"js"
+				],
+				"Client": [
+					"js"
+				],
 				"Remote": [
 					"js"
 				],
 				"Server": [
 					"js"
-				]
-			},
-			"serve": {
-				"API": [
-					"js"
 				],
-				"File": [
-					"js"
-				],
-				"Redirect": [
-					"js"
-				],
-				"api": {
+				"client": {
+					"Console": [
+						"js"
+					],
+					"Library": [
+						"js"
+					],
+					"Profile": [
+						"js"
+					],
+					"Project": [
+						"js"
+					]
+				},
+				"remote": {
+					"Console": [
+						"js"
+					],
 					"Library": [
 						"js"
 					],
@@ -119,6 +245,14 @@
 						"js"
 					],
 					"Server": [
+						"js"
+					]
+				},
+				"server": {
+					"File": [
+						"js"
+					],
+					"Redirect": [
 						"js"
 					]
 				}

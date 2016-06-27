@@ -7,7 +7,7 @@ lychee.define('lychee.net.remote.Session').includes([
 	 * HELPERS
 	 */
 
-	var _cache = {};
+	var _CACHE = {};
 
 	var _on_join = function(data) {
 
@@ -15,7 +15,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		if (sid !== null) {
 
 			// 1. Create Session
-			var session = _cache[sid] || null;
+			var session = _CACHE[sid] || null;
 			if (session === null) {
 
 				var autoadmin = data.autoadmin === true      ? true     : false;
@@ -24,7 +24,7 @@ lychee.define('lychee.net.remote.Session').includes([
 				var min       = typeof data.min === 'number' ? data.min : 2;
 				var max       = typeof data.max === 'number' ? data.max : 4;
 
-				session = _cache[sid] = {
+				session = _CACHE[sid] = {
 					autolock:  autolock,
 					autostart: autostart,
 					sid:       sid,
@@ -63,7 +63,7 @@ lychee.define('lychee.net.remote.Session').includes([
 
 					} else if (session.active === true) {
 
-						this.report('Session is active', {
+						this.reject('Session is active', {
 							sid: sid,
 							min: session.min,
 							max: session.max
@@ -71,7 +71,7 @@ lychee.define('lychee.net.remote.Session').includes([
 
 					} else {
 
-						this.report('Session is full', {
+						this.reject('Session is full', {
 							sid: sid,
 							min: session.min,
 							max: session.max
@@ -93,7 +93,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		if (sid !== null) {
 
 			// 1. Leave Session
-			var session = _cache[sid] || null;
+			var session = _CACHE[sid] || null;
 			if (session !== null) {
 
 				var index = session.tunnels.indexOf(this.tunnel);
@@ -109,7 +109,7 @@ lychee.define('lychee.net.remote.Session').includes([
 
 				if (session.tunnels.length === 0) {
 
-					delete _cache[sid];
+					delete _CACHE[sid];
 
 				} else {
 
@@ -128,7 +128,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		var sid = data.sid || null;
 		if (sid !== null) {
 
-			var session = _cache[sid] || null;
+			var session = _CACHE[sid] || null;
 			if (session !== null) {
 
 				if (session.admin === null || session.admin === this.tunnel) {
@@ -154,7 +154,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		var sid = data.sid || null;
 		if (sid !== null) {
 
-			var session = _cache[sid] || null;
+			var session = _CACHE[sid] || null;
 			if (session !== null) {
 
 				if (session.active === true) {
@@ -287,7 +287,7 @@ lychee.define('lychee.net.remote.Session').includes([
 		id = typeof id === 'string' ? id : 'session';
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.session = null;
@@ -309,9 +309,9 @@ lychee.define('lychee.net.remote.Session').includes([
 
 		this.bind('unplug', function() {
 
-			for (var sid in _cache) {
+			for (var sid in _CACHE) {
 
-				var session = _cache[sid];
+				var session = _CACHE[sid];
 				var index   = session.tunnels.indexOf(this.tunnel);
 				if (index !== -1) {
 					_on_leave.call(this, session);

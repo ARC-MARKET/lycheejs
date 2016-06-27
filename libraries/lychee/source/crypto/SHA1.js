@@ -196,7 +196,6 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 					buffer[(pointer % 64) + s] = data[s + p];
 				}
 
-
 				pointer += size;
 				p       += size;
 

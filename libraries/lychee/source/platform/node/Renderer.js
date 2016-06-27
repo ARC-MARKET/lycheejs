@@ -157,7 +157,7 @@ lychee.define('Renderer').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.alpha      = 1.0;

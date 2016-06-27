@@ -1,72 +1,17 @@
 
-lychee.define('tool.Main').requires([
-	'lychee.data.JSON',
-	'tool.state.Project',
-	'tool.state.Scene'
+lychee.define('app.Main').requires([
+	'app.net.Client',
+	'app.net.Server',
+	'app.state.Welcome',
+	'harvester.net.Client'
 ]).includes([
 	'lychee.app.Main'
-]).tags({
-	platform: 'html'
-}).exports(function(lychee, tool, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _JSON   = lychee.data.JSON;
-	var PROJECT = null;
-
-
-
-	/*
-	 * HACKS
-	 */
-
-	(function(global) {
-
-		if (typeof global.addEventListener !== 'undefined') {
-
-			global.addEventListener('click', function(event) {
-
-				var target = event.target;
-				if (target.tagName === 'A' && target.href.match(/lycheejs:\/\//g)) {
-
-					setTimeout(function() {
-
-						var main = global.MAIN || null;
-						if (main !== null) {
-							main.loop.trigger('update', []);
-						}
-
-					}, 200);
-
-				}
-
-			}, true);
-
-		}
-
-	})(global);
-
-	(function(global) {
-
-		try {
-
-			var gui = require('nw.gui');
-			PROJECT = gui.App.argv[0];
-
-		} catch(e) {
-
-		}
-
-
-		var location = global.location || null;
-		if (location instanceof Object) {
-
-			var hash = location.hash || '';
-			if (hash.indexOf('#!') !== -1) {
-				PROJECT = location.hash.split('!')[1];
-			}
-
-		}
-
-	})(global);
+	var _lychee = lychee.import('lychee');
+	var _app    = lychee.import('app');
+	var _Client = lychee.import('harvester.net.Client');
+	var _Main   = lychee.import('lychee.app.Main');
 
 
 
@@ -76,31 +21,35 @@ lychee.define('tool.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
-			client:     null,
-			input:      null,
-			jukebox:    null,
-			renderer:   null,
-			server:     null,
-
-			loop:       {
-				update: 1/10,
-				render: 0
+			input: {
+				delay:       0,
+				key:         true,
+				keymodifier: false,
+				touch:       true,
+				swipe:       true
 			},
 
-			viewport:   {
+			jukebox: {
+				music: true,
+				sound: true
+			},
+
+			renderer: {
+				id:     'app',
+				width:  null,
+				height: null
+			},
+
+			viewport: {
 				fullscreen: false
 			}
 
 		}, data);
 
 
-		this.project  = null;
-		this.projects = {};
-
-
-		lychee.app.Main.call(this, settings);
+		_Main.call(this, settings);
 
 
 
@@ -109,17 +58,35 @@ lychee.define('tool.Main').requires([
 		 */
 
 		this.bind('load', function(oncomplete) {
+
+			this.settings.appclient = this.settings.client;
+			this.settings.client    = null;
+
+			this.settings.appserver = this.settings.server;
+			this.settings.server    = null;
+
 			oncomplete(true);
+
 		}, this, true);
 
 		this.bind('init', function() {
 
-			this.setState('project', new tool.state.Project(this));
-			this.setState('scene',   new tool.state.Scene(this));
+			var appclient = this.settings.appclient || null;
+			if (appclient !== null) {
+				this.client = new _app.net.Client(appclient, this);
+				this.api    = new _Client({}, this);
+			}
 
-			this.changeState('project', {
-				identifier: PROJECT || 'boilerplate'
-			});
+			var appserver = this.settings.appserver || null;
+			if (appserver !== null) {
+				this.server = new _app.net.Server(appserver, this);
+			}
+
+
+			this.setState('welcome', new _app.state.Welcome(this));
+
+
+			this.changeState('welcome');
 
 		}, this, true);
 
@@ -127,6 +94,34 @@ lychee.define('tool.Main').requires([
 
 
 	Class.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			var data = _Main.prototype.serialize.call(this);
+			data['constructor'] = 'app.Main';
+
+
+			var settings = data['arguments'][0] || {};
+			var blob     = data['blob'] || {};
+
+
+			if (this.settings.appclient !== null) settings.client = this.defaults.client;
+			if (this.settings.appserver !== null) settings.server = this.defaults.server;
+
+
+			data['arguments'][0] = settings;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
+
+
+			return data;
+
+		}
 
 	};
 

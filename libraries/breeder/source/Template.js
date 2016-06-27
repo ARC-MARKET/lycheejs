@@ -1,13 +1,16 @@
 
 lychee.define('breeder.Template').requires([
-	'lychee.data.JSON'
+	'lychee.Stash'
 ]).includes([
-	'fertilizer.Template'
-]).exports(function(lychee, breeder, global, attachments) {
+	'lychee.event.Flow'
+]).exports(function(lychee, global, attachments) {
 
-	var _JSON = lychee.data.JSON;
-	var _LIB  = new fertilizer.data.Filesystem('/');
-	var _TPL  = new fertilizer.data.Filesystem('/libraries/breeder/asset');
+	var _Flow  = lychee.import('lychee.event.Flow');
+	var _Stash = lychee.import('lychee.Stash');
+	var _ASSET = '/libraries/breeder/asset';
+	var _STASH = new _Stash({
+		type: _Stash.TYPE.persistent
+	});
 
 
 
@@ -15,68 +18,120 @@ lychee.define('breeder.Template').requires([
 	 * HELPERS
 	 */
 
-	var _inject = function(platform, path) {
+	var _inject = function(buffer, injections) {
 
-		var tmp   = path.split('/');
-		var tmp_s = '';
-		var tmp_c = '';
-		var tmp_i = '';
+		var chunk    = '';
+		var code     = buffer.split('\n');
+		var c        = 0;
+		var cl       = code.length;
+		var found    = { include: false, inject: false };
+		var index    = { include: -1,    inject: -1    };
+		var tmp      = '';
+		var tmp_s    = '';
+		var tmp_c    = '';
+		var tmp_i    = '';
+		var tpl_s    = '';
+		var tpl_c    = '';
+		var tpl_i    = '';
 
-		var code  = ('' + this).toString().split('\n');
-		var id    = tmp.slice(0, 3).join('/') + '/' + tmp.slice(5, 6).join('/');
-		var found = { include: false, inject: false };
-		var index = { include: -1,    inject: -1    };
 
+		for (c = 0; c < cl; c++) {
 
-		if (platform === 'html') {
-			tmp_s = '\t<script src="/libraries/';
-			tmp_c = '\t<script src="' + path + '"></script>';
-			tmp_i = '\t\tlychee.inject(lychee.ENVIRONMENTS[\'' + id + '\']);';
-		} else if (platform === 'node') {
-			tmp_s = 'require(_root + \'/libraries/';
-			tmp_c = 'require(_root + \'' + path + '\');';
-			tmp_i = '\tlychee.inject(lychee.ENVIRONMENTS[\'' + id + '\']);';
+			chunk = code[c].trim();
+
+			if (chunk.substr(0, 7) === '<script') {
+
+				tpl_s = '\t<script src="/libraries/';
+				tpl_c = '\t<script src="${injection}"></script>';
+				tpl_i = '\t\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);';
+
+				injections = injections.filter(function(injection) {
+					return injection.split('/')[4] === 'html';
+				});
+
+				break;
+
+			} else if (chunk.substr(0, 8) === 'require(') {
+
+				tpl_s = 'require(_root + \'/libraries/';
+				tpl_c = 'require(_root + \'${injection}\');';
+				tpl_i = '\tlychee.inject(lychee.ENVIRONMENTS[\'${identifier}\']);';
+
+				injections = injections.filter(function(injection) {
+					return injection.split('/')[4] === 'node';
+				});
+
+				break;
+
+			}
+
 		}
 
 
-		code.forEach(function(line, i) {
+		for (var i = 0, il = injections.length; i < il; i++) {
 
-			var str = line.trim();
-			var cmp = tmp_s.trim();
-			if (str.substr(0, cmp.length) === cmp) {
-				index.include = i;
+			var injection  = injections[i];
+			var identifier = injection.split('/').slice(0, 3).join('/') + '/' + injection.split('/')[5];
+
+
+			tmp_c = tpl_c.replaceObject({
+				injection: injection
+			});
+
+			tmp_i = tpl_i.replaceObject({
+				identifier: identifier
+			});
+
+			tmp_s = tpl_s;
+
+
+			for (c = 0; c < cl; c++) {
+
+				chunk = code[c].trim();
+				tmp   = tmp_s.trim();
+
+
+				if (chunk.substr(0, tmp.length) === tmp) {
+					index.include = c;
+				}
+
+				if (chunk === tmp_c.trim()) {
+					found.include = true;
+				}
+
 			}
 
-			if (str === tmp_c.trim()) {
-				found.include = true;
+			if (found.include === false && index.include >= 0) {
+				code.splice(index.include + 1, 0, tmp_c);
+				cl++;
 			}
 
-		});
 
-		if (found.include === false && index.include >= 0) {
-			code.splice(index.include + 1, 0, tmp_c);
-		}
+			for (c = 0; c < cl; c++) {
+
+				chunk = code[c].trim();
 
 
-		code.forEach(function(line, i) {
+				if (chunk.substr(0, 14) === 'lychee.inject(') {
+					index.inject = c;
+				} else if (chunk.substr(0, 15) === 'lychee.envinit(' && index.inject === -1) {
+					index.inject = c - 1;
+				} else if (chunk.substr(0, 15) === 'lychee.pkginit(' && index.inject === -1) {
+					index.inject = c - 1;
+				}
 
-			var str = line.trim();
-			if (str.substr(0, 14) === 'lychee.inject(') {
-				index.inject = i;
-			} else if (str.substr(0, 15) === 'lychee.envinit(' && index.inject === -1) {
-				index.inject = i - 1;
-			} else if (str.substr(0, 15) === 'lychee.pkginit(' && index.inject === -1) {
-				index.inject = i - 1;
+				if (chunk === tmp_i.trim()) {
+					found.inject = true;
+				}
+
 			}
 
-			if (str === tmp_i.trim()) {
-				found.inject = true;
+
+			if (found.inject === false && index.inject >= 0) {
+				code.splice(index.inject + 1, 0, tmp_i);
+				cl++;
 			}
 
-		});
-
-		if (found.inject === false && index.inject >= 0) {
-			code.splice(index.inject + 1, 0, tmp_i);
 		}
 
 
@@ -92,7 +147,27 @@ lychee.define('breeder.Template').requires([
 
 	var Class = function(data) {
 
-		fertilizer.Template.call(this, data);
+		var settings = Object.assign({}, data);
+
+
+		this.sandbox  = '';
+		this.settings = {};
+		this.stash    = new _Stash({
+			type: _Stash.TYPE.persistent
+		});
+
+
+		this.__injections = [];
+		this.__main       = [];
+
+
+		this.setSandbox(settings.sandbox);
+		this.setSettings(settings.settings);
+
+
+		_Flow.call(this);
+
+		settings = null;
 
 
 
@@ -102,43 +177,65 @@ lychee.define('breeder.Template').requires([
 
 		this.bind('init', function(oncomplete) {
 
-			var fs = this.filesystem;
-			if (fs !== null) {
+			var sandbox = this.sandbox;
+			var stash   = this.stash;
 
-				// _TPL.copy(fs, '/lychee.pkg');
-				_TPL.copy(fs, '/harvester.js');
-				fs.chmod('/harvester.js', '775');
+			if (sandbox !== '' && stash !== null) {
 
-
-				_LIB.copy(fs, '/libraries/lychee/build/html/core.js');
-				_LIB.copy(fs, '/libraries/lychee/build/html-nwjs/core.js');
-				_LIB.copy(fs, '/libraries/lychee/build/html-webview/core.js');
-				_LIB.copy(fs, '/libraries/lychee/build/node/core.js');
-				_LIB.copy(fs, '/libraries/lychee/build/node-sdl/core.js');
+				console.log('breeder: INIT');
 
 
-				_TPL.copy(fs, '/source/Main.js');
-				_TPL.copy(fs, '/source/net/Server.js');
-				_TPL.copy(fs, '/source/net/Client.js');
-				_TPL.copy(fs, '/source/net/client/Ping.js');
-				_TPL.copy(fs, '/source/net/remote/Ping.js');
-				_TPL.copy(fs, '/source/state/Welcome.js');
-				_TPL.copy(fs, '/source/state/Welcome.json');
+				_STASH.bind('batch', function(type, assets) {
 
-				_TPL.copy(fs, '/icon.png');
-				_TPL.copy(fs, '/favicon.ico');
-				_TPL.copy(fs, '/index.html');
+					var pkg  = assets.find(function(asset) {
+						return asset.url === _ASSET + '/lychee.pkg';
+					}) || null;
+					var urls = assets.map(function(asset) {
+						return sandbox + asset.url.substr(_ASSET.length);
+					});
 
 
-				var id  = fs.root.split('/').pop();
-				var pkg = _TPL.read('/lychee.pkg').toString();
+					if (pkg !== null) {
 
-				pkg = this.replace(pkg, { id: id });
+						var tmp = JSON.stringify(pkg.buffer, null, '\t');
 
-				fs.write('/lychee.pkg', pkg);
+						tmp = tmp.replaceObject({
+							id: sandbox
+						});
+
+						pkg.buffer = JSON.parse(tmp);
+
+					}
 
 
-				oncomplete(true);
+					stash.bind('batch', function(action, woop) {
+
+						if (action === 'write') {
+							oncomplete(true);
+						}
+
+					}, this, true);
+
+					stash.batch('write', urls, assets);
+
+				}, this, true);
+
+				_STASH.batch('read', [
+
+					_ASSET + '/harvester.js',
+					_ASSET + '/icon.png',
+					_ASSET + '/index.html',
+					_ASSET + '/lychee.pkg',
+
+					_ASSET + '/source/Main.js',
+					_ASSET + '/source/net/Client.js',
+					_ASSET + '/source/net/Server.js',
+					_ASSET + '/source/net/client/Ping.js',
+					_ASSET + '/source/net/remote/Ping.js',
+					_ASSET + '/source/state/Welcome.js',
+					_ASSET + '/source/state/Welcome.json'
+
+				]);
 
 			} else {
 
@@ -148,67 +245,153 @@ lychee.define('breeder.Template').requires([
 
 		}, this);
 
+
 		this.bind('pull', function(oncomplete) {
 
-			var fs  = this.filesystem;
-			var lib = this.settings.library;
-			if (fs !== null && lib !== null) {
+			var library = this.settings.library;
+			var stash   = this.stash;
 
-				var tmp  = null;
-				var copy = function(platform, target) {
 
-					var path = lib + '/build/' + platform + '/' + target + '/index.js';
-					var info = _LIB.info(path);
-					if (info !== null && info.type === 'file') {
+			if (library !== null && stash !== null) {
 
-						_LIB.copy(fs, path);
+				console.log('breeder: PULL ' + library);
 
-						if (tmp !== null) {
-							tmp = _inject.call(tmp, platform, path);
+
+				var sandbox = this.sandbox;
+
+
+				_STASH.bind('batch', function(type, assets) {
+
+					var main = assets.filter(function(asset) {
+						return asset.url.match(/index\.html|harvester\.js/g) !== null;
+					});
+					var pkg  = assets.find(function(asset) {
+						return asset.url.match(/lychee\.pkg/g) !== null;
+					}) || null;
+
+
+					if (main.length > 0 && pkg !== null) {
+
+						var platforms = [];
+
+						Object.values(pkg.buffer.build.environments).forEach(function(environment) {
+
+							var tags = environment.tags || null;
+							if (tags instanceof Object) {
+
+								if (tags.platform instanceof Array) {
+
+									tags.platform.forEach(function(val) {
+
+										if (platforms.indexOf(val) === -1) {
+											platforms.push(val);
+										}
+
+									});
+
+								}
+
+							}
+
+						});
+
+
+						if (platforms.length > 0) {
+
+							var injections = platforms.sort().map(function(platform) {
+								return library + '/build/' + platform + '/dist/index.js';
+							});
+							var tmp_stash  = new _Stash({
+								type: _Stash.TYPE.temporary
+							});
+
+
+							tmp_stash.bind('batch', function(type, assets) {
+
+								for (var a = 0, al = assets.length; a < al; a++) {
+
+									var asset = assets[a];
+									if (asset.buffer !== null && asset.buffer !== '') {
+										stash.write('.' + asset.url, asset);
+									}
+
+								}
+
+							});
+
+							tmp_stash.batch('read', injections);
+
 						}
+
+
+						setTimeout(function() {
+
+							this.__main       = main;
+							this.__injections = injections;
+
+							this.trigger('pull-inject', [function(result) {
+								oncomplete(result);
+							}]);
+
+						}.bind(this), 500);
+
+					} else {
+
+						oncomplete(false);
 
 					}
 
-				};
+				}, this, true);
 
 
-				tmp = fs.read('/index.html');
-				_LIB.dir(lib + '/build/html').forEach(function(target) {
-					copy('html', target);
-				});
-
-				if (tmp !== null) {
-					fs.write('/index.html', tmp);
-				}
-
-				_LIB.dir(lib + '/build/html-nwjs').forEach(function(target) {
-					copy('html-nwjs', target);
-				});
-
-				_LIB.dir(lib + '/build/html-webview').forEach(function(target) {
-					copy('html-webview', target);
-				});
-
-
-				tmp = fs.read('/harvester.js');
-				_LIB.dir(lib + '/build/node').forEach(function(target) {
-					copy('node', target);
-				});
-
-				if (tmp !== null) {
-					fs.write('/harvester.js', tmp);
-				}
-
-				_LIB.dir(lib + '/build/node-sdl').forEach(function(target) {
-					copy('node-sdl', target);
-				});
-
-
-				oncomplete(true);
+				_STASH.batch('read', [
+					sandbox + '/harvester.js',
+					sandbox + '/index.html',
+					sandbox + '/lychee.pkg'
+				]);
 
 			} else {
 
 				oncomplete(false);
+
+			}
+
+		});
+
+
+		this.bind('pull-inject', function(oncomplete) {
+
+			var injections = this.__injections;
+			var main       = this.__main;
+			var stash      = this.stash;
+
+
+			if (injections.length > 0 && main.length > 0 && stash !== null) {
+
+				for (var m = 0, ml = main.length; m < ml; m++) {
+
+					var tmp = main[m];
+					if (tmp.buffer !== null) {
+
+						console.log('breeder: PULL-INJECT ' + tmp.url);
+
+
+						tmp.buffer = _inject(tmp.buffer, injections);
+
+						stash.write(tmp.url, tmp);
+
+					}
+
+				}
+
+
+				setTimeout(function() {
+					oncomplete(true);
+				}, 500);
+
+			} else {
+
+				oncomplete(true);
 
 			}
 
@@ -223,13 +406,79 @@ lychee.define('breeder.Template').requires([
 		 * ENTITY API
 		 */
 
+		deserialize: function(blob) {
+
+			var stash = lychee.deserialize(blob.stash);
+			if (stash !== null) {
+				this.stash = stash;
+			}
+
+		},
+
 		serialize: function() {
 
-			var data = fertilizer.Template.prototype.serialize.call(this);
+			var data = _Flow.prototype.serialize.call(this);
 			data['constructor'] = 'breeder.Template';
 
 
+			var settings = data['arguments'][0] || {};
+			var blob     = data['blob'] || {};
+
+
+			if (this.sandbox !== '') settings.sandbox = this.sandbox;
+
+
+			if (this.stash !== null) blob.stash = lychee.serialize(this.stash);
+
+
+			data['arguments'][0] = settings;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
+
+
 			return data;
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
+
+		setSandbox: function(sandbox) {
+
+			sandbox = typeof sandbox === 'string' ? sandbox : null;
+
+
+			if (sandbox !== null) {
+
+				this.sandbox = sandbox;
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setSettings: function(settings) {
+
+			settings = settings instanceof Object ? settings : null;
+
+
+			if (settings !== null) {
+
+				this.settings = settings;
+
+				return true;
+
+			}
+
+
+			return false;
 
 		}
 

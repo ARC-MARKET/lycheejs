@@ -1,7 +1,7 @@
 
 lychee.define('app.net.remote.Ping').includes([
 	'lychee.net.Service'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	/*
 	 * HELPERS

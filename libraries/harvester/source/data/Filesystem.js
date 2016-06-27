@@ -10,14 +10,14 @@ lychee.define('harvester.data.Filesystem').tags({
 
 		return true;
 
-	} catch(e) {
+	} catch(err) {
 
 	}
 
 
 	return false;
 
-}).exports(function(lychee, harvester, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
 	var _ROOT = lychee.ROOT.lychee;
 	var _fs   = require('fs');
@@ -149,7 +149,7 @@ lychee.define('harvester.data.Filesystem').tags({
 
 					return asset;
 
-				} catch(e) {
+				} catch(err) {
 					return null;
 				}
 
@@ -184,7 +184,7 @@ lychee.define('harvester.data.Filesystem').tags({
 
 				try {
 					return _fs.readdirSync(resolved);
-				} catch(e) {
+				} catch(err) {
 					return [];
 				}
 
@@ -208,7 +208,7 @@ lychee.define('harvester.data.Filesystem').tags({
 				var data = null;
 				try {
 					data = _fs.readFileSync(resolved);
-				} catch(e) {
+				} catch(err) {
 					data = null;
 				}
 
@@ -218,7 +218,7 @@ lychee.define('harvester.data.Filesystem').tags({
 
 				try {
 					return _fs.readFileSync(resolved);
-				} catch(e) {
+				} catch(err) {
 					return null;
 				}
 
@@ -258,7 +258,7 @@ lychee.define('harvester.data.Filesystem').tags({
 					try {
 						_fs.writeFileSync(resolved, data, encoding);
 						result = true;
-					} catch(e) {
+					} catch(err) {
 						result = false;
 					}
 
@@ -270,7 +270,7 @@ lychee.define('harvester.data.Filesystem').tags({
 					try {
 						_fs.writeFileSync(resolved, data, encoding);
 						result = true;
-					} catch(e) {
+					} catch(err) {
 						result = false;
 					}
 
@@ -305,7 +305,7 @@ lychee.define('harvester.data.Filesystem').tags({
 
 				try {
 					stat = _fs.lstatSync(resolved);
-				} catch(e) {
+				} catch(err) {
 					stat = null;
 				}
 
@@ -315,7 +315,7 @@ lychee.define('harvester.data.Filesystem').tags({
 					return {
 						type:   stat.isFile() ? 'file' : 'directory',
 						length: stat.size,
-						time:   stat.mtime
+						mtime:  new Date(stat.mtime.toUTCString())
 					};
 
 				}

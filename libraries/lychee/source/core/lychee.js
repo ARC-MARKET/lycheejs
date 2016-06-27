@@ -151,6 +151,39 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 	}
 
+	if (typeof Object.assign !== 'function') {
+
+		Object.assign = function(object /*, ... sources */) {
+
+			if (object !== Object(object)) {
+				throw new TypeError('Object.assign called on a non-object');
+			}
+
+
+			for (var a = 1, al = arguments.length; a < al; a++) {
+
+				var source = arguments[a];
+				if (source != null) {
+
+					for (var key in source) {
+
+						if (Object.prototype.hasOwnProperty.call(source, key) === true) {
+							object[key] = source[key];
+						}
+
+					}
+
+				}
+
+			}
+
+
+			return object;
+
+		};
+
+	}
+
 	if (typeof Object.filter !== 'function') {
 
 		Object.filter = function(object, predicate/*, thisArg */) {
@@ -256,6 +289,47 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 	}
 
+	if (typeof Object.map !== 'function') {
+
+		Object.map = function(object, predicate/*, thisArg */) {
+
+			if (object !== Object(object)) {
+				throw new TypeError('Object.map called on a non-object');
+			}
+
+			if (typeof predicate !== 'function') {
+				throw new TypeError('predicate must be a function');
+			}
+
+
+			var clone   = {};
+			var keys    = Object.keys(object).sort();
+			var length  = keys.length >>> 0;
+			var thisArg = arguments.length >= 3 ? arguments[2] : void 0;
+			var key;
+			var value;
+			var tmp;
+
+
+			for (var k = 0; k < length; k++) {
+
+				key   = keys[k];
+				value = object[key];
+				tmp   = predicate.call(thisArg, value, key);
+
+				if (tmp !== undefined) {
+					clone[key] = tmp;
+				}
+
+			}
+
+
+			return clone;
+
+		};
+
+	}
+
 	if (typeof Object.sort !== 'function') {
 
 		Object.sort = function(object) {
@@ -333,6 +407,63 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 	}
 
+	if (typeof String.prototype.replaceObject !== 'function') {
+
+		String.prototype.replaceObject = function(object) {
+
+			if (object !== Object(object)) {
+				throw new TypeError('String.prototype.replaceObject called on a non-object');
+			}
+
+
+			var clone  = '' + this;
+			var keys   = Object.keys(object);
+			var values = Object.values(object);
+
+
+			for (var k = 0, kl = keys.length; k < kl; k++) {
+
+				var key   = keys[k];
+				var value = values[k];
+
+				if (value instanceof Array) {
+					value = JSON.stringify(value);
+				} else if (value instanceof Object) {
+					value = JSON.stringify(value);
+				} else if (typeof value !== 'string') {
+					value = '' + value;
+				}
+
+
+				var pointers = [];
+				var pointer  = clone.indexOf('${' + key + '}');
+
+				while (pointer !== -1) {
+					pointers.push(pointer);
+					pointer = clone.indexOf('${' + key + '}', pointer + 1);
+				}
+
+
+				var offset = 0;
+
+				for (var p = 0, pl = pointers.length; p < pl; p++) {
+
+					var index = pointers[p];
+
+					clone   = clone.substr(0, index + offset) + value + clone.substr(index + offset + key.length + 3);
+					offset += (value.length - (key.length + 3));
+
+				}
+
+			}
+
+
+			return clone;
+
+		};
+
+	}
+
 	if (typeof String.prototype.toJSON !== 'function') {
 
 		String.prototype.toJSON = function() {
@@ -362,7 +493,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 		if (_environment === null) {
 
 			_environment = new lychee.Environment({
-				debug: true
+				debug: false
 			});
 
 		}
@@ -412,7 +543,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 			lychee:  null,
 			project: null
 		},
-		VERSION:      "2016-Q1",
+		VERSION:      "2016-Q2",
 
 
 
@@ -491,31 +622,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 		},
 
-		extend: function(target) {
-
-			for (var a = 1, al = arguments.length; a < al; a++) {
-
-				var object = arguments[a];
-				if (object) {
-
-					for (var prop in object) {
-
-						if (object.hasOwnProperty(prop) === true) {
-							target[prop] = object[prop];
-						}
-
-					}
-
-				}
-
-			}
-
-
-			return target;
-
-		},
-
-		extendsafe: function(target) {
+		assignsafe: function(target) {
 
 			for (var a = 1, al = arguments.length; a < al; a++) {
 
@@ -530,11 +637,11 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							var ovalue = object[prop];
 							if (tvalue instanceof Array && ovalue instanceof Array) {
 
-								lychee.extendsafe(target[prop], object[prop]);
+								lychee.assignsafe(target[prop], object[prop]);
 
 							} else if (tvalue instanceof Object && ovalue instanceof Object) {
 
-								lychee.extendsafe(target[prop], object[prop]);
+								lychee.assignsafe(target[prop], object[prop]);
 
 							} else if (typeof tvalue === typeof ovalue) {
 
@@ -555,7 +662,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 		},
 
-		extendunlink: function(target) {
+		assignunlink: function(target) {
 
 			for (var a = 1, al = arguments.length; a < al; a++) {
 
@@ -570,10 +677,10 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							var ovalue = object[prop];
 							if (tvalue instanceof Array && ovalue instanceof Array) {
 								target[prop] = [];
-								lychee.extendunlink(target[prop], object[prop]);
+								lychee.assignunlink(target[prop], object[prop]);
 							} else if (tvalue instanceof Object && ovalue instanceof Object) {
 								target[prop] = {};
-								lychee.extendunlink(target[prop], object[prop]);
+								lychee.assignunlink(target[prop], object[prop]);
 							} else {
 								target[prop] = object[prop];
 							}
@@ -664,7 +771,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 			try {
 				data = JSON.parse(JSON.stringify(data));
-			} catch(e) {
+			} catch(err) {
 				data = null;
 			}
 
@@ -776,7 +883,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 						try {
 							data = JSON.parse(JSON.stringify(definition));
-						} catch(e) {
+						} catch(err) {
 							data = null;
 						}
 
@@ -811,15 +918,77 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 				_bootstrap_environment.call(this);
 
 
-				var definition  = new lychee.Definition(identifier);
-				var environment = this.environment;
+				var definition = new lychee.Definition(identifier);
+				var that       = this;
+
+				// XXX: First sandboxed hierarchy
+				if (that.environment.sandbox === true) {
+					that = that.environment.global.lychee;
+				}
+
+				// XXX: Second sandboxed hierarchy
+				if (that.environment.sandbox === true) {
+					that = that.environment.global.lychee;
+				}
+
 
 				definition.exports = function(callback) {
+
 					lychee.Definition.prototype.exports.call(this, callback);
-					environment.define(this);
+					that.environment.define(this);
+
 				};
 
+
 				return definition;
+
+			}
+
+
+			return null;
+
+		},
+
+		import: function(reference) {
+
+			reference = typeof reference === 'string' ? reference : null;
+
+
+			if (reference !== null) {
+
+				_bootstrap_environment.call(this);
+
+
+				var instance = null;
+				var that     = this;
+
+				// XXX: First sandboxed hierarchy
+				if (that.environment.sandbox === true) {
+					that = that.environment.global.lychee;
+				}
+
+				// XXX: Second sandboxed hierarchy
+				if (that.environment.sandbox === true) {
+					that = that.environment.global.lychee;
+				}
+
+
+				var resolved_module = _resolve_reference.call(that.environment.global, reference);
+				if (resolved_module !== null) {
+					instance = resolved_module;
+				}
+
+
+				if (instance === null) {
+
+					if (lychee.debug === true) {
+						console.warn('lychee.deserialize: Require ' + (reference) + ' to import it.');
+					}
+
+				}
+
+
+				return instance;
 
 			}
 
@@ -841,7 +1010,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 				var code        = '\n';
 				var id          = lychee.ROOT.project.substr(lychee.ROOT.lychee.length) + '/custom';
-				var env_profile = lychee.extend({}, environment.profile, profile);
+				var env_profile = Object.assign({}, environment.profile, profile);
 
 
 				if (environment.id.substr(0, 19) === 'lychee-Environment-') {
@@ -912,10 +1081,10 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 							if (data instanceof Object) {
 
 								var code         = '\n';
-								var env_settings = lychee.extend({
+								var env_settings = Object.assign({
 									id: lychee.ROOT.project + '/' + identifier.split('/').pop()
 								}, data, settings);
-								var env_profile  = lychee.extend({}, data.profile, profile);
+								var env_profile  = Object.assign({}, data.profile, profile);
 								var environment  = new lychee.Environment(env_settings);
 
 
@@ -984,6 +1153,14 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 						that.environment.define(definition);
 					});
 
+					var build_old = this.environment.definitions[this.environment.build] || null;
+					var build_new = environment.definitions[environment.build]           || null;
+
+					if (build_old === null && build_new !== null) {
+						this.environment.build = environment.build;
+						this.environment.type  = environment.type;
+					}
+
 
 					return true;
 
@@ -1009,16 +1186,6 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 			if (environment !== null) {
 
-				if (this.environment !== null && environment.sandbox === true) {
-
-					Object.values(this.environment.definitions).filter(function(definition) {
-						return definition.id.substr(0, 6) === 'lychee';
-					}).forEach(function(definition) {
-						environment.define(definition);
-					});
-
-				}
-
 				this.environment = environment;
 				this.debug       = this.environment.debug;
 
@@ -1039,7 +1206,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 	};
 
 
-	return Module.extend(lychee, Module);
+	return Object.assign(lychee, Module);
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

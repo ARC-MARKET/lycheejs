@@ -1,8 +1,9 @@
 
 lychee.define('game.entity.Background').includes([
 	'lychee.app.Entity'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Entity  = lychee.import('lychee.app.Entity');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = {
 		states: { 'default': 0 },
@@ -20,7 +21,7 @@ lychee.define('game.entity.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.origin    = { bgx: 0, bgy: 0, fgx: 0, fgy: 0 };
@@ -40,7 +41,7 @@ lychee.define('game.entity.Background').includes([
 		settings.states = _CONFIG.states;
 
 
-		lychee.app.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 		settings = null;
 
@@ -55,7 +56,7 @@ lychee.define('game.entity.Background').includes([
 
 		serialize: function() {
 
-			var data = lychee.app.Entity.prototype.serialize.call(this);
+			var data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'game.entity.Background';
 
 

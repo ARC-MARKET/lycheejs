@@ -1,5 +1,5 @@
 
-# Contribution Guide for lycheeJS
+# Contribution Guide for lychee.js
 
 - [Fork Management](#fork-management)
 
@@ -27,7 +27,7 @@ we can make usage of pull requests on GitHub.
 
 You have to fork the project on GitHub to your own repository.
 This allows you to work on the feature beforehand, even while the
-lycheeJS team is undecided whether or not to merge in your features
+lychee.js team is undecided whether or not to merge in your features
 already.
 
 ![How to create a Fork](./asset/contribution-fork.png)
@@ -38,7 +38,7 @@ already.
 After you have forked the project you can start picking some issues you
 want to help us on.
 
-We use internally our own [GitHub Scrum Board extension](https://github.com/Artificial-Engineering/AE-github),
+We use internally our own [GitHub Scrum Board](https://github.com/Artificial-Engineering/AE-github-scrumboard),
 but that's not required for contributors. This extension just shows you
 a neat Scrum Board with easier-to-use Issue Cards and the typical Scrum
 columns with `backlog` (open and unlabeled), `todo`, `in-progress`,
@@ -47,15 +47,15 @@ columns with `backlog` (open and unlabeled), `todo`, `in-progress`,
 In any case, you can find all open issues in the Issues overview in
 this repository.
 
-![How to find Issues](./asset/contributon-issues.png)
+![How to find Issues](./asset/contribution-issues.png)
 
 
 
 ## Assign an Issue
 
 When you've found something you like to work on, you can assign an issue
-to yourself so that the other lycheeJS team members know what you're
-working on. This helps them to help you, they love to help you :)
+to yourself so that the other lychee.js team members know what you're
+working on. This helps them to help you and they love to help you :)
 
 ![How to assign an Issue](./asset/contribution-assignissue.png)
 
@@ -74,8 +74,9 @@ name for a feature is the name of the equivalent issue title or its title
 shrinked down to the minimum quintessence.
 
 ```bash
-git clone git@github.com:YourName/lycheeJS.git;
-cd lycheeJS;
+git clone git@github.com:YourName/lycheejs.git /opt/lycheejs;
+
+cd /opt/lycheejs;
 git checkout development;
 git checkout -b fancy-feature;
 
@@ -86,7 +87,7 @@ git commit -m "Meaningful description";
 # END of your own work
 
 # After some days of work, make sure you are up-to-date
-git pull https://github.com/Artificial-Engineering/lycheeJS.git development;
+git pull https://github.com/Artificial-Engineering/lycheejs.git development;
 
 # The final push to your github repository before your pull request
 git push origin fancy-feature;
@@ -107,7 +108,7 @@ git-defaulted one.
 ![How to use Triangular git Workflow](./asset/contribution-workflow.png)
 
 ```bash
-git remote add upstream git@github.com:Artificial-Engineering/lycheeJS.git;
+git remote add upstream git@github.com:Artificial-Engineering/lycheejs.git;
 git pull upstream development;
 ```
 
@@ -206,5 +207,7 @@ Need help or just want to think out loud? The are several ways to get in touch w
 We look forward to hearing from you!
 
 * Twitter: https://twitter.com/lycheejs
+* Reddit:  https://reddit.com/r/lycheejs
+* YouTube: https://www.youtube.com/user/lycheejs
 * Email:   robot@artificial.engineering
-* YouTube: https://www.youtube.com/user/lycheeJS
+

@@ -1,67 +1,20 @@
 
-lychee.define('harvester.net.Server').tags({
-	platform: 'node'
-}).requires([
-	'harvester.net.Remote'
+lychee.define('harvester.net.Server').requires([
+	'harvester.net.Remote',
+	'harvester.net.server.File',
+	'harvester.net.server.Redirect'
 ]).includes([
-	'lychee.event.Emitter'
-]).supports(function(lychee, global) {
+	'lychee.net.Server'
+]).exports(function(lychee, global, attachments) {
 
-	if (typeof process !== 'undefined') {
-
-		try {
-
-			require('net');
-
-			return true;
-
-		} catch(e) {
-		}
-
-	}
-
-	return false;
-
-}).exports(function(lychee, harvester, global, attachments) {
-
-	var _net = require('net');
-
-
-
-	/*
-	 * HELPERS
-	 */
-
-	var _generate_error = function(data) {
-
-		var content = 'text/plain';
-		var payload = 'File not found.';
-
-
-		var ext = '';
-		if (data.headers instanceof Object && typeof data.headers.url === 'string') {
-			ext = data.headers.url.split('?')[0].split('.').pop();
-		}
-
-
-		if (ext === 'js') {
-			content = 'application/javascript';
-			payload = '"File not found.";';
-		} else if (ext === 'json') {
-			content = 'application/json';
-			payload = '{ "error": "File not found." }';
-		} else if (ext === 'xml') {
-			content = 'text/xml';
-			payload = '<error>File not found.</error>';
-		}
-
-
-		return {
-			headers: { status: 404, 'Content-Type': content },
-			payload: payload
-		};
-
+	var _CODEC    = {
+		encode: function(data) { return data; },
+		decode: function(data) { return data; }
 	};
+	var _File     = lychee.import('harvester.net.server.File');
+	var _Redirect = lychee.import('harvester.net.server.Redirect');
+	var _Remote   = lychee.import('harvester.net.Remote');
+	var _Server   = lychee.import('lychee.net.Server');
 
 
 
@@ -71,23 +24,63 @@ lychee.define('harvester.net.Server').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({
+			codec:  _CODEC,
+			remote: _Remote,
+			type:   _Server.TYPE.HTTP
+		}, data);
 
 
-		this.host = null;
-		this.port = 8080;
-
-
-		this.__socket = null;
-
-
-		this.setHost(settings.host);
-		this.setPort(settings.port);
-
-
-		lychee.event.Emitter.call(this);
+		_Server.call(this, settings);
 
 		settings = null;
+
+
+
+		/*
+		 * INITIALIZATION
+		 */
+
+		this.bind('connect', function(remote) {
+
+			remote.bind('receive', function(payload, headers) {
+
+				var method = headers['method'];
+				if (method === 'OPTIONS') {
+
+					this.send({}, {
+						'status':                       '200 OK',
+						'access-control-allow-headers': 'Content-Type',
+						'access-control-allow-origin':  'http://localhost',
+						'access-control-allow-methods': 'GET, POST',
+						'access-control-max-age':       '3600'
+					});
+
+				} else {
+
+					var redirect = _Redirect.receive.call({ tunnel: this }, payload, headers);
+					if (redirect === false) {
+
+						var file = _File.receive.call({ tunnel: this }, payload, headers);
+						if (file === false) {
+
+							this.send('File not found.', {
+								'status':       '404 Not Found',
+								'content-type': 'text/plain; charset=utf-8'
+							});
+
+						}
+
+					}
+
+				}
+
+			});
+
+		}, this);
+
+
+		this.connect();
 
 	};
 
@@ -102,160 +95,11 @@ lychee.define('harvester.net.Server').tags({
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			var data = _Server.prototype.serialize.call(this);
 			data['constructor'] = 'harvester.net.Server';
 
 
-			var settings = {};
-			var blob     = (data['blob'] || {});
-
-
-			if (this.host !== null) settings.host = this.host;
-			if (this.port !== 8080) settings.port = this.port;
-
-
-			data['arguments'][0] = settings;
-			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
-
-
 			return data;
-
-		},
-
-
-
-		/*
-		 * CUSTOM API
-		 */
-
-		connect: function() {
-
-			if (this.__socket === null) {
-
-				if (lychee.debug === true) {
-					console.log('harvester.net.Server: Connected to ' + this.host + ':' + this.port);
-				}
-
-
-				var that = this;
-
-
-				this.__socket = new _net.Server();
-
-				this.__socket.on('connection', function(socket) {
-
-					var host = socket.remoteAddress;
-					var port = socket.remotePort;
-
-
-					socket.setTimeout(0);
-
-
-					var remote = new harvester.net.Remote({
-						host: host,
-						port: port
-					});
-
-					remote.bind('connect', function() {
-						that.trigger('connect', [ this ]);
-					}, remote);
-
-					remote.bind('disconnect', function() {
-						that.trigger('disconnect', [ this ]);
-					}, remote);
-
-
-					remote.bind('receive', function(blob) {
-
-						this.trigger('serve', [ blob, function(data) {
-
-							if (data !== null) {
-								remote.send(data);
-							} else {
-								remote.send(_generate_error(blob));
-							}
-
-						}]);
-
-					}, that);
-
-
-					remote.connect(socket);
-					remote.trigger('connect', []);
-
-				});
-
-
-				this.__socket.on('error', function(err) {
-					console.error('harvester.net.Server: Error "' + err + '" on ' + that.host + ':' + that.port);
-				});
-
-				this.__socket.on('close', function() {
-					that.__socket = null;
-				});
-
-				this.__socket.listen(this.port, this.host);
-
-
-				return true;
-
-			}
-
-
-			return false;
-
-		},
-
-		disconnect: function() {
-
-			if (this.__socket !== null) {
-				this.__socket.close();
-			}
-
-
-			return true;
-
-		},
-
-
-
-		/*
-		 * TUNNEL API
-		 */
-
-		setHost: function(host) {
-
-			host = typeof host === 'string' ? host : null;
-
-
-			if (host !== null) {
-
-				this.host = host;
-
-				return true;
-
-			}
-
-
-			return false;
-
-		},
-
-		setPort: function(port) {
-
-			port = typeof port === 'number' ? (port | 0) : null;
-
-
-			if (port !== null) {
-
-				this.port = port;
-
-				return true;
-
-			}
-
-
-			return false;
 
 		}
 

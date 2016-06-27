@@ -116,7 +116,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 				helper.on('exit', function(code) {});
 
-			} catch(e) {
+			} catch(err) {
 
 				helper = null;
 
@@ -137,7 +137,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			label: 'HELPER'
 		}, data);
 

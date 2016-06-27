@@ -4,25 +4,51 @@
 	},
 	"build": {
 		"environments": {
-			"node/main": {
+			"node-sdl/dist": {
 				"build": "fertilizer.Main",
 				"debug": false,
-				"sandbox": false,
 				"packages": [
 					[
 						"fertilizer",
 						"./lychee.pkg"
 					]
 				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node-sdl",
+						"node"
+					]
+				},
+				"variant": "library"
+			},
+			"node/dist": {
+				"build": "fertilizer.Main",
+				"debug": false,
+				"packages": [
+					[
+						"fertilizer",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
 				"tags": {
 					"platform": [
 						"node"
 					]
 				},
-				"variant": "application"
+				"variant": "library"
 			}
 		},
-		"files": {}
+		"files": {
+			"node": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			}
+		}
 	},
 	"source": {
 		"environments": {},
@@ -35,9 +61,6 @@
 				"js"
 			],
 			"data": {
-				"Filesystem": [
-					"js"
-				],
 				"Shell": [
 					"js"
 				]
@@ -45,8 +68,10 @@
 			"template": {
 				"html": {
 					"Application": [
-						"js",
-						"tpl"
+						"config.tpl",
+						"icon.png",
+						"index.tpl",
+						"js"
 					],
 					"Library": [
 						"js",
@@ -78,8 +103,8 @@
 				},
 				"node": {
 					"Application": [
-						"js",
-						"tpl"
+						"index.tpl",
+						"js"
 					],
 					"Library": [
 						"js",

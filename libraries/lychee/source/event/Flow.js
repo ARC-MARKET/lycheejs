@@ -24,9 +24,22 @@ lychee.define('lychee.event.Flow').includes([
 			args[1].push(function(result) {
 
 				if (result === true) {
-					_process_stack.call(that);
+
+					if (that.___timeout === null) {
+
+						that.___timeout = setTimeout(function() {
+
+							that.___timeout = null;
+							_process_stack.call(that);
+
+						}, 0);
+
+					}
+
 				} else {
+
 					that.trigger('error', [ event ]);
+
 				}
 
 			});
@@ -53,8 +66,9 @@ lychee.define('lychee.event.Flow').includes([
 
 	var Class = function() {
 
-		this.___init  = false;
-		this.___stack = [];
+		this.___init    = false;
+		this.___stack   = [];
+		this.___timeout = null;
 
 		lychee.event.Emitter.call(this);
 

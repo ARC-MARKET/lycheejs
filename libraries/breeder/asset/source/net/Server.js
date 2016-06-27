@@ -1,23 +1,26 @@
 
 lychee.define('app.net.Server').requires([
-	'lychee.data.BitON',
 	'app.net.remote.Ping'
 ]).includes([
 	'lychee.net.Server'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _BitON = lychee.data.BitON;
-	var _Ping  = app.net.remote.Ping;
+	var _Ping   = lychee.import('app.net.remote.Ping');
+	var _Server = lychee.import('lychee.net.Server');
 
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
-			codec: _BitON
+		var settings = Object.assign({
 		}, data);
 
 
-		lychee.net.Server.call(this, settings);
+		_Server.call(this, settings);
 
 
 
@@ -55,7 +58,7 @@ lychee.define('app.net.Server').requires([
 
 		serialize: function() {
 
-			var data = lychee.net.Server.prototype.serialize.call(this);
+			var data = _Server.prototype.serialize.call(this);
 			data['constructor'] = 'app.net.Server';
 
 

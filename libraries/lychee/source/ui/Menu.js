@@ -22,7 +22,7 @@ lychee.define('lychee.ui.Menu').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.font    = _FONT;
@@ -161,7 +161,15 @@ lychee.define('lychee.ui.Menu').requires([
 		}, this);
 
 		this.bind('blur', function() {
+
 			this.setState('default');
+
+			var focus = this.__focus;
+			if (focus !== null) {
+				focus.trigger('blur');
+				this.__focus = null;
+			}
+
 		}, this);
 
 		this.bind('reshape', function(orientation, rotation, width, height) {
@@ -201,7 +209,7 @@ lychee.define('lychee.ui.Menu').requires([
 
 					entity = this.__helpers[h];
 					entity.position.x = 0;
-					entity.position.y = y2 - 32 - 32 * h - 16 * h;
+					entity.position.y = y2 - 16 - 32 * hl + 32 * h + 16 * h;
 
 				}
 
@@ -228,9 +236,6 @@ lychee.define('lychee.ui.Menu').requires([
 			}
 
 		}, this);
-
-
-		this.__focus = this.getEntity('@select');
 
 
 		this.setFont(settings.font);
@@ -433,7 +438,7 @@ lychee.define('lychee.ui.Menu').requires([
 						value:  this.helpers[h],
 						position: {
 							x: 0,
-							y: (this.height / 2) - 32 - 32 * h - 16 * h
+							y: (this.height / 2) - 16 - 32 * hl + 32 * h + 16 * h
 						}
 					}));
 

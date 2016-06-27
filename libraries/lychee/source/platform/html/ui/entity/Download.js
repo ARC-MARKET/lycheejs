@@ -88,7 +88,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 			label: 'DOWNLOAD'
 		}, data);
 

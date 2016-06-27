@@ -1,0 +1,276 @@
+<template id="template">
+	<style>
+	:host {
+		display: block;
+		position: static;
+		position: relative;
+		width: 256px;
+		min-width: 256px;
+		max-width: 256px;
+		height: 384px;
+		background: #363f3e;
+	}
+	:host label {
+		display: block;
+		height: 64px;
+		margin: 0px;
+		padding: 0px 0px 0px 16px;
+		background: #2f3736;
+		font-family: 'museo-sans-300';
+		font-size: 24px;
+		line-height: 64px;
+		vertical-align: middle;
+	}
+	:host label b {
+		display: inline;
+		margin: 0px 16px 0px 0px;
+	}
+
+	::content > div,
+	::content > img,
+	::content > p {
+		display: block;
+		margin: 16px;
+		padding: 0px;
+	}
+
+	::content > img {
+		display: block;
+		width: 128px;
+		height: 128px;
+		margin: 16px auto;
+		border: 0px none;
+		outline: none;
+		background-image: url('/projects/boilerplate/icon.png');
+		background-color: #2f3736;
+	}
+	::content > p {
+		margin: 16px;
+		text-align: justify;
+	}
+	::content > button {
+		display: block;
+		position: absolute;
+		top: auto;
+		right: auto;
+		bottom: 16px;
+		left: auto;
+		width: 96px;
+		height: 32px;
+		color: #ffffff;
+		background: #545454;
+		font-family: 'museo-sans-300';
+		font-size: 16px;
+		appearance: none;
+		border: 0px none;
+		outline: none;
+		overflow: hidden;
+		text-overflow: hidden;
+		cursor: pointer;
+	}
+	::content button:nth-of-type(1) {
+		right: 16px;
+	}
+	::content button:nth-of-type(2) {
+		left: 16px;
+	}
+	::content button.hidden {
+		display: none;
+	}
+	::content button {
+		background: #545454;
+		transition: all 300ms ease-out;
+	}
+	::content button:active {
+		background: #32afe5;
+		transition: all 0ms;
+	}
+	</style>
+
+	<label><b>1</b><span>PROJECT</span></label>
+	<content>
+		<img src="/projects/boilerplate/icon.png">
+		<p></p>
+		<button title="Open in Browser">Browse</button>
+		<button title="Open in Terminal" class="hidden">Start</button>
+	</content>
+</template>
+
+<script>
+(function(globaldoc, importdoc) {
+
+	/*
+	 * HELPERS
+	 */
+
+	var _on_command = function(command) {
+
+		var element = this.querySelector('button:nth-of-type(2)');
+		if (element !== null) {
+
+			if (command === '') {
+				element.className = 'hidden';
+			} else {
+				element.className = '';
+			}
+
+		}
+
+	};
+
+	var _on_identifier = function(identifier) {
+
+		var element = this.querySelector('img');
+		if (element !== null) {
+
+			if (identifier === '') {
+				identifier = '/projects/boilerplate';
+			}
+
+			element.src = identifier + '/icon.png';
+
+		}
+
+	};
+
+	var _on_label = function(label) {
+
+		var element = this.querySelector('label span');
+		if (element !== null) {
+			element.innerHTML = label;
+		}
+
+	};
+
+	var _on_order = function(order) {
+
+		var element = this.querySelector('label b');
+		if (element !== null) {
+			element.innerHTML = order;
+		}
+
+	};
+
+
+
+	/*
+	 * DOM SHIT
+	 */
+
+	var element = fyto.define('fyto.ui.element.Project', importdoc.querySelector('#template'));
+	if (element !== null) {
+
+		element._init = function() {
+
+			var command    = this.getAttribute('command');
+			var identifier = this.getAttribute('identifier');
+			var label      = this.getAttribute('label');
+			var order      = this.getAttribute('order');
+
+			var descriptions = [].slice.call(this.querySelectorAll('p'));
+			if (descriptions.length === 2) {
+
+				var code1 = (descriptions[0].innerHTML || '').trim();
+				var code2 = (descriptions[1].innerHTML || '').trim();
+
+				if (code2 !== '') {
+
+					if (code2 !== code1) {
+
+						descriptions[0].innerHTML = code2;
+						descriptions[1].parentNode.removeChild(descriptions[1]);
+
+					} else if (code2 === code1) {
+
+						descriptions[1].parentNode.removeChild(descriptions[1]);
+
+					}
+
+				}
+
+			}
+
+
+			if (command !== null) {
+				_on_command.call(this, command);
+			}
+
+
+			if (identifier !== null) {
+				_on_identifier.call(this, identifier);
+			}
+
+
+			if (label === null) {
+				this.setAttribute('label', 'CONTENT');
+			} else {
+				_on_label.call(this, label);
+			}
+
+
+			if (order === null) {
+				this.setAttribute('order', '1');
+			} else {
+				_on_order.call(this, order);
+			}
+
+
+			var browse = this.querySelector('button:nth-of-type(1)');
+			if (browse !== null) {
+
+				browse.onclick = function() {
+
+					var url = this.getAttribute('identifier');
+					if (url !== null) {
+						window.open(url + '/index.html');
+					}
+
+				}.bind(this);
+
+			}
+
+			var start = this.querySelector('button:nth-of-type(2)');
+			if (start !== null) {
+
+				start.onclick = function() {
+
+					var cmd = this.getAttribute('command');
+					if (cmd !== null) {
+						window.location.href = 'lycheejs://cmd=' + cmd;
+					}
+
+				}.bind(this);
+
+			}
+
+		};
+
+		element._change = function(name, oldvalue, newvalue) {
+
+			if (oldvalue !== newvalue) {
+
+				switch (name) {
+
+					case 'command':    _on_command.call(this, newvalue);    break;
+					case 'identifier': _on_identifier.call(this, newvalue); break;
+					case 'label':      _on_label.call(this, newvalue);      break;
+					case 'order':      _on_order.call(this, newvalue);      break;
+
+				}
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		};
+
+	}
+
+
+})(document, document.currentScript.ownerDocument);
+</script>
+

@@ -1,8 +1,8 @@
 
 lychee.define('harvester.mod.Server').requires([
-	'harvester.data.Filesystem',
+	'harvester.data.Project',
 	'harvester.data.Server'
-]).exports(function(lychee, harvester, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	var _MIN_PORT      = 49152;
 	var _MAX_PORT      = 65534;
@@ -12,6 +12,7 @@ lychee.define('harvester.mod.Server').requires([
 	var _child_process = require('child_process');
 	var _net           = require('net');
 	var _port          = _MIN_PORT;
+	var _Server        = lychee.import('harvester.data.Server');
 
 
 
@@ -19,7 +20,7 @@ lychee.define('harvester.mod.Server').requires([
 	 * HELPERS
 	 */
 
-	var _report = function(text) {
+	var _report_error = function(text) {
 
 		var lines   = text.split('\n');
 		var line    = null;
@@ -121,7 +122,9 @@ lychee.define('harvester.mod.Server').requires([
 
 		try {
 
-			server = _child_process.execFile(_ROOT + project + '/harvester.js', [
+			server = _child_process.execFile(_ROOT + '/bin/helper.sh', [
+				'env:node',
+				_ROOT + project + '/harvester.js',
 				_ROOT,
 				port,
 				host
@@ -142,7 +145,7 @@ lychee.define('harvester.mod.Server').requires([
 
 					_LOG_PROJECT = project;
 					console.error('harvester.mod.Server: FAILURE ("' + project + ' | ' + host + ':' + port + '")');
-					_report(stderr);
+					_report_error(stderr);
 
 				}
 
@@ -235,7 +238,7 @@ lychee.define('harvester.mod.Server').requires([
 
 			};
 
-		} catch(e) {
+		} catch(err) {
 
 			server = null;
 
@@ -304,7 +307,7 @@ lychee.define('harvester.mod.Server').requires([
 							var server = _serve(project.identifier, null, port);
 							if (server !== null) {
 
-								project.setServer(new harvester.data.Server({
+								project.setServer(new _Server({
 									process: server,
 									host:    null,
 									port:    port

@@ -1,37 +1,37 @@
 
-# Release Guide for lycheeJS
+# Release Guide for lychee.js
 
-1. [Update Runtimes](#update-runtimes)
-  - [Fix Info.plist files](#fix-infoplist-files)
-2. [Release Runtimes](#release-runtimes)
-3. [Release lycheeJS](#release-lycheejs)
-4. [Release lycheeJS Bundles](#release-lycheejs-bundles)
+1. [Update lychee.js](#update-lycheejs)
+  - [Fix Info.plist files](#todo-for-automation-fix-infoplist-files)
+3. [Release lychee.js](#release-lycheejs)
 
 
-## Update Runtimes
+## Update lychee.js
 
-All runtimes have to be updated. The `update.sh` inside
-the `./bin/runtime` folder updates all runtimes and
-downloads their latest stable releases.
+First, the `development` branch is the branch that is
+the newest HEAD and gets merged back to `master` with
+a single squashed release commit.
 
-The update process itself takes around 20min+, depending
-on your bandwidth. The reason for that time span is mostly
-bandwidth limitations of the runtime's download servers.
+To make sure everything is up-to-date, execute the update tool:
 
 ```bash
-cd /opt/lycheejs-edge/bin/runtime;
-./update.sh;
+cd /opt/lycheejs;
+
+# You should have been on development already
+git checkout development;
+
+./bin/maintenance/do-update.sh;
 ```
 
 
-### Fix Info.plist files
+### (TODO for automation) Fix Info.plist files
 
 All OSX Info.plist files contain a `<string>...</string>` tag.
 This tag currently is not fixed by the `update.sh` script,
 so you have to make sure that every occurance of the name value
 is replaced with `__NAME__`.
 
-The two different occurances in the `html-nwjs/osx/x86_64/nwjs.app/Contents/Info.plist`
+The two different occurances in the `./bin/runtime/html-nwjs/osx/x86_64/nwjs.app/Contents/Info.plist`
 are listed below:
 
 ```html
@@ -43,80 +43,19 @@ are listed below:
 ```
 
 
-## Release Runtimes
+## Release lychee.js
 
-The runtimes are hosted at github, so that a `Contributor Installation`
-can still use only github for installing lycheeJS.
+The lychee.js Release Tool is a wizard that automatically updates
+and creates the quaterly releases for everything including:
 
-```bash
-cd /opt/lycheejs-edge/bin/runtime;
-rm -rf .git/;
-git init;
-git remote add origin git@github.com:Artificial-Engineering/lycheeJS-runtime.git;
-git add ./;
-git commit -m ":sparkles: :boom: :sparkles:";
-git push origin master -f;
-```
-
-
-## Release lycheeJS
-
-The lycheeJS version flags are used among all bundle-generation algorithms.
-That means we have to fix both the `README.md` and the `lychee.js` file
-in `/libraries/lychee/source/core`.
+- lycheejs (Engine repository)
+- lycheejs-runtime (update and publish on github)
+- lycheejs-library (publish on NPM and Bower)
+- lycheejs-website (rebuild with new lycheejs library)
 
 ```bash
-VERSION="2016-Q1";
+cd /opt/lycheejs;
 
-
-sudo mkdir -m 0777 /opt/lycheejs-release;
-cd /opt/lycheejs-release;
-git clone git@github.com:Artificial-Engineering/lycheeJS.git ./;
-git checkout master;
-
-OLD_HEAD=`git rev-parse HEAD`;
-git pull origin development;
-
-
-# Now merge everything properly into master
-# I have no clue how to do this automagically :-/
-
-
-sed -i 's|2[0-9][0-9][0-9]-Q[1-4]|'$VERSION'|g' ./README.md;
-sed -i 's|2[0-9][0-9][0-9]-Q[1-4]|'$VERSION'|g' ./libraries/lychee/source/core/lychee.js;
-
-git add ./;
-git commit -m "lycheeJS $VERSION release";
-git rebase -i $OLD_HEAD;
-
-
-# Now squash everything into this release and remove the commit messages
-# I have no clue how to do this automagically :-/
-
-
-git push origin master;
+./bin/maintenance/do-release.sh;
 ```
 
-
-## Release lycheeJS bundles
-
-The bundles have to be created on an up-to-date Ubuntu machine.
-The `package.sh` inside the root folder creates all bundles. In between
-different bundle iterations, the `clean.sh` script has to be executed.
-
-```bash
-sudo apt-get install curl git hfsprogs advancecomp mktorrent;
-
-cd /opt/lycheejs-bundle;
-
-sudo ./clean.sh;
-sudo ./package.sh --release "2016-Q1";
-sudo ./package.sh --preview "2016-Q2";
-```
-
-Now everything needs to be uploaded to the [lycheeJS-website](https://github.com/Artificial-Engineering/lycheeJS-website)'s
-`/download/bundle` folder, including the `release.json` and the optional
-`preview.json`. After that everything is integrated with the website.
-
-Note that the files are too large to be hosted on github, that's why the
-server for the `lycheeJS-website` still exists and is served via `nginx`.

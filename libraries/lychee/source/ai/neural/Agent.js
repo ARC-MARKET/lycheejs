@@ -93,7 +93,7 @@ lychee.define('lychee.ai.neural.Agent').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id = 'lychee-ai-neural-Agent-' + _id++;

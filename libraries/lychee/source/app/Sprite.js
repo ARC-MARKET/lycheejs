@@ -9,7 +9,7 @@ lychee.define('lychee.app.Sprite').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.frame   = 0;

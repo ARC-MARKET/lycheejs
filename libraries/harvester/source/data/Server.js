@@ -1,5 +1,5 @@
 
-lychee.define('harvester.data.Server').exports(function(lychee, harvester, global, attachments) {
+lychee.define('harvester.data.Server').exports(function(lychee, global, attachments) {
 
 	/*
 	 * IMPLEMENTATION
@@ -7,7 +7,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, harvester, globa
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.host = settings.host || null;

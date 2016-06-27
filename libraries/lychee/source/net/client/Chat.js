@@ -8,7 +8,7 @@ lychee.define('lychee.net.client.Chat').includes([
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.room = null;

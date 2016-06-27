@@ -13,7 +13,7 @@ lychee.define('lychee.ui.entity.Label').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -110,13 +110,33 @@ lychee.define('lychee.ui.entity.Label').includes([
 
 			if (font !== null) {
 
-				renderer.drawText(
-					x,
-					y,
-					value,
-					font,
-					true
-				);
+				var cur = font.measure(value);
+				var max = this.width;
+
+				if (cur.realwidth <= max) {
+
+					renderer.drawText(
+						x,
+						y,
+						value,
+						font,
+						true
+					);
+
+				} else {
+
+					var len = (max / cur.realwidth * value.length) | 0;
+					var str = value.substr(0, len);
+
+					renderer.drawText(
+						x,
+						y,
+						str,
+						font,
+						true
+					);
+
+				}
 
 			}
 

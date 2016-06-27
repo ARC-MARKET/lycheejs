@@ -1,0 +1,118 @@
+<template id="template">
+	<style>
+	:host {
+		display: block;
+		position: static;
+		width: 256px;
+		min-width: 256px;
+		max-width: 256px;
+		height: 384px;
+		background: #363f3e;
+	}
+	:host label {
+		display: block;
+		height: 64px;
+		margin: 0px;
+		padding: 0px 0px 0px 16px;
+		background: #2f3736;
+		font-family: 'museo-sans-300';
+		font-size: 24px;
+		line-height: 64px;
+		vertical-align: middle;
+	}
+	:host label b {
+		display: inline;
+		margin: 0px 16px 0px 0px;
+	}
+	::content div {
+		display: block;
+		margin: 16px;
+		padding: 0px;
+	}
+	</style>
+
+	<label><b>1</b><span>CONTENT</span></label>
+	<content></content>
+</template>
+
+<script>
+(function(globaldoc, importdoc) {
+
+	/*
+	 * HELPERS
+	 */
+
+	var _on_label = function(label) {
+
+		var element = this.querySelector('label span');
+		if (element !== null) {
+			element.innerHTML = label;
+		}
+
+	};
+
+	var _on_order = function(order) {
+
+		var element = this.querySelector('label b');
+		if (element !== null) {
+			element.innerHTML = order;
+		}
+
+	};
+
+
+
+	/*
+	 * DOM SHIT
+	 */
+
+	var element = fyto.define('fyto.ui.Element', importdoc.querySelector('#template'));
+	if (element !== null) {
+
+		element._init = function() {
+
+			var label = this.getAttribute('label');
+			var order = this.getAttribute('order');
+
+
+			if (label === null) {
+				this.setAttribute('label', 'CONTENT');
+			} else {
+				_on_label.call(this, label);
+			}
+
+			if (order === null) {
+				this.setAttribute('order', '1');
+			} else {
+				_on_order.call(this, order);
+			}
+
+		};
+
+		element._change = function(name, oldvalue, newvalue) {
+
+			if (oldvalue !== newvalue) {
+
+				switch (name) {
+
+					case 'label': _on_label.call(this, newvalue); break;
+					case 'order': _on_order.call(this, newvalue); break;
+
+				}
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		};
+
+	}
+
+
+})(document, document.currentScript.ownerDocument);
+</script>
+

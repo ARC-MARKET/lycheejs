@@ -1,12 +1,15 @@
 
 lychee.define('game.net.remote.Control').includes([
 	'lychee.net.remote.Session'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Session = lychee.import('lychee.net.remote.Session');
+
+
 
 	/*
 	 * HELPERS
 	 */
-
 
 	var _id       = 0;
 	var _sessions = {};
@@ -214,7 +217,7 @@ lychee.define('game.net.remote.Control').includes([
 		var settings = {};
 
 
-		lychee.net.remote.Session.call(this, 'control', remote, settings);
+		_Session.call(this, 'control', remote, settings);
 
 
 		this.bind('plug',    _on_plug,    this);
@@ -232,8 +235,8 @@ lychee.define('game.net.remote.Control').includes([
 
 		serialize: function() {
 
-			var data = lychee.net.remote.Session.prototype.serialize.call(this);
-			data['constructor'] = 'app.net.remote.Control';
+			var data = _Session.prototype.serialize.call(this);
+			data['constructor'] = 'game.net.remote.Control';
 
 
 			return data;

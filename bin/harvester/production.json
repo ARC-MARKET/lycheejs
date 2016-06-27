@@ -1,10 +1,6 @@
 {
-
-	"port":  80,
-
-	"hosts": {
-		"boilerplate.org": "/projects/boilerplate",
-		"localhost": null
-	}
-
+	"host": "yourwebsite.tld",
+	"port": 80,
+	"debug": false,
+	"sandbox": false
 }

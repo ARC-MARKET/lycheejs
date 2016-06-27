@@ -1,8 +1,9 @@
 
 lychee.define('app.ui.sprite.Avatar').includes([
 	'lychee.ui.Sprite'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Sprite  = lychee.import('lychee.ui.Sprite');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = {
 		width:  128,
@@ -52,7 +53,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.value = _random_color();
@@ -68,7 +69,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 		settings.height  = _CONFIG.height;
 
 
-		lychee.ui.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 
 
@@ -99,7 +100,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.sprite.Avatar';
 
 			var settings = data['arguments'][0] || {};
@@ -138,7 +139,7 @@ lychee.define('app.ui.sprite.Avatar').includes([
 			var y1 = y - this.height / 2;
 
 
-			renderer.drawSprite(x1, y1, _texture);
+			renderer.drawSprite(x1, y1, _TEXTURE);
 
 			renderer.drawBox(x - 13, y - 13, x + 13, y - 2, value, true);
 			renderer.drawBox(x - 10, y - 12, x + 10, y - 1, value, true);

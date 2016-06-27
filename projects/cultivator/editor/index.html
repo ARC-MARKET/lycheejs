@@ -1,297 +1,44 @@
 <!doctype html>
 <html>
 <head>
-	<title>lycheeJS Editor</title>
+	<title>lychee.js Editor</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="robots" content="noindex">
-
-	<!-- DESIGN -->
-	<link rel="stylesheet" href="/projects/cultivator/design/index.css">
-	<script src="/projects/cultivator/design/index.js"></script>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	<!-- BOOTSTRAP -->
 	<script src="/libraries/lychee/build/html/core.js"></script>
 
 	<style>
-	.ico-add:before     { content: "\e095"; }
-	.ico-open:before    { content: "\e00c"; }
-	.ico-refresh:before { content: "\e098"; }
-	.ico-remove:before  { content: "\e07c"; }
-	.ico-upload:before  { content: "\e084"; }
-	.ico-quit:before    { content: "\e07a"; }
-
-	.ico-create-entity:before { content: "\e095"; }
-	.ico-modify-entity:before { content: "\e052"; }
-	.ico-aligns-entity:before { content: "\e09e"; }
-	.ico-remove-entity:before { content: "\e054"; }
-	.ico-double-entity:before { content: "\e05a"; }
-
-	#project > article:nth-of-type(1) {
-		min-width: 384px;
-		max-width: 384px;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		overflow: hidden;
-	}
-	#project > article:nth-of-type(2) table.vertical {
-		float: left;
-		width: auto;
-		height: 128px;
-		margin: 18px 0px 16px 0px;
-		border: 0 none;
-	}
-	#project > article:nth-of-type(2) table.vertical tr:last-child th,
-	#project > article:nth-of-type(2) table.vertical tr:last-child td {
-		border: 0 none;
-	}
-	#project > article:nth-of-type(2) img {
-		display: inline-block;
-		float: left;
-		width: 128px;
-		height: 128px;
-		margin: 18px 16px 16px 18px;
-	}
-	#project > article:nth-of-type(2) table:nth-of-type(2) th,
-	#project > article:nth-of-type(2) table:nth-of-type(2) td {
-		width: 96px;
-		text-align: center;
-	}
-	#project > article:nth-of-type(2) table:nth-of-type(1) th,
-	#project > article:nth-of-type(2) table:nth-of-type(2) th:nth-child(1),
-	#project > article:nth-of-type(2) table:nth-of-type(2) td:nth-child(1),
-	#project > article:nth-of-type(2) table:nth-of-type(2) th:nth-child(2),
-	#project > article:nth-of-type(2) table:nth-of-type(2) td:nth-child(2) {
-		width: 128px;
-	}
-	#project > article:nth-of-type(2) table:nth-of-type(2) th:last-child,
-	#project > article:nth-of-type(2) table:nth-of-type(2) td:last-child {
-		width: auto;
-		text-align: left;
-	}
-
-	#project > article:nth-of-type(2) table {
-		overflow: auto;
-	}
-
-	#scene > article:nth-child(2) {
-		margin: 0px 0px 0px 8px;
-		display: block;
-		min-height: 512px;
-		overflow: auto;
-		-moz-box-flex: 3;
-		-webkit-box-flex: 3;
-		-ms-flex: 3;
-		-webkit-flex: 3;
-		flex: 3;
-		max-width: initial;
-		min-width: initial;
-	}
-
-	#scene > article:nth-child(2) > div {
-		margin: 0px;
-		overflow: scroll;
-	}
-	
-	#scene > article:nth-child(3) {
-		position: fixed;
-		top: 0px;
-		right: 0px;
-		bottom: 48px;
-		left: auto;
-		margin: 0px 0px 0px 16px;
-		min-width: initial;
-		max-width: initial;
-		background: #363f3e;
-		transform: translate(100%, 0%);
-		transition: all 300ms ease-out;
-	}
-
-	#scene > article:nth-child(3).active {
-		transform: translate(0%, 0%);
-	}
+		body {
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		
+		.lychee-Renderer {
+			display: block;
+			margin: 0 auto;
+			user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-webkit-user-select: none;
+		} 
 	</style>
+
 </head>
 <body>
-<menu class="active">
-	<b id="menu-toggle"><span></span></b>
-	<li class="active" onclick="ui.changeState('project');">Project</li>
-	<li onclick="ui.changeState('scene');">Scene</li>
-	<li onclick="ui.changeState('flow');">Flow</li>
-	<li onclick="ui.changeState('debugger');">Debugger</li>
-	<li onclick="ui.changeState('help');">Help</li>
-	<aside>
-		<button class="ico-refresh ico-only" title="Refresh" onclick="location.href='./index.html';"></button>
-		<button class="ico-quit ico-only" title="Quit" onclick="location.href='../../index.html';"></button>
-	</aside>
-</menu>
+	<script>
+	(function(lychee, global) {
 
-<main>
+		lychee.pkginit('html/main', {
+			debug:   true,
+			sandbox: false
+		}, {
+		});
 
-	<section id="project" class="active">
-
-		<article id="project-selection">
-			<h3><b>1</b>Select</h3>
-			<form id="selection" enctype="application/json" action="MAIN.state" method="javascript">
-				<table class="vertical">
-					<tr>
-						<th>Project</th>
-						<td>
-							<ul class="select">
-								<li><input type="radio" name="project" value="boilerplate"><span>boilerplate</span></li>
-							</ul>
-						</td>
-				</table>
-			</form>
-			<p class="center">
-				<button class="ico-open">Open Project</button>
-				<br>
-				<small>(This might take a bit)</small>
-			</p>
-		</article>
-
-		<article id="project-settings">
-			<h3><b>2</b>Modify</h3>
-			<form id="settings" enctype="application/json" action="MAIN.state" method="javascript">
-				<img id="project-settings-preview" src="/projects/boilerplate/icon.png" onerror="this.src='/projects/cultivator/design/icon.png';">
-				<table class="vertical">
-					<tr>
-						<th>Identifier</th>
-						<td><input type="text" name="identifier" value="boilerplate" disabled></td>
-					</tr>
-					<tr>
-						<th>Icon (128x128)</th>
-						<td><label class="file ico-upload"><input type="file" name="file" accept=".png">Select</label></td>
-					</tr>
-				</table>
-				<br>
-				<br>
-				<table>
-					<thead>
-						<tr>
-							<th>Identifier</th>
-							<th>Definition</th>
-							<th>html</th>
-							<th>html-nwjs</th>
-							<th>html-webview</th>
-							<th>node</th>
-							<th>node-sdl</th>
-							<th>Actions</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td><input type="text" name="identifier-0" value="main"></td>
-							<td><input type="text" name="definition-0" value="game.Main"></td>
-							<td><input type="checkbox" name="html-0" checked></td>
-							<td><input type="checkbox" name="html-nwjs-0" checked></td>
-							<td><input type="checkbox" name="html-webview-0" checked></td>
-							<td><input type="checkbox" name="node-0" checked></td>
-							<td><input type="checkbox" name="node-sdl-0" checked></td>
-							<td><button class="ico-remove ico-only" onclick="MAIN.state.trigger('remove-build', [ 'main' ]);return false;"></button></td>
-						</tr>
-					</tbody>
-					<tfoot>
-						<tr class="div">
-							<td colspan="8"></td>
-						</tr>
-						<tr class="div">
-							<th colspan="8">Add new Build</th>
-						</tr>
-						<tr>
-							<td><input type="text" id="project-settings-build" placeholder="main"></td>
-							<td><input type="text" id="project-settings-definition" placeholder="app.Main"></td>
-							<td><input type="checkbox" id="project-settings-html"></td>
-							<td><input type="checkbox" id="project-settings-html-nwjs"></td>
-							<td><input type="checkbox" id="project-settings-html-webview"></td>
-							<td><input type="checkbox" id="project-settings-node"></td>
-							<td><input type="checkbox" id="project-settings-node-sdl"></td>
-							<td><button class="ico-add ico-only" onclick="MAIN.state.trigger('add-build', [ ui.value('#project-settings-build'), ui.value('#project-settings-definition'), ui.value('#project-settings-html'), ui.value('#project-settings-html-nwjs'), ui.value('#project-settings-html-webview'), ui.value('#project-settings-node'), ui.value('#project-settings-node-sdl') ]);return false;"></button></td>
-						</tr>
-					</tfoot>
-				</table>
-			</form>
-		</article>
-
-	</section>
-
-	<section id="scene">
-
-		<article id="scene-selection">
-			<h3><b>1</b>Select</h3>
-			<form id="selection" enctype="application/json" action="MAIN.state" method="javascript">
-				<table class="vertical">
-					<tr>
-						<th>Tool</th>
-						<td>
-							<button class="ico-only ico-create-entity" onclick="MAIN.state.trigger('changetool', [ 'create' ])"></button><br>
-							<button class="ico-only ico-modify-entity" onclick="MAIN.state.trigger('changetool', [ 'modify' ])"></button><br>
-							<button class="ico-only ico-aligns-entity" onclick="MAIN.state.trigger('changetool', [ 'aligns' ])"></button><br>
-							<button class="ico-only ico-remove-entity" onclick="MAIN.state.trigger('changetool', [ 'remove' ])"></button><br>
-							<button class="ico-only ico-double-entity" onclick="MAIN.state.trigger('changetool', [ 'double' ])"></button><br>
-							<br><br>
-							<button class="ico-only ico-double-entity" onclick="ui.toggle('#scene-settings')"></button><br>
-						</td>
-				</table>
-			</form>
-		</article>
-
-		<article id="scene-preview">
-			<h3><b>2</b>Modify</h3>
-			<div id="scene-preview-wrapper"></div>
-		</article>
-
-		<article id="scene-settings">
-			<h3>No Entity selected</h3>
-
-			<form id="settings" enctype="application/json" action="MAIN.state" method="javascript">
-			<div class="collapse-content" id="scene-settings-wrapper">
-				<div>
-					<div class="row">
-						<span>Position</span>
-					</div>
-					<div class="row">
-						<label>x</label>
-						<input type="number" name="entity-position-x" min="-2048" max="2048" value="" placeholder="0">
-						<label>y</label>
-						<input type="number" name="entity-position-y" min="-2048" max="2048" value="" placeholder="0">
-					</div>
-					<div class="row">
-						<span>Size</span>
-					</div>
-					<div class="row">
-						<label>W</label>
-						<input type="number" name="entity-width" min="0" max="2048" value="" placeholder="0">
-						<label>H</label>
-						<input type="number" name="entity-height" min="0" max="2048" value="" placeholder="0">
-					</div>
-				</div>
-			</div>
-			</form>
-
-			<h3>Layers</h3>
-			<div class="collapse-content active no-padding" id="scene-layers-wrapper"></div>
-		</article>
-
-	</section>
-
-</main>
-
-<footer>
-	lycheeJS is (c) 2012-2016 by Artificial-Engineering and released under MIT license.
-</footer>
-<script>
-(function(lychee, global) {
-
-	lychee.pkginit('html/main', {
-		debug:   false,
-		sandbox: false
-	}, {
-	});
-
-})(lychee, typeof global !== 'undefined' ? global : this);
-</script>
+	})(lychee, typeof global !== 'undefined' ? global : this);
+	</script>
 </body>
-</html>
+</html>    

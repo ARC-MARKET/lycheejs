@@ -52,7 +52,7 @@ lychee.define('lychee.ai.neural.Network').exports(function(lychee, global, attac
 
 	var Class = function(data) {
 
-		var settings = lychee.extendsafe({
+		var settings = lychee.assignsafe({
 			inputs:  2,
 			outputs: 2,
 			layers:  1,

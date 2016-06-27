@@ -1,5 +1,5 @@
 
-lychee.define('game.entity.Track').exports(function(lychee, game, global, attachments) {
+lychee.define('game.entity.Track').exports(function(lychee, global, attachments) {
 
 	var _TRACKS = {};
 

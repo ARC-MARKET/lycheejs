@@ -1,14 +1,13 @@
 
-lychee.define('fertilizer.template.node.Application').requires([
-	'lychee.data.JSON',
-	'fertilizer.data.Filesystem',
-	'fertilizer.data.Shell'
-]).includes([
+lychee.define('fertilizer.template.node.Application').includes([
 	'fertilizer.Template'
-]).exports(function(lychee, fertilizer, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _JSON     = lychee.data.JSON;
-	var _template = attachments["tpl"].buffer;
+	var _Template  = lychee.import('fertilizer.Template');
+	var _TEMPLATES = {
+		core:  null,
+		index: attachments["index.tpl"]
+	};
 
 
 
@@ -18,7 +17,11 @@ lychee.define('fertilizer.template.node.Application').requires([
 
 	var Class = function(data) {
 
-		fertilizer.Template.call(this, data);
+		_Template.call(this, data);
+
+
+		this.__core  = lychee.deserialize(lychee.serialize(_TEMPLATES.core));
+		this.__index = lychee.deserialize(lychee.serialize(_TEMPLATES.index));
 
 
 
@@ -27,40 +30,64 @@ lychee.define('fertilizer.template.node.Application').requires([
 		 */
 
 		this.bind('configure', function(oncomplete) {
-			oncomplete(true);
+
+			console.log('fertilizer: CONFIGURE');
+
+
+			var that = this;
+			var load = 1;
+			var core = this.stash.read('/libraries/lychee/build/node/core.js');
+
+			if (core !== null) {
+
+				core.onload = function(result) {
+
+					if (result === true) {
+						that.__core = this;
+					}
+
+					if ((--load) === 0) {
+						oncomplete(true);
+					}
+
+				};
+
+				core.load();
+
+			}
+
+
+			if (core === null) {
+				oncomplete(false);
+			}
+
 		}, this);
 
 		this.bind('build', function(oncomplete) {
 
-			var env = this.environment;
-			var fs  = this.filesystem;
+			var env   = this.environment;
+			var stash = this.stash;
 
-			if (env !== null && fs !== null) {
+			if (env !== null && stash !== null) {
 
 				console.log('fertilizer: BUILD ' + env.id);
 
-				var id      = env.id;
-				var version = ('' + lychee.VERSION);
 
-				var profile = this.profile;
-				var blob  = _JSON.encode(env.serialize());
-				var core  = this.getCore('node');
-				var info  = this.getInfo(true);
-
-				var index = _template.toString();
+				var sandbox = this.sandbox;
+				var core    = this.__core;
+				var index   = this.__index;
 
 
-				core  = this.getInfo(false) + '\n\n' + core;
-				index = this.replace(index, {
-					blob:    blob,
-					core:    core,
-					id:      id,
-					init:    init,
-					profile: profile
+				index.buffer = index.buffer.replaceObject({
+					blob:    env.serialize(),
+					id:      env.id,
+					profile: this.profile
 				});
 
 
-				fs.write('/index.js', index);
+				stash.write(sandbox + '/core.js',  core);
+				stash.write(sandbox + '/index.js', index);
+
 
 				oncomplete(true);
 
@@ -74,34 +101,34 @@ lychee.define('fertilizer.template.node.Application').requires([
 
 		this.bind('package', function(oncomplete) {
 
-			var runtime_fs = new fertilizer.data.Filesystem('/bin/runtime/node');
-			var runtime_sh = new fertilizer.data.Shell('/bin/runtime/node');
-			var project_fs = this.filesystem;
-			var project_id = this.environment.id.split('/').pop();
+			var name    = this.environment.id.split('/')[2];
+			var sandbox = this.sandbox;
+			var shell   = this.shell;
 
-			if (project_fs !== null) {
+			if (name === 'cultivator') {
+				name = this.environment.id.split('/')[3];
+			}
 
-				console.log('fertilizer: PACKAGE ' + project_fs.root + ' ' + project_id);
 
-				if (runtime_fs.info('/package.sh') !== null) {
+			if (sandbox !== '') {
 
-					var result = runtime_sh.exec('/package.sh ' + project_fs.root + ' ' + project_id);
+				console.log('fertilizer: PACKAGE ' + sandbox + ' ' + name);
+
+
+				shell.exec('/bin/runtime/node/package.sh ' + sandbox + ' ' + name, function(result) {
+
 					if (result === true) {
 
 						oncomplete(true);
 
 					} else {
 
-						runtime_sh.trace();
+						shell.trace();
 						oncomplete(false);
 
 					}
 
-				} else {
-
-					oncomplete(false);
-
-				}
+				});
 
 			} else {
 
@@ -122,7 +149,7 @@ lychee.define('fertilizer.template.node.Application').requires([
 
 		serialize: function() {
 
-			var data = fertilizer.Template.prototype.serialize.call(this);
+			var data = _Template.prototype.serialize.call(this);
 			data['constructor'] = 'fertilizer.template.node.Application';
 
 

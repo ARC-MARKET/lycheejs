@@ -3,7 +3,10 @@ lychee.define('app.ui.layer.Web').includes([
 	'lychee.ui.Layer'
 ]).requires([
 	'lychee.ui.entity.Helper'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Helper = lychee.import('lychee.ui.entity.Helper');
+	var _Layer  = lychee.import('lychee.ui.Layer');
 
 
 
@@ -23,7 +26,7 @@ lychee.define('app.ui.layer.Web').includes([
 				this.entities = [];
 
 				for (var l = 0, ll = label.length; l < ll; l++) {
-					this.entities.push(new lychee.ui.entity.Helper());
+					this.entities.push(new _Helper());
 				}
 
 			}
@@ -73,7 +76,7 @@ lychee.define('app.ui.layer.Web').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.label = [];
@@ -83,7 +86,7 @@ lychee.define('app.ui.layer.Web').includes([
 		settings.relayout = false;
 
 
-		lychee.ui.Layer.call(this, settings);
+		_Layer.call(this, settings);
 
 		settings = null;
 
@@ -107,7 +110,7 @@ lychee.define('app.ui.layer.Web').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Layer.prototype.serialize.call(this);
+			var data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.layer.Web';
 
 

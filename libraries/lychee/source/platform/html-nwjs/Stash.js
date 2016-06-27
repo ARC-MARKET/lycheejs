@@ -93,7 +93,7 @@ lychee.define('Stash').tags({
 								try {
 									_fs.writeFileSync(path, buffer, encoding);
 									result = true;
-								} catch(e) {
+								} catch(err) {
 									result = false;
 								}
 
@@ -106,7 +106,7 @@ lychee.define('Stash').tags({
 						try {
 							_fs.unlinkSync(path);
 							result = true;
-						} catch(e) {
+						} catch(err) {
 							result = false;
 						}
 
@@ -153,6 +153,60 @@ lychee.define('Stash').tags({
 		}
 
 		return false;
+
+	};
+
+	var _on_batch_remove = function(stash, others) {
+
+		var keys = Object.keys(others);
+
+		for (var k = 0, kl = keys.length; k < kl; k++) {
+
+			var key   = keys[k];
+			var index = this.load.indexOf(key);
+			if (index !== -1) {
+
+				if (this.ready.indexOf(key) === -1) {
+					this.ready.push(null);
+					this.load.splice(index, 1);
+				}
+
+			}
+
+		}
+
+
+		if (this.load.length === 0) {
+			stash.trigger('batch', [ 'remove', this.ready ]);
+			stash.unbind('sync', _on_batch_remove);
+		}
+
+	};
+
+	var _on_batch_write = function(stash, others) {
+
+		var keys = Object.keys(others);
+
+		for (var k = 0, kl = keys.length; k < kl; k++) {
+
+			var key   = keys[k];
+			var index = this.load.indexOf(key);
+			if (index !== -1) {
+
+				if (this.ready.indexOf(key) === -1) {
+					this.ready.push(others[key]);
+					this.load.splice(index, 1);
+				}
+
+			}
+
+		}
+
+
+		if (this.load.length === 0) {
+			stash.trigger('batch', [ 'write', this.ready ]);
+			stash.unbind('sync', _on_batch_write);
+		}
 
 	};
 
@@ -271,7 +325,7 @@ lychee.define('Stash').tags({
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id   = 'lychee-Stash-' + _id++;
@@ -392,6 +446,107 @@ lychee.define('Stash').tags({
 		/*
 		 * CUSTOM API
 		 */
+
+		batch: function(action, ids, assets) {
+
+			action = typeof action === 'string' ? action : null;
+			ids    = ids instanceof Array       ? ids    : null;
+			assets = assets instanceof Array    ? assets : null;
+
+
+			if (action !== null) {
+
+				var cache  = {
+					load:  [].slice.call(ids),
+					ready: []
+				};
+
+
+				var result = true;
+				var that   = this;
+				var i      = 0;
+				var il     = ids.length;
+
+				if (action === 'read') {
+
+					for (i = 0; i < il; i++) {
+
+						var asset = this.read(ids[i]);
+						if (asset !== null) {
+
+							asset.onload = function(result) {
+
+								var index = cache.load.indexOf(this.url);
+								if (index !== -1) {
+									cache.ready.push(this);
+									cache.load.splice(index, 1);
+								}
+
+								if (cache.load.length === 0) {
+									that.trigger('batch', [ 'read', cache.ready ]);
+								}
+
+							};
+
+							asset.load();
+
+						} else {
+
+							result = false;
+
+						}
+
+					}
+
+
+					return result;
+
+				} else if (action === 'remove') {
+
+					this.bind('#sync', _on_batch_remove, cache);
+
+					for (i = 0; i < il; i++) {
+
+						if (this.remove(ids[i]) === false) {
+							result = false;
+						}
+
+					}
+
+					if (result === false) {
+						this.unbind('sync', _on_batch_remove);
+					}
+
+
+					return result;
+
+				} else if (action === 'write' && ids.length === assets.length) {
+
+					this.bind('#sync', _on_batch_write, cache);
+
+					for (i = 0; i < il; i++) {
+
+						if (this.write(ids[i], assets[i]) === false) {
+							result = false;
+						}
+
+					}
+
+					if (result === false) {
+						this.unbind('sync', _on_batch_write);
+					}
+
+
+					return result;
+
+				}
+
+			}
+
+
+			return false;
+
+		},
 
 		read: function(id) {
 

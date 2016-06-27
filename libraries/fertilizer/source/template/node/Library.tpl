@@ -1,11 +1,7 @@
 
-${info}
-
-
 (function(lychee, global) {
 
 	var environment = lychee.deserialize(${blob});
-
 	if (environment !== null) {
 		environment.init();
 	}

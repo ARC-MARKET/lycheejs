@@ -225,69 +225,31 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			if (this.debug === true) {
 
-				if (packageId === 'lychee') {
+				try {
 
-					try {
+					// TODO: This needs to be sandboxed, so global will be this.global
 
-						// TODO: This needs to be sandboxed, so global will be this.global
+					template = definition._exports.call(
+						definition._exports,
+						this.global.lychee,
+						global,
+						definition._attaches
+					) || null;
 
-						template = definition._exports.call(
-							definition._exports,
-							this.global.lychee,
-							global,
-							definition._attaches
-						) || null;
-
-					} catch(err) {
-						lychee.Debugger.report(this, err, definition);
-					}
-
-				} else {
-
-					try {
-
-						// TODO: This needs to be sandboxed, so global will be this.global
-
-						template = definition._exports.call(
-							definition._exports,
-							this.global.lychee,
-							this.global[packageId],
-							global,
-							definition._attaches
-						) || null;
-
-					} catch(err) {
-						lychee.Debugger.report(this, err, definition);
-					}
-
+				} catch(err) {
+					lychee.Debugger.report(this, err, definition);
 				}
 
 			} else {
 
-				if (packageId === 'lychee') {
+				// TODO: This needs to be sandboxed, so global will be this.global
 
-					// TODO: This needs to be sandboxed, so global will be this.global
-
-					template = definition._exports.call(
-						definition._exports,
-						this.global.lychee,
-						global,
-						definition._attaches
-					) || null;
-
-				} else {
-
-					// TODO: This needs to be sandboxed, so global will be this.global
-
-					template = definition._exports.call(
-						definition._exports,
-						this.global.lychee,
-						this.global[packageId],
-						global,
-						definition._attaches
-					) || null;
-
-				}
+				template = definition._exports.call(
+					definition._exports,
+					this.global.lychee,
+					global,
+					definition._attaches
+				) || null;
 
 			}
 
@@ -296,31 +258,56 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		/*
-		 * 2. Extend Class, Module or Callback
+		 * 2. Assign Class, Module or Callback
 		 */
 
 		if (template !== null) {
 
 			/*
-			 * 2.1 Extend and export Class or Module
+			 * 2.1 Assign and export Class or Module
 			 */
 
 			var includes = definition._includes;
 			if (includes.length > 0) {
 
+				var ownenums   = null;
+				var ownmethods = null;
+				var ownkeys    = Object.keys(template);
+				var ownproto   = template.prototype;
 
-				// Cache old prototype
-				var oldprototype = null;
-				if (template.prototype instanceof Object) {
 
-					oldprototype = {};
+				if (ownkeys.length > 0) {
 
-					for (var property in template.prototype) {
-						oldprototype[property] = template.prototype[property];
+					ownenums = {};
+
+					for (var ok = 0, okl = ownkeys.length; ok < okl; ok++) {
+
+						var ownkey = ownkeys[ok];
+						if (ownkey === ownkey.toUpperCase()) {
+							ownenums[ownkey] = template[ownkey];
+						}
+
+					}
+
+					if (Object.keys(ownenums).length === 0) {
+						ownenums = null;
 					}
 
 				}
 
+				if (ownproto instanceof Object) {
+
+					ownmethods = {};
+
+					for (var ownmethod in ownproto) {
+						ownmethods[ownmethod] = ownproto[ownmethod];
+					}
+
+					if (Object.keys(ownmethods).length === 0) {
+						ownmethods = null;
+					}
+
+				}
 
 
 				// Define classId in namespace
@@ -332,20 +319,34 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				});
 
 
-				// Create new prototype
+				namespace[classId].displayName = definition.id;
 				namespace[classId].prototype = {};
 
 
-				var extendargs = [];
+				var tplenums   = {};
+				var tplmethods = [ namespace[classId].prototype ];
 
-				extendargs.push(namespace[classId].prototype);
 
 				for (var i = 0, il = includes.length; i < il; i++) {
 
 					var include = _get_template.call(this.global, includes[i]);
 					if (include !== null) {
 
-						extendargs.push(include.prototype);
+						var inckeys = Object.keys(include);
+						if (inckeys.length > 0) {
+
+							for (var ik = 0, ikl = inckeys.length; ik < ikl; ik++) {
+
+								var inckey = inckeys[ik];
+								if (inckey === inckey.toUpperCase()) {
+									tplenums[inckey] = include[inckey];
+								}
+
+							}
+
+						}
+
+						tplmethods.push(include.prototype);
 
 					} else {
 
@@ -358,12 +359,24 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				}
 
 
-				if (oldprototype !== null) {
-					extendargs.push(oldprototype);
+				if (ownenums !== null) {
+
+					for (var e in ownenums) {
+						tplenums[e] = ownenums[e];
+					}
+
+				}
+
+				if (ownmethods !== null) {
+					tplmethods.push(ownmethods);
 				}
 
 
-				lychee.extend.apply(lychee, extendargs);
+				for (var e in tplenums) {
+					namespace[classId][e] = tplenums[e];
+				}
+
+				Object.assign.apply(lychee, tplmethods);
 
 				Object.seal(namespace[classId].prototype);
 
@@ -375,6 +388,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			} else {
 
 				namespace[classId] = template;
+				namespace[classId].displayName = definition.id;
 
 
 				if (template instanceof Object) {
@@ -386,6 +400,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		} else {
 
 			namespace[classId] = function() {};
+			namespace[classId].displayName = definition.id;
 
 			if (this.debug === true) {
 				this.global.console.error('lychee-Environment (' + this.id + '): Invalid Definition "' + definition.id + '", it is a Dummy now.');
@@ -575,22 +590,24 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		this.lychee              = {};
+		this.lychee.environment  = null;
 		this.lychee.ENVIRONMENTS = global.lychee.ENVIRONMENTS;
 		this.lychee.VERSION      = global.lychee.VERSION;
-		this.lychee.ROOT         = global.lychee.ROOT;
+		this.lychee.ROOT         = {};
+		this.lychee.ROOT.lychee  = global.lychee.ROOT.lychee;
+		this.lychee.ROOT.project = global.lychee.ROOT.project;
 
 		[
+			'assignsafe',
+			'assignunlink',
 			'debug',
-			'environment',
 			'diff',
 			'enumof',
-			'extend',
-			'extendsafe',
-			'extendunlink',
 			'interfaceof',
 			'deserialize',
 			'serialize',
 			'define',
+			'import',
 			'envinit',
 			'pkginit',
 			'setEnvironment',
@@ -694,16 +711,16 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.id          = 'lychee-Environment-' + _id++;
 		this.build       = 'app.Main';
 		this.debug       = true;
 		this.definitions = {};
-		this.global      = new _Sandbox();
+		this.global      = global;
 		this.packages    = [];
-		this.sandbox     = true;
+		this.sandbox     = false;
 		this.tags        = {};
 		this.timeout     = 10000;
 		this.type        = 'source';
@@ -1098,11 +1115,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 						}
 
 
-						if (this.sandbox === true) {
-							this.global.lychee.environment = this;
-						}
-
-
 						if (this.debug === true) {
 
 							try {
@@ -1341,13 +1353,23 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			if (sandbox === true || sandbox === false) {
 
-				this.sandbox = sandbox;
+
+				if (sandbox !== this.sandbox) {
+
+					this.sandbox = sandbox;
 
 
-				if (sandbox === true) {
-					this.global = new _Sandbox();
-				} else {
-					this.global = global;
+					if (sandbox === true) {
+
+						this.global = new _Sandbox();
+						this.global.lychee.setEnvironment(this);
+
+					} else {
+
+						this.global = global;
+
+					}
+
 				}
 
 

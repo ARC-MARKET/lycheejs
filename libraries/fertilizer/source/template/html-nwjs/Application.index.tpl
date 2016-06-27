@@ -1,11 +1,14 @@
 <!doctype html>
 <html>
 <head>
+	<meta charset="utf-8">
 	<title>${id}</title>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<link rel="icon" href="./icon.png" sizes="128x128" type="image/png">
 
 	<script src="./core.js"></script>
 
@@ -13,6 +16,7 @@
 		body {
 			margin: 0;
 			padding: 0;
+			overflow: hidden;
 		}
 		
 		.lychee-Renderer-canvas {
@@ -28,9 +32,6 @@
 </head>
 <body>
 <script>
-${info}
-
-
 (function(lychee, global) {
 
 	var environment = lychee.deserialize(${blob});

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>Welcome to lycheeJS</title>
+	<title>Welcome to lychee.js</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -10,392 +10,234 @@
 
 	<link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="64x64 32x32 16x16">
 
-	<!-- DESIGN -->
-	<link rel="stylesheet" href="./design/index.css">
-	<script src="./design/index.js"></script>
-
 	<!-- BOOTSTRAP -->
 	<script src="/libraries/lychee/build/html/core.js"></script>
 
+	<script src="./fyto/index.js"></script>
+	<link rel="stylesheet" href="./fyto/index.css">
+	<link rel="import" href="./fyto/app/Main.html">
+	<link rel="import" href="./fyto/ui/Menu.html">
+	<link rel="import" href="./fyto/ui/State.html">
+	<link rel="import" href="./fyto/ui/Element.html">
+	<link rel="import" href="./fyto/ui/element/Project.html">
+
 	<style>
-	.ico-browse:before  { content: "\e037"; }
-	.ico-exit:before    { content: "\e097"; }
-	.ico-file:before    { content: "\e039"; }
-	.ico-open:before    { content: "\e00c"; }
-	.ico-refresh:before { content: "\e098"; }
-	#intro {
-		display: block;
-	}
-	#intro-logo {
-		display: block;
-		margin: 0px auto;
-		text-align: center;
-	}
-	#intro-logo h1 {
-		display: inline-block;
-		vertical-align: middle;
-		margin: 16px;
-		line-height: 0px;
-	}
-	#intro-logo h2 {
-		display: inline-block;
-		vertical-align: middle;
-		margin: 0px;
-		padding: 0px;
-		color: #efefef;
-		font-family: 'museo-sans-300';
-		font-size: 64px;
-		font-weight: normal;
-	}
-	#intro-logo h2 span {
-		color: #d0494b;
-	}
-	#intro-wizard {
-		text-align: center;
-	}
-	#intro-wizard article {
-		display: inline-block;
-		width: 256px;
-		text-align: left;
-	}
-	#projects,
-	#tools {
-		display: block;
-		padding: 32px 32px;
-	}
-	#projects > article,
-	#tools > article {
-		display: inline-block;
-		width: 256px;
-		height: 308px;
-		margin: 0px 32px 32px 0px;
-		vertical-align: middle;
-	}
-	#tools > article {
-		height: 398px;
-	}
-	article img {
-		width: 128px;
-		height: 128px;
-		color: #ffffff;
-		border: 2px solid #2f3736;
-		background: url('./design/icon.png') #2f3736;
-	}
+		body {
+			color: #ffffff;
+			background: #405050;
+			font-family: 'museo-sans-300';
+			font-size: 16px;
+			margin: 0px;
+			padding: 0px;
+		}
+
+		body fyto-ui-Menu[state="active"] {
+			width: 160px;
+		}
+		body fyto-ui-Menu[state="active"] ~ fyto-app-Main {
+			left: 192px;
+		}
+
+		#welcome p {
+			display: block;
+			margin: 32px;
+			text-align: center;
+			font-family: 'museo-sans-300';
+			font-size: 24px;
+		}
+
+		#welcome-logo {
+			display: block;
+			margin: 0px auto;
+			text-align: center;
+		}
+		#welcome-logo h1 {
+			display: inline-block;
+			vertical-align: middle;
+			margin: 16px;
+			line-height: 0px;
+		}
+		#welcome-logo h2 {
+			display: inline-block;
+			vertical-align: middle;
+			margin: 0px;
+			padding: 0px;
+			color: #efefef;
+			font-family: 'museo-sans-300';
+			font-size: 64px;
+			font-weight: normal;
+		}
+		#welcome-logo h2 span {
+			color: #d0494b;
+		}
+
 	</style>
+
 </head>
 <body>
-<menu class="active">
-	<b onclick="ui.toggle('menu');"><span></span></b>
-	<li class="active" onclick="ui.changeState('intro');">Intro</li>
-	<li onclick="ui.changeState('projects');">Projects</li>
-	<li onclick="ui.changeState('tools');">Tools</li>
-</menu>
 
-<main>
+<fyto-ui-Menu id="menu" label="lychee.js" value="Projects" state="active">
+	<option>Welcome</option>
+	<option>Projects</option>
+	<option>Tools</option>
+</fyto-ui-Menu>
 
-	<section id="intro" class="active">
-	
-		<div id="intro-logo">
-			<h1><img alt="Logo" src="/desktop.svg" width="128" height="128"></h1>
+<fyto-app-Main state="welcome">
+
+	<fyto-ui-State id="welcome" name="welcome" type="full">
+		<div id="welcome-logo">
+			<h1><img alt="lychee.js Logo" src="/desktop.svg" width="128" height="128"></h1>
 			<h2>lychee<span>js</span></h2>
 		</div>
 	
-		<p style="text-align:center">
+		<p>
 			The Editor and Strainer are Work-in-Progress until 2016-Q2.<br>
 			lychee.ai and lychee.verlet are Work-in-Progress until 2016-Q3.
 		</p>
+		<p>
+			lychee.js Version: <span id="lychee-VERSION">2016-Q1</span>
+		</p>
+	</fyto-ui-State>
 
-		<div id="intro-wizard">
-	
-			<article id="intro-play">
-				<h3><b>1</b>Play</h3>
-				<div>
-					Play with existing Projects and learn how
-					they are integrated with the engine stack.
-				</div>
-				<div>
-					<ul class="select">
-						<li><input tabindex="1" name="intro-play" type="radio" value="boilerplate" checked><span>boilerplate</span></li>
-						<li><input tabindex="2" name="intro-play" type="radio" value="mode7"><span>mode7</span></li>
-						<li><input tabindex="3" name="intro-play" type="radio" value="pong"><span>pong</span></li>
-						<li><input tabindex="4" name="intro-play" type="radio" value="tictactoe"><span>tictactoe</span></li>
-					</ul>
-				</div>
-				<p class="center">
-					<button tabindex="5" class="ico-browse" onclick="var id = ui.value('#intro-play input'); if (id !== null) window.open('../../projects/' + id);">Open in Browser</button>
-				</p>
-			</article>
-	
-			<article id="intro-learn">
-				<h3><b>2</b>Learn</h3>
-				<div>
-					Inspect existing Projects and learn how
-					environment snapshots and builds work.
-				</div>
-				<div>
-					<ul class="select">
-						<li><input tabindex="6" name="intro-learn" type="radio" value="boilerplate" checked><span>boilerplate</span></li>
-						<li><input tabindex="7" name="intro-learn" type="radio" value="mode7"><span>mode7</span></li>
-						<li><input tabindex="8" name="intro-learn" type="radio" value="pong"><span>pong</span></li>
-						<li><input tabindex="9" name="intro-learn" type="radio" value="tictactoe"><span>tictactoe</span></li>
-					</ul>
-				</div>
-				<p class="center">
-					<button tabindex="10" class="ico-open" onclick="var id = ui.value('#intro-learn input'); if (id !== null) window.open('lycheejs://edit=' + id);">Open in Editor</button>
-				</p>
-			</article>
-	
-			<article id="intro-cultivate">
-				<h3><b>3</b>Cultivate</h3>
-				<div>
-					Start a new Project from the boilerplate.
-					Use the editor to modify its contents.
-				</div>
-				<div>
-					<div style="text-align:center;margin:0px;">
-						<input name="intro-cultivate" type="text" placeholder="my-project">
-					</p>
-					<div style="height:96px"></div>
-				</div>
-				<p class="center">
-					<button disabled class="ico-open" onclick="var id = ui.value('#intro-plant input'); if (id !== null) window.open('lycheejs://create=' + id);">Create Project</button>
-				</p>
-			</article>
-	
-		</div>
-	
-	</section>
+	<fyto-ui-State name="projects" type="grid">
 
-	<section id="projects" class="gallery">
-
-		<article id="projects-boilerplate">
-			<h3>boilerplate</h3>
-			<div class="center">
-				<p>
-					<img src="/projects/boilerplate/icon.png">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('/projects/boilerplate');" title="Open in Browser"></button>
-					<button class="ico-open ico-only" onclick="window.open('lycheejs://edit=/projects/boilerplate');" title="Open in Editor"></button>
-					<button class="ico-file ico-only" onclick="window.open('lycheejs://file=/projects/boilerplate');" title="Open in File Manager"></button>
-				</div>
-			</div>
-		</article>
-
-	</section>
-
-	<section id="tools" class="gallery">
-
-		<article id="tools-editor">
-			<h3>Editor</h3>
+		<fyto-ui-element-Project order="1" identifier="/projects/boilerplate" label="boilerplate">
 			<p>
-				The Editor allows to create new projects and modify them.
+				An easy template and starting point for developing projects with lychee.js.
 			</p>
-			<div class="center">
-				<p>
-					<img src="/projects/cultivator/editor/icon.png">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('./editor/index.html');" title="Open in Browser"></button>
-				</div>
-			</div>
-		</article>
-
-		<article id="tools-ranger">
-			<h3>Ranger</h3>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="2" identifier="/projects/lethalmaze" label="lethalmaze">
 			<p>
-				The Ranger allows to maintain the server infrastructure.
+				Fast-paced Multiplayer action game with battling Tanks in a Maze.
+				Hackathon project (48 hours).
 			</p>
-			<div class="center">
-				<p>
-					<img src="/projects/cultivator/ranger/icon.png">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('./ranger/index.html');" title="Open in Browser"></button>
-				</div>
-			</div>
-		</article>
-
-		<article id="tools-api">
-			<h3>API Tool</h3>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="3" identifier="/projects/mode7" label="mode7">
 			<p>
-				The API Tool allows to browse and edit the API documentation.
+				A demo that shows multiple sandboxed instances and a custom game-specific Renderer.
 			</p>
-			<div class="center">
-				<p>
-					<img src="/projects/cultivator/api/icon.png" onclick="window.open('./api/index.html');">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('./api/index.html');" title="Open in Browser"></button>
-				</div>
-			</div>
-		</article>
-
-		<article id="tools-font">
-			<h3>Font Tool</h3>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="4" identifier="/projects/over-there" label="over-there">
 			<p>
-				The Font Tool allows to export installed system Fonts.
+				Live view from the ISS (International Space Station).
+				Hackathon project (48 hours).
 			</p>
-			<div class="center">
-				<p>
-					<img src="/projects/cultivator/font/icon.png" onclick="window.open('./font/index.html');">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('./font/index.html');" title="Open in Browser"></button>
-				</div>
-			</div>
-		</article>
-
-		<article id="tools-sprite">
-			<h3>Sprite Tool</h3>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="5" identifier="/projects/pong" label="pong">
 			<p>
-				The Sprite Tool allows to batch-convert images into Entities.
+				Pong implementation that is easy to follow. No adaptive layout, everything as simple
+				as possible.
 			</p>
-			<div class="center">
-				<p>
-					<img src="/projects/cultivator/sprite/icon.png">
-				</p>
-				<div class="center">
-					<button class="ico-browse ico-only" onclick="window.open('./sprite/index.html');" title="Open in Browser"></button>
-				</div>
-			</div>
-		</article>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="6" identifier="/projects/text-chat" label="text-chat">
+			<p>
+				Broadcast and Multicast peer-to-peer networking chat service with multiple rooms.
+			</p>
+		</fyto-ui-element-Project>
+		<fyto-ui-element-Project order="7" identifier="/projects/tictactoe" label="tictactoe">
+			<p>
+				Tic Tac Toe implementation that is easy to follow. No adaptive layout, everything as simple
+				as possible.
+			</p>
+		</fyto-ui-element-Project>
 
-	</section>
- 
-</main>
+	</fyto-ui-State>
 
-<footer>
-	lycheeJS is (c) 2012-2016 by Artificial-Engineering and released under MIT license.
-</footer>
+	<fyto-ui-State name="tools" type="grid">
 
+		<fyto-ui-element-Project order="1" identifier="/projects/cultivator/ranger" label="ranger" command="lycheejs-ranger">
+			<p>
+				A GUI tool to manage and connect your libraries and projects.
+				Manages training and debugging data of your apps.
+			</p>
+		</fyto-ui-element-Project>
+
+		<fyto-ui-element-Project order="2" identifier="/projects/cultivator/editor" label="editor" command="lycheejs-editor">
+			<p>
+				A GUI tool to edit your libraries and projects.
+				Edits all entities, states and manages fertilizer build targets.
+			</p>
+		</fyto-ui-element-Project>
+
+		<fyto-ui-element-Project order="3" identifier="/projects/cultivator/strainer" label="strainer" command="lycheejs-strainer">
+			<p>
+				A GUI tool to update and filter your libraries and projects.
+				Allows a peer-cloud AI to automatically fix and improve your apps.
+			</p>
+		</fyto-ui-element-Project>
+
+		<fyto-ui-element-Project order="4" identifier="/projects/cultivator/api" label="api tool">
+		</fyto-ui-element-Project>
+
+		<fyto-ui-element-Project order="5" identifier="/projects/cultivator/font" label="font tool">
+		</fyto-ui-element-Project>
+
+		<fyto-ui-element-Project order="6" identifier="/projects/cultivator/sprite" label="sprite tool">
+		</fyto-ui-element-Project>
+
+	</fyto-ui-State>
+
+</fyto-app-Main>
 <script>
-(function(global) {
+(function(global, version, projects) {
 
-	var _original_open = global.open;
+	var host = (function(location) {
 
-	var location = global.location || null;
-	if (location instanceof Object) {
+		if (typeof location.hostname === 'string') {
+			return location.hostname;
+		}
 
-		if (location.hostname === 'localhost') {
+		return null;
 
-			var config = new Config('http://localhost:4848/api/Project');
-
-			config.onload = function(result) {
-
-				if (result === true) {
-
-					if (this.buffer instanceof Array) {
-
-						var articles = [].slice.call(document.querySelectorAll('#projects article'));
-						if (articles.length > 0) {
-
-							this.buffer.filter(function(project) {
-								return !project.identifier.match(/projects\/cultivator/);
-							}).forEach(function(project) {
-
-								var identifier = project.identifier;
-								var article    = articles.find(function(node) {
-									return node.id === 'projects-' + identifier.split('/').pop();
-								}) || null;
-
-								if (article === null) {
-									article = articles[0].cloneNode(true);
-								}
+	})(global.location || {});
 
 
-								article.id                            = 'projects-' + identifier.split('/').pop();
-								article.querySelector('h3').innerHTML = identifier.split('/').pop();
-								article.querySelector('img').src      = identifier + '/icon.png';
-								article.querySelector('img').onerror  = function() {
-									this.src = '/projects/cultivator/design/icon.png';
-								};
-
-								var buttons = [].slice.call(article.querySelectorAll('button'));
-								if (buttons.length > 0) {
-
-									buttons.forEach(function(button, index) {
-
-										switch (index) {
-
-											case 0: button.setAttribute('onclick', 'window.open(\'' + identifier + '\');');       break;
-											case 1: button.setAttribute('onclick', 'window.open(\'lycheejs://edit=' + identifier + '\');'); break;
-											case 2: button.setAttribute('onclick', 'window.open(\'lycheejs://file=' + identifier + '\');'); break;
-
-										}
-
-									});
-
-								}
+	if (version !== null) {
+		version.innerHTML = lychee.VERSION;
+	}
 
 
-								if (articles.indexOf(article) === -1) {
-									articles.push(article);
-								}
+	if (host === 'localhost' && projects !== null) {
 
-							});
-
-							articles.sort(function(a, b) {
-								if (a.id < b.id) return -1;
-								if (a.id > b.id) return  1;
-								return 0;
-							});
+		var config = new Config('http://localhost:4848/api/project/index');
+		var other  = [].slice.call(projects.querySelectorAll('fyto-ui-element-Project'));
+		var order  = other.length;
 
 
-							var wrapper = document.querySelector('#projects');
-							if (wrapper !== null) {
+		config.onload = function(result) {
 
-								articles.forEach(function(article) {
+			if (result === true && this.buffer instanceof Array) {
 
-									if (article.parentNode !== null) {
-										article.parentNode.removeChild(article);
-									}
+				this.buffer.filter(function(project) {
+					return /projects\/cultivator/g.test(project.identifier) === false;
+				}).forEach(function(project) {
 
-									wrapper.appendChild(article);
+					var node = other.find(function(obj) {
+						return obj.getAttribute('identifier') === project.identifier;
+					}) || null;
 
-								});
+					if (node === null) {
 
-							}
+						node = document.createElement('fyto-ui-element-Project');
+						node.setAttribute('identifier', project.identifier);
+						node.setAttribute('label',      project.identifier.split('/').pop());
+						node.setAttribute('order',      ++order);
 
-						}
+						projects.appendChild(node);
 
 					}
 
-				}
+				});
 
-			};
+			}
 
-			config.load();
+		};
 
-			global.open = function(url) {
-				location.href = url;
-			};
-
-		} else {
-
-
-			[].slice.call(document.querySelectorAll('#projects article button')).filter(function(button, index) {
-				return index % 3 === 2;
-			}).forEach(function(button) {
-				button.parentNode.removeChild(button);
-			});
-
-
-			global.open = function(url) {
-
-				if (url.substr(0, 11) === 'lycheejs://') {
-					location.href = url;
-				} else {
-					_original_open(url);
-				}
-
-			};
-
-		}
+		config.load();
 
 	}
 
-})(this);
+})(typeof global !== 'undefined' ? global : this, document.querySelector('#lychee-VERSION'), document.querySelector('fyto-ui-State[name="projects"]'));
 </script>
 </body>
 </html>    

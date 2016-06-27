@@ -97,7 +97,7 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Stash';

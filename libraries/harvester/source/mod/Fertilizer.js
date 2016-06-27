@@ -11,18 +11,19 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 		return true;
 
-	} catch(e) {
+	} catch(err) {
 
 	}
 
 
 	return false;
 
-}).exports(function(lychee, harvester, global, attachments) {
+}).exports(function(lychee, global, attachments) {
 
-	var _CACHE         = { active: false, queue: [] };
 	var _child_process = require('child_process');
-	var _root          = new harvester.data.Filesystem().root;
+	var _Filesystem    = lychee.import('harvester.data.Filesystem');
+	var _CACHE         = { active: false, queue: [] };
+	var _ROOT          = new _Filesystem().root;
 
 
 
@@ -74,11 +75,11 @@ lychee.define('harvester.mod.Fertilizer').tags({
 
 	var _fertilize = function(project, target) {
 
-		_child_process.execFile(_root + '/bin/fertilizer.sh', [
+		_child_process.execFile(_ROOT + '/bin/fertilizer.sh', [
 			target,
 			project
 		], {
-			cwd: _root
+			cwd: _ROOT
 		}, function(error, stdout, stderr) {
 
 			_CACHE.active = false;
@@ -135,7 +136,7 @@ lychee.define('harvester.mod.Fertilizer').tags({
 						var targets = Object.keys(environments);
 						if (targets.length > 0) {
 
-							var root = project.filesystem.root.substr(_root.length);
+							var root = project.filesystem.root.substr(_ROOT.length);
 
 							targets = targets.filter(function(target) {
 								return _is_queue(root, target) === false;

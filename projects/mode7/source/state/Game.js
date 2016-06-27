@@ -5,18 +5,25 @@ lychee.define('game.state.Game').requires([
 	'game.entity.Track'
 ]).includes([
 	'lychee.app.State'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Background = lychee.import('game.entity.Background');
+	var _Emblem     = lychee.import('lychee.app.sprite.Emblem');
+	var _State      = lychee.import('lychee.app.State');
+	var _Track      = lychee.import('game.entity.Track');
+
+
 
 	/*
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(game) {
+	var Class = function(main) {
 
-		lychee.app.State.call(this, game);
+		_State.call(this, main);
 
 
-		this.camera = game.camera || null;
+		this.camera = main.camera || null;
 
 		this.__autopilot  = false;
 		this.__direction  = 1;
@@ -41,7 +48,7 @@ lychee.define('game.state.Game').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'game.state.Game';
 
 
@@ -54,13 +61,13 @@ lychee.define('game.state.Game').requires([
 			var renderer = this.renderer;
 			if (renderer !== null) {
 
-				this.__background = new game.entity.Background({
+				this.__background = new _Background({
 					width:  renderer.width,
 					height: renderer.height,
 					origin: this.__origin
 				});
 
-				this.__logo = new lychee.app.sprite.Emblem({
+				this.__logo = new _Emblem({
 					position: {
 						x: renderer.width - 128,
 						y: renderer.height - 32
@@ -105,10 +112,10 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete, data) {
 
-			lychee.app.State.prototype.enter.call(this, oncomplete);
+			_State.prototype.enter.call(this, oncomplete);
 
 
-			this.__track = new game.entity.Track(data.track);
+			this.__track = new _Track(data.track);
 
 
 			if (this.__track.length === 0) {
@@ -164,7 +171,7 @@ lychee.define('game.state.Game').requires([
 			this.__track     = null;
 
 
-			lychee.app.State.prototype.leave.call(this, oncomplete);
+			_State.prototype.leave.call(this, oncomplete);
 
 		},
 

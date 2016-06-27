@@ -1,12 +1,10 @@
 
-lychee.define('fertilizer.template.html-webview.Library').requires([
-	'lychee.data.JSON'
-]).includes([
+lychee.define('fertilizer.template.html-webview.Library').includes([
 	'fertilizer.Template'
-]).exports(function(lychee, fertilizer, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _JSON     = lychee.data.JSON;
-	var _template = attachments["tpl"].buffer;
+	var _Template = lychee.import('fertilizer.Template');
+	var _TEMPLATE = attachments["tpl"];
 
 
 
@@ -16,7 +14,10 @@ lychee.define('fertilizer.template.html-webview.Library').requires([
 
 	var Class = function(data) {
 
-		fertilizer.Template.call(this, data);
+		_Template.call(this, data);
+
+
+		this.__index = lychee.deserialize(lychee.serialize(_TEMPLATE));
 
 
 
@@ -25,34 +26,32 @@ lychee.define('fertilizer.template.html-webview.Library').requires([
 		 */
 
 		this.bind('configure', function(oncomplete) {
+			console.log('fertilizer: CONFIGURE');
 			oncomplete(true);
 		}, this);
 
 		this.bind('build', function(oncomplete) {
 
-			var env = this.environment;
-			var fs  = this.filesystem;
+			var env   = this.environment;
+			var stash = this.stash;
 
-			if (env !== null && fs !== null) {
+			if (env !== null && stash !== null) {
 
 				console.log('fertilizer: BUILD ' + env.id);
 
-				var id      = env.id;
-				var version = ('' + lychee.VERSION);
 
-				var blob  = _JSON.encode(env.serialize());
-				var info  = this.getInfo(true);
-				var index = _template.toString();
+				var sandbox = this.sandbox;
+				var index   = this.__index;
 
 
-				index = this.replace(index, {
-					blob: blob,
-					id:   id,
-					info: info
+				index.buffer = index.buffer.replaceObject({
+					blob: env.serialize(),
+					id:   env.id
 				});
 
 
-				fs.write('/index.js', index);
+				stash.write(sandbox + '/index.js', index);
+
 
 				oncomplete(true);
 
@@ -65,6 +64,7 @@ lychee.define('fertilizer.template.html-webview.Library').requires([
 		}, this);
 
 		this.bind('package', function(oncomplete) {
+			console.log('fertilizer: PACKAGE');
 			oncomplete(true);
 		}, this);
 
@@ -79,7 +79,7 @@ lychee.define('fertilizer.template.html-webview.Library').requires([
 
 		serialize: function() {
 
-			var data = fertilizer.Template.prototype.serialize.call(this);
+			var data = _Template.prototype.serialize.call(this);
 			data['constructor'] = 'fertilizer.template.html-webview.Library';
 
 

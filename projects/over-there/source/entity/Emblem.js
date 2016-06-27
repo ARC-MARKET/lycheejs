@@ -1,8 +1,9 @@
 
 lychee.define('app.entity.Emblem').includes([
 	'lychee.app.Sprite'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
+	var _Sprite  = lychee.import('lychee.app.Sprite');
 	var _TEXTURE = attachments["png"];
 	var _CONFIG  = {
 		width:  256,
@@ -17,7 +18,7 @@ lychee.define('app.entity.Emblem').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.texture = _TEXTURE;
@@ -25,7 +26,7 @@ lychee.define('app.entity.Emblem').includes([
 		settings.height  = _CONFIG.height;
 
 
-		lychee.app.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 		settings = null;
 
@@ -40,7 +41,7 @@ lychee.define('app.entity.Emblem').includes([
 
 		serialize: function() {
 
-			var data = lychee.app.Sprite.prototype.serialize.call(this);
+			var data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'app.entity.Emblem';
 
 

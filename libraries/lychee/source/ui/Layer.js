@@ -227,7 +227,7 @@ lychee.define('lychee.ui.Layer').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.width  = typeof settings.width  === 'number' ? settings.width  : 0;
@@ -291,37 +291,48 @@ lychee.define('lychee.ui.Layer').requires([
 
 		deserialize: function(blob) {
 
-			var entities = [];
-			for (var be = 0, bel = blob.entities.length; be < bel; be++) {
-				entities.push(lychee.deserialize(blob.entities[be]));
-			}
+			if (blob.entities instanceof Array) {
 
-			var map = {};
-			for (var bid in blob.map) {
+				var entities = [];
+				var map      = {};
 
-				var index = blob.map[bid];
-				if (typeof index === 'number') {
-					map[bid] = index;
+				for (var be = 0, bel = blob.entities.length; be < bel; be++) {
+					entities.push(lychee.deserialize(blob.entities[be]));
 				}
 
-			}
 
-			for (var e = 0, el = entities.length; e < el; e++) {
+				if (blob.map instanceof Object) {
 
-				var id = null;
-				for (var mid in map) {
+					for (var bid in blob.map) {
 
-					if (map[mid] === e) {
-						id = mid;
+						var index = blob.map[bid];
+						if (typeof index === 'number') {
+							map[bid] = index;
+						}
+
 					}
 
 				}
 
 
-				if (id !== null) {
-					this.setEntity(id, entities[e]);
-				} else {
-					this.addEntity(entities[e]);
+				for (var e = 0, el = entities.length; e < el; e++) {
+
+					var id = null;
+					for (var mid in map) {
+
+						if (map[mid] === e) {
+							id = mid;
+						}
+
+					}
+
+
+					if (id !== null) {
+						this.setEntity(id, entities[e]);
+					} else {
+						this.addEntity(entities[e]);
+					}
+
 				}
 
 			}
@@ -382,36 +393,24 @@ lychee.define('lychee.ui.Layer').requires([
 			if (this.visible !== true)                      settings.visible    = this.visible;
 
 
-			var entities = [];
-
 			if (this.entities.length > 0) {
-
-				blob.entities = [];
-
-				for (var e = 0, el = this.entities.length; e < el; e++) {
-
-					var entity = this.entities[e];
-
-					blob.entities.push(lychee.serialize(entity));
-					entities.push(entity);
-
-				}
-
+				blob.entities = this.entities.map(lychee.serialize);
 			}
 
 
-			if (Object.keys(this.__map).length > 0) {
+			if (blob.entities instanceof Array && Object.keys(this.__map).length > 0) {
 
-				blob.map = {};
+				blob.map = Object.map(this.__map, function(val, key) {
 
-				for (var id in this.__map) {
-
-					var index = entities.indexOf(this.__map[id]);
+					var index = this.entities.indexOf(val);
 					if (index !== -1) {
-						blob.map[id] = index;
+						return index;
 					}
 
-				}
+
+					return undefined;
+
+				}, this);
 
 			}
 

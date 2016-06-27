@@ -5,7 +5,11 @@ lychee.define('harvester.data.Project').requires([
 	'harvester.data.Server'
 ]).includes([
 	'lychee.event.Emitter'
-]).exports(function(lychee, harvester, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Filesystem = lychee.import('harvester.data.Filesystem');
+	var _Package    = lychee.import('harvester.data.Package');
+	var _Server     = lychee.import('harvester.data.Server');
 
 
 
@@ -19,8 +23,8 @@ lychee.define('harvester.data.Project').requires([
 
 
 		this.identifier = identifier;
-		this.filesystem = new harvester.data.Filesystem(identifier);
-		this.package    = new harvester.data.Package(this.filesystem.read('/lychee.pkg'));
+		this.filesystem = new _Filesystem(identifier);
+		this.package    = new _Package(this.filesystem.read('/lychee.pkg'));
 		this.server     = null;
 		this.harvester  = this.filesystem.info('/harvester.js') !== null;
 
@@ -71,7 +75,7 @@ lychee.define('harvester.data.Project').requires([
 
 		setPackage: function(package) {
 
-			package = package instanceof harvester.data.Package ? package : null;
+			package = package instanceof _Package ? package : null;
 
 
 			if (package !== null) {
@@ -89,7 +93,7 @@ lychee.define('harvester.data.Project').requires([
 
 		setServer: function(server) {
 
-			server = server instanceof harvester.data.Server ? server : null;
+			server = server instanceof _Server ? server : null;
 
 
 			if (server !== null) {

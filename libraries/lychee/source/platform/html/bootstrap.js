@@ -114,71 +114,93 @@
 	 * POLYFILLS
 	 */
 
-	var _log = console.log || function() {};
+	var _log     = console.log   || function() {};
+	var _info    = console.info  || console.log;
+	var _warn    = console.warn  || console.log;
+	var _error   = console.error || console.log;
+	var _std_out = '';
+	var _std_err = '';
 
 
-	if (typeof console.info === 'undefined') {
+	console.log = function() {
 
-		console.info = function() {
+		var al   = arguments.length;
+		var args = [ '(L)' ];
+		for (var a = 0; a < al; a++) {
+			args.push(arguments[a]);
+		}
 
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
+		_std_out += args.join('\t') + '\n';
+		_log.apply(console, args);
+
+	};
+
+	console.info = function() {
+
+		var al   = arguments.length;
+		var args = [ '(I)' ];
+		for (var a = 0; a < al; a++) {
+			args.push(arguments[a]);
+		}
+
+		_std_out += args.join('\t') + '\n';
+		_info.apply(console, args);
+
+	};
+
+	console.warn = function() {
+
+		var al   = arguments.length;
+		var args = [ '(W)' ];
+		for (var a = 0; a < al; a++) {
+			args.push(arguments[a]);
+		}
+
+		_std_out += args.join('\t') + '\n';
+		_warn.apply(console, args);
+
+	};
+
+	console.error = function() {
+
+		var al   = arguments.length;
+		var args = [ '(E)' ];
+		for (var a = 0; a < al; a++) {
+			args.push(arguments[a]);
+		}
+
+		_std_err += args.join('\t') + '\n';
+		_error.apply(console, args);
+
+	};
+
+	console.deserialize = function(blob) {
+
+		if (typeof blob.stdout === 'string') {
+			_std_out = blob.stdout;
+		}
+
+		if (typeof blob.stderr === 'string') {
+			_std_err = blob.stderr;
+		}
+
+	};
+
+	console.serialize = function() {
+
+		var blob = {};
 
 
-			args.reverse();
-			args.push('[INFO]');
-			args.reverse();
+		if (_std_out.length > 0) blob.stdout = _std_out;
+		if (_std_err.length > 0) blob.stderr = _std_err;
 
-			_log.apply(console, args);
 
+		return {
+			'reference': 'console',
+			'blob':      Object.keys(blob).length > 0 ? blob : null
 		};
 
-	}
-
-
-	if (typeof console.warn === 'undefined') {
-
-		console.warn = function() {
-
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
-
-			args.reverse();
-			args.push('[WARN]');
-			args.reverse();
-
-			_log.apply(console, args);
-
-		};
-
-	}
-
-
-	if (typeof console.error === 'undefined') {
-
-		console.error = function() {
-
-			var al   = arguments.length;
-			var args = new Array(al);
-			for (var a = 0; a < al; a++) {
-				args[a] = arguments[a];
-			}
-
-			args.reverse();
-			args.push('[ERROR]');
-			args.reverse();
-
-			_log.apply(console, args);
-
-		};
-
-	}
+	};
 
 
 
@@ -479,7 +501,7 @@
 
 		try {
 			return decodeURIComponent(str);
-		} catch(e) {
+		} catch(err) {
 			return String.fromCharCode(0xFFFD);
 		}
 
@@ -663,6 +685,21 @@
 
 	};
 
+	var _hex_to_string = function(buffer, start, end) {
+
+		end = Math.min(buffer.length, end);
+
+
+		var str = '';
+
+		for (var b = start; b < end; b++) {
+			str += String.fromCharCode(buffer[i]);
+		}
+
+		return str;
+
+	};
+
 	var _copy_buffer = function(source, target, offset, length) {
 
 		var i = 0;
@@ -679,6 +716,37 @@
 		return i;
 
 	};
+
+	var _copy_hexadecimal = function(source, target, offset, length) {
+
+		var strlen = source.length;
+		if (strlen % 2 !== 0) {
+			throw new Error('Invalid hex string');
+		}
+
+		if (length > strlen / 2) {
+			length = strlen / 2;
+		}
+
+
+		var i = 0;
+
+		for (i = 0; i < length; i++) {
+
+			var num = parseInt(source.substr(i * 2, 2), 16);
+			if (isNaN(num)) {
+				return i;
+			}
+
+			target[i + offset] = num;
+
+		}
+
+
+		return i;
+
+	};
+
 
 
 	var Buffer = function(subject, encoding) {
@@ -735,7 +803,10 @@
 			length = _base64_to_bytes(str).length;
 		} else if (encoding === 'binary') {
 			length = str.length;
+		} else if (encoding === 'hex') {
+			length = str.length >>> 1;
 		}
+
 
 		return length;
 
@@ -845,6 +916,8 @@
 				diff = _copy_buffer(_base64_to_bytes(str), this, offset, length);
 			} else if (encoding === 'binary') {
 				diff = _copy_buffer(_binary_to_bytes(str), this, offset, length);
+			} else if (encoding === 'hex') {
+				diff = _copy_hexadecimal(str, this, offset, length);
 			}
 
 
@@ -872,7 +945,10 @@
 				str = _base64_to_string(this, start, end);
 			} else if (encoding === 'binary') {
 				str = _binary_to_string(this, start, end);
+			} else if (encoding === 'hex') {
+				str = _hex_to_string(this, start, end);
 			}
+
 
 			return str;
 
@@ -980,7 +1056,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -1248,7 +1324,7 @@
 				var data = null;
 				try {
 					data = JSON.parse(raw);
-				} catch(e) {
+				} catch(err) {
 				}
 
 
@@ -1497,7 +1573,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 				if (this.buffer.currentTime === 0) {
@@ -1536,7 +1612,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 			}
@@ -1792,7 +1868,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 				if (this.buffer.currentTime === 0) {
@@ -1831,7 +1907,7 @@
 
 				try {
 					this.buffer.currentTime = 0;
-				} catch(e) {
+				} catch(err) {
 				}
 
 			}
@@ -2111,6 +2187,48 @@
 
 	};
 
+	var _execute_stuff = function(callback, stuff) {
+
+		var type = stuff.url.split('/').pop().split('.').pop();
+		if (type === 'js' && stuff.__ignore === false) {
+
+			var tmp = document.createElement('script');
+
+
+			tmp._filename = stuff.url;
+			tmp.async     = true;
+
+			tmp.onload = function() {
+
+				callback.call(stuff, true);
+
+				// XXX: Don't move, it's causing serious bugs in Blink
+				document.body.removeChild(this);
+
+			};
+			tmp.onerror = function() {
+
+				callback.call(stuff, false);
+
+				// XXX: Don't move, it's causing serious bugs in Blink
+				document.body.removeChild(this);
+
+			};
+			tmp.src = lychee.environment.resolve(stuff.url);
+
+			document.body.appendChild(tmp);
+
+		} else {
+
+			callback.call(stuff, true);
+
+		}
+
+
+		return false;
+
+	};
+
 
 	var Stuff = function(url, ignore) {
 
@@ -2179,71 +2297,43 @@
 
 			if (this.__load === false) {
 
-				if (this.onload instanceof Function) {
-					this.onload(true);
-					this.onload = null;
-				}
+				_execute_stuff(function(result) {
+
+					if (this.onload instanceof Function) {
+						this.onload(result);
+						this.onload = null;
+					}
+
+				}, this);
+
 
 				return;
 
 			}
 
 
-			var that = this;
-			var url  = this.url;
-			var type = url.split('/').pop().split('.').pop();
-			if (type === 'js' && this.__ignore === false) {
+			_load_asset({
+				url: this.url
+			}, function(raw) {
 
-				this.buffer           = document.createElement('script');
-				this.buffer._filename = this.url;
-				this.buffer.async     = true;
-
-				this.buffer.onload = function() {
-
-					that.buffer = '';
-
-					if (that.onload instanceof Function) {
-						that.onload(true);
-						that.onload = null;
-					}
-
-					// Don't move this, it's causing serious bugs in Blink
-					document.body.removeChild(this);
-
-				};
-				this.buffer.onerror = function() {
-
-					that.buffer = '';
-
-					if (that.onload instanceof Function) {
-						that.onload(false);
-						that.onload = null;
-					}
-
-					// Don't move this, it's causing serious bugs in Blink
-					document.body.removeChild(this);
-
-				};
-				this.buffer.src = lychee.environment.resolve(url);
-
-				document.body.appendChild(this.buffer);
-
-			} else {
-
-				_load_asset({
-					url: this.url
-				}, function(raw) {
-
+				if (raw !== null) {
+					// this.buffer = raw.toString('utf8');
 					this.buffer = raw;
+				} else {
+					this.buffer = '';
+				}
+
+
+				_execute_stuff(function(result) {
 
 					if (this.onload instanceof Function) {
-						this.onload(raw !== null);
+						this.onload(result);
 						this.onload = null;
 					}
 
 				}, this);
 
-			}
+			}, this);
 
 		}
 

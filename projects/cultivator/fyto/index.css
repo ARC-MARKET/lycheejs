@@ -1,0 +1,17 @@
+
+@font-face {
+	font-family: 'museo-sans-300';
+	src: url('./fnt/museo-sans-300.woff2') format('woff2'),
+	     url('./fnt/museo-sans-300.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'museo-sans-500';
+	src: url('./fnt/museo-sans-500.woff2') format('woff2'),
+	     url('./fnt/museo-sans-500.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+

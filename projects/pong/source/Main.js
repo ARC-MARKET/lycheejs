@@ -3,11 +3,11 @@ lychee.define('game.Main').requires([
 	'game.state.Game'
 ]).includes([
 	'lychee.app.Main'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client: null,
 			server: null,

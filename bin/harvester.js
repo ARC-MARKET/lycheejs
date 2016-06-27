@@ -1,4 +1,4 @@
-#!/usr/bin/lycheejs-helper env:node
+#!/usr/local/bin/lycheejs-helper env:node
 
 
 var root = require('path').resolve(__dirname, '../');
@@ -27,7 +27,7 @@ var _print_help = function() {
 
 
 	console.log('                                                            ');
-	console.info('lycheeJS ' + lychee.VERSION + ' Harvester');
+	console.info('lychee.js ' + lychee.VERSION + ' Harvester');
 	console.log('                                                            ');
 	console.log('Usage: lycheejs-harvester [Action] [Profile] [Flag]         ');
 	console.log('                                                            ');
@@ -45,12 +45,13 @@ var _print_help = function() {
 	console.log('                                                            ');
 	console.log('Available Flags:                                            ');
 	console.log('                                                            ');
-	console.log('   --no-integration                                         ');
+	console.log('   --debug          Debug Mode with verbose debug messages  ');
+	console.log('   --sandbox        Sandbox Mode without software bots      ');
 	console.log('                                                            ');
 	console.log('Examples:                                                   ');
 	console.log('                                                            ');
 	console.log('    lycheejs-harvester start development;                   ');
-	console.log('    lycheejs-harvester restart development --no-integration;');
+	console.log('    lycheejs-harvester restart development --sandbox;       ');
 	console.log('                                                            ');
 
 };
@@ -60,15 +61,18 @@ var _print_help = function() {
 var _settings = (function() {
 
 	var settings = {
-		action:      null,
-		profile:     null,
-		integration: true
+		action:  null,
+		debug:   false,
+		profile: null,
+		sandbox: false
 	};
 
 
 	var raw_arg0 = process.argv[2] || '';
 	var raw_arg1 = process.argv[3] || '';
 	var raw_arg2 = process.argv[4] || '';
+	var raw_arg3 = process.argv[5] || '';
+	var raw_flag = raw_arg2 + ' ' + raw_arg3;
 
 
 	if (raw_arg0 === 'start') {
@@ -89,6 +93,8 @@ var _settings = (function() {
 
 				if (json !== null) {
 					settings.profile = json;
+					settings.debug   = json.debug   === true;
+					settings.sandbox = json.sandbox === true;
 				}
 
 			}
@@ -104,8 +110,12 @@ var _settings = (function() {
 	}
 
 
-	if (raw_arg2 === '--no-integration') {
-		settings.integration = false;
+	if (/--debug/g.test(raw_flag) === true) {
+		settings.debug = true;
+	}
+
+	if (/--sandbox/g.test(raw_flag) === true) {
+		settings.sandbox = true;
 	}
 
 
@@ -168,11 +178,11 @@ var _bootup = function(settings) {
 	console.info('BOOTUP (' + process.pid + ')');
 
 	var environment = new lychee.Environment({
-		id:      'harvester',
-		debug:   false,
-		sandbox: false,
-		build:   'harvester.Main',
-		timeout: 10000, // for really slow hosts
+		id:       'harvester',
+		debug:    settings.debug === true,
+		sandbox:  true,
+		build:    'harvester.Main',
+		timeout:  3000,
 		packages: [
 			new lychee.Package('lychee',    '/libraries/lychee/lychee.pkg'),
 			new lychee.Package('harvester', '/libraries/harvester/lychee.pkg')
@@ -200,10 +210,11 @@ var _bootup = function(settings) {
 
 			// This allows using #MAIN in JSON files
 			sandbox.MAIN = new harvester.Main(settings);
-			sandbox.MAIN.init();
-			sandbox.MAIN.bind('destroy', function() {
+			sandbox.MAIN.bind('destroy', function(code) {
 				process.exit(0);
 			});
+
+			sandbox.MAIN.init();
 			_write_pid();
 
 
@@ -257,7 +268,8 @@ var _bootup = function(settings) {
 
 	if (action === 'start' && has_profile) {
 
-		settings.profile.integration = settings.integration === true;
+		settings.profile.debug   = settings.debug   === true;
+		settings.profile.sandbox = settings.sandbox === true;
 
 		_bootup(settings.profile);
 

@@ -78,7 +78,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.width  = typeof settings.width === 'number'  ? settings.width  : 0;
@@ -161,11 +161,11 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 			if (this.depth  !== 0) settings.depth  = this.depth;
 			if (this.radius !== 0) settings.radius = this.radius;
 
-			if (this.alpha !== 1)                         settings.alpha     = this.alpha;
-			if (this.collision !== Class.COLLISION.none)  settings.collision = this.collision;
-			if (this.shape !== Class.SHAPE.rectangle)     settings.shape     = this.shape;
-			if (this.state !== _default_state)            settings.state     = this.state;
-			if (this.__states !== _default_states)        settings.states    = this.__states;
+			if (this.alpha !== 1)                        settings.alpha     = this.alpha;
+			if (this.collision !== Class.COLLISION.none) settings.collision = this.collision;
+			if (this.shape !== Class.SHAPE.rectangle)    settings.shape     = this.shape;
+			if (this.state !== 'default')                settings.state     = this.state;
+			if (Object.keys(this.__states).length > 1)   settings.states    = this.__states;
 
 
 			if (this.position.x !== 0 || this.position.y !== 0 || this.position.z !== 0) {

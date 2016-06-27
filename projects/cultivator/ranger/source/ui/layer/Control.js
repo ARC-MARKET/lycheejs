@@ -3,7 +3,10 @@ lychee.define('app.ui.layer.Control').includes([
 	'lychee.ui.Layer'
 ]).requires([
 	'lychee.ui.entity.Helper'
-]).exports(function(lychee, app, global, attachments) {
+]).exports(function(lychee, global, attachments) {
+
+	var _Helper = lychee.import('lychee.ui.entity.Helper');
+	var _Layer  = lychee.import('lychee.ui.Layer');
 
 
 
@@ -49,7 +52,7 @@ lychee.define('app.ui.layer.Control').includes([
 
 				for (var l = 0, ll = label.length; l < ll; l++) {
 
-					var helper = new lychee.ui.entity.Helper();
+					var helper = new _Helper();
 
 					helper.bind('change', _on_change, helper);
 
@@ -103,7 +106,7 @@ lychee.define('app.ui.layer.Control').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.label = [];
@@ -113,7 +116,7 @@ lychee.define('app.ui.layer.Control').includes([
 		settings.relayout = false;
 
 
-		lychee.ui.Layer.call(this, settings);
+		_Layer.call(this, settings);
 
 		settings = null;
 
@@ -137,7 +140,7 @@ lychee.define('app.ui.layer.Control').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Layer.prototype.serialize.call(this);
+			var data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'app.ui.layer.Control';
 
 

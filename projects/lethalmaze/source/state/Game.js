@@ -7,19 +7,28 @@ lychee.define('game.state.Game').requires([
 	'game.app.sprite.Item',
 	'game.app.sprite.Portal',
 	'game.app.sprite.Tank',
-	'game.data.Level',
+	'game.data.LEVEL',
 	'game.effect.Explosion',
 	'game.effect.Lightning',
 	'game.ui.entity.Timeout',
 	'game.ui.layer.Control'
 ]).includes([
 	'lychee.app.State'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _BLOB   = attachments["json"].buffer;
-	var _LEVELS = attachments["levels.json"].buffer;
-	var _MUSIC  = attachments["msc"];
-	var _SOUNDS = {
+	var _Explosion = lychee.import('game.effect.Explosion');
+	var _Lightning = lychee.import('game.effect.Lightning');
+	var _Bullet    = lychee.import('game.app.sprite.Bullet');
+	var _Item      = lychee.import('game.app.sprite.Item');
+	var _Shake     = lychee.import('lychee.effect.Shake');
+	var _State     = lychee.import('lychee.app.State');
+	var _Tank      = lychee.import('game.app.sprite.Tank');
+	var _Wall      = lychee.import('game.app.sprite.Wall');
+	var _LEVEL     = lychee.import('game.data.LEVEL');
+	var _BLOB      = attachments["json"].buffer;
+	var _LEVELS    = attachments["levels.json"].buffer;
+	var _MUSIC     = attachments["msc"];
+	var _SOUNDS    = {
 		kill:  attachments["kill.snd"],
 		spawn: attachments["spawn.snd"]
 	};
@@ -38,8 +47,8 @@ lychee.define('game.state.Game').requires([
 		var portal = this.queryLayer('game', 'portals > portal');
 		if (portal !== null) {
 
-			portal.addEffect(new game.effect.Lightning({
-				type:     game.effect.Lightning.TYPE.bounceeaseout,
+			portal.addEffect(new _Lightning({
+				type:     _Lightning.TYPE.bounceeaseout,
 				duration: 2000,
 				position: position
 			}));
@@ -66,7 +75,7 @@ lychee.define('game.state.Game').requires([
 				var diff_y = Math.random() > 0.5 ? -8 : 8;
 
 
-				objects.addEffect(new lychee.effect.Shake({
+				objects.addEffect(new _Shake({
 					duration: 300,
 					shake:    {
 						x: diff_x,
@@ -74,7 +83,7 @@ lychee.define('game.state.Game').requires([
 					}
 				}));
 
-				terrain.addEffect(new lychee.effect.Shake({
+				terrain.addEffect(new _Shake({
 					duration: 400,
 					shake:    {
 						x: diff_x / 2,
@@ -87,7 +96,7 @@ lychee.define('game.state.Game').requires([
 
 			if (position !== null) {
 
-				objects.addEffect(new game.effect.Explosion({
+				objects.addEffect(new _Explosion({
 					duration: 500,
 					position: {
 						x: position.x,
@@ -116,7 +125,7 @@ lychee.define('game.state.Game').requires([
 				var effect   = portal.effects[pe];
 				var position = effect.position;
 
-				if (effect instanceof game.effect.Lightning) {
+				if (effect instanceof _Lightning) {
 
 					var valid = Math.abs(position.x) > portal.width || Math.abs(position.y) > portal.height;
 					if (valid === true && effect.__alpha < 0.5) {
@@ -164,8 +173,8 @@ lychee.define('game.state.Game').requires([
 		if (objects.entities.indexOf(tank) === -1) {
 
 			tank.removeEffects();
-			tank.addEffect(new game.effect.Lightning({
-				type:     game.effect.Lightning.TYPE.bounceeaseout,
+			tank.addEffect(new _Lightning({
+				type:     _Lightning.TYPE.bounceeaseout,
 				duration: 3000
 			}));
 
@@ -294,7 +303,7 @@ lychee.define('game.state.Game').requires([
 
 				entity = objects.getEntity(null, position);
 
-				if (entity === null || entity instanceof game.app.sprite.Item) {
+				if (entity === null || entity instanceof _Item) {
 					result = player.move(data.direction);
 				} else {
 					player.setDirection(data.direction);
@@ -333,7 +342,7 @@ lychee.define('game.state.Game').requires([
 					}
 
 
-					entity = new game.app.sprite.Bullet({
+					entity = new _Bullet({
 						position: position,
 						velocity: velocity
 					});
@@ -441,7 +450,7 @@ lychee.define('game.state.Game').requires([
 
 	var Class = function(main) {
 
-		lychee.app.State.call(this, main);
+		_State.call(this, main);
 
 
 		this.__bullets = [[], [], [], []];
@@ -504,7 +513,7 @@ lychee.define('game.state.Game').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			var data = _State.prototype.serialize.call(this);
 			data['constructor'] = 'game.state.Game';
 
 
@@ -514,7 +523,7 @@ lychee.define('game.state.Game').requires([
 
 		deserialize: function(blob) {
 
-			lychee.app.State.prototype.deserialize.call(this, blob);
+			_State.prototype.deserialize.call(this, blob);
 
 		},
 
@@ -542,7 +551,7 @@ lychee.define('game.state.Game').requires([
 
 						if (entity.collidesWith(player)) {
 
-							if (entity instanceof game.app.sprite.Item) {
+							if (entity instanceof _Item) {
 
 								var result = player.powerup();
 								if (result === true) {
@@ -581,9 +590,9 @@ lychee.define('game.state.Game').requires([
 							var entity = objects.getEntity(null, bullet.position);
 							if (entity !== null && entity !== player) {
 
-								if (entity instanceof game.app.sprite.Tank) {
+								if (entity instanceof _Tank) {
 									entity.hit();
-								} else if (entity instanceof game.app.sprite.Wall) {
+								} else if (entity instanceof _Wall) {
 									entity.hit();
 								}
 
@@ -628,10 +637,10 @@ lychee.define('game.state.Game').requires([
 					for (var pe = 0, pel = portal.effects.length; pe < pel; pe++) {
 
 						var effect = portal.effects[pe];
-						if (effect instanceof game.effect.Lightning && effect.__start !== null && effect.__start < clock) {
+						if (effect instanceof _Lightning && effect.__start !== null && effect.__start < clock) {
 
 							var entity = objects.getEntity(null, effect.position);
-							if (entity !== null && entity instanceof game.app.sprite.Wall) {
+							if (entity !== null && entity instanceof _Wall) {
 								_explode.call(this, effect.position);
 								objects.removeEntity(entity);
 							}
@@ -663,7 +672,7 @@ lychee.define('game.state.Game').requires([
 			}
 
 
-			lychee.app.State.prototype.update.call(this, clock, delta);
+			_State.prototype.update.call(this, clock, delta);
 
 		},
 
@@ -678,10 +687,10 @@ lychee.define('game.state.Game').requires([
 			data = data instanceof Object ? data : { level: 'intro' };
 
 
-			lychee.app.State.prototype.enter.call(this, oncomplete);
+			_State.prototype.enter.call(this, oncomplete);
 
 
-			var level = game.data.Level.decode(_LEVELS[data.level] || null) || null;
+			var level = _LEVEL.decode(_LEVELS[data.level] || null) || null;
 			if (level !== null) {
 
 				this.__bullets = [];
@@ -704,7 +713,7 @@ lychee.define('game.state.Game').requires([
 						object.position.y -= objects.height / 2;
 
 
-						if (object instanceof game.app.sprite.Tank) {
+						if (object instanceof _Tank) {
 							this.__bullets.push([]);
 							this.__tanks.push(object);
 						} else {
@@ -879,7 +888,7 @@ lychee.define('game.state.Game').requires([
 			}
 
 
-			lychee.app.State.prototype.leave.call(this, oncomplete);
+			_State.prototype.leave.call(this, oncomplete);
 
 		}
 

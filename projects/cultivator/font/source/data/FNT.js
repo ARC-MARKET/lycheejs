@@ -1,11 +1,11 @@
 
 lychee.define('tool.data.FNT').requires([
-	'lychee.data.JSON'
+	'lychee.codec.JSON'
 ]).tags({
 	platform: 'html'
 }).exports(function(lychee, tool, global, attachments) {
 
-	var _JSON = lychee.data.JSON;
+	var _JSON = lychee.import('lychee.codec.JSON');
 
 
 
@@ -31,11 +31,11 @@ lychee.define('tool.data.FNT').requires([
 
 	var _Buffer = function(data, mode) {
 
-		data = typeof data === 'string'          ? _JSON.decode(data) : null;
-		mode = lychee.enumof(_Buffer.MODE, mode) ? mode               : 0;
+		data = typeof data === 'string' ? _JSON.decode(new Buffer(data, 'utf8')) : null;
+		mode = lychee.enumof(_Buffer.MODE, mode) ? mode : 0;
 
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		var texture = settings.texture;
@@ -84,7 +84,7 @@ lychee.define('tool.data.FNT').requires([
 
 		toString: function() {
 
-			var tmp = lychee.extend({}, this.__data);
+			var tmp = Object.assign({}, this.__data);
 			if (tmp.texture !== null) {
 				tmp.texture = tmp.texture.url || null;
 			}
@@ -244,7 +244,7 @@ lychee.define('tool.data.FNT').requires([
 
 	var _encode_buffer = function(buffer, data) {
 
-		var settings     = lychee.extend({}, _defaults, data);
+		var settings     = Object.assign({}, _defaults, data);
 		var measurements = {
 			width:  0,
 			height: 0,

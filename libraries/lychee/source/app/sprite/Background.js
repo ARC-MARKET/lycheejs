@@ -109,7 +109,7 @@ lychee.define('lychee.app.sprite.Background').includes([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		this.color  = null;

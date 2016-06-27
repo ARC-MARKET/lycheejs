@@ -69,7 +69,7 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({}, data);
+		var settings = Object.assign({}, data);
 
 
 		settings.label   = 'Jukebox';

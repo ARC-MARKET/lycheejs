@@ -1,14 +1,19 @@
 
 lychee.define('game.Main').requires([
+	'lychee.Viewport',
 	'game.Camera',
 	'game.Compositor',
 	'game.Renderer',
 	'game.state.Game'
 ]).includes([
 	'lychee.app.Main'
-]).exports(function(lychee, game, global, attachments) {
+]).exports(function(lychee, global, attachments) {
 
-	var _instances  = [];
+	var _lychee    = lychee.import('lychee');
+	var _game      = lychee.import('game');
+	var _Main      = lychee.import('lychee.app.Main');
+	var _Viewport  = lychee.import('lychee.Viewport');
+	var _instances = [];
 
 
 
@@ -42,7 +47,7 @@ lychee.define('game.Main').requires([
 
 		}, this);
 
-	})(new lychee.Viewport());
+	})(new _Viewport());
 
 
 
@@ -52,7 +57,7 @@ lychee.define('game.Main').requires([
 
 	var Class = function(data) {
 
-		var settings = lychee.extend({
+		var settings = Object.assign({
 
 			client: null,
 			server: null,
@@ -84,7 +89,7 @@ lychee.define('game.Main').requires([
 		}, data);
 
 
-		lychee.app.Main.call(this, settings);
+		_Main.call(this, settings);
 
 		_instances.push(this);
 
@@ -107,17 +112,17 @@ lychee.define('game.Main').requires([
 
 			var gamerenderer = this.settings.gamerenderer || null;
 			if (gamerenderer !== null) {
-				this.renderer = new game.Renderer(gamerenderer);
+				this.renderer = new _game.Renderer(gamerenderer);
 			}
 
-			this.camera     = new game.Camera(this);
-			this.compositor = new game.Compositor(this);
+			this.camera     = new _game.Camera(this);
+			this.compositor = new _game.Compositor(this);
 			this.viewport.unbind('reshape');
 
 			this.renderer.setCamera(this.camera);
 			this.renderer.setCompositor(this.compositor);
 
-			this.setState('game', new game.state.Game(this));
+			this.setState('game', new _game.state.Game(this));
 
 
 			this.viewport.bind('reshape', function() {
@@ -143,7 +148,7 @@ lychee.define('game.Main').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.Main.prototype.serialize.call(this);
+			var data = _Main.prototype.serialize.call(this);
 			data['constructor'] = 'game.Main';
 
 
