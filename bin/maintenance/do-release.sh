@@ -242,9 +242,14 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo "";
 	echo "Manual Steps required to do now:";
 	echo "";
-	echo "- Create equivalent $NEW_VERSION release in the lychee.js Bundle repository.";
-	echo "- Upload and attach lychee.js Bundles (./build/*) to this release.";
+	echo "- Create the $NEW_VERSION release in the lychee.js Harvester repository.";
+	echo "- Upload and attach the builds of it to the release.";
 	echo "";
+	echo "- Create the $NEW_VERSION release in the lychee.js Bundle repository.";
+	echo "- Upload and attach the builds of it to the release.";
+	echo "";
+
+	exit 0;
 
 else
 
