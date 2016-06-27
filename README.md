@@ -73,7 +73,6 @@ repository and its release section.
 
 These bundles ship with an integrated git repository, leading to
 auto-updates via the `master` (quarterly release-cycle) branch.
-
 If you want to change update behaviour of a lychee.js Engine 
 installation, read the [Maintain section](#maintain-lycheejs-engine)
 of this README file.
@@ -89,10 +88,8 @@ release-cycle) branch.
 
 The netinstaller shell script allows to automatically install
 the lychee.js Engine on any UNIX-compatible machine (arm, x86
-or amd64).
-
-The only requirements beforehand are working `bash`, `curl`
-and `git`.
+or amd64). The only requirements beforehand are working `bash`,
+`curl` and `git`.
 
 ```bash
 # This will clone lycheejs into /opt/lycheejs
