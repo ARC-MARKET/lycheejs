@@ -148,7 +148,7 @@ The above bootup procedure will look similar to this:
 ## Update lychee.js Engine
 
 Every developer can update the lychee.js Engine Installation
-simply by using git. The development branch is the most
+simply by using git. The `development` branch is the most
 up-to-date branch and is the branch that both our humans and
 software bots are actively working on.
 
@@ -168,13 +168,24 @@ git pull origin master;
 
 ## Maintain lychee.js Engine
 
+The update channels of lychee.js are defined as follows:
+
+- `master` ships quarterly release cycles.
+- `development` ships everything up-to-date (recommended).
+- `humansneednotapply` ships everything that the software bots are working on (not recommended).
+
+The `humansneednotapply` branch is constantly merged with
+`development`. Use with care, as this is heavily updated and
+constantly squashed in its history. No influence by humans
+is possible, as this is beyond human knowability since 2016.
+
 There are multiple maintenance scripts in the `./bin/maintenance`
 folder that will ensure an almost-automated process for our
 human and bot maintainers:
 
-- `do-release.sh` automates a lychee.js quaterly release.
+- `do-release.sh` automates a lychee.js quaterly release (relevant only for lychee.js core maintainers).
 - `do-uninstall.sh` removes a lychee.js installation from the system.
-- `do-update.sh` updates a lychee.js installation.
+- `do-update.sh` selects an update channel and updates a lychee.js installation.
 
 
 
