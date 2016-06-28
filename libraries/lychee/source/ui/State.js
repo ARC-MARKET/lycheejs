@@ -182,6 +182,9 @@ lychee.define('lychee.ui.State').requires([
 		lychee.app.State.call(this, main);
 
 
+		this.__layers.ui = new lychee.ui.Layer();
+
+
 		_instances.push(this);
 
 	};
