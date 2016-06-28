@@ -92,26 +92,34 @@ lychee.define('fertilizer.data.Shell').tags({
 
 			if (callback !== null) {
 
-				_child_process.execFile(file, args, {
-					cwd: path
-				}, function(error, stdout, stderr) {
+				try {
 
-					that.__stack.push({
-						args:   args,
-						file:   file,
-						path:   path,
-						stdout: stdout.toString(),
-						stderr: stderr.toString()
+					_child_process.execFile(file, args, {
+						cwd: path
+					}, function(error, stdout, stderr) {
+
+						that.__stack.push({
+							args:   args,
+							file:   file,
+							path:   path,
+							stdout: stdout.toString(),
+							stderr: stderr.toString()
+						});
+
+
+						if (error) {
+							callback.call(scope, false);
+						} else {
+							callback.call(scope, true);
+						}
+
 					});
 
+				} catch(err) {
 
-					if (error) {
-						callback.call(scope, false);
-					} else {
-						callback.call(scope, true);
-					}
+					callback.call(scope, false);
 
-				});
+				}
 
 			}
 
