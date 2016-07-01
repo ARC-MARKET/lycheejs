@@ -34,7 +34,7 @@ var _print_help = function() {
 	console.log('                                                            ');
 	console.log('Available Actions:                                          ');
 	console.log('                                                            ');
-	console.log('   start, status, restart, stop                             ');
+	console.log('   start, status, stop                                      ');
 	console.log('                                                            ');
 	console.log('Available Profiles:                                         ');
 	console.log('                                                            ');
@@ -51,7 +51,9 @@ var _print_help = function() {
 	console.log('Examples:                                                   ');
 	console.log('                                                            ');
 	console.log('    lycheejs-harvester start development;                   ');
-	console.log('    lycheejs-harvester restart development --sandbox;       ');
+	console.log('    lycheejs-harvester status;                              ');
+	console.log('    lycheejs-harvester stop;                                ');
+	console.log('    lycheejs-harvester start development --sandbox;         ');
 	console.log('                                                            ');
 
 };
@@ -60,61 +62,64 @@ var _print_help = function() {
 
 var _settings = (function() {
 
+	var args     = process.argv.slice(2).filter(val => val !== '');
 	var settings = {
 		action:  null,
-		debug:   false,
 		profile: null,
+		debug:   false,
 		sandbox: false
 	};
 
 
-	var raw_arg0 = process.argv[2] || '';
-	var raw_arg1 = process.argv[3] || '';
-	var raw_arg2 = process.argv[4] || '';
-	var raw_arg3 = process.argv[5] || '';
-	var raw_flag = raw_arg2 + ' ' + raw_arg3;
+	var action       = args.find(val => /(start|status|restart|stop)/g.test(val));
+	var profile      = args.find(val => /([A-Za-z0-9-_.])/g.test(val) && val !== action);
+	var debug_flag   = args.find(val => /--([debug]{5})/g.test(val));
+	var sandbox_flag = args.find(val => /--([sandbox]{7})/g.test(val));
 
 
-	if (raw_arg0 === 'start') {
+	if (action === 'start') {
 
-		settings.action = 'start';
+		if (profile !== undefined) {
+
+			settings.action = 'start';
 
 
-		try {
+			try {
 
-			var stat1 = fs.lstatSync(root + '/bin/harvester/' + raw_arg1 + '.json');
-			if (stat1.isFile()) {
+				var stat1 = fs.lstatSync(root + '/bin/harvester/' + profile + '.json');
+				if (stat1.isFile()) {
 
-				var json = null;
-				try {
-					json = JSON.parse(fs.readFileSync(root + '/bin/harvester/' + raw_arg1 + '.json', 'utf8'));
-				} catch(e) {
+					var json = null;
+					try {
+						json = JSON.parse(fs.readFileSync(root + '/bin/harvester/' + profile + '.json', 'utf8'));
+					} catch(e) {
+					}
+
+					if (json !== null) {
+						settings.profile = json;
+						settings.debug   = json.debug   === true;
+						settings.sandbox = json.sandbox === true;
+					}
+
 				}
 
-				if (json !== null) {
-					settings.profile = json;
-					settings.debug   = json.debug   === true;
-					settings.sandbox = json.sandbox === true;
-				}
-
+			} catch(e) {
 			}
 
-		} catch(e) {
 		}
 
+	} else if (action !== undefined) {
 
-	} else if (raw_arg0 === 'stop') {
-
-		settings.action = 'stop';
+		settings.action = action;
 
 	}
 
 
-	if (/--debug/g.test(raw_flag) === true) {
+	if (debug_flag !== undefined) {
 		settings.debug = true;
 	}
 
-	if (/--sandbox/g.test(raw_flag) === true) {
+	if (sandbox_flag !== undefined) {
 		settings.sandbox = true;
 	}
 
@@ -272,6 +277,18 @@ var _bootup = function(settings) {
 		settings.profile.sandbox = settings.sandbox === true;
 
 		_bootup(settings.profile);
+
+	} else if (action === 'status') {
+
+		var pid = _read_pid();
+		if (pid !== null) {
+			console.log('Running (' + pid + ')');
+			process.exit(0);
+		} else {
+			console.log('Not running');
+			process.exit(1);
+		}
+
 
 	} else if (action === 'stop') {
 

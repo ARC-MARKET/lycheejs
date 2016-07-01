@@ -80,6 +80,7 @@ var _print_help = function() {
 
 var _settings = (function() {
 
+	var args     = process.argv.slice(2).filter(val => val !== '');
 	var settings = {
 		project:     null,
 		identifier:  null,
@@ -89,23 +90,21 @@ var _settings = (function() {
 	};
 
 
-	var raw_arg0 = process.argv[2] || '';
-	var raw_arg1 = process.argv[3] || '';
-	var raw_arg2 = process.argv[4] || '';
-	var raw_arg3 = process.argv[5] || '';
-	var raw_flag = raw_arg2 + ' ' + raw_arg3;
-	var pkg_path = root + raw_arg1 + '/lychee.pkg';
+	var identifier   = args.find(val => /([a-z-]+)\/([a-z]+)/g.test(val));
+	var project      = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
+	var debug_flag   = args.find(val => /--([debug]{5})/g.test(val));
+	var sandbox_flag = args.find(val => /--([sandbox]{7})/g.test(val));
 
 
-	if (raw_arg0 !== '' && raw_arg1 !== '' && fs.existsSync(pkg_path) === true) {
+	if (identifier !== undefined && project !== undefined && fs.existsSync(root + project) === true) {
 
-		settings.project = raw_arg1;
+		settings.project = project;
 
 
 		var json = null;
 
 		try {
-			json = JSON.parse(fs.readFileSync(pkg_path, 'utf8'));
+			json = JSON.parse(fs.readFileSync(root + project + '/lychee.pkg', 'utf8'));
 		} catch(e) {
 			json = null;
 		}
@@ -115,28 +114,27 @@ var _settings = (function() {
 
 			if (json.build instanceof Object && json.build.environments instanceof Object) {
 
-				if (json.build.environments[raw_arg0] instanceof Object) {
-					settings.identifier  = raw_arg0;
-					settings.environment = json.build.environments[raw_arg0];
+				if (json.build.environments[identifier] instanceof Object) {
+					settings.identifier  = identifier;
+					settings.environment = json.build.environments[identifier];
 				}
 
 			}
 
 		}
 
-	} else if (raw_arg1 !== '' && fs.existsSync(root + raw_arg1) === true) {
+	} else if (project !== undefined && fs.existsSync(root + project) === true) {
 
-		settings.project    = raw_arg1;
+		settings.project    = project;
 		settings.identifier = null;
 
 	}
 
-
-	if (/--debug/g.test(raw_flag) === true) {
+	if (debug_flag !== undefined) {
 		settings.debug = true;
 	}
 
-	if (/--sandbox/g.test(raw_flag) === true) {
+	if (sandbox_flag !== undefined) {
 		settings.sandbox = true;
 	}
 

@@ -53,19 +53,8 @@ fi;
 
 
 
-if [ -d "$LYCHEEJS_ROOT/$2" ]; then
+cd $LYCHEEJS_ROOT;
+$LYCHEEJS_NODE ./bin/strainer.js "$1" "$2" "$3" "$4";
 
-	cd $LYCHEEJS_ROOT;
-	$LYCHEEJS_NODE ./bin/strainer.js "$1" "$2";
-
-	exit 0;
-
-else
-
-	cd $LYCHEEJS_ROOT;
-	$LYCHEEJS_NODE ./bin/strainer.js help;
-
-	exit 1;
-
-fi;
+exit $?;
 

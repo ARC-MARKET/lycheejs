@@ -73,6 +73,7 @@ var _print_help = function() {
 
 var _settings = (function() {
 
+	var args     = process.argv.slice(2).filter(val => val !== '');
 	var settings = {
 		action:   null,
 		project:  null,
@@ -80,14 +81,16 @@ var _settings = (function() {
 	};
 
 
-	var raw_arg0 = process.argv[2] || '';
-	var raw_arg1 = process.argv[3] || '';
-	var raw_arg2 = process.argv[4] || '';
+	var action       = args.find(val => /(init|pull|push)/g.test(val));
+	var library      = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
+	var project      = args.find(val => /--project=\/(libraries|projects)\/([A-Za-z0-9-_\/]+)/g.test(val));
+	var debug_flag   = args.find(val => /--([debug]{5})/g.test(val));
+	var sandbox_flag = args.find(val => /--([sandbox]{7})/g.test(val));
 
 
-	if (raw_arg2.substr(0, 10) === '--project=') {
+	if (project !== undefined) {
 
-		var tmp = raw_arg2.substr(10);
+		var tmp = project.substr(10);
 		if (tmp.indexOf('.') === -1) {
 
 			try {
@@ -108,34 +111,31 @@ var _settings = (function() {
 	}
 
 
-	// init "" --project="/projects/my-project"
-	if (raw_arg0 === 'init') {
+	if (action === 'pull') {
 
-		settings.action = 'init';
+		if (library !== undefined) {
+
+			settings.action = action;
 
 
-	// pull /libraries/harvester --project="/projects/my-project"
-	} else if (raw_arg0 === 'pull') {
+			try {
+				var stat1 = fs.lstatSync(root + library);
+				var stat2 = fs.lstatSync(root + library + '/lychee.pkg');
+				if (stat1.isDirectory() && stat2.isFile()) {
+					settings.library = library;
+				}
 
-		settings.action = 'pull';
+			} catch(e) {
 
-		try {
-			var stat1 = fs.lstatSync(root + raw_arg1);
-			var stat2 = fs.lstatSync(root + raw_arg1 + '/lychee.pkg');
-			if (stat1.isDirectory() && stat2.isFile()) {
-				settings.library = raw_arg1;
+				settings.library = null;
+
 			}
-
-		} catch(e) {
-
-			settings.library = null;
 
 		}
 
-	// push "" --project="/projects/my-project"
-	} else if (raw_arg0 === 'push') {
+	} else if (action !== undefined) {
 
-		settings.action = 'push';
+		settings.action = action;
 
 	}
 
