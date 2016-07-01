@@ -250,6 +250,19 @@ lychee.define('lychee.math.Vector2').exports(function(lychee, global, attachment
  			d[0] = t * v[0];
 			d[1] = t * v[1];
 
+		},
+
+		rotate: function(origin, t) {
+
+			var d  = this._data;
+			var o  = origin._data;
+			var dx = d[0] - o[0];
+			var dy = d[1] - o[1];
+
+
+			d[0] = o[0] + dx * Math.cos(t) - dy * Math.sin(t);
+			d[1] = o[1] + dx * Math.sin(t) + dy * Math.cos(t);
+
 		}
 
 	};
