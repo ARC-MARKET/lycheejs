@@ -9,7 +9,7 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 	try {
 
-		if (typeof global.XMLHttpRequest === 'function') {
+		if (typeof global.XMLHttpRequest === 'function' || typeof global.XMLHttpRequest === 'object') {
 			return true;
 		}
 
