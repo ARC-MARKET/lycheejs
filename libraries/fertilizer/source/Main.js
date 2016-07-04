@@ -233,7 +233,7 @@ lychee.define('fertilizer.Main').requires([
 
 				template.bind('configure-project', function(oncomplete) {
 
-					this.shell.exec(project + '/bin/configure.sh', function(result) {
+					this.shell.exec(project + '/bin/configure.sh ' + identifier, function(result) {
 
 						if (result === true) {
 							console.info('fertilizer: CONFIGURE-PROJECT SUCCESS');
@@ -249,7 +249,7 @@ lychee.define('fertilizer.Main').requires([
 
 				template.bind('build-project', function(oncomplete) {
 
-					this.shell.exec(project + '/bin/build.sh', function(result) {
+					this.shell.exec(project + '/bin/build.sh ' + identifier, function(result) {
 
 						if (result === true) {
 							console.info('fertilizer: BUILD-PROJECT SUCCESS');
@@ -265,7 +265,7 @@ lychee.define('fertilizer.Main').requires([
 
 				template.bind('package-project', function(oncomplete) {
 
-					this.shell.exec(project + '/bin/package.sh', function(result) {
+					this.shell.exec(project + '/bin/package.sh ' + identifier, function(result) {
 
 						if (result === true) {
 

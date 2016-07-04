@@ -81,6 +81,7 @@ var _print_help = function() {
 var _settings = (function() {
 
 	var args     = process.argv.slice(2).filter(val => val !== '');
+	var prog     = process.argv[0];
 	var settings = {
 		project:     null,
 		identifier:  null,
@@ -90,13 +91,44 @@ var _settings = (function() {
 	};
 
 
-	var identifier   = args.find(val => /([a-z-]+)\/([a-z]+)/g.test(val));
+	var identifier   = args.find(val => /^([a-z-]+)\/([a-z]+)$/g.test(val)) || args.find(val => val === 'auto');
 	var project      = args.find(val => /^\/(libraries|projects)\/([A-Za-z0-9-_\/]+)$/g.test(val));
 	var debug_flag   = args.find(val => /--([debug]{5})/g.test(val));
 	var sandbox_flag = args.find(val => /--([sandbox]{7})/g.test(val));
 
 
-	if (identifier !== undefined && project !== undefined && fs.existsSync(root + project) === true) {
+	if (identifier === 'auto' && project !== undefined && fs.existsSync(root + project) === true) {
+
+		var json = null;
+
+		try {
+			json = JSON.parse(fs.readFileSync(root + project + '/lychee.pkg', 'utf8'));
+		} catch(e) {
+			json = null;
+		}
+
+
+		if (json !== null) {
+
+			if (json.build instanceof Object && json.build.environments instanceof Object) {
+
+				Object.keys(json.build.environments).forEach(function(identifier) {
+
+					if (identifier !== 'auto') {
+// TODO: This shit
+						console.log(prog, [ process.argv[1], identifier, project ]);
+					}
+
+				});
+
+			}
+
+		}
+
+
+		process.exit(0);
+
+	} else if (identifier !== undefined && project !== undefined && fs.existsSync(root + project) === true) {
 
 		settings.project = project;
 
@@ -123,12 +155,8 @@ var _settings = (function() {
 
 		}
 
-	} else if (project !== undefined && fs.existsSync(root + project) === true) {
-
-		settings.project    = project;
-		settings.identifier = null;
-
 	}
+
 
 	if (debug_flag !== undefined) {
 		settings.debug = true;
