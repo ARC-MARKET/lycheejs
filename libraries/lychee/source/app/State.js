@@ -489,7 +489,7 @@ lychee.define('lychee.app.State').requires([
 
 
 				var cache = this.__cache;
-				for (var c = 0; cl = cache.length; c < cl; c++) {
+				for (var c = 0, cl = cache.length; c < cl; c++) {
 
 					var layer = this.__layers[cache[c]];
 					if (layer.visible === false) continue;
