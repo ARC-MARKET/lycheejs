@@ -657,9 +657,6 @@
 				}
 			},
 			"verlet": {
-				"AngleConstraint": [
-					"js"
-				],
 				"DistanceConstraint": [
 					"js"
 				],
@@ -667,9 +664,6 @@
 					"js"
 				],
 				"Tire": [
-					"js"
-				],
-				"Vector2": [
 					"js"
 				],
 				"World": [

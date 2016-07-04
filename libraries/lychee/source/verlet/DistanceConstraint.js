@@ -1,17 +1,18 @@
 
 lychee.define('lychee.verlet.DistanceConstraint').requires([
-	'lychee.verlet.Particle',
-	'lychee.verlet.Vector2'
-]).exports(function(lychee, global) {
+	'lychee.math.Vector2',
+	'lychee.verlet.Particle'
+]).exports(function(lychee, global, attachments) {
 
-	var _cache    = new lychee.verlet.Vector2();
-	var _particle = lychee.verlet.Particle;
+	var _Particle = lychee.import('lychee.verlet.Particle');
+	var _Vector2  = lychee.import('lychee.math.Vector2');
+	var _cache    = new _Vector2();
 
 
 	var Class = function(a, b, rigidity) {
 
-		this.a = a instanceof _particle ? a : null;
-		this.b = b instanceof _particle ? b : null;
+		this.a = a instanceof _Particle ? a : null;
+		this.b = b instanceof _Particle ? b : null;
 
 		this.distance = 0;
 		this.rigidity = typeof rigidity === 'number' ? rigidity : 1;

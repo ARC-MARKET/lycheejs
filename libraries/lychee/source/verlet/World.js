@@ -1,9 +1,9 @@
 
 lychee.define('lychee.verlet.World').requires([
-	'lychee.verlet.Vector2'
-]).exports(function(lychee, global) {
+	'lychee.math.Vector2'
+]).exports(function(lychee, global, attachments) {
 
-	var _vector2 = lychee.verlet.Vector2;
+	var _Vector2 = lychee.import('lychee.math.Vector2');
 
 
 	var Class = function(data) {
@@ -16,10 +16,10 @@ lychee.define('lychee.verlet.World').requires([
 		this.objects = [];
 
 		this.__friction       = 0.99;
-		this.__gravity        = new _vector2();
+		this.__gravity        = new _Vector2();
 		this.__groundfriction = 0.8;
 		this.__map            = {};
-		this.__velocity       = new _vector2();
+		this.__velocity       = new _Vector2();
 
 
 		this.setWidth(settings.width);

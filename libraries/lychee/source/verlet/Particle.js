@@ -1,15 +1,15 @@
 
 lychee.define('lychee.verlet.Particle').requires([
-	'lychee.verlet.Vector2'
-]).exports(function(lychee, global) {
+	'lychee.math.Vector2'
+]).exports(function(lychee, global, attachments) {
 
-	var _vector2 = lychee.verlet.Vector2;
+	var _Vector2 = lychee.import('lychee.math.Vector2');
 
 
 	var Class = function(position) {
 
-		this.position     = new _vector2();
-		this.lastposition = new _vector2();
+		this.position     = new _Vector2();
+		this.lastposition = new _Vector2();
 
 		this.setPosition(position);
 

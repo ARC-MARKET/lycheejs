@@ -331,6 +331,7 @@ lychee.define('lychee.app.State').requires([
 		this.viewport = main.viewport || null;
 
 
+		this.__cache   = [];
 		this.__layers  = {};
 		this.__focus   = null;
 		this.__touches = [
@@ -487,9 +488,10 @@ lychee.define('lychee.app.State').requires([
 				}
 
 
-				for (var id in this.__layers) {
+				var cache = this.__cache;
+				for (var c = 0; cl = cache.length; c < cl; c++) {
 
-					var layer = this.__layers[id];
+					var layer = this.__layers[cache[c]];
 					if (layer.visible === false) continue;
 
 					layer.render(
@@ -539,6 +541,7 @@ lychee.define('lychee.app.State').requires([
 				if (layer !== null) {
 
 					this.__layers[id] = layer;
+					this.__cache      = Object.keys(this.__layers).sort();
 
 					return true;
 
@@ -609,6 +612,7 @@ lychee.define('lychee.app.State').requires([
 			if (id !== null && this.__layers[id] !== undefined) {
 
 				delete this.__layers[id];
+				this.__cache = Object.keys(this.__layers).sort();
 
 				return true;
 
