@@ -272,6 +272,9 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 					var by = this.position.y;
 
 
+					// TODO: Support SHAPE.sphere
+					// TODO: Support SHAPE.cuboid
+
 					var shape = this.shape;
 					if (shape === Class.SHAPE.circle) {
 
