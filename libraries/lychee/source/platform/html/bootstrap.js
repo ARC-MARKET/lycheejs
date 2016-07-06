@@ -54,7 +54,7 @@
 
 		}
 
-	})(global.location || {}, document.currentScript.src || '');
+	})(global.location || {}, (document.currentScript || {}).src || '');
 
 
 
