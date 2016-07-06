@@ -272,13 +272,17 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 					var by = this.position.y;
 
 
-					// TODO: Support SHAPE.sphere
-					// TODO: Support SHAPE.cuboid
-
 					var shape = this.shape;
 					if (shape === Class.SHAPE.circle) {
 
 						var dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
+						if (dist < this.radius) {
+							return true;
+						}
+
+					} else if (shape === Class.SHAPE.sphere) {
+
+						var dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));
 						if (dist < this.radius) {
 							return true;
 						}
@@ -292,6 +296,18 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 
 						return colX && colY;
+
+					} else if (shape === Class.SHAPE.cuboid) {
+
+						var hwidth  = this.width  / 2;
+						var hheight = this.height / 2;
+						var hdepth  = this.depth  / 2;
+						var colX    = (ax >= bx - hwidth)  && (ax <= bx + hwidth);
+						var colY    = (ay >= by - hheight) && (ay <= by + hheight);
+						var colZ    = (az >= bz - hheight) && (az <= bz + hheight);
+
+
+						return colX && colY && colZ;
 
 					}
 

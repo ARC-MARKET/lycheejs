@@ -69,47 +69,53 @@ lychee.define('lychee.verlet.Layer').requires([
 			_Layer.prototype.update.call(this, clock, delta);
 
 
-			var gravity  = this.gravity;
+			var entities = this.entities;
 			var friction = this.friction;
+			var gravity  = this.gravity;
 			var velocity = this.__velocity;
 
 
 			var hwidth  = this.width  / 2;
 			var hheight = this.height / 2;
 
+			for (var e = 0, el = entities.length; e < el; e++) {
 
-			for (var e = 0, el = this.entities.length; e < el; e++) {
+				var entity    = entities[e];
+				var position  = entity.position.clone();
+                var particles = entity.particles;
 
-				var entity   = this.entities[e];
-				var position = entity.position;
-				var origin   = entity.position.clone();
+				for (var p = 0, pl = particles.length; p < pl; p++) {
 
-
-				position.copy(velocity);
-				velocity.subtract(origin);
-				velocity.scale(friction);
+					var particle = particles[p];
 
 
-				if (position.y >= hheight && velocity.squaredLength() > 0.00000001) {
-
-					var m = velocity.length();
-
-					velocity.x /= m;
-					velocity.y /= m;
-					velocity.z /= m;
-
-					velocity.scale(m * 0.8);
-
-				}
+					particle.copy(velocity);
+					velocity.sub(position);
+					velocity.scale(friction);
 
 
-				position.copy(origin);
-				position.add(gravity);
-				position.add(velocity);
+					if (particle.y >= hheight && velocity.squaredLength() > 0.00000001) {
+
+						var m = velocity.length();
+
+						velocity.x /= m;
+						velocity.y /= m;
+						velocity.z /= m;
+
+						velocity.scale(m * 0.8);
+
+					}
 
 
-				if (position.y > hheight) {
-					position.y = hheight;
+					particle.copy(position);
+					particle.add(gravity);
+					particle.add(velocity);
+
+
+					if (particle.y > hheight) {
+						particle.y = hheight;
+					}
+
 				}
 
 			}

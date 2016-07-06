@@ -38,12 +38,12 @@
 			left: 192px;
 		}
 
-		#welcome p {
-			display: block;
-			margin: 32px;
-			text-align: center;
-			font-family: 'museo-sans-300';
-			font-size: 24px;
+		#welcome fyto-ui-Element {
+			width: 60%;
+			max-width: initial;
+			height: auto;
+			margin: 32px auto;
+			padding: 0px 0px 1px 0px;
 		}
 
 		#welcome-logo {
@@ -76,7 +76,7 @@
 </head>
 <body>
 
-<fyto-ui-Menu id="menu" label="lychee.js" value="Projects" state="active">
+<fyto-ui-Menu id="menu" label="lychee.js" value="Welcome" state="active">
 	<option>Welcome</option>
 	<option>Projects</option>
 	<option>Tools</option>
@@ -90,13 +90,21 @@
 			<h2>lychee<span>js</span></h2>
 		</div>
 	
-		<p>
-			The Editor and Strainer are Work-in-Progress until 2016-Q2.<br>
-			lychee.ai and lychee.verlet are Work-in-Progress until 2016-Q3.
-		</p>
-		<p>
-			lychee.js Version: <span id="lychee-VERSION">2016-Q1</span>
-		</p>
+		<fyto-ui-Element label="welcome">
+			<p>
+				The lychee.ai Stack, Editor and Strainer are Work-in-Progress until 2016-Q3.
+			</p>
+			<p>
+				The official (planned) release date for the lychee.js CARTEL/ES-HyperNEAT
+				stack is the 28th September 2016. It will be released to the public here:
+				<br>
+				<br>
+				<a href="https://github.com/Artificial-Engineering/lycheejs-cartel">https://github.com/Artificial-Engineering/lycheejs-cartel</a>
+			</p>
+			<p>
+				lychee.js Version: <span id="lychee-VERSION">2016-Q1</span>
+			</p>
+		</fyto-ui-Element>
 	</fyto-ui-State>
 
 	<fyto-ui-State name="projects" type="grid">

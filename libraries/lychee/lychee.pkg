@@ -370,9 +370,6 @@
 				"Quaternion": [
 					"js"
 				],
-				"Vector2": [
-					"js"
-				],
 				"Vector3": [
 					"js"
 				],
@@ -657,16 +654,13 @@
 				}
 			},
 			"verlet": {
-				"DistanceConstraint": [
+				"Constraint": [
 					"js"
 				],
-				"Particle": [
+				"Entity": [
 					"js"
 				],
-				"Tire": [
-					"js"
-				],
-				"World": [
+				"Layer": [
 					"js"
 				]
 			}

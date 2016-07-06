@@ -1,12 +1,79 @@
 
 lychee.define('lychee.verlet.Entity').requires([
-	'lychee.math.Vector3'
+	'lychee.math.Vector3',
+	'lychee.verlet.Constraint'
 ]).includes([
 	'lychee.app.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Entity  = lychee.import('lychee.app.Entity');
-	var _Vector3 = lychee.import('lychee.math.Vector3');
+	var _Constraint = lychee.import('lychee.verlet.Constraint');
+	var _Entity     = lychee.import('lychee.app.Entity');
+	var _Vector3    = lychee.import('lychee.math.Vector3');
+
+
+
+	/*
+	 * HELPERS
+	 */
+
+	var _on_change = function() {
+
+		var constraints = [];
+		var particles   = [ this.position ];
+		var rigidity    = this.rigidity;
+		var shape       = this.shape;
+
+
+		if (shape === Class.SHAPE.circle) {
+
+			var origin   = new _Vector3(this.position);
+			var radius   = this.radius;
+			var segments = Math.min(64, Math.max(4, Math.pow(radius / 8, 2)));
+
+			for (var s = 0; s < segments; s++) {
+
+				var theta = s * (2 * Math.PI) / segments;
+
+				particles.push(new _Vector3({
+					x: origin.x + Math.cos(theta) * radius,
+					y: origin.y + Math.sin(theta) * radius,
+					z: 0
+				}));
+
+			}
+
+			for (var s = 0; s < segments; s++) {
+
+				var curr = particles[s % segments];
+				var prev = particles[(s - 1) % segments] || null;
+				var next = particles[(s + 1) % segments] || null;
+
+
+				if (curr !== prev && prev !== null) {
+					constraints.push(new _Constraint(curr, prev, rigidity));
+				}
+
+				if (curr !== next && next !== null) {
+					constraints.push(new _Constraint(curr, next, rigidity));
+				}
+
+				constraints.push(new _Constraint(curr, origin, rigidity));
+
+			}
+
+
+// TODO: Implement this stuff here
+
+		} else if (shape === Class.SHAPE.sphere) {
+		} else if (shape === Class.SHAPE.rectangle) {
+		} else if (shape === Class.SHAPE.cuboid) {
+		}
+
+
+		this.constraints = constraints;
+		this.particles   = particles;
+
+	};
 
 
 
@@ -19,14 +86,28 @@ lychee.define('lychee.verlet.Entity').requires([
 		var settings = Object.assign({}, data);
 
 
-		// TODO: this.__constraints
-		// TODO: this.__segments
+		this.constraints = [];
+		this.particles   = [];
+		this.rigidity    = 1;
+
+
+		this.setRigidity(settings.rigidity);
+
+		delete settings.rigidity;
 
 
 		_Entity.call(this, settings);
 
 		settings = null;
 
+	};
+
+
+	Class.SHAPE = {
+		circle:    0,
+		rectangle: 1,
+		sphere:    2,
+		cuboid:    3
 	};
 
 
@@ -51,6 +132,18 @@ lychee.define('lychee.verlet.Entity').requires([
 
 		},
 
+		update: function(clock, delta) {
+
+			_Entity.prototype.update.call(this, clock, delta);
+
+
+			var constraints = this.constraints;
+			for (var c = 0, cl = constraints.length; c < cl; c++) {
+				constraints[c].update(clock, delta);
+			}
+
+		},
+
 
 
 		/*
@@ -65,6 +158,26 @@ lychee.define('lychee.verlet.Entity').requires([
 			if (position !== null) {
 
 				this.position = position;
+				_on_change.call(this);
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setRigidity: function(rigidity) {
+
+			rigidity = typeof rigidity === 'number' ? rigidity : null;
+
+
+			if (rigidity !== null) {
+
+				this.rigidity = rigidity;
+				_on_change.call(this);
 
 				return true;
 
@@ -82,11 +195,8 @@ lychee.define('lychee.verlet.Entity').requires([
 
 			if (shape !== null) {
 
-				// TODO: Update collision model for verlet.Layer
-				// TODO: DistanceConstraint for sphere/circle
-				// TODO: DistanceConstraint for rectangle/cuboid shape
-
 				this.shape = shape;
+				_on_change.call(this);
 
 				return true;
 

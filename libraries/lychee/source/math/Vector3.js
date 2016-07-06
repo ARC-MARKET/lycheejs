@@ -86,7 +86,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 
 		},
 
-		subtract: function(vector) {
+		sub: function(vector) {
 
 			this.x -= vector.x;
 			this.y -= vector.y;
