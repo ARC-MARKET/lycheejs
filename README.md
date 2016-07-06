@@ -11,6 +11,7 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 The following repositories are related to the lychee.js project:
 
+- [lychee.js CARTEL](https://github.com/Artificial-Engineering/lycheejs-cartel.git) contains our academic work related to the CARTEL/ES-HyperNEAT botnet concept (WIP, forked from `/libraries/lychee`).
 - [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled lychee.js Runtimes and Fertilizers.
 - [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (installable via `bower` and `npm`).
 - [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (forked from `/libraries/harvester`).
@@ -34,9 +35,13 @@ scenes.
 The project's goal is to ease up and automate the design
 and engineering process of applications through intelligent
 software bots that learn from your application code. In
-particular, we use an ES/HyperNEAT-architecture across a
-world-wide botnet with over 500k+ active computers
+particular, we use a CARTEL/ES-HyperNEAT architecture
+across a world-wide botnet with over 500k+ active computers
 that constantly improve and learn from your code.
+
+Every (not sandboxed) lychee.js Harvester connected to the
+lychee.js peer cloud is contributing to the evolutionary
+AI's knowledge and improves its capabilities for all others.
 
 The development process is optimized for Blink-based
 browsers (Chromium, Google Chrome, Opera) and their
