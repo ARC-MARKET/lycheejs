@@ -14,11 +14,6 @@ LYCHEEJS_NODE="";
 LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../../"; pwd);
 LYCHEEJS_VERSION=$(cd $LYCHEEJS_ROOT && cat ./libraries/lychee/source/core/lychee.js | grep VERSION | cut -d\" -f2);
 
-SANDBOX_FLAG=false;
-if [ "$1" == "--sandbox" ]; then
-	SANDBOX_FLAG=true;
-fi;
-
 
 
 if [ "$OS" == "darwin" ]; then
@@ -33,7 +28,7 @@ fi;
 
 
 
-if [[ "$USER_WHO" != "root" && "$SANDBOX_FLAG" == "false" ]]; then
+if [[ "$USER_WHO" != "root" ]]; then
 
 	echo "You are not root.";
 	echo "Use \"sudo $0\".";
@@ -58,8 +53,6 @@ else
 	echo "No projects are harmed or modified, so after executing this script";
 	echo "your lychee.js installation is still available in sandboxed mode.";
 	echo "";
-	echo "You need to remove the $LYCHEEJS_ROOT folder manually afterwards.";
-	echo "";
 	echo "lychee.js Folder:  $LYCHEEJS_ROOT";
 	echo "lychee.js Version: $LYCHEEJS_VERSION";
 	echo "";
@@ -74,91 +67,87 @@ else
 
 
 
-	if [ "$SANDBOX_FLAG" == "false" ]; then
+	if [ "$OS" == "linux" ]; then
 
-		if [ "$OS" == "linux" ]; then
-
-			if [ -d /usr/share/applications ]; then
-
-				echo "";
-				echo "> Separating GUI Applications";
-				echo "";
-
-
-				rm /usr/share/applications/lycheejs-editor.desktop;
-				rm /usr/share/applications/lycheejs-helper.desktop;
-				rm /usr/share/applications/lycheejs-ranger.desktop;
-				rm /usr/share/icons/lycheejs.svg;
-
-
-				update_desktop=`which update-desktop-database`;
-
-				if [ "$update_desktop" != "" ]; then
-					$update_desktop;
-				fi;
-
-				update_desktop=`which xdg-desktop-menu`;
-
-				if [ "$update_desktop" != "" ]; then
-					$update_desktop forceupdate;
-				fi;
-
-
-				echo "> DONE";
-				echo "";
-
-			fi;
-
-			if [ -d /usr/local/bin ]; then
-
-				echo "";
-				echo "> Separating CLI Applications";
-				echo "";
-
-
-				rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
-				rm /usr/local/bin/lycheejs-editor 2> /dev/null;
-				rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-				rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
-				rm /usr/local/bin/lycheejs-helper 2> /dev/null;
-				rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
-				rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
-
-
-				echo "> DONE";
-				echo "";
-
-			fi;
-
-		elif [ "$OS" == "osx" ]; then
+		if [ -d /usr/share/applications ]; then
 
 			echo "";
 			echo "> Separating GUI Applications";
 			echo "";
+
+
+			rm /usr/share/applications/lycheejs-editor.desktop;
+			rm /usr/share/applications/lycheejs-helper.desktop;
+			rm /usr/share/applications/lycheejs-ranger.desktop;
+			rm /usr/share/icons/lycheejs.svg;
+
+
+			update_desktop=`which update-desktop-database`;
+
+			if [ "$update_desktop" != "" ]; then
+				$update_desktop;
+			fi;
+
+			update_desktop=`which xdg-desktop-menu`;
+
+			if [ "$update_desktop" != "" ]; then
+				$update_desktop forceupdate;
+			fi;
+
+
 			echo "> DONE";
 			echo "";
 
+		fi;
 
-			if [ -d /usr/local/bin ]; then
+		if [ -d /usr/local/bin ]; then
 
-				echo "";
-				echo "> Separating CLI Applications";
-				echo "";
-
-
-				rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
-				rm /usr/local/bin/lycheejs-editor 2> /dev/null;
-				rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-				rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
-				rm /usr/local/bin/lycheejs-helper 2> /dev/null;
-				rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
-				rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
+			echo "";
+			echo "> Separating CLI Applications";
+			echo "";
 
 
-				echo "> DONE";
-				echo "";
+			rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
+			rm /usr/local/bin/lycheejs-editor 2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper 2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
 
-			fi;
+
+			echo "> DONE";
+			echo "";
+
+		fi;
+
+	elif [ "$OS" == "osx" ]; then
+
+		echo "";
+		echo "> Separating GUI Applications";
+		echo "";
+		echo "> DONE";
+		echo "";
+
+
+		if [ -d /usr/local/bin ]; then
+
+			echo "";
+			echo "> Separating CLI Applications";
+			echo "";
+
+
+			rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
+			rm /usr/local/bin/lycheejs-editor 2> /dev/null;
+			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper 2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
+
+
+			echo "> DONE";
+			echo "";
 
 		fi;
 

@@ -122,21 +122,15 @@ The above installation procedure will look similar to this:
 After you've installed the lychee.js Engine, you can directly
 start the `lycheejs-harvester`.
 
-The `./bin/configure.sh` script has to be executed initially
-one time via `sudo` (not `su`) in order to compile down all
-the lychee.js core libraries and to symlink the `lycheejs-`
-tools correctly into `/usr/local/bin`.
+The `./bin/maintenance/do-install.sh` script has to be executed
+one time with `sudo` (not `su`) in order to install all required
+dependencies and to symlink the `lycheejs-*` tools correctly
+into `/usr/local/bin`.
 
-We try to support as much package managers as possible inside
-the `./bin/configure.sh`, but if your package manager isn't
-supported - please let us know.
-
-If you want a sandboxed installation without the system-wide
-integration of the `lycheejs-` tools, you can use the `--sandbox`
-flag. The sandbox flag can also be used with the harvester so
-it does not use any native tools outside the `/opt/lycheejs`
-folder, which, in return will use less resources and runs
-better on slower machines like a Raspberry Pi.
+The `--sandbox` flag can be used with the lycheejs tools, so
+they do not use any native tools outside the `/opt/lycheejs`
+folder, which in return will use less resources and run better
+on slower machines like a Raspberry Pi.
 
 However, the sandbox flag disables all software bots like
 auto-testing, auto-documentation, auto-fertilization and
@@ -145,8 +139,11 @@ auto-synchronization of all lychee.js Libraries and Projects.
 ```bash
 cd /opt/lycheejs;
 
-sudo ./bin/configure.sh;              # --sandbox to install in isolation
-lycheejs-harvester start development; # --sandbox to enforce sandbox mode
+# (Optional) GUI and CLI tools integration
+sudo ./bin/maintenance/do-install.sh;
+
+./bin/configure.sh;                   # build the lychee.js Engine
+lycheejs-harvester start development; # start the lychee.js Harvester
 ```
 
 The above bootup procedure will look similar to this:
@@ -194,7 +191,8 @@ folder that will ensure an almost-automated process for our
 human and bot maintainers:
 
 - `do-release.sh` automates a lychee.js quarterly release (relevant only for lychee.js core maintainers).
-- `do-uninstall.sh` removes a lychee.js installation from the system.
+- `do-install.sh` integrates a lychee.js installation with the system.
+- `do-uninstall.sh` separates a lychee.js installation from the system.
 - `do-update.sh` selects an update channel and updates a lychee.js installation.
 
 
