@@ -133,10 +133,10 @@ if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
 	# Make command line tools explicitely executable
 
-	chmod +x -f ./libraries/*/harvester.js;
-	chmod +x -f ./libraries/*/bin/*.sh;
-	chmod +x -f ./projects/*/harvester.js;
-	chmod +x -f ./projects/*/bin/*.sh;
+	chmod +x ./libraries/*/harvester.js 2> /dev/null;
+	chmod +x ./libraries/*/bin/*.sh     2> /dev/null;
+	chmod +x ./projects/*/harvester.js  2> /dev/null;
+	chmod +x ./projects/*/bin/*.sh      2> /dev/null;
 
 	chmod 0777 ./bin;
 	chmod -R 0777 ./bin/harvester;
