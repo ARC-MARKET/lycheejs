@@ -12,7 +12,7 @@ if [ -d $PROJECT_ROOT/build ]; then
 	if [ "$PROJECT_BUILD" == "html/main" ]; then
 
 		cd "$PROJECT_ROOT/build/$PROJECT_BUILD";
-		zip -q "$PROJECT_ROOT/build/boilerplate_browser_all.zip" ./*;
+		zip -qr "$PROJECT_ROOT/build/boilerplate_browser_all.zip" ./*;
 
 
 		rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD";
@@ -20,15 +20,15 @@ if [ -d $PROJECT_ROOT/build ]; then
 	elif [ "$PROJECT_BUILD" == "html-nwjs/main" ]; then
 
 		cd "$PROJECT_ROOT/build/$PROJECT_BUILD-linux/x86_64";
-		zip -q "$PROJECT_ROOT/build/boilerplate_linux_x86_64.zip" ./*;
+		zip -qr "$PROJECT_ROOT/build/boilerplate_linux_x86_64.zip" ./*;
 		rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD-linux";
 
 		cd "$PROJECT_ROOT/build/$PROJECT_BUILD-osx/x86_64";
-		zip -q "$PROJECT_ROOT/build/boilerplate_osx_x86_64.zip" ./*;
+		zip -qr "$PROJECT_ROOT/build/boilerplate_osx_x86_64.zip" ./*;
 		rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD-osx";
 
 		cd "$PROJECT_ROOT/build/$PROJECT_BUILD-windows/x86_64";
-		zip -q "$PROJECT_ROOT/build/boilerplate_windows_x86_64.zip" ./*;
+		zip -qr "$PROJECT_ROOT/build/boilerplate_windows_x86_64.zip" ./*;
 		rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD-windows";
 
 

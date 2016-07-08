@@ -22,6 +22,24 @@
 				},
 				"variant": "application"
 			},
+			"html-webview/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-webview",
+						"html"
+					]
+				},
+				"variant": "application"
+			},
 			"html/main": {
 				"build": "game.Main",
 				"debug": false,
