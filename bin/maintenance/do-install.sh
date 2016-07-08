@@ -92,24 +92,35 @@ else
 
 	if [ "$OS" == "linux" ]; then
 
+		# Debian/Ubuntu
 		if [[ -x "/usr/bin/apt-get" ]]; then
 			REQUIRED_LIST="bash binutils binutils-multiarch coreutils icnsutils sed zip unzip tar curl git";
 			REQUIRED_CMD="apt-get -y install $REQUIRED_LIST";
 			OPTIONAL_LIST="openjdk-8-jdk libc6-i386 lib32stdc++6 lib32ncurses5 lib32z1";
 			OPTIONAL_CMD="apt-get -y install $OPTIONAL_LIST";
+
+		# Fedora
 		elif [[ -x "/usr/bin/dnf" ]]; then
 			REQUIRED_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
 			REQUIRED_CMD="dnf -y install $REQUIRED_LIST";
+			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
+			OPTIONAL_CMD="dnf -y install $OPTIONAL_LIST";
+
+		# CentOS/old Fedora
 		elif [[ -x "/usr/bin/yum" ]]; then
 			REQUIRED_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
 			REQUIRED_CMD="yum --setopt=alwaysprompt=no install $REQUIRED_LIST";
-			OPTIONAL_LIST="glibc.i686 libstdc++.i686 ncurses.i686 zlib.i686";
+			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
 			OPTIONAL_CMD="yum --setopt=alwaysprompt=no install $OPTIONAL_LIST";
+
+		# Arch
 		elif [[ -x "/usr/bin/pacman" ]]; then
 			REQUIRED_LIST="bash binutils arm-none-eabi-binutils coreutils libicns sed zip unzip tar curl git";
 			REQUIRED_CMD="pacman -S --noconfirm $REQUIRED_LIST";
 			OPTIONAL_LIST="lib32-glibc lib32-libstdc++5 lib32-ncurses lib32-zlib";
 			OPTIONAL_CMD="pacman -S --noconfirm $OPTIONAL_LIST";
+
+		# openSUSE
 		elif [[ -x "/usr/bin/zypper" ]]; then
 			REQUIRED_LIST="bash binutils coreutils icns-utils sed zip unzip tar curl git";
 			REQUIRED_CMD="zypper --non-interactive install $REQUIRED_LIST";
