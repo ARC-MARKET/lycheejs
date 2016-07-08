@@ -4,6 +4,48 @@
 	},
 	"build": {
 		"environments": {
+			"html-nwjs/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-nwjs",
+						"html"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
+				}
+			},
+			"html-webview/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-webview",
+						"html"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
+				}
+			},
 			"html/main": {
 				"build": "game.Main",
 				"debug": false,
@@ -21,8 +63,7 @@
 				},
 				"variant": "application",
 				"profile": {
-					"client": "/api/server/connect?identifier=/projects/lethalmaze",
-					"server": "/api/server/connect?identifier=/projects/lethalmaze"
+					"client": "/api/server/connect?identifier=/projects/lethalmaze"
 				}
 			},
 			"node/main": {
