@@ -12,6 +12,7 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 The following repositories are related to the lychee.js project:
 
 - [lychee.js CARTEL](https://github.com/Artificial-Engineering/lycheejs-cartel.git) contains all academic work related to the CARTEL/ES-HyperNEAT concept (WIP).
+- [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git) contains architecture explanations and concept documentations (WIP).
 - [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled lychee.js Runtimes and Fertilizers.
 - [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (installable via `bower` and `npm`).
 - [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (forked from `/libraries/harvester`).
@@ -63,7 +64,7 @@ each project's or library's `lychee.pkg` file.
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
 |:-------------|:-----------------------------|:----------|:-----:|:-----:|:-------:|
 | Browser      | html                         | zip, html |   ✓   |   ✓   |    ✓    |
-| Linux        | html-nwjs, node, node-sdl    | bin       |   ✓   |   ✓   |    ✓    |
+| GNU/Linux    | html-nwjs, node, node-sdl    | bin       |   ✓   |   ✓   |    ✓    |
 | OSX          | html-nwjs, node, node-sdl    | app, bin  |   ✗   |   ✗   |    ✓    |
 | Windows      | html-nwjs, node, node-sdl    | exe       |   ✗   |   ✓   |    ✓    |
 | Android      | html-webview, node, node-sdl | apk, bin  |   ✓   |   ✓   |    ✓    |
@@ -209,6 +210,28 @@ by opening up an [Issue directly on GitHub](https://github.com/Artificial-Engine
 - [Release Guide](./guides/RELEASE.md)
 
 We also have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials).
+
+
+
+## Common Mistakes
+
+Humans make mistakes, that is normal. Here are the most common mistakes
+that have occured so far and were hard to remember for beginners:
+
+- Forgot to install `brew` beforehand (on OSX).
+- Forgot to execute `./bin/configure.sh`.
+- Forgot to execute `sudo ./bin/maintenance/do-install.sh`.
+- Forgot that `localhost:4848` and `localhost:8080` is already in use.
+- Forgot to edit the `port` setting of `./bin/harvester/development.json`.
+- Forgot to set `JAVA_HOME` for mobile (html-webview) support:
+
+```bash
+# On GNU/Linux
+export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64";
+
+# On OSX
+export JAVA_HOME=$(/usr/libexec/java_home);
+```
 
 
 

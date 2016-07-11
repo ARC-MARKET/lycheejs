@@ -7,7 +7,7 @@ lowercase() {
 OS=`lowercase \`uname\``;
 ARCH=`lowercase \`uname -m\``;
 USER_WHO=`whoami`;
-USER_LOG=`logname`;
+USER_LOG=`logname 2> /dev/null`;
 
 
 LYCHEEJS_NODE="";

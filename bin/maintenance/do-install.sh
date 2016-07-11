@@ -7,12 +7,28 @@ lowercase() {
 OS=`lowercase \`uname\``;
 ARCH=`lowercase \`uname -m\``;
 USER_WHO=`whoami`;
-USER_LOG=`logname`;
+USER_LOG=`logname 2> /dev/null`;
 
 
 LYCHEEJS_NODE="";
 LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../../"; pwd);
 LYCHEEJS_VERSION=$(cd $LYCHEEJS_ROOT && cat ./libraries/lychee/source/core/lychee.js | grep VERSION | cut -d\" -f2);
+
+
+
+_install() {
+
+	cmd="$1";
+	echo -e "\t$cmd";
+	$cmd 2>&1 > /dev/null;
+
+	if [ "$?" == "0" ]; then
+		return 0;
+	else
+		return 1;
+	fi;
+
+}
 
 
 
@@ -53,14 +69,21 @@ else
 	echo "No projects are harmed or modified, so after executing this script";
 	echo "your lychee.js installation is still available in sandboxed mode.";
 	echo "";
-	echo "lychee.js Folder:  $LYCHEEJS_ROOT";
-	echo "lychee.js Version: $LYCHEEJS_VERSION";
+	echo "Please select the installation channel:";
+	echo "";
+	echo "1) minimal + optional dependencies";
+	echo "   Required for mobile device support.";
+	echo "";
+	echo "2) minimal dependencies";
+	echo "   No mobile device support.";
 	echo "";
 
-	read -p "Continue (y/n)? " -r
+	read -p "Continue (1/2)? " -r
 
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
-		echo "";
+	if [[ $REPLY =~ ^[1]$ ]]; then
+		SELECTION="optional";
+	elif [[ $REPLY =~ ^[2]$ ]]; then
+		SELECTION="required";
 	else
 		exit 1;
 	fi;
@@ -69,73 +92,92 @@ else
 
 	if [ "$OS" == "linux" ]; then
 
+		# Debian/Ubuntu
 		if [[ -x "/usr/bin/apt-get" ]]; then
-			PACKAGE_LIST="bash binutils binutils-multiarch coreutils icnsutils sed zip unzip tar curl git";
-			PACKAGE_CMD="apt-get -y install $PACKAGE_LIST";
+			REQUIRED_LIST="bash binutils binutils-multiarch coreutils icnsutils sed zip unzip tar curl git";
+			REQUIRED_CMD="apt-get -y install $REQUIRED_LIST";
+			OPTIONAL_LIST="openjdk-8-jdk libc6-i386 lib32stdc++6 lib32ncurses5 lib32z1";
+			OPTIONAL_CMD="apt-get -y install $OPTIONAL_LIST";
+
+		# Fedora
 		elif [[ -x "/usr/bin/dnf" ]]; then
-			PACKAGE_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
-			PACKAGE_CMD="dnf -y install $PACKAGE_LIST";
+			REQUIRED_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
+			REQUIRED_CMD="dnf -y install $REQUIRED_LIST";
+			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
+			OPTIONAL_CMD="dnf -y install $OPTIONAL_LIST";
+
+		# CentOS/old Fedora
 		elif [[ -x "/usr/bin/yum" ]]; then
-			PACKAGE_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
-			PACKAGE_CMD="yum --setopt=alwaysprompt=no install $PACKAGE_LIST";
+			REQUIRED_LIST="bash binutils binutils-arm-linux-gnu binutils-x86_64-linux-gnu coreutils libicns-utils sed zip unzip tar curl git";
+			REQUIRED_CMD="yum --setopt=alwaysprompt=no install $REQUIRED_LIST";
+			OPTIONAL_LIST="java-1.8.0-openjdk glibc.i686 libstdc++.i686 ncurses-libs.i686 zlib.i686";
+			OPTIONAL_CMD="yum --setopt=alwaysprompt=no install $OPTIONAL_LIST";
+
+		# Arch
 		elif [[ -x "/usr/bin/pacman" ]]; then
-			PACKAGE_LIST="bash binutils arm-none-eabi-binutils coreutils libicns sed zip unzip tar curl git";
-			PACKAGE_CMD="pacman -S --noconfirm $PACKAGE_LIST";
+			REQUIRED_LIST="bash binutils arm-none-eabi-binutils coreutils libicns sed zip unzip tar curl git";
+			REQUIRED_CMD="pacman -S --noconfirm $REQUIRED_LIST";
+			OPTIONAL_LIST="lib32-glibc lib32-libstdc++5 lib32-ncurses lib32-zlib";
+			OPTIONAL_CMD="pacman -S --noconfirm $OPTIONAL_LIST";
+
+		# openSUSE
 		elif [[ -x "/usr/bin/zypper" ]]; then
-			PACKAGE_LIST="bash binutils coreutils icns-utils sed zip unzip tar curl git";
-			PACKAGE_CMD="zypper --non-interactive install $PACKAGE_LIST";
+			REQUIRED_LIST="bash binutils coreutils icns-utils sed zip unzip tar curl git";
+			REQUIRED_CMD="zypper --non-interactive install $REQUIRED_LIST";
+			OPTIONAL_LIST="glibc-32bit libstdc++6-32bit libncurses5-32bit libz1-32bit";
+			OPTIONAL_CMD="zypper --non-interactive install $OPTIONAL_LIST";
 		fi;
 
 	elif [ "$OS" == "osx" ]; then
 
 		if [[ -x "/usr/local/bin/brew" ]]; then
-			PACKAGE_LIST="binutils coreutils libicns gnu-sed gnu-tar curl git";
-			PACKAGE_CMD="sudo -u $USER_LOG brew install $PACKAGE_LIST --with-default-names";
+			REQUIRED_LIST="binutils coreutils libicns gnu-sed gnu-tar curl git";
+			REQUIRED_CMD="sudo -u $USER_LOG brew install $REQUIRED_LIST --with-default-names";
 		elif [[ -x "/opt/local/bin/port" ]]; then
-			PACKAGE_LIST="binutils coreutils libicns gsed zip unzip gnutar curl git";
-			PACKAGE_CMD="port install $PACKAGE_LIST";
+			REQUIRED_LIST="binutils coreutils libicns gsed zip unzip gnutar curl git";
+			REQUIRED_CMD="port install $REQUIRED_LIST";
 		fi;
 
 	fi;
 
 
-	echo "";
-	echo "> Installing Dependencies ...";
 
-	if [ "$PACKAGE_CMD" != "" ]; then
+	if [ "$REQUIRED_CMD" != "" ]; then
 
-		echo -e "\t$PACKAGE_CMD";
+		echo "> Installing required dependencies ...";
 
-		$PACKAGE_CMD 2>&1 > /dev/null;
+		_install "$REQUIRED_CMD";
 
-		if [ "$?" == "0" ]; then
-
+		if [ $? -eq 0 ]; then
 			echo "> DONE";
-
 		else
 			echo "> FAIL";
-			echo "";
-			echo "Installation command failed, please verify that this is working (don't forget to sudo):";
-			echo "$PACKAGE_CMD";
-			echo "";
-
-			exit 1;
-
 		fi;
 
-
-	else
-
-		echo "> FAIL";
+	elif [ "$REQUIRED_CMD" == "" ]; then
 
 		echo "";
 		echo "Your system is not officially supported.";
-		echo "Feel free to modify this script to add the dependencies!";
+		echo "Feel free to modify this script to support your system!";
 		echo "";
 		echo "Also, please let us know about this at https://github.com/Artificial-Engineering/lycheejs/issues";
 		echo "";
 
 		exit 1;
+
+	fi;
+
+	if [[ "$OPTIONAL_CMD" != "" && "$SELECTION" == "optional" ]]; then
+
+		echo "> Installing optional dependencies ...";
+
+		_install "$OPTIONAL_CMD";
+
+		if [ $? -eq 0 ]; then
+			echo "> DONE";
+		else
+			echo "> FAIL";
+		fi;
 
 	fi;
 
