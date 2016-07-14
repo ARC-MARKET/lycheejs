@@ -126,7 +126,8 @@ start the `lycheejs-harvester`.
 The `./bin/maintenance/do-install.sh` script has to be executed
 one time with `sudo` (not `su`) in order to install all required
 dependencies and to symlink the `lycheejs-*` tools correctly
-into `/usr/local/bin`.
+into `/usr/local/bin`. The net installer has done this for you
+already, but some Bundles can't do this automatically.
 
 The `--sandbox` flag can be used with the lycheejs tools, so
 they do not use any native tools outside the `/opt/lycheejs`
@@ -143,34 +144,14 @@ cd /opt/lycheejs;
 # (Optional) GUI and CLI tools integration
 sudo ./bin/maintenance/do-install.sh;
 
-./bin/configure.sh;                   # build the lychee.js Engine
-lycheejs-harvester start development; # start the lychee.js Harvester
+# Build lychee.js Engine and Bootup lychee.js Harvester
+./bin/configure.sh;
+lycheejs-harvester start development;
 ```
 
 The above bootup procedure will look similar to this:
 
 ![Bootup lychee.js](./guides/asset/readme-bootup.gif)
-
-
-
-## Update lychee.js Engine
-
-Every developer can update the lychee.js Engine Installation
-simply by using git. The `development` branch is the most
-up-to-date branch and is the branch that both our humans and
-software bots are actively working on.
-
-```bash
-cd /opt/lycheejs;
-
-# development branch (recommended, but unstable)
-git checkout development;
-git pull origin development;
-
-# master branch (quarterly release-cycle, more stable)
-git checkout master;
-git pull origin master;
-```
 
 
 
@@ -209,7 +190,9 @@ by opening up an [Issue directly on GitHub](https://github.com/Artificial-Engine
 - [ECMAScript Guide](./guides/ECMASCRIPT.md)
 - [Release Guide](./guides/RELEASE.md)
 
-We also have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials).
+We have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials)
+and a [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git)
+that is written in CommonMark and hosted on GitHub.
 
 
 
@@ -219,9 +202,9 @@ Humans make mistakes, that is normal. Here are the most common mistakes
 that have occured so far and were hard to remember for beginners:
 
 - Forgot to install `brew` beforehand (on OSX).
-- Forgot to execute `./bin/configure.sh`.
 - Forgot to execute `sudo ./bin/maintenance/do-install.sh`.
-- Forgot that `localhost:4848` and `localhost:8080` is already in use.
+- Forgot to execute `./bin/configure.sh`.
+- Forgot that ports `4848` and `8080` are already in use.
 - Forgot to edit the `port` setting of `./bin/harvester/development.json`.
 - Forgot to set `JAVA_HOME` for mobile (html-webview) support:
 
