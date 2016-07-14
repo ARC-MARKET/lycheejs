@@ -84,7 +84,7 @@ iOS app and use the `html` platform adapter.
 The lychee.js Bundles (such as a Debian package, OSX package or
 the Raspberry Pi image) can be downloaded by anyone using the
 [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
-repository and its release section.
+repository or the website's instructions at [lychee.js.org/#!install](https://lychee.js.org/#!install).
 
 These bundles ship with an integrated git repository, leading to
 auto-updates via the `master` (quarterly release-cycle) branch.
