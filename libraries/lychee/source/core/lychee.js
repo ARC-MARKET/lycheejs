@@ -921,12 +921,18 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 				var definition = new lychee.Definition(identifier);
 				var that       = this;
 
+
 				// XXX: First sandboxed hierarchy
 				if (that.environment.sandbox === true) {
 					that = that.environment.global.lychee;
 				}
 
 				// XXX: Second sandboxed hierarchy
+				if (that.environment.sandbox === true) {
+					that = that.environment.global.lychee;
+				}
+
+				// XXX: Third sandboxed hierarchy
 				if (that.environment.sandbox === true) {
 					that = that.environment.global.lychee;
 				}

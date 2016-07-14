@@ -3,6 +3,61 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	var lychee = global.lychee;
 
+
+
+	/*
+	 * HELPERS
+	 */
+
+	var _fuzz_id = function(filename) {
+
+		var packages = lychee.environment.packages.filter(function(pkg) {
+			return pkg.type === 'source';
+		}).map(function(pkg) {
+
+			return {
+				id:  pkg.id,
+				url: pkg.url.split('/').slice(0, -1).join('/')
+			};
+
+		});
+
+
+		var ns  = filename.split('/');
+		var pkg = packages.find(function(pkg) {
+			return filename.substr(0, pkg.url.length) === pkg.url;
+		}) || null;
+
+
+		if (pkg !== null) {
+
+			var tmp_i = ns.indexOf('source');
+			var tmp_s = ns[ns.length - 1];
+
+			if (/\.js$/g.test(tmp_s)) {
+				ns[ns.length - 1] = tmp_s.split('.').slice(0, -1).join('.');
+			}
+
+			var classId = '';
+			if (tmp_i !== -1) {
+				classId = ns.slice(tmp_i + 1).join('.');
+			}
+
+
+			this.id        = pkg.id + '.' + classId;
+			this.classId   = classId;
+			this.packageId = pkg.id;
+
+		}
+
+	};
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
 	var Class = function(id) {
 
 		id = typeof id === 'string' ? id : '';
@@ -16,11 +71,30 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			this.classId   = tmp.slice(1).join('.');
 			this.packageId = tmp[0];
 
-		} else {
+		} else if (/^([A-Za-z0-9]+)/g.test(id) === true) {
 
 			this.id        = 'lychee.' + id;
 			this.classId   = id;
 			this.packageId = 'lychee';
+
+		} else {
+
+			this.id        = '';
+			this.classId   = '';
+			this.packageId = '';
+
+
+			var filename = lychee.Environment.__FILENAME || null;
+			if (filename !== null) {
+				_fuzz_id.call(this, filename);
+			}
+
+
+			if (this.id !== '') {
+				console.warn('lychee.Definition: Fuzzy Identifier "' + this.id + '" (defined by ' + filename + ')');
+			} else {
+				console.error('lychee.Definition: Invalid Identifier "' + id + '" (defined by ' + filename + ')');
+			}
 
 		}
 

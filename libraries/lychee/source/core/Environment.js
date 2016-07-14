@@ -1087,9 +1087,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 						// XXX: Always show Dependency Errors
-						this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies ' + cache.load.map(function(value, index) {
-							return '"' + value + '" (required by ' + cache.track[index] + ')';
-						}).join(', '));
+						if (cache.load.length > 0) {
+
+							this.global.console.error('lychee-Environment (' + this.id + '): Invalid Dependencies\n' + cache.load.map(function(value, index) {
+								return '\t - ' + value + ' (required by ' + cache.track[index] + ')';
+							}).join('\n'));
+
+						}
 
 
 						if (this.debug === true) {

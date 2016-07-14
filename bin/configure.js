@@ -326,7 +326,15 @@
 				lychee.envinit(null);
 
 			} catch(e) {
+
+				console.log('\n\n\n');
+				console.log('Syntax Error in lychee.js core:');
+				console.log('- - - - - - - - - - - - - - - -');
+				console.log(e);
+				console.log('\n\n\n');
+
 				errors++;
+
 			}
 
 		}
