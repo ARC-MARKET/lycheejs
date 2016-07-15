@@ -205,6 +205,56 @@
 
 
 	/*
+	 * EASTER EGG
+	 */
+
+	(function(log, console) {
+
+		var css = [
+			'font-size:16px;color:#ffffff;background:#405050',
+			'font-size:16px;color:#d0494b;background:#405050'
+		];
+
+		var is_chrome  = /Chrome/g.test(navigator.userAgent.split(' ').slice(-2, -1)[0] || '');
+		var is_opera   = /OPR/g.test(navigator.userAgent.split(' ').slice(-1) || '');
+		var is_firefox = !!(console.firebug || console.exception);
+
+
+		if (is_chrome || is_opera) {
+
+			log.call(console, '%c                                        ',                                         css[0]);
+			log.call(console, '%c      %c\u2597\u2584\u2596%c        lychee.%cjs%c ' + lychee.VERSION + '      ',   css[0], css[1], css[0], css[1], css[0]);
+			log.call(console, '%c    \u259c\u2585%c\u259d\u2580\u2598%c\u2585\u259b      Isomorphic Engine      ',  css[0], css[1], css[0]);
+			log.call(console, '%c    \u259f\u2580\u2580\u2580\u2580\u2580\u2599    https://lychee.js.org    ',      css[0]);
+			log.call(console, '%c                                        ',                                         css[0]);
+
+		} else if (is_firefox) {
+
+			log.call(console, '%c                                        ',                                         css[0]);
+			log.call(console, '%c      %c\u2597\u2584\u2596%c        lychee.%cjs%c ' + lychee.VERSION + '      ',   css[0], css[1], css[0], css[1], css[0]);
+			log.call(console, '%c    \u259c\u2585%c\u259d\u2580\u2598%c\u2585\u259b      Isomorphic Engine      ',  css[0], css[1], css[0]);
+			log.call(console, '%c   \u259f\u2580\u2580\u2580\u2580\u2580\u2599    https://lychee.js.org   ',        css[0]);
+			log.call(console, '%c                                        ',                                         css[0]);
+			log.call(console, '%c    Please use Chrome/Chromium/Opera    ',                                         css[0]);
+			log.call(console, '%c    We recommend the Blink Dev Tools    ',                                         css[0]);
+			log.call(console, '%c                                        ',                                         css[0]);
+
+		} else {
+
+			log.call(console, '    lychee.js ' + lychee.VERSION + '                   ');
+			log.call(console, '    Isomorphic Engine                   ');
+			log.call(console, '                                        ');
+			log.call(console, '    Please use Chrome/Chromium/Opera    ');
+			log.call(console, '    We recommend the Blink Dev Tools    ');
+			log.call(console, '                                        ');
+
+		}
+
+	})(_log, console);
+
+
+
+	/*
 	 * FEATURE DETECTION
 	 */
 

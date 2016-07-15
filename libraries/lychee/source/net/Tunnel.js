@@ -284,7 +284,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 				this.__socket.bind('connect', function() {
 					this.trigger('connect');
-				}, this)
+				}, this);
 
 				this.__socket.bind('receive', function(payload, headers) {
 					this.receive(payload, headers);
