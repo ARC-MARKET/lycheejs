@@ -300,7 +300,7 @@ lychee.define('app.state.App').requires([
 						alpha:    1.0,
 						duration: 600,
 						delay:    astronauts.length * 300
-					}))
+					}));
 
 
 					astronauts.push(astronaut);

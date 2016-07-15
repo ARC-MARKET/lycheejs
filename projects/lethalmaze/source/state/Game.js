@@ -89,7 +89,7 @@ lychee.define('game.state.Game').requires([
 						x: diff_x / 2,
 						y: diff_y / 2
 					}
-				}))
+				}));
 
 			}
 
