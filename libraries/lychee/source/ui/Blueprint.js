@@ -555,6 +555,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 		 * INITIALIZATION
 		 */
 
+		this.unbind('scroll');
 		this.unbind('touch');
 
 		this.bind('relayout', _on_relayout, this);
@@ -600,6 +601,35 @@ lychee.define('lychee.ui.Blueprint').requires([
 				if (entity !== null) {
 					entity.trigger('key', [ key, name, delta ]);
 				}
+
+
+				return true;
+
+			}
+
+
+			return false;
+
+		}, this);
+
+		this.bind('scroll', function(id, direction, position, delta) {
+
+			if (direction === 'up') {
+
+				_on_swipe.call(this, null, 'start');
+				_on_swipe.call(this, null, 'move', null, null, {
+					y: 128
+				});
+
+
+				return true;
+
+			} else if (direction === 'down') {
+
+				_on_swipe.call(this, null, 'start');
+				_on_swipe.call(this, null, 'move', null, null, {
+					y: -128
+				});
 
 
 				return true;

@@ -92,6 +92,49 @@ lychee.define('lychee.app.State').requires([
 
 	};
 
+	var _on_scroll = function(id, direction, position, delta) {
+
+		var args = [ id, direction, {
+			x: 0,
+			y: 0
+		}, delta ];
+
+
+		var x = position.x;
+		var y = position.y;
+
+
+		var renderer = this.renderer;
+		if (renderer !== null) {
+
+			x -= renderer.offset.x;
+			y -= renderer.offset.y;
+
+		}
+
+
+		for (var lid in this.__layers) {
+
+			var layer = this.__layers[lid];
+			if (layer.visible === false) continue;
+
+			if (lychee.interfaceof(lychee.ui.Layer, layer)) {
+
+				args[2].x = x - layer.position.x;
+				args[2].y = y - layer.position.y;
+
+
+				var result = layer.trigger('scroll', args);
+				if (result !== true && result !== false && result !== null) {
+					break;
+				}
+
+			}
+
+		}
+
+	};
+
 	var _on_swipe = function(id, type, position, delta, swipe) {
 
 		var touch = this.__touches[id];
@@ -424,9 +467,10 @@ lychee.define('lychee.app.State').requires([
 
 			var input = this.input;
 			if (input !== null) {
-				input.bind('key',   _on_key,   this);
-				input.bind('touch', _on_touch, this);
-				input.bind('swipe', _on_swipe, this);
+				input.bind('key',    _on_key,    this);
+				input.bind('scroll', _on_scroll, this);
+				input.bind('swipe',  _on_swipe,  this);
+				input.bind('touch',  _on_touch,  this);
 			}
 
 
@@ -463,9 +507,10 @@ lychee.define('lychee.app.State').requires([
 
 			var input = this.input;
 			if (input !== null) {
-				input.unbind('swipe', _on_swipe, this);
-				input.unbind('touch', _on_touch, this);
-				input.unbind('key',   _on_key,   this);
+				input.unbind('touch',  _on_touch,  this);
+				input.unbind('swipe',  _on_swipe,  this);
+				input.unbind('scroll', _on_scroll, this);
+				input.unbind('key',    _on_key,    this);
 			}
 
 

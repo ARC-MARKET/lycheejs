@@ -25,8 +25,9 @@ lychee.define('app.Main').requires([
 				delay:       0,
 				key:         true,
 				keymodifier: false,
-				touch:       true,
-				swipe:       true
+				scroll:      true,
+				swipe:       true,
+				touch:       true
 			},
 
 			jukebox: {

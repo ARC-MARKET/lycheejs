@@ -183,6 +183,42 @@ lychee.define('lychee.ui.Layer').requires([
 
 	};
 
+	var _on_scroll = function(id, direction, position, delta) {
+
+		if (this.visible === false) return null;
+
+
+		var triggered = null;
+		var args      = [ id, direction, {
+			x: position.x - this.offset.x,
+			y: position.y - this.offset.y
+		}, delta ];
+
+
+		var entity = this.getEntity(null, args[2]);
+		if (entity !== null) {
+
+			if (typeof entity.trigger === 'function') {
+
+				args[2].x -= entity.position.x;
+				args[2].y -= entity.position.y;
+
+				var result = entity.trigger('scroll', args);
+				if (result === true) {
+					triggered = entity;
+				} else if (result !== false) {
+					triggered = result;
+				}
+
+			}
+
+		}
+
+
+		return triggered;
+
+	};
+
 	var _on_touch = function(id, position, delta) {
 
 		if (this.visible === false) return null;
@@ -270,6 +306,7 @@ lychee.define('lychee.ui.Layer').requires([
 		 * INITIALIZATION
 		 */
 
+		this.bind('scroll',   _on_scroll,   this);
 		this.bind('touch',    _on_touch,    this);
 		this.bind('relayout', _on_relayout, this);
 
