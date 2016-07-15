@@ -212,7 +212,14 @@ lychee.define('harvester.mod.Server').requires([
 					}
 
 					lines.forEach(function(message) {
-						console.error('                      ' + message.trim());
+
+						var type = message.trim().substr(0, 3);
+						if (type === '(W)') {
+							console.warn('                      ' + message.trim());
+						} else {
+							console.error('                      ' + message.trim());
+						}
+
 					});
 
 				}
