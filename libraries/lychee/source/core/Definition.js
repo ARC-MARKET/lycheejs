@@ -9,6 +9,39 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	 * HELPERS
 	 */
 
+	var _fuzz_asset = function(filename, type) {
+
+		var asset = {
+			url: '/tmp/Dummy.' + type,
+			serialize: function() {
+				return null;
+			}
+		};
+
+
+		if (filename !== null) {
+			asset.url = filename.split('.').slice(0, -1).join('.') + '.' + type;
+		}
+
+
+		Object.defineProperty(asset, 'buffer', {
+			get: function() {
+				console.warn('lychee.Definition: Injecting Attachment "' + this.url + '" (' + filename + ')');
+				return null;
+
+			},
+			set: function() {
+				return false;
+			},
+			enumerable:   true,
+			configurable: false
+		});
+
+
+		return asset;
+
+	};
+
 	var _fuzz_id = function(filename) {
 
 		var packages = lychee.environment.packages.filter(function(pkg) {
@@ -63,6 +96,13 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 		id = typeof id === 'string' ? id : '';
 
 
+		this.id        = '';
+		this.classId   = '';
+		this.packageId = '';
+
+
+		var filename = lychee.Environment.__FILENAME || null;
+
 		if (id.match(/\./)) {
 
 			var tmp = id.split('.');
@@ -77,29 +117,28 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			this.classId   = id;
 			this.packageId = 'lychee';
 
-		} else {
+		} else if (filename !== null) {
 
-			this.id        = '';
-			this.classId   = '';
-			this.packageId = '';
-
-
-			var filename = lychee.Environment.__FILENAME || null;
-			if (filename !== null) {
-				_fuzz_id.call(this, filename);
-			}
-
+			_fuzz_id.call(this, filename);
 
 			if (this.id !== '') {
-				console.warn('lychee.Definition: Fuzzy Identifier "' + this.id + '" (defined by ' + filename + ')');
+				console.warn('lychee.Definition: Injecting Identifier "' + this.id + '" (' + filename + ')');
 			} else {
-				console.error('lychee.Definition: Invalid Identifier "' + id + '" (defined by ' + filename + ')');
+				console.error('lychee.Definition: Invalid Identifier "' + id + '" (' + filename + ')');
 			}
 
 		}
 
 
-		this._attaches = {};
+		this._attaches = {
+			'json':  _fuzz_asset(filename, 'json'),
+			'fnt':   _fuzz_asset(filename, 'fnt'),
+			'msc':   _fuzz_asset(filename, 'msc'),
+			'pkg':   _fuzz_asset(filename, 'pkg'),
+			'png':   _fuzz_asset(filename, 'png'),
+			'snd':   _fuzz_asset(filename, 'snd'),
+			'store': _fuzz_asset(filename, 'store')
+		};
 		this._tags     = {};
 		this._requires = [];
 		this._includes = [];
@@ -190,7 +229,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 				blob.attaches = {};
 
 				for (var aid in this._attaches) {
-					blob.attaches[aid] = lychee.serialize(this._attaches[aid]);
+
+					var asset = lychee.serialize(this._attaches[aid]);
+					if (asset !== null) {
+						blob.attaches[aid] = asset;
+					}
+
 				}
 
 			}
