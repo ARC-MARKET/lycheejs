@@ -171,7 +171,16 @@ lychee.define('harvester.mod.Server').requires([
 					}
 
 					lines.forEach(function(message) {
-						console.log('                      ' + message.trim());
+
+						var type = message.trim().substr(0, 3);
+						var line = message.trim().substr(3).trim();
+
+						if (type === '(L)') {
+							console.log('                      ' + line);
+						} else {
+							console.log('                      ' + message.trim());
+						}
+
 					});
 
 				}
@@ -214,8 +223,14 @@ lychee.define('harvester.mod.Server').requires([
 					lines.forEach(function(message) {
 
 						var type = message.trim().substr(0, 3);
-						if (type === '(W)') {
-							console.warn('                      ' + message.trim());
+						var line = message.trim().substr(3).trim();
+
+						if (type === '(I)') {
+							console.info('                      ' + line);
+						} else if (type === '(W)') {
+							console.warn('                      ' + line);
+						} else if (type === '(E)') {
+							console.error('                      ' + line);
 						} else {
 							console.error('                      ' + message.trim());
 						}
