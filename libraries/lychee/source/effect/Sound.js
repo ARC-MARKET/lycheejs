@@ -1,7 +1,7 @@
 
 lychee.define('lychee.effect.Sound').exports(function(lychee, global, attachments) {
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.delay = 0;
 		this.sound = true;
@@ -25,7 +25,7 @@ lychee.define('lychee.effect.Sound').exports(function(lychee, global, attachment
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -87,7 +87,7 @@ lychee.define('lychee.effect.Sound').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

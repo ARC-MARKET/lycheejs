@@ -11,7 +11,7 @@ lychee.define('lychee.ui.entity.Label').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -50,7 +50,7 @@ lychee.define('lychee.ui.entity.Label').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -208,7 +208,7 @@ lychee.define('lychee.ui.entity.Label').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

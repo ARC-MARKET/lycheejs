@@ -141,7 +141,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id, remote, data) {
+	var Composite = function(id, remote, data) {
 
 		id = typeof id === 'string' ? id : 'chat';
 
@@ -176,7 +176,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		setLimit: function(limit) {
 
@@ -199,7 +199,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

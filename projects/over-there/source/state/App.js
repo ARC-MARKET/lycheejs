@@ -89,7 +89,7 @@ lychee.define('app.state.App').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(main) {
+	var Composite = function(main) {
 
 		_State.call(this, main);
 
@@ -137,7 +137,7 @@ lychee.define('app.state.App').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -357,6 +357,6 @@ lychee.define('app.state.App').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

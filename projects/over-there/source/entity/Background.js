@@ -17,7 +17,7 @@ lychee.define('app.entity.Background').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -35,7 +35,7 @@ lychee.define('app.entity.Background').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -54,7 +54,7 @@ lychee.define('app.entity.Background').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -18,7 +18,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -47,7 +47,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -206,7 +206,7 @@ lychee.define('app.ui.entity.Bubble').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

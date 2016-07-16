@@ -141,7 +141,7 @@ lychee.define('app.state.Chat').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(main) {
+	var Composite = function(main) {
 
 		_State.call(this, main);
 
@@ -228,7 +228,7 @@ lychee.define('app.state.Chat').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * STATE API
@@ -361,6 +361,6 @@ lychee.define('app.state.Chat').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

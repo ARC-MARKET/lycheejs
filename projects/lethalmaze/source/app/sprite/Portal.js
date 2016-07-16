@@ -62,7 +62,7 @@ lychee.define('game.app.sprite.Portal').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data, main) {
+	var Composite = function(data, main) {
 
 		var settings = Object.assign({}, data);
 
@@ -84,7 +84,7 @@ lychee.define('game.app.sprite.Portal').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -172,7 +172,7 @@ lychee.define('game.app.sprite.Portal').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -612,7 +612,7 @@ lychee.define('Input').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -656,7 +656,7 @@ lychee.define('Input').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -812,7 +812,7 @@ lychee.define('Input').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

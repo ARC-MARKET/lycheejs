@@ -54,7 +54,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 		var off_y    = 0;
 
 
-		if (type === Class.TYPE.horizontal) {
+		if (type === Composite.TYPE.horizontal) {
 
 			off_x = 0;
 			off_y = 64;
@@ -96,7 +96,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 
 			}
 
-		} else if (type === Class.TYPE.vertical) {
+		} else if (type === Composite.TYPE.vertical) {
 
 			off_x = 128;
 			off_y = 0;
@@ -187,14 +187,14 @@ lychee.define('lychee.ui.layer.Table').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
 
 		this.font  = _FONT;
 		this.model = {};
-		this.type  = Class.TYPE.horizontal;
+		this.type  = Composite.TYPE.horizontal;
 		this.value = [];
 
 		this.__cache  = [];
@@ -208,10 +208,10 @@ lychee.define('lychee.ui.layer.Table').requires([
 		this.setValue(settings.value);
 
 
-		if (this.type === Class.TYPE.horizontal) {
+		if (this.type === Composite.TYPE.horizontal) {
 			settings.width  = typeof settings.width === 'number'  ? settings.width  : 512;
 			settings.height = typeof settings.height === 'number' ? settings.height : 384;
-		} else if (this.type === Class.TYPE.vertical) {
+		} else if (this.type === Composite.TYPE.vertical) {
 			settings.width  = typeof settings.width === 'number'  ? settings.width  : 384;
 			settings.height = typeof settings.height === 'number' ? settings.height : 512;
 		}
@@ -234,13 +234,13 @@ lychee.define('lychee.ui.layer.Table').requires([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		horizontal: 0,
 		vertical:   1
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -282,7 +282,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 			var blob     = (data['blob'] || {});
 
 
-			if (this.type !== Class.TYPE.horizontal) settings.type = this.type;
+			if (this.type !== Composite.TYPE.horizontal) settings.type = this.type;
 
 
 			if (this.font !== null) blob.font = lychee.serialize(this.font);
@@ -344,7 +344,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 			}
 
 
-			if (type === Class.TYPE.horizontal) {
+			if (type === Composite.TYPE.horizontal) {
 
 				renderer.drawBox(
 					x1,
@@ -385,7 +385,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 
 				}
 
-			} else if (type === Class.TYPE.vertical) {
+			} else if (type === Composite.TYPE.vertical) {
 
 				renderer.drawBox(
 					x1 + 128,
@@ -525,7 +525,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -624,7 +624,7 @@ lychee.define('lychee.ui.layer.Table').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

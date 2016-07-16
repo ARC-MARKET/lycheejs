@@ -53,7 +53,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.__a = 1732584193;
 		this.__b = -271733879;
@@ -63,7 +63,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		update: function(data) {
 
@@ -207,7 +207,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

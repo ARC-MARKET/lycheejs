@@ -24,7 +24,7 @@ lychee.define('game.app.sprite.Tank').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -74,7 +74,7 @@ lychee.define('game.app.sprite.Tank').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -336,7 +336,7 @@ lychee.define('game.app.sprite.Tank').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

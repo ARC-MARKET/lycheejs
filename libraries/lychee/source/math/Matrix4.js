@@ -4,7 +4,7 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 	var _type = typeof Float32Array !== 'undefined' ? Float32Array : Array;
 
 
-	var Class = function() {
+	var Composite = function() {
 
 		this._data = new _type(16);
 
@@ -18,7 +18,7 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 	};
 
 
-	Class.IDENTITY = new _type([
+	Composite.IDENTITY = new _type([
 		1, 0, 0, 0,
 		0, 1, 0, 0,
 		0, 0, 1, 0,
@@ -26,14 +26,14 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 	]);
 
 
-	Class.PRECISION = 0.000001;
+	Composite.PRECISION = 0.000001;
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		clone: function() {
 
-			var clone = new Class();
+			var clone = new Composite();
 			var d     = this._data;
 
 			clone.set(
@@ -296,7 +296,7 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 
 
 			var length = Math.sqrt(x * x + y * y + z * z);
-			if (Math.abs(length) < Class.PRECISION) {
+			if (Math.abs(length) < Composite.PRECISION) {
 				return;
 			}
 
@@ -453,7 +453,7 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 			var z1 = eyey - centery;
 			var z2 = eyez - centerz;
 
-			if (Math.abs(z0) < Class.PRECISION && Math.abs(z1) < Class.PRECISION && Math.abs(z2) < Class.PRECISION) {
+			if (Math.abs(z0) < Composite.PRECISION && Math.abs(z1) < Composite.PRECISION && Math.abs(z2) < Composite.PRECISION) {
 				return;
 			}
 
@@ -530,7 +530,7 @@ lychee.define('lychee.math.Matrix4').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

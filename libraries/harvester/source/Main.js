@@ -261,7 +261,7 @@ lychee.define('harvester.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({}, _defaults, settings);
 		this.defaults = lychee.assignunlink({}, this.settings);
@@ -326,7 +326,7 @@ lychee.define('harvester.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -457,7 +457,7 @@ lychee.define('harvester.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

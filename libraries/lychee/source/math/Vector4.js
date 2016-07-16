@@ -4,18 +4,18 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 	var _type = typeof Float32Array !== 'undefined' ? Float32Array : Array;
 
 
-	var Class = function() {
+	var Composite = function() {
 
 		this._data = new _type(4);
 
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		clone: function() {
 
-			var clone = new Class();
+			var clone = new Composite();
 
 			clone.set(
 				this._data[0],
@@ -334,7 +334,7 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

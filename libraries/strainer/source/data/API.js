@@ -497,9 +497,9 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_enums = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tvar Class = ') + 14;
+		var i1   = code.indexOf('\n\tvar Composite = ') + 14;
 		var i2   = code.indexOf('\n\t};', i1 + 14)  +  4;
-		var i3   = code.indexOf('\n\tClass.prototype = {');
+		var i3   = code.indexOf('\n\tComposite.prototype = {');
 
 		var enam   = '';
 		var values = [];
@@ -514,7 +514,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		code.split('\n').filter(function(line) {
 
-			if (line.substr(0, 7) === '\tClass.') {
+			if (line.substr(0, 7) === '\tComposite.') {
 				return true;
 			}
 
@@ -527,9 +527,9 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		}).forEach(function(line) {
 
-			if (line.substr(0, 7) === '\tClass.') {
+			if (line.substr(0, 7) === '\tComposite.') {
 
-				enam   = line.split('=')[0].split('Class.')[1].trim();
+				enam   = line.split('=')[0].split('Composite.')[1].trim();
 				values = [];
 
 			} else if (line.substr(0, 2) === '\t\t' && line.indexOf(':') !== -1) {
@@ -616,7 +616,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_properties = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tvar Class = ') + 14;
+		var i1   = code.indexOf('\n\tvar Composite = ') + 14;
 		var i2   = code.indexOf('\n\t};', i1)       +  3;
 
 
@@ -661,7 +661,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							val = line.split(':')[1].split(';')[0].trim();
 							val = _dynamic_value(val);
 
-						} else if (value.substr(0, 6) === 'Class.') {
+						} else if (value.substr(0, 6) === 'Composite.') {
 
 							typ = 'Enum';
 							val = value;
@@ -690,7 +690,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_methods = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tClass.prototype = {') + 21;
+		var i1   = code.indexOf('\n\tComposite.prototype = {') + 21;
 		var i2   = code.indexOf('\n\t};', i1)              +  4;
 		var i3   = code.indexOf('\n\tvar Module = {')      + 16;
 		var i4   = code.indexOf('\n\t};', i3)              +  4;
@@ -897,8 +897,8 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 		};
 
 
-		if (stream.indexOf('return Class;') !== -1) {
-			object.TYPE = 'Class';
+		if (stream.indexOf('return Composite;') !== -1) {
+			object.TYPE = 'Composite';
 		} else if (stream.indexOf('return Module;') !== -1) {
 			object.TYPE = 'Module';
 		}

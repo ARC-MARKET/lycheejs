@@ -86,7 +86,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			label: 'DOWNLOAD'
@@ -123,7 +123,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		setValue: function(value) {
 
@@ -159,7 +159,7 @@ lychee.define('lychee.ui.entity.Download').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

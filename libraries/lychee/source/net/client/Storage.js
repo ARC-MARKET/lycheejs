@@ -7,7 +7,7 @@ lychee.define('lychee.net.client.Storage').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(client) {
+	var Composite = function(client) {
 
 		lychee.net.Service.call(this, 'storage', client, lychee.net.Service.TYPE.client);
 
@@ -40,7 +40,7 @@ lychee.define('lychee.net.client.Storage').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -74,7 +74,7 @@ lychee.define('lychee.net.client.Storage').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

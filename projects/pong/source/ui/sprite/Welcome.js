@@ -16,7 +16,7 @@ lychee.define('game.ui.sprite.Welcome').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -33,7 +33,7 @@ lychee.define('game.ui.sprite.Welcome').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -52,7 +52,7 @@ lychee.define('game.ui.sprite.Welcome').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

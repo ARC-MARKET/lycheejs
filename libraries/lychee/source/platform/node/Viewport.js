@@ -109,7 +109,7 @@ lychee.define('Viewport').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -149,7 +149,7 @@ lychee.define('Viewport').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -212,7 +212,7 @@ lychee.define('Viewport').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

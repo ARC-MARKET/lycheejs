@@ -190,7 +190,7 @@ lychee.define('game.entity.Track').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id) {
+	var Composite = function(id) {
 
 		id = typeof id === 'string' ? id : 'valley';
 
@@ -214,7 +214,7 @@ lychee.define('game.entity.Track').exports(function(lychee, global, attachments)
 	};
 
 
-	Class.ELEMENTS = {
+	Composite.ELEMENTS = {
 
 		jump: function(t, from, to) {
 			return from + (to - from) * Math.pow(t ,2);
@@ -227,7 +227,7 @@ lychee.define('game.entity.Track').exports(function(lychee, global, attachments)
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -349,7 +349,7 @@ lychee.define('game.entity.Track').exports(function(lychee, global, attachments)
 
 			var callback = null;
 			if (element !== null) {
-				callback = Class.ELEMENTS[element] || null;
+				callback = Composite.ELEMENTS[element] || null;
 			}
 
 
@@ -425,7 +425,7 @@ lychee.define('game.entity.Track').exports(function(lychee, global, attachments)
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

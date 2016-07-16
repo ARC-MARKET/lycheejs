@@ -10,7 +10,7 @@ lychee.define('lychee.ui.entity.Texture').requires([
 	var _Sprite = lychee.import('lychee.ui.Sprite');
 
 
-	var Class = function() {
+	var Composite = function() {
 
 		var settings = Object.assign({}, data);
 
@@ -76,7 +76,7 @@ lychee.define('lychee.ui.entity.Texture').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -232,7 +232,7 @@ lychee.define('lychee.ui.entity.Texture').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

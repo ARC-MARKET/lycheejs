@@ -84,7 +84,7 @@ lychee.define('harvester.net.remote.Server').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		_Service.call(this, 'server', remote, _Service.TYPE.remote);
 
@@ -94,7 +94,7 @@ lychee.define('harvester.net.remote.Server').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -167,7 +167,7 @@ lychee.define('harvester.net.remote.Server').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

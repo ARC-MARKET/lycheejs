@@ -110,7 +110,7 @@ lychee.define('harvester.data.Package').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(buffer) {
+	var Composite = function(buffer) {
 
 		this.buffer = null;
 
@@ -128,7 +128,7 @@ lychee.define('harvester.data.Package').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -193,7 +193,7 @@ lychee.define('harvester.data.Package').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

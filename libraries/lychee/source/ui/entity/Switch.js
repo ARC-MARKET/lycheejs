@@ -11,7 +11,7 @@ lychee.define('lychee.ui.entity.Switch').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -116,7 +116,7 @@ lychee.define('lychee.ui.entity.Switch').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -406,7 +406,7 @@ lychee.define('lychee.ui.entity.Switch').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

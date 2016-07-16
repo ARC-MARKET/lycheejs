@@ -72,11 +72,11 @@ lychee.define('lychee.net.Service').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id, tunnel, type) {
+	var Composite = function(id, tunnel, type) {
 
 		id     = typeof id === 'string'                        ? id     : null;
 		tunnel = lychee.interfaceof(lychee.net.Tunnel, tunnel) ? tunnel : null;
-		type   = lychee.enumof(Class.TYPE, type)               ? type   : null;
+		type   = lychee.enumof(Composite.TYPE, type)               ? type   : null;
 
 
 		this.id     = id;
@@ -111,7 +111,7 @@ lychee.define('lychee.net.Service').includes([
 		 * INITIALIZATION
 		 */
 
-		if (this.type === Class.TYPE.remote) {
+		if (this.type === Composite.TYPE.remote) {
 
 			this.bind('plug',   _plug_broadcast,   this);
 			this.bind('unplug', _unplug_broadcast, this);
@@ -121,14 +121,14 @@ lychee.define('lychee.net.Service').includes([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		// 'default': 0, (deactivated)
 		'client': 1,
 		'remote': 2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -150,7 +150,7 @@ lychee.define('lychee.net.Service').includes([
 			if (this.id !== null)   id   = this.id;
 			if (this.type !== null) type = this.type;
 
-			if (this.type === Class.TYPE.client) {
+			if (this.type === Composite.TYPE.client) {
 				tunnel = '#MAIN.client';
 			} else {
 				tunnel = null;
@@ -185,7 +185,7 @@ lychee.define('lychee.net.Service').includes([
 
 
 			var type = this.type;
-			if (type === Class.TYPE.client) {
+			if (type === Composite.TYPE.client) {
 
 				if (service === null) {
 
@@ -211,7 +211,7 @@ lychee.define('lychee.net.Service').includes([
 
 				}
 
-			} else if (type === Class.TYPE.remote) {
+			} else if (type === Composite.TYPE.remote) {
 
 				if (data.service !== null) {
 
@@ -254,7 +254,7 @@ lychee.define('lychee.net.Service').includes([
 
 
 			var type = this.type;
-			if (type === Class.TYPE.client) {
+			if (type === Composite.TYPE.client) {
 
 				if (service === null) {
 
@@ -280,7 +280,7 @@ lychee.define('lychee.net.Service').includes([
 
 				}
 
-			} else if (type === Class.TYPE.remote) {
+			} else if (type === Composite.TYPE.remote) {
 
 				if (data.service !== null) {
 
@@ -396,7 +396,7 @@ lychee.define('lychee.net.Service').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

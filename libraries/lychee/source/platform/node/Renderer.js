@@ -155,7 +155,7 @@ lychee.define('Renderer').tags({
 
 	var _id = 0;
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -184,7 +184,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -623,7 +623,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

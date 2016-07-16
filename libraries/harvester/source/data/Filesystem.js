@@ -71,7 +71,7 @@ lychee.define('harvester.data.Filesystem').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(root) {
+	var Composite = function(root) {
 
 		root = typeof root === 'string' ? root : null;
 
@@ -84,7 +84,7 @@ lychee.define('harvester.data.Filesystem').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -330,7 +330,7 @@ lychee.define('harvester.data.Filesystem').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

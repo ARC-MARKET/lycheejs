@@ -111,7 +111,7 @@ lychee.define('app.ui.entity.Messages').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -148,7 +148,7 @@ lychee.define('app.ui.entity.Messages').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -247,7 +247,7 @@ lychee.define('app.ui.entity.Messages').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

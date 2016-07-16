@@ -15,7 +15,7 @@ lychee.define('lychee.net.client.Session').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id, client, data) {
+	var Composite = function(id, client, data) {
 
 		id = typeof id === 'string' ? id : 'session';
 
@@ -93,7 +93,7 @@ lychee.define('lychee.net.client.Session').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -292,7 +292,7 @@ lychee.define('lychee.net.client.Session').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

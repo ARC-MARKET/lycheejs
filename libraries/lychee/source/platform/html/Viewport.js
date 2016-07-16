@@ -9,7 +9,7 @@ lychee.define('Viewport').tags({
 
 		if (typeof global.innerWidth === 'number' && typeof global.innerHeight === 'number') {
 
-			if (typeof global.document !== 'undefined' && typeof global.document.getElementsByClassName === 'function') {
+			if (typeof global.document !== 'undefined' && typeof global.document.getElementsByCompositeName === 'function') {
 				return true;
 			}
 
@@ -57,7 +57,7 @@ lychee.define('Viewport').tags({
 		 * than 1.0, even if the meta tag is correctly setup.
 		 */
 
-		var elements = global.document.getElementsByClassName('lychee-Renderer');
+		var elements = global.document.getElementsByCompositeName('lychee-Renderer');
 		for (var e = 0, el = elements.length; e < el; e++) {
 
 			var element = elements[e];
@@ -410,7 +410,7 @@ lychee.define('Viewport').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -450,7 +450,7 @@ lychee.define('Viewport').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -540,7 +540,7 @@ lychee.define('Viewport').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

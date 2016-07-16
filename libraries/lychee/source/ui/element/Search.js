@@ -13,7 +13,7 @@ lychee.define('lychee.ui.element.Search').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -89,7 +89,7 @@ lychee.define('lychee.ui.element.Search').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -141,7 +141,7 @@ lychee.define('lychee.ui.element.Search').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

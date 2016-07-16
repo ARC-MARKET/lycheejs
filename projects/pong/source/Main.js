@@ -5,7 +5,7 @@ lychee.define('game.Main').requires([
 	'lychee.app.Main'
 ]).exports(function(lychee, global, attachments) {
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 
@@ -59,7 +59,7 @@ lychee.define('game.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		serialize: function() {
 
@@ -74,6 +74,6 @@ lychee.define('game.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

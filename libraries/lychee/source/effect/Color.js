@@ -36,9 +36,9 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
-		this.type     = Class.TYPE.easeout;
+		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
 		this.duration = 250;
 		this.color    = '#000000';
@@ -49,7 +49,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Class.TYPE, settings.type) ? settings.type           : null;
+		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
 		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
 		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
 		var color    = _is_color(settings.color)                ? settings.color          : null;
@@ -73,7 +73,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		linear:        0,
 		easein:        1,
 		easeout:       2,
@@ -82,7 +82,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -95,7 +95,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 			var settings = {};
 
 
-			if (this.type !== Class.TYPE.easeout) settings.type     = this.type;
+			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
 			if (this.delay !== 0)                 settings.delay    = this.delay;
 			if (this.duration !== 250)            settings.duration = this.duration;
 			if (this.color !== '#000000')         settings.color    = this.color;
@@ -152,13 +152,13 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 
 				var type = this.type;
-				if (type === Class.TYPE.linear) {
+				if (type === Composite.TYPE.linear) {
 
 					r += t * dr;
 					g += t * dg;
 					b += t * db;
 
-				} else if (type === Class.TYPE.easein) {
+				} else if (type === Composite.TYPE.easein) {
 
 					f = 1 * Math.pow(t, 3);
 
@@ -166,7 +166,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 					g += f * dg;
 					b += f * db;
 
-				} else if (type === Class.TYPE.easeout) {
+				} else if (type === Composite.TYPE.easeout) {
 
 					f = Math.pow(t - 1, 3) + 1;
 
@@ -174,7 +174,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 					g += f * dg;
 					b += f * db;
 
-				} else if (type === Class.TYPE.bounceeasein) {
+				} else if (type === Composite.TYPE.bounceeasein) {
 
 					var k = 1 - t;
 
@@ -192,7 +192,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 					g += (1 - f) * dg;
 					b += (1 - f) * db;
 
-				} else if (type === Class.TYPE.bounceeaseout) {
+				} else if (type === Composite.TYPE.bounceeaseout) {
 
 					if ((t /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(t, 2) );
@@ -232,7 +232,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -16,7 +16,7 @@ lychee.define('game.entity.Paddle').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, _CONFIG, data);
 
@@ -31,7 +31,7 @@ lychee.define('game.entity.Paddle').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -50,6 +50,6 @@ lychee.define('game.entity.Paddle').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

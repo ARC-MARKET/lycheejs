@@ -11,7 +11,7 @@ lychee.define('game.net.client.Control').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(client) {
+	var Composite = function(client) {
 
 		var settings = {};
 
@@ -40,7 +40,7 @@ lychee.define('game.net.client.Control').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -89,7 +89,7 @@ lychee.define('game.net.client.Control').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

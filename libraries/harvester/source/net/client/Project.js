@@ -30,7 +30,7 @@ lychee.define('harvester.net.client.Project').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(client) {
+	var Composite = function(client) {
 
 		_Service.call(this, 'project', client, _Service.TYPE.client);
 
@@ -40,7 +40,7 @@ lychee.define('harvester.net.client.Project').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -79,7 +79,7 @@ lychee.define('harvester.net.client.Project').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

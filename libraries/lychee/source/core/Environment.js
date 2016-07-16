@@ -217,7 +217,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		/*
-		 * 1. Export Class, Module or Callback
+		 * 1. Export Composite, Module or Callback
 		 */
 
 		var template = null;
@@ -258,13 +258,13 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 
 		/*
-		 * 2. Assign Class, Module or Callback
+		 * 2. Assign Composite, Module or Callback
 		 */
 
 		if (template !== null) {
 
 			/*
-			 * 2.1 Assign and export Class or Module
+			 * 2.1 Assign and export Composite or Module
 			 */
 
 			var includes = definition._includes;
@@ -709,7 +709,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 	var _id = 0;
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -777,7 +777,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	 * BOOTSTRAP API
 	 */
 
-	Class.__FILENAME = null;
+	Composite.__FILENAME = null;
 
 
 
@@ -785,7 +785,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	 * IMPLEMENTATION
 	 */
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -945,7 +945,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 		define: function(definition) {
 
-			var filename = Class.__FILENAME || null;
+			var filename = Composite.__FILENAME || null;
 			if (filename !== null) {
 
 				if (definition instanceof lychee.Definition) {
@@ -1461,7 +1461,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	};
 
 
-	return Class;
+	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

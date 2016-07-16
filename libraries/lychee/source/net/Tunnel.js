@@ -110,7 +110,7 @@ lychee.define('lychee.net.Tunnel').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -119,7 +119,7 @@ lychee.define('lychee.net.Tunnel').requires([
 		this.host      = 'localhost';
 		this.port      = 1337;
 		this.reconnect = 0;
-		this.type      = Class.TYPE.WS;
+		this.type      = Composite.TYPE.WS;
 
 
 		this.__isConnected = false;
@@ -188,14 +188,14 @@ lychee.define('lychee.net.Tunnel').requires([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		WS:   0,
 		HTTP: 1,
 		TCP:  2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -232,7 +232,7 @@ lychee.define('lychee.net.Tunnel').requires([
 			if (this.host !== 'localhost')   settings.host      = this.host;
 			if (this.port !== 1337)          settings.port      = this.port;
 			if (this.reconnect !== 0)        settings.reconnect = this.reconnect;
-			if (this.type !== Class.TYPE.WS) settings.type      = this.type;
+			if (this.type !== Composite.TYPE.WS) settings.type      = this.type;
 
 
 			if (this.__socket !== null) blob.socket = lychee.serialize(this.__socket);
@@ -275,9 +275,9 @@ lychee.define('lychee.net.Tunnel').requires([
 			if (this.__isConnected === false) {
 
 				var type = this.type;
-				if (type === Class.TYPE.WS) {
+				if (type === Composite.TYPE.WS) {
 					this.__socket = new lychee.net.socket.WS();
-				} else if (type === Class.TYPE.HTTP) {
+				} else if (type === Composite.TYPE.HTTP) {
 					this.__socket = new lychee.net.socket.HTTP();
 				}
 
@@ -623,7 +623,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -654,7 +654,7 @@ lychee.define('lychee.net.Tunnel').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

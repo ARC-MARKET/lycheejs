@@ -7,7 +7,7 @@ lychee.define('lychee.net.remote.Stash').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		lychee.net.Service.call(this, 'stash', remote, lychee.net.Service.TYPE.remote);
 
@@ -40,7 +40,7 @@ lychee.define('lychee.net.remote.Stash').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -81,7 +81,7 @@ lychee.define('lychee.net.remote.Stash').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

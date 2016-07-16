@@ -10,7 +10,7 @@ lychee.define('lychee.ui.sprite.Emblem').includes([
 	};
 
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -38,7 +38,7 @@ lychee.define('lychee.ui.sprite.Emblem').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		serialize: function() {
 
@@ -53,7 +53,7 @@ lychee.define('lychee.ui.sprite.Emblem').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

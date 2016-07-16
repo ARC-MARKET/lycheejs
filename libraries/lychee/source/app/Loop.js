@@ -233,7 +233,7 @@ lychee.define('lychee.app.Loop').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -266,7 +266,7 @@ lychee.define('lychee.app.Loop').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -571,7 +571,7 @@ lychee.define('lychee.app.Loop').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

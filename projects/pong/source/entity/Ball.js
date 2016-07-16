@@ -13,7 +13,7 @@ lychee.define('game.entity.Ball').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, _CONFIG, data);
 
@@ -28,7 +28,7 @@ lychee.define('game.entity.Ball').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -47,6 +47,6 @@ lychee.define('game.entity.Ball').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

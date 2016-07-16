@@ -408,13 +408,13 @@
 		var code = (function () {/*
 			lychee.define('lychee.DIST').requires([{{requires}}]).exports(function(lychee, global, attachments) {
 
-				var Class = function() {};
+				var Composite = function() {};
 
-				Class.prototype = {
+				Composite.prototype = {
 
 				};
 
-				return Class;
+				return Composite;
 
 			});
 

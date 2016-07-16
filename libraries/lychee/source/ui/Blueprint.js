@@ -54,7 +54,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 			this.__scroll.delta = 0;
 
 
-			if (type === Class.TYPE.grid) {
+			if (type === Composite.TYPE.grid) {
 
 				for (var e = 0, el = this.entities.length; e < el; e++) {
 
@@ -118,7 +118,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 				}
 
-			} else if (type === Class.TYPE.view) {
+			} else if (type === Composite.TYPE.view) {
 
 				if (this.entities.length === 2) {
 
@@ -241,7 +241,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 				}
 
-			} else if (type === Class.TYPE.full) {
+			} else if (type === Composite.TYPE.full) {
 
 				for (var e = 0, el = this.entities.length; e < el; e++) {
 
@@ -411,7 +411,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 			var type   = this.type;
 
 
-			if (type === Class.TYPE.grid) {
+			if (type === Composite.TYPE.grid) {
 
 				if (state === 'start') {
 
@@ -457,7 +457,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 				}
 
-			} else if (type === Class.TYPE.view) {
+			} else if (type === Composite.TYPE.view) {
 
 				if (state === 'start') {
 
@@ -518,12 +518,12 @@ lychee.define('lychee.ui.Blueprint').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
 
-		this.type = Class.TYPE.grid;
+		this.type = Composite.TYPE.grid;
 
 
 		this.__fade   = false;
@@ -644,14 +644,14 @@ lychee.define('lychee.ui.Blueprint').requires([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		grid: 0,
 		view: 1,
 		full: 2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -683,7 +683,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -731,7 +731,7 @@ lychee.define('lychee.ui.Blueprint').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

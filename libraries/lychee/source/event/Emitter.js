@@ -272,7 +272,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.___events   = {};
 		this.___timeline = {
@@ -284,7 +284,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -402,7 +402,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 		relay: function(event, instance, once) {
 
 			event    = typeof event === 'string'           ? event    : null;
-			instance = lychee.interfaceof(Class, instance) ? instance : null;
+			instance = lychee.interfaceof(Composite, instance) ? instance : null;
 			once     = once === true;
 
 
@@ -434,7 +434,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

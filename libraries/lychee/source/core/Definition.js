@@ -123,7 +123,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id) {
+	var Composite = function(id) {
 
 		id = typeof id === 'string' ? id : '';
 
@@ -182,7 +182,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -435,7 +435,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	};
 
 
-	return Class;
+	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

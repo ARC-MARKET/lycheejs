@@ -30,7 +30,7 @@ lychee.define('strainer.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({}, _defaults, settings);
 		this.defaults = _lychee.assignunlink({}, this.settings);
@@ -119,7 +119,7 @@ lychee.define('strainer.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -167,7 +167,7 @@ lychee.define('strainer.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

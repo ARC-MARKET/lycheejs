@@ -14,7 +14,7 @@ lychee.define('app.net.Server').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 		}, data);
@@ -50,7 +50,7 @@ lychee.define('app.net.Server').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -71,7 +71,7 @@ lychee.define('app.net.Server').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

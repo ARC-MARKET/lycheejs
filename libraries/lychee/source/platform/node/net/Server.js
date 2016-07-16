@@ -43,7 +43,7 @@ lychee.define('lychee.net.Server').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -52,7 +52,7 @@ lychee.define('lychee.net.Server').tags({
 		this.host   = null;
 		this.port   = 1337;
 		this.remote = _Remote;
-		this.type   = Class.TYPE.WS;
+		this.type   = Composite.TYPE.WS;
 
 
 		this.__isConnected = false;
@@ -104,14 +104,14 @@ lychee.define('lychee.net.Server').tags({
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		WS:   0,
 		HTTP: 1,
 		TCP:  2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -131,7 +131,7 @@ lychee.define('lychee.net.Server').tags({
 			if (this.host !== 'localhost')   settings.host   = this.host;
 			if (this.port !== 1337)          settings.port   = this.port;
 			if (this.remote !== _Remote)     settings.remote = lychee.serialize(this.remote);
-			if (this.type !== Class.TYPE.WS) settings.type   = this.type;
+			if (this.type !== Composite.TYPE.WS) settings.type   = this.type;
 
 
 			data['arguments'][0] = settings;
@@ -329,7 +329,7 @@ lychee.define('lychee.net.Server').tags({
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -360,7 +360,7 @@ lychee.define('lychee.net.Server').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

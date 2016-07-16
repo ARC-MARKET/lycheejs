@@ -7,7 +7,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -22,7 +22,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -56,7 +56,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 
 		clone: function() {
 
-			return new Class({
+			return new Composite({
 				x: this.x,
 				y: this.y,
 				z: this.z
@@ -299,7 +299,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

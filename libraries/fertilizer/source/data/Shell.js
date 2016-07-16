@@ -31,14 +31,14 @@ lychee.define('fertilizer.data.Shell').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.__stack = [];
 
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -174,7 +174,7 @@ lychee.define('fertilizer.data.Shell').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

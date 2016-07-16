@@ -4,7 +4,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 	var _type = typeof Float32Array !== 'undefined' ? Float32Array : Array;
 
 
-	var Class = function() {
+	var Composite = function() {
 
 		this._data = new _type(4);
 
@@ -13,14 +13,14 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 	};
 
 
-	Class.IDENTITY = new _type(0, 0, 0, 1);
+	Composite.IDENTITY = new _type(0, 0, 0, 1);
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		clone: function() {
 
-			var clone = new Class();
+			var clone = new Composite();
 
 			clone.set(this._data[0], this._data[1], this._data[2], this._data[3]);
 
@@ -323,7 +323,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

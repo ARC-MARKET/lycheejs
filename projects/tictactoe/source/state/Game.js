@@ -180,7 +180,7 @@ lychee.define('game.state.Game').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(main) {
+	var Composite = function(main) {
 
 		_State.call(this, main);
 
@@ -224,7 +224,7 @@ lychee.define('game.state.Game').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -296,6 +296,6 @@ lychee.define('game.state.Game').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

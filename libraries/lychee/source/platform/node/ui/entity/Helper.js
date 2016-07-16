@@ -135,7 +135,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			label: 'HELPER'
@@ -162,7 +162,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -320,7 +320,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

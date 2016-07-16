@@ -107,7 +107,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -158,7 +158,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -286,7 +286,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

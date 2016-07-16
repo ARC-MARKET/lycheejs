@@ -73,7 +73,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -81,7 +81,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 		this.font  = _FONT;
 		this.max   = Infinity;
 		this.min   = 0;
-		this.type  = Class.TYPE.text;
+		this.type  = Composite.TYPE.text;
 		this.value = null;
 
 		this.__buffer  = null;
@@ -149,11 +149,11 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 					var raw = this.__value.substr(0, this.__value.length - 1);
 
-					if (type === Class.TYPE.text) {
+					if (type === Composite.TYPE.text) {
 
 						this.__value = raw;
 
-					} else if (type === Class.TYPE.number) {
+					} else if (type === Composite.TYPE.number) {
 
 						var bsvalue = parseInt(raw, 10);
 						if (!isNaN(bsvalue)) {
@@ -183,11 +183,11 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 				if (key.length === 1) {
 
-					if (type === Class.TYPE.text && key.match(/([A-Za-z0-9\s+=-_#@$%*:.\(\)?!]+)/)) {
+					if (type === Composite.TYPE.text && key.match(/([A-Za-z0-9\s+=-_#@$%*:.\(\)?!]+)/)) {
 
 						this.__value = this.__value + key;
 
-					} else if (type === Class.TYPE.number && key.match(/[0-9-+]/)) {
+					} else if (type === Composite.TYPE.number && key.match(/[0-9-+]/)) {
 
 						var value = parseInt('' + this.__value + key, 10);
 						if (!isNaN(value)) {
@@ -217,7 +217,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 
 			var type = this.type;
-			if (type === Class.TYPE.text) {
+			if (type === Composite.TYPE.text) {
 
 				newvalue = this.__value;
 
@@ -229,7 +229,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 				}
 
-			} else if (type === Class.TYPE.number) {
+			} else if (type === Composite.TYPE.number) {
 
 				newvalue = parseInt(this.__value, 10);
 
@@ -269,13 +269,13 @@ lychee.define('lychee.ui.entity.Input').includes([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		text:   0,
 		number: 1
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -301,7 +301,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 			if (this.max !== Infinity)         settings.max   = this.max;
 			if (this.min !== 0)                settings.min   = this.min;
-			if (this.type !== Class.TYPE.text) settings.type  = this.type;
+			if (this.type !== Composite.TYPE.text) settings.type  = this.type;
 			if (this.value !== null)           settings.value = this.value;
 
 
@@ -559,16 +559,16 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
 
 				this.type = type;
 
-				if (type === Class.TYPE.text) {
+				if (type === Composite.TYPE.text) {
 					this.setValue('' + this.value);
-				} else if (type === Class.TYPE.number) {
+				} else if (type === Composite.TYPE.number) {
 					this.setValue(typeof this.value === 'string' ? parseInt(this.value, 10) : this.value);
 				}
 
@@ -588,7 +588,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 
 			// 0: Text
-			if (type === Class.TYPE.text && typeof value === 'string') {
+			if (type === Composite.TYPE.text && typeof value === 'string') {
 
 				if (this.value !== value && value.length >= this.min && value.length <= this.max) {
 
@@ -603,7 +603,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 
 
 			// 1. Number
-			} else if (type === Class.TYPE.number && typeof value === 'number' && !isNaN(value)) {
+			} else if (type === Composite.TYPE.number && typeof value === 'number' && !isNaN(value)) {
 
 				if (this.value !== value && value >= this.min && value <= this.max) {
 
@@ -626,7 +626,7 @@ lychee.define('lychee.ui.entity.Input').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

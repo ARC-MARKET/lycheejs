@@ -5,7 +5,7 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -35,7 +35,7 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -287,7 +287,7 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 
