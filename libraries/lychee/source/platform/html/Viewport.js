@@ -9,7 +9,7 @@ lychee.define('Viewport').tags({
 
 		if (typeof global.innerWidth === 'number' && typeof global.innerHeight === 'number') {
 
-			if (typeof global.document !== 'undefined' && typeof global.document.getElementsByCompositeName === 'function') {
+			if (typeof global.document !== 'undefined' && typeof global.document.querySelectorAll === 'function') {
 				return true;
 			}
 
@@ -57,7 +57,7 @@ lychee.define('Viewport').tags({
 		 * than 1.0, even if the meta tag is correctly setup.
 		 */
 
-		var elements = global.document.getElementsByCompositeName('lychee-Renderer');
+		var elements = global.document.querySelectorAll('.lychee-Renderer');
 		for (var e = 0, el = elements.length; e < el; e++) {
 
 			var element = elements[e];
