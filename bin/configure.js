@@ -7,6 +7,7 @@
 	var _CORE      = '';
 	var _ASSETS    = {};
 	var _BOOTSTRAP = {};
+	var _PLATFORM  = process.argv[2] || null;
 
 
 	(function() {
@@ -524,7 +525,9 @@
 			if (a < b) return -1;
 			return 0;
 		}));
-		var platforms = Object.keys(_package.source.tags.platform);
+		var platforms = Object.keys(_package.source.tags.platform).filter(function(platform) {
+			return _PLATFORM !== null ? platform === _PLATFORM : true;
+		});
 
 
 		console.log('> Generating lychee.js platform adapters');
