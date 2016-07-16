@@ -100,6 +100,156 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	 * HELPERS
 	 */
 
+	var _mock_feature = function(name) {
+
+		switch (name) {
+
+			case 'href':
+				return '1337';
+			break;
+
+			case 'innerWidth':
+			case 'innerHeight':
+				return 1337;
+			break;
+
+			case 'addEventListener':
+			case 'createElement':
+			case 'on':
+			case 'querySelectorAll':
+			case 'read':
+			case 'require':
+			case 'write':
+			case 'CanvasRenderingContext2D':
+			case 'FileReader':
+			case 'WebSocket':
+			case 'XMLHttpRequest':
+				return function(){};
+			break;
+
+			case 'document':
+			case 'location':
+			case 'localStorage':
+			case 'process':
+			case 'sessionStorage':
+			case 'stdin':
+			case 'stdout':
+				return _mock_detector({});
+			break;
+
+			default:
+			break;
+
+		}
+
+
+		console.error('lychee.Environment: Unknown Datatype ("' + name + '")');
+
+		return undefined;
+
+	};
+
+	var _mock_detector = function(source) {
+
+		if (typeof Proxy !== 'undefined') {
+
+			var clone = {};
+			var proxy = new Proxy(clone, {
+				get: function(target, name) {
+
+					if (name === 'splice') {
+						return undefined;
+					} else if (target[name] !== undefined) {
+						return target[name];
+					}
+
+
+					var type = typeof source[name];
+					if (/number|string|function/g.test(type)) {
+						target[name] = source[name];
+					} else if (/object/g.test(type)) {
+						target[name] = _mock_detector(source[name]);
+					} else if (/undefined/g.test(type)) {
+						target[name] = _mock_feature(name);
+					}
+
+
+					return target[name];
+
+				}
+			});
+
+
+			proxy.toJSON = function() {
+
+				var data = {};
+
+				Object.keys(clone).map(function(key) {
+
+					var typ = typeof clone[key];
+					if (/toJSON/g.test(key)) {
+						// XXX: Do nothing
+					} else if (/number|string/g.test(typ)) {
+						data[key] = typ;
+					} else if (/object/g.test(typ)) {
+						data[key] = clone[key];
+					} else if (/function/g.test(typ)) {
+						data[key] = 'function';
+					}
+
+				});
+
+				return data;
+
+			};
+
+
+			return proxy;
+
+		}
+
+
+		return null;
+
+	};
+
+	var _inject_features = function(source, features) {
+
+		var target = this;
+		var keys   = Object.keys(features);
+
+		if (keys.length > 0) {
+
+			keys.forEach(function(key) {
+
+				var type = features[key];
+				if (type instanceof Object) {
+
+					if (source[key] instanceof Object) {
+
+						target[key] = source[key];
+						_inject_features.call(target[key], source[key], type);
+
+					}
+
+				} else {
+
+					// XXX: This is pretty much the only Exception -_-
+					if (key === 'href') return;
+
+
+					if (/number|string|function/g.test(type)) {
+						target[key] = source[key];
+					}
+
+				}
+
+			});
+
+		}
+
+	};
+
 	var _validate_definition = function(definition) {
 
 		if (!(definition instanceof lychee.Definition)) {
@@ -107,15 +257,30 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 
+		var features  = null;
+		var sandbox   = this.sandbox;
 		var supported = false;
+
 
 		if (definition._supports !== null) {
 
-			// TODO: We need a Proxy for determination of all required sandboxed properties
-			supported = definition._supports.call(global, lychee, global);
+			var detector = _mock_detector(global);
+			if (detector !== null) {
+
+				supported = definition._supports.call(detector, lychee, detector);
+				features  = JSON.parse(JSON.stringify(detector));
+				detector  = null;
+
+			} else {
+
+				supported = definition._supports.call(global, lychee, global);
+
+			}
 
 		} else {
+
 			supported = true;
+
 		}
 
 
@@ -146,13 +311,37 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		var type = this.type;
 		if (type === 'build') {
 
+			if (features !== null && sandbox === true) {
+				_inject_features.call(this.global, global, features);
+			}
+
 			return tagged;
 
 		} else if (type === 'export') {
 
+			if (features !== null) {
+
+				this.__features = lychee.assignunlink(this.__features, features);
+
+				if (sandbox === true) {
+					_inject_features.call(this.global, global, features);
+				}
+
+			}
+
 			return tagged;
 
 		} else if (type === 'source') {
+
+			if (features !== null) {
+
+				this.__features = lychee.assignunlink(this.__features, features);
+
+				if (sandbox === true) {
+					_inject_features.call(this.global, global, features);
+				}
+
+			}
 
 			return supported && tagged;
 
@@ -227,12 +416,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				try {
 
-					// TODO: This needs to be sandboxed, so global will be this.global
-
 					template = definition._exports.call(
 						definition._exports,
 						this.global.lychee,
-						global,
+						this.global,
 						definition._attaches
 					) || null;
 
@@ -242,12 +429,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			} else {
 
-				// TODO: This needs to be sandboxed, so global will be this.global
-
 				template = definition._exports.call(
 					definition._exports,
 					this.global.lychee,
-					global,
+					this.global,
 					definition._attaches
 				) || null;
 
@@ -726,7 +911,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		this.type        = 'source';
 
 
-		this.__cache = {
+		this.__cache    = {
 			active:   false,
 			start:    0,
 			end:      0,
@@ -735,6 +920,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			ready:    [],
 			track:    []
 		};
+		this.__features = {};
 
 
 		// Alternative API for lychee.pkg
@@ -801,6 +987,11 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 			}
 
+			var features = lychee.deserialize(blob.features);
+			if (features !== null) {
+				this.__features = features;
+			}
+
 			if (blob.packages instanceof Array) {
 
 				var packages = [];
@@ -862,6 +1053,9 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				}
 
 			}
+
+
+			if (Object.keys(this.__features).length > 0) blob.features = lychee.serialize(this.__features);
 
 			if (this.packages.length > 0) {
 

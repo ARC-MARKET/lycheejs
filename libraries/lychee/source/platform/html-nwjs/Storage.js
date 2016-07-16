@@ -5,10 +5,15 @@ lychee.define('Storage').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	var fs = require('fs');
-	if (typeof fs.readFileSync === 'function' && typeof fs.writeFileSync === 'function') {
-		return true;
+	if (typeof global.require === 'function') {
+
+		var fs = global.require('fs');
+		if (typeof fs.readFileSync === 'function' && typeof fs.writeFileSync === 'function') {
+			return true;
+		}
+
 	}
+
 
 	return false;
 

@@ -5,15 +5,15 @@ lychee.define('Viewport').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	if (typeof global.addEventListener === 'function') {
+	if (
+		typeof global.addEventListener === 'function'
+		&& typeof global.innerWidth === 'number'
+		&& typeof global.innerHeight === 'number'
+		&& typeof global.document !== 'undefined'
+		&& typeof global.document.querySelectorAll === 'function'
+	) {
 
-		if (typeof global.innerWidth === 'number' && typeof global.innerHeight === 'number') {
-
-			if (typeof global.document !== 'undefined' && typeof global.document.querySelectorAll === 'function') {
-				return true;
-			}
-
-		}
+		return true;
 
 	}
 

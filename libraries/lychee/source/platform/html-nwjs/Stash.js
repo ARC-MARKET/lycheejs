@@ -5,10 +5,15 @@ lychee.define('Stash').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	var fs = require('fs');
-	if (typeof fs.unlinkSync === 'function' && typeof fs.writeFileSync === 'function') {
-		return true;
+	if (typeof global.require === 'function') {
+
+		var fs = global.require('fs');
+		if (typeof fs.unlinkSync === 'function' && typeof fs.writeFileSync === 'function') {
+			return true;
+		}
+
 	}
+
 
 	return false;
 

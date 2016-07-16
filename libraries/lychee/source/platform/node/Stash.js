@@ -5,10 +5,15 @@ lychee.define('Stash').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	var fs = require('fs');
-	if (typeof fs.unlinkSync === 'function' && typeof fs.writeFileSync === 'function') {
-		return true;
+	if (typeof global.require === 'function') {
+
+		var fs = global.require('fs');
+		if (typeof fs.unlinkSync === 'function' && typeof fs.writeFileSync === 'function') {
+			return true;
+		}
+
 	}
+
 
 	return false;
 
@@ -66,8 +71,8 @@ lychee.define('Stash').tags({
 		};
 
 
-		var _fs      = require('fs');
-		var _path    = require('path');
+		var _fs      = global.require('fs');
+		var _path    = global.require('path');
 		var _mkdir_p = function(path, mode) {
 
 			if (mode === undefined) {

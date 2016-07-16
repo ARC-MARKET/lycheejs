@@ -5,18 +5,21 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	'lychee.ui.entity.Button'
 ]).supports(function(lychee, global) {
 
-	var child_process = require('child_process');
-	if (typeof child_process.execFile === 'function') {
+	if (
+		typeof global.require === 'function'
+		&& typeof global.document !== 'undefined'
+		&& typeof global.document.createElement === 'function'
+		&& typeof global.location !== 'undefined'
+		&& typeof global.location.href === 'string'
+	) {
 
-		if (typeof global.document !== 'undefined' && typeof global.document.createElement === 'function') {
-
-			if (typeof global.location !== 'undefined' && typeof global.location.href === 'string') {
-				return true;
-			}
-
+		var child_process = global.require('child_process');
+		if (typeof child_process.execFile === 'function') {
+			return true;
 		}
 
 	}
+
 
 	return false;
 
@@ -24,7 +27,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 	var _texture       = attachments["png"];
 	var _config        = attachments["json"].buffer;
-	var _child_process = require('child_process');
+	var _child_process = global.require('child_process');
 	var _root          = lychee.ROOT.lychee;
 
 

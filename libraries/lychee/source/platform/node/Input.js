@@ -5,12 +5,12 @@ lychee.define('Input').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	if (typeof process !== 'undefined') {
-
-		if (typeof process.stdin === 'object' && typeof process.stdin.on === 'function') {
-			return true;
-		}
-
+	if (
+		typeof global.process !== 'undefined'
+		&& typeof global.process.stdin === 'object'
+		&& typeof global.process.stdin.on === 'function'
+	) {
+		return true;
 	}
 
 

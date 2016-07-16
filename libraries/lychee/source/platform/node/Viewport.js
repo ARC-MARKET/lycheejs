@@ -5,17 +5,22 @@ lychee.define('Viewport').tags({
 	'lychee.event.Emitter'
 ]).supports(function(lychee, global) {
 
-	if (typeof process !== 'undefined') {
-
-		if (typeof process.stdout === 'object' && typeof process.stdout.on === 'function') {
-			return true;
-		}
-
+	if (
+		typeof global.process !== 'undefined'
+		&& typeof global.process.stdout === 'object'
+		&& typeof global.process.stdout.on === 'function'
+	) {
+		return true;
 	}
+
 
 	return false;
 
 }).exports(function(lychee, global, attachments) {
+
+	var _process = global.process;
+
+
 
 	/*
 	 * EVENTS
@@ -28,7 +33,7 @@ lychee.define('Viewport').tags({
 		resize: function() {
 
 			for (var i = 0, l = _instances.length; i < l; i++) {
-				_process_reshape.call(_instances[i], process.stdout.columns, process.stdout.rows);
+				_process_reshape.call(_instances[i], _process.stdout.columns, _process.stdout.rows);
 			}
 
 		}
@@ -45,7 +50,7 @@ lychee.define('Viewport').tags({
 
 		var resize = true;
 		if (resize === true) {
-			process.stdout.on('resize', _listeners.resize);
+			_process.stdout.on('resize', _listeners.resize);
 		}
 
 
@@ -115,8 +120,8 @@ lychee.define('Viewport').tags({
 
 
 		this.fullscreen = false;
-		this.width      = process.stdout.columns;
-		this.height     = process.stdout.rows;
+		this.width      = _process.stdout.columns;
+		this.height     = _process.stdout.rows;
 
 		this.__orientation = 0; // Unsupported
 
@@ -139,7 +144,7 @@ lychee.define('Viewport').tags({
 			this.width  = 0;
 			this.height = 0;
 
-			_process_reshape.call(this, process.stdout.columns, process.stdout.rows);
+			_process_reshape.call(this, _process.stdout.columns, _process.stdout.rows);
 
 		}.bind(this), 100);
 
