@@ -53,6 +53,7 @@ any remote debugging protocol.
 We ain't doing HTML5 websites or single-page-webapps here.
 
 
+
 ## Platform / Fertilizer Support
 
 The target platforms are described as so-called Fertilizers.
@@ -79,142 +80,62 @@ iOS app and use the `html` platform adapter.
 
 
 
-## Install lychee.js Engine (Bundles)
+## Quickstart
 
-The lychee.js Bundles (such as a Debian package, OSX package or
-the Raspberry Pi image) can be downloaded by anyone using the
-[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
-repository or the website's instructions at [lychee.js.org/#!install](https://lychee.js.org/#!install).
-
-These bundles ship with an integrated git repository, leading to
-auto-updates via the `master` (quarterly release-cycle) branch.
-If you want to change update behaviour of a lychee.js Engine 
-installation, read the [Maintain section](#maintain-lycheejs-engine)
-of this README file.
-
-The lychee.js Library (available via `bower` and `npm`) is
-available in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
-repository and follows updates via the `master` (quarterly
-release-cycle) branch.
+This is the directly-it-works-failsafe guide of how to install
+the lychee.js Engine. For everything related to Bundles, Dev Ops,
+Security, Deployments and Virtualization - please consult the
+[lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git).
 
 
+![Quickstart](./guides/asset/quickstart.gif)
 
-## Install lychee.js Engine (Developer Machine)
 
-The netinstaller shell script allows to automatically install
-the lychee.js Engine on any UNIX-compatible machine (arm, x86
-or amd64). The only requirements beforehand are working `bash`,
-`curl` and `git`.
+**1) Installation**
+
+The Net Installer automatically installs the lychee.js Engine
+on any UNIX-compatible machine (arm, x86 or amd64). The only
+requirements beforehand are working `bash`, `curl` and `git`.
+
+Note: OSX requires [brew](https://brew.sh) installed beforehand.
 
 ```bash
-# This will clone lycheejs into /opt/lycheejs
-
+# Install lychee.js Engine into /opt/lycheejs
 sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
 ```
 
-The above installation procedure will look similar to this:
 
-![Install lychee.js](./guides/asset/readme-install.gif)
+**2) Bootup**
 
-
-
-## Bootup lychee.js Engine
-
-After you've installed the lychee.js Engine, you can directly
-start the `lycheejs-harvester`.
-
-The `./bin/maintenance/do-install.sh` script has to be executed
-one time with `sudo` (not `su`) in order to install all required
-dependencies and to symlink the `lycheejs-*` tools correctly
-into `/usr/local/bin`. The net installer has done this for you
-already, but some Bundles can't do this automatically.
-
-The `--sandbox` flag can be used with the lycheejs tools, so
-they do not use any native tools outside the `/opt/lycheejs`
-folder, which in return will use less resources and run better
-on slower machines like a Raspberry Pi.
-
-However, the sandbox flag disables all software bots like
-auto-testing, auto-documentation, auto-fertilization and
-auto-synchronization of all lychee.js Libraries and Projects.
+The `lycheejs-harvester` integrates all projects with the
+Software Bots. Start the `development` profile and open
+`http://localhost:8080` in your Blink-based Browser.
 
 ```bash
 cd /opt/lycheejs;
 
-# (Optional) GUI and CLI tools integration
-sudo ./bin/maintenance/do-install.sh;
-
-# Build lychee.js Engine and Bootup lychee.js Harvester
-./bin/configure.sh;
+# Bootup lychee.js Harvester
 lycheejs-harvester start development;
 ```
 
-The above bootup procedure will look similar to this:
-
-![Bootup lychee.js](./guides/asset/readme-bootup.gif)
 
 
+## Developer Guide
 
-## Maintain lychee.js Engine
+The lychee.js Guide tries to help developers to get started as
+easy as possible. Please let us know if we can improve anything
+in these documents by opening up an [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/new).
 
-The update channels of lychee.js are defined as follows:
-
-- `master` ships quarterly release cycles.
-- `development` ships everything up-to-date (recommended).
-- `humansneednotapply` ships everything that the software bots are working on (not recommended).
-
-The `humansneednotapply` branch is constantly merged with
-`development`. Use with care, as this is heavily updated and
-constantly squashed in its history. No influence by humans
-is possible, as this is beyond human knowability since 2016.
-
-There are multiple maintenance scripts in the `./bin/maintenance`
-folder that will ensure an almost-automated process for our
-human and bot maintainers:
-
-- `do-release.sh` automates a lychee.js quarterly release (relevant only for lychee.js core maintainers).
-- `do-install.sh` integrates a lychee.js installation with the system.
-- `do-uninstall.sh` separates a lychee.js installation from the system.
-- `do-update.sh` selects an update channel and updates a lychee.js installation.
+- [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide)
 
 
 
-## Guides
-
-These guides help developers to get started as easy as possible.
-Please let us know if we can improve anything in these documents
-by opening up an [Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheejs/issues/new).
+## Maintainer Guide
 
 - [Contribution Guide](./guides/CONTRIBUTION.md)
 - [Codestyle Guide](./guides/CODESTYLE.md)
 - [ECMAScript Guide](./guides/ECMASCRIPT.md)
 - [Release Guide](./guides/RELEASE.md)
-
-We have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials)
-and a [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git)
-that is written in CommonMark and hosted on GitHub.
-
-
-
-## Common Mistakes
-
-Humans make mistakes, that is normal. Here are the most common mistakes
-that have occured so far and were hard to remember for beginners:
-
-- Forgot to install `brew` beforehand (on OSX).
-- Forgot to execute `sudo ./bin/maintenance/do-install.sh`.
-- Forgot to execute `./bin/configure.sh`.
-- Forgot that ports `4848` and `8080` are already in use.
-- Forgot to edit the `port` setting of `./bin/harvester/development.json`.
-- Forgot to set `JAVA_HOME` for mobile (html-webview) support:
-
-```bash
-# On GNU/Linux
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64";
-
-# On OSX
-export JAVA_HOME=$(/usr/libexec/java_home);
-```
 
 
 
