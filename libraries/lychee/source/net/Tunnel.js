@@ -621,6 +621,21 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		},
 
+		removeServices: function() {
+
+			this.__services.waiting.slice(0).forEach(function(service) {
+				_unplug_service.call(this, service.id, service);
+			}.bind(this));
+
+			this.__services.active.slice(0).forEach(function(service) {
+				_unplug_service.call(this, service.id, service);
+			}.bind(this));
+
+
+			return true;
+
+		},
+
 		setType: function(type) {
 
 			type = lychee.enumof(Composite.TYPE, type) ? type : null;

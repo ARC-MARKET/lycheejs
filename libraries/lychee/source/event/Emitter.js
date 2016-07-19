@@ -185,6 +185,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 					this.___events[event].splice(e, 1);
 					el--;
+					e--;
 
 				}
 

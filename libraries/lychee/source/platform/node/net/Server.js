@@ -174,6 +174,7 @@ lychee.define('lychee.net.Server').tags({
 						type:  that.type
 					});
 
+					that.trigger('preconnect', [ remote ]);
 
 					remote.bind('connect', function() {
 						that.trigger('connect', [ this ]);
