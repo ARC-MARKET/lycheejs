@@ -308,8 +308,10 @@ lychee.define('harvester.Main').requires([
 			this.server.connect();
 
 
-			console.log('\n\n');
-			console.log('Open your web browser and surf to one of the following hosts:');
+			console.log('\n');
+			console.info('+-------------------------------------------------------+');
+			console.info('| Open one of these URLs with a Blink-based Web Browser |');
+			console.info('+-------------------------------------------------------+');
 			console.log('\n');
 			this.getHosts().forEach(function(host) {
 				console.log(host);
