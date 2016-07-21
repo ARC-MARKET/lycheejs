@@ -28,8 +28,6 @@ lychee.define('Renderer').tags({
 	 * HELPERS
 	 */
 
-	var _color_cache = {};
-
 	var _is_color = function(color) {
 
 		if (typeof color === 'string') {
@@ -121,7 +119,6 @@ lychee.define('Renderer').tags({
 		settings = null;
 
 	};
-
 
 
 	Composite.prototype = {

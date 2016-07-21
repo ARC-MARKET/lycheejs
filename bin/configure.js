@@ -170,13 +170,11 @@
 
 			if (attachments === true) {
 
-				if (node.indexOf('json') !== -1)  files.push(path + '.json');
-				if (node.indexOf('fnt') !== -1)   files.push(path + '.fnt');
-				if (node.indexOf('msc') !== -1)   files.push(path + '.msc');
-				if (node.indexOf('pkg') !== -1)   files.push(path + '.pkg');
-				if (node.indexOf('png') !== -1)   files.push(path + '.png');
-				if (node.indexOf('snd') !== -1)   files.push(path + '.snd');
-				if (node.indexOf('store') !== -1) files.push(path + '.store');
+				node.filter(function(ext) {
+					return ext !== 'js';
+				}).forEach(function(ext) {
+					files.push(path + '.' + ext);
+				});
 
 			}
 
@@ -542,7 +540,7 @@
 
 					if (result === true) {
 
-						var id  = path.split('.').slice(0, -1).join('.');
+						var id  = path.split('.')[0];
 						var ext = path.split('/').pop().split('.').slice(1).join('.');
 
 						if (_ASSETS[id] === undefined) {
@@ -611,7 +609,7 @@
 								}
 
 								tmp1 += code.substr(0,  i1);
-								tmp1 += '.attaches({' + (tmp2.length > 0 ? tmp2.join(',') : '') + '})';
+								tmp1 += '.attaches({' + (tmp2.length > 0 ? tmp2.join(',') : '') + '\n})';
 								tmp1 += code.substr(i1, code.length - i1);
 
 
@@ -621,7 +619,7 @@
 
 							}
 
-							bootstrap[platform][adapter] = tmp1;
+							bootstrap[platform][adapter] = code;
 
 						} else {
 

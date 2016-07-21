@@ -6,6 +6,15 @@ brought to you as libre software with joy and pride by [Artificial Engineering](
 Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin:1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2?amount=0.5&label=lychee.js%20Support).
 
 
+## Work-in-Progress (aka alpha beta gamma)
+
+These are the things that we are currently working on:
+
+- The lychee.js Editor is currently being refactored until the 2016-Q3 release.
+- The lychee.js Guide is subject to change (to integrate the Editor).
+- The lychee.js Strainer is being refactored until the 2016-Q4 release.
+- The lychee.js CARTEL (AI implementation) is being refactored until the 2016-Q4 release.
+
 
 ## Overview
 
@@ -130,7 +139,7 @@ in these documents by opening up an [Issue](https://github.com/Artificial-Engine
 
 
 
-## Maintainer Guide
+## Contributor Guide
 
 - [Contribution Guide](./guides/CONTRIBUTION.md)
 - [Codestyle Guide](./guides/CODESTYLE.md)
