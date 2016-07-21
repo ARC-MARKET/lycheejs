@@ -46,6 +46,7 @@ _print_help() {
 	echo " Usage: lycheejs-helper [lycheejs://Action]                     ";
 	echo "        lycheejs-helper [env:Platform]                          ";
 	echo "        lycheejs-helper [which:Platform]                        ";
+	echo "        lycheejs-helper [Action] [Library/Project]              ";
 	echo "                                                                ";
 	echo "                                                                ";
 	echo " Available Actions:                                             ";
@@ -75,6 +76,9 @@ _print_help() {
 	echo "    lycheejs-helper lycheejs://web=https://lychee.js.org        ";
 	echo "                                                                ";
 	echo "    lycheejs-helper env:node /path/to/program.js                ";
+	echo "                                                                ";
+	echo "    lycheejs-helper start /projects/boilerplate                 ";
+	echo "    lycheejs-helper edit /projects/boilerplate                  ";
 	echo "                                                                ";
 	echo " Notes:                                                         ";
 	echo "                                                                ";
@@ -111,12 +115,160 @@ _start_env () {
 
 }
 
+_handle_action () {
+
+	action="$1";
+	resource="$2";
+	data="$3";
+
+
+	case "$action" in
+
+		boot)
+
+			cd $LYCHEEJS_ROOT;
+
+			./bin/harvester.sh stop 2>&1;
+			./bin/harvester.sh start "$resource" 2>&1;
+			exit 0;
+
+		;;
+
+		profile)
+
+			cd $LYCHEEJS_ROOT;
+
+			_put_api_profile "$resource" "save" "$data";
+
+		;;
+
+		unboot)
+
+			cd $LYCHEEJS_ROOT;
+
+			./bin/harvester.sh stop 2>&1;
+			exit 0;
+
+		;;
+
+		start)
+
+			_put_api_project "$resource" "start";
+			exit 0;
+
+		;;
+
+		stop)
+
+			_put_api_project "$resource" "stop";
+			exit 0;
+
+		;;
+
+		edit)
+
+			if [ -f ./bin/editor.sh ]; then
+
+				if [ "$OS" == "linux" -o "$OS" == "osx" ]; then
+					./bin/editor.sh "$resource" 2>&1;
+					exit 0;
+				fi;
+
+			fi;
+
+		;;
+
+		file)
+
+			if [ "$OS" == "linux" ]; then
+
+				xdg-open "file://$LYCHEEJS_ROOT/$resource" 2>&1;
+				exit 0;
+
+			elif [ "$OS" == "osx" ]; then
+
+				open "file://$LYCHEEJS_ROOT/$resource" 2>&1;
+				exit 0;
+
+			fi;
+
+		;;
+
+		cmd)
+
+			if [[ "$(echo $resource | cut -c 1-8)" == "lycheejs" && "$resource" != "lycheejs-helper" ]]; then
+
+				if [ -x /usr/local/bin/$resource ]; then
+
+					if [ "$data" != "" ]; then
+						$resource $data;
+						exit $?;
+					else
+						$resource;
+						exit $?;
+					fi;
+
+				fi;
+
+
+			fi;
+
+		;;
+
+		web)
+
+			# Well, fuck you, Blink and WebKit.
+
+			clean_resource="$resource";
+			clean_resource=${clean_resource//%5B/\[};
+			clean_resource=${clean_resource//%5D/\]};
+			clean_resource=${clean_resource//http:0\/\//http:\/\/};
+
+
+			if [ "$OS" == "linux" ]; then
+
+				chrome1=`which google-chrome`;
+				chrome2=`which chromium-browser`;
+
+				if [ -x "$chrome1" ]; then
+					"$chrome1" "$clean_resource";
+				elif [ -x "$chrome2" ]; then
+					"$chrome2" "$clean_resource";
+				else
+					xdg-open "$clean_resource" 2>&1;
+				fi;
+
+				exit 0;
+
+			elif [ "$OS" == "osx" ]; then
+
+				chrome1="/Applications/Google Chrome.app";
+
+				if [ -x "$chrome1" ]; then
+					open -a "$chrome1" "$clean_resource";
+				else
+					open "$clean_resource" 2>&1;
+				fi;
+
+				exit 0;
+
+			fi;
+
+		;;
+
+	esac;
+
+}
+
 _put_api_project () {
 
 	data="{\"identifier\":\"$1\",\"action\":\"$2\"}";
 	apiurl="http://localhost:4848/api/project/$2";
 
-	curl -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1;
+	result=$(curl --silent -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1);
+    echo "";
+	echo "$result";
+    echo "";
 
 }
 
@@ -125,7 +277,10 @@ _put_api_profile () {
 	data=$(echo $3 | base64 --decode);
 	apiurl="http://localhost:4848/api/profile/$2";
 
-	curl -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1;
+	result=$(curl --silent -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1);
+    echo "";
+	echo "$result";
+    echo "";
 
 }
 
@@ -169,145 +324,8 @@ if [ "$protocol" == "lycheejs" ]; then
 
 
 	if [ "$action" != "" -a "$resource" != "" ]; then
-
-		case "$action" in
-
-			boot)
-
-				cd $LYCHEEJS_ROOT;
-
-				./bin/harvester.sh stop 2>&1;
-				./bin/harvester.sh start "$resource" 2>&1;
-				exit 0;
-
-			;;
-
-			profile)
-
-				cd $LYCHEEJS_ROOT;
-
-				_put_api_profile "$resource" "save" "$data";
-
-			;;
-
-			unboot)
-
-				cd $LYCHEEJS_ROOT;
-
-				./bin/harvester.sh stop 2>&1;
-				exit 0;
-
-			;;
-
-			start)
-
-				_put_api_project "$resource" "start";
-				exit 0;
-
-			;;
-
-			stop)
-
-				_put_api_project "$resource" "stop";
-				exit 0;
-
-			;;
-
-			edit)
-
-				if [ -f ./bin/editor.sh ]; then
-
-					if [ "$OS" == "linux" -o "$OS" == "osx" ]; then
-						./bin/editor.sh "$resource" 2>&1;
-						exit 0;
-					fi;
-
-				fi;
-
-			;;
-
-			file)
-
-				if [ "$OS" == "linux" ]; then
-
-					xdg-open "file://$LYCHEEJS_ROOT/$resource" 2>&1;
-					exit 0;
-
-				elif [ "$OS" == "osx" ]; then
-
-					open "file://$LYCHEEJS_ROOT/$resource" 2>&1;
-					exit 0;
-
-				fi;
-
-			;;
-
-			cmd)
-
-				if [[ "$(echo $resource | cut -c 1-8)" == "lycheejs" && "$resource" != "lycheejs-helper" ]]; then
-
-					if [ -x /usr/local/bin/$resource ]; then
-
-						if [ "$data" != "" ]; then
-							$resource $data;
-						else
-							$resource;
-						fi;
-
-					fi;
-
-
-				fi;
-
-			;;
-
-			web)
-
-				# Well, fuck you, Blink and WebKit.
-
-				clean_resource="$resource";
-				clean_resource=${clean_resource//%5B/\[};
-				clean_resource=${clean_resource//%5D/\]};
-				clean_resource=${clean_resource//http:0\/\//http:\/\/};
-
-
-				if [ "$OS" == "linux" ]; then
-
-					chrome1=`which google-chrome`;
-					chrome2=`which chromium-browser`;
-
-					if [ -x "$chrome1" ]; then
-						"$chrome1" "$clean_resource";
-					elif [ -x "$chrome2" ]; then
-						"$chrome2" "$clean_resource";
-					else
-						xdg-open "$clean_resource" 2>&1;
-					fi;
-
-					exit 0;
-
-				elif [ "$OS" == "osx" ]; then
-
-					chrome1="/Applications/Google Chrome.app";
-
-					if [ -x "$chrome1" ]; then
-						open -a "$chrome1" "$clean_resource";
-					else
-						open "$clean_resource" 2>&1;
-					fi;
-
-					exit 0;
-
-				fi;
-
-			;;
-
-		esac;
-
+		_handle_action "$action" "$resource" "$data";
 	fi;
-
-
-	exit 0;
 
 elif [ "$protocol" == "env" ]; then
 
@@ -441,9 +459,22 @@ elif [ "$protocol" == "which" ]; then
 
 else
 
-	_print_help;
+	action="$1";
+	resource="$2";
+	data="$3";
 
-	exit 1;
+
+	if [ "$action" != "" -a "$resource" != "" ]; then
+
+		_handle_action "$action" "$resource" "$data";
+
+	else
+
+		_print_help;
+
+		exit 1;
+
+	fi;
 
 fi;
 
