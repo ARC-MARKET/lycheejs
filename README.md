@@ -44,22 +44,31 @@ scenes.
 
 The project's goal is to ease up and automate the design
 and engineering process of applications through intelligent
-software bots that learn from your application code. In
-particular, we use a CARTEL/ES-HyperNEAT architecture
-across a world-wide botnet with over 500k+ active computers
-that constantly improve and learn from your code.
+software bots that learn from your application code.
 
-Every (not sandboxed) lychee.js Harvester connected to the
-lychee.js peer cloud is contributing to the evolutionary
+lychee.js has an end-to-end philosophy and helps automating
+software from source code to the final result (installable
+packages like an APK or DEB file). It features cross-platform
+(and cross-Browser) adapters, runtimes, live-updates,
+a scene graph and event graph, offline-synchronization and
+peer-to-peer networking.
+
+Every (not sandboxed) lychee.js Harvester is connected to the
+lychee.js Peer Cloud and is contributing to the evolutionary
 AI's knowledge and improves its capabilities for all others.
 
-The development process is optimized for Blink-based
+In particular, we use a CARTEL/ES-HyperNEAT architecture
+across a world-wide Bot Net with over 500k+ active computers
+that constantly improve and learn from your code.
+
+The development process is optimized for Blink-based web
 browsers (Chromium, Google Chrome, Opera) and their
 developer tools. We honestly recommend NOT using Firefox
 due to lack of developer and debugging tools nor has it
 any remote debugging protocol.
 
 We ain't doing HTML5 websites or single-page-webapps here.
+This is an isomorphic application engine, not a framework.
 
 
 
