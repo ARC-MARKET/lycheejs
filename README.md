@@ -6,7 +6,7 @@ brought to you as libre software with joy and pride by [Artificial Engineering](
 Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin:1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2?amount=0.5&label=lychee.js%20Support).
 
 
-## Work-in-Progress (aka alpha beta gamma)
+## Work-in-Progress (aka alpha)
 
 These are the things that we are currently working on:
 
@@ -18,7 +18,8 @@ These are the things that we are currently working on:
 
 ## Overview
 
-The following repositories are related to the lychee.js project:
+The lychee.js Project started in 2012 and is in active development.
+The following Repositories are related to the lychee.js Engine:
 
 - [lychee.js CARTEL](https://github.com/Artificial-Engineering/lycheejs-cartel.git) contains all academic work related to the CARTEL/ES-HyperNEAT concept (WIP).
 - [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git) contains architecture explanations and concept documentations (WIP).
@@ -29,7 +30,7 @@ The following repositories are related to the lychee.js project:
 - [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready lychee.js Bundles (published at [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
 - [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains all Concepts and Ideas not yet finished.
 
-The following accounts are related to the lychee.js project:
+The following Accounts are related to the lychee.js Engine:
 
 - [@cookiengineer](https://github.com/cookiengineer) is the core maintainer and founder of this project.
 - [@humansneednotapply](https://github.com/humansneednotapply) is the account used by our software bots.
@@ -42,24 +43,46 @@ technology stack does not matter (HTML5, WebGL, OpenGL,
 OpenGLES, libSDL) and is completely automated behind the
 scenes.
 
-The project's goal is to ease up and automate the design
-and engineering process of applications through intelligent
-software bots that learn from your application code.
 
-lychee.js has an end-to-end philosophy and helps automating
-software from source code to the final result (installable
-packages like an APK or DEB file). It features cross-platform
-(and cross-Browser) adapters, runtimes, live-updates,
-a scene graph and event graph, offline-synchronization and
-peer-to-peer networking.
+
+## Features
+
+The lychee.js Engine aims to deliver Total Automation through
+Artificial Intelligence and better Software Architecture.
+
+Here is a selected subset of Features that the lychee.js Engine
+already covers and delivers. Everything listed here requires
+zero lines of code overhead and is already fully integrated
+in the [lychee.js Boilerplate](./projects/boilerplate):
+
+- Isomorphic Application Engine (runs pretty much everywhere)
+- Language is only ES5/ES6 JavaScript Code, nothing else
+- Automated Code Refactoring, Bug Fixing and Code Improvements
+- Automated Design Tracking, Layout and Flow Optimization
+- Automated Packaging for Embedded, Console, Mobile, Desktop and Server Apps
+- Automated Deployment via git and Live-Updates
+- Automated Reactive/Responsive UI/UX Components
+- Automated Debugging, Network and UI/UX Flow Analysis
+- Automated Testing and Integration with the AI
+- Automated Networking (Peer-to-Peer HTTP1.1/2.0 and WS13 with Local/Global Discovery)
+- Automated Network Services and Traffic Balancing/Sharding
+- Graphical Editor and Project Management Tool (Ranger)
+- Command-Line Wizard for Projects and Libraries (Breeder)
+- Command-Line Fuzz-Tester and Code-Refactorer (Strainer)
+- Built-In Offline Storage Management and Synchronization
+
+
+
+## Workflow
 
 Every (not sandboxed) lychee.js Harvester is connected to the
 lychee.js Peer Cloud and is contributing to the evolutionary
 AI's knowledge and improves its capabilities for all others.
 
-In particular, we use a CARTEL/ES-HyperNEAT architecture
-across a world-wide Bot Net with over 500k+ active computers
-that constantly improve and learn from your code.
+The lychee.js Engine uses CARTEL/ES-HyperNEAT as an evolutionary
+AI that is connected to a Botnet of lychee.js Harvesters. Each
+and every Definition written in lychee.js contributes to the AI
+so that it can predict, suggest and improve all other Projects.
 
 The development process is optimized for Blink-based web
 browsers (Chromium, Google Chrome, Opera) and their
@@ -82,19 +105,19 @@ each project's or library's `lychee.pkg` file.
 
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
 |:-------------|:-----------------------------|:----------|:-----:|:-----:|:-------:|
-| Browser      | html                         | zip, html |   ✓   |   ✓   |    ✓    |
-| GNU/Linux    | html-nwjs, node, node-sdl    | bin       |   ✓   |   ✓   |    ✓    |
-| OSX          | html-nwjs, node, node-sdl    | app, bin  |   ✗   |   ✗   |    ✓    |
-| Windows      | html-nwjs, node, node-sdl    | exe       |   ✗   |   ✓   |    ✓    |
-| Android      | html-webview, node, node-sdl | apk, bin  |   ✓   |   ✓   |    ✓    |
-| BlackberryOS | html-webview, node, node-sdl | apk, bin  |   ✓   |   ✓   |    ✓    |
-| FirefoxOS    | html-webview                 | zip       |   ✓   |   ✓   |    ✓    |
-| iOS          | html                         |           |   ✗   |   ✗   |    ✗    |
-| Ubuntu Touch | html-webview, node           | deb, bin  |   ✓   |   ✓   |    ✓    |
+| Browser      | html                         | zip, html |   x   |   x   |    x    |
+| GNU/Linux    | html-nwjs, node, node-sdl    | bin       |   x   |   x   |    x    |
+| OSX          | html-nwjs, node, node-sdl    | app, bin  |       |       |    x    |
+| Windows      | html-nwjs, node, node-sdl    | exe       |       |   x   |    x    |
+| Android      | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
+| BlackberryOS | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
+| FirefoxOS    | html-webview                 | zip       |   x   |   x   |    x    |
+| iOS          | html                         |           |   x   |       |         |
+| Ubuntu Touch | html-webview, node           | deb, bin  |   x   |   x   |    x    |
 
 The iOS Fertilizer has currently no support for cross-compilation
-due to XCode limitations. You can still create an own WebView
-iOS app and use the `html` platform adapter.
+due to XCode's gcc limitations. You can still create an own WebView
+iOS App and use the `html` platform adapter.
 
 
 
@@ -115,7 +138,11 @@ The Net Installer automatically installs the lychee.js Engine
 on any UNIX-compatible machine (arm, x86 or amd64). The only
 requirements beforehand are working `bash`, `curl` and `git`.
 
-Note: OSX requires [brew](https://brew.sh) installed beforehand.
+Notes:
+
+- OSX requires [brew](https://brew.sh) installed beforehand.
+- BSD requires `pkg` installed beforehand.
+
 
 ```bash
 # Install lychee.js Engine into /opt/lycheejs
