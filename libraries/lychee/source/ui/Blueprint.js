@@ -15,12 +15,14 @@ lychee.define('lychee.ui.Blueprint').requires([
 
 		if (entity instanceof Object) {
 
-			if (typeof entity.update === 'function' && typeof entity.render === 'function' && typeof entity.shape === 'number') {
-
-				if (typeof entity.setOrder === 'function' && typeof entity.isAtPosition === 'function') {
-					return true;
-				}
-
+			if (
+				typeof entity.update === 'function'
+				&& typeof entity.render === 'function'
+				&& typeof entity.shape === 'number'
+				&& typeof entity.setOrder === 'function'
+				&& typeof entity.isAtPosition === 'function'
+			) {
+				return true;
 			}
 
 		}

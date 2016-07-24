@@ -95,7 +95,7 @@ lychee.define('strainer.Main').requires([
 					console.info('strainer: SUCCESS ("' + project + '")');
 				}
 
-				this.destroy();
+				this.destroy(0);
 
 			}, this);
 
@@ -105,12 +105,13 @@ lychee.define('strainer.Main').requires([
 					console.error('strainer: FAILURE ("' + project + '") at "' + event + '" template event');
 				}
 
-				this.destroy();
+				this.destroy(1);
 
 			}, this);
 
 
 			template.init();
+
 
 			return true;
 

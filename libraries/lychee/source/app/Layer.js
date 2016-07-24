@@ -13,12 +13,13 @@ lychee.define('lychee.app.Layer').requires([
 
 		if (entity instanceof Object) {
 
-			if (typeof entity.update === 'function' && typeof entity.render === 'function' && typeof entity.shape === 'number') {
-
-				if (typeof entity.isAtPosition === 'function') {
-					return true;
-				}
-
+			if (
+				typeof entity.update === 'function'
+				&& typeof entity.render === 'function'
+				&& typeof entity.shape === 'number'
+				&& typeof entity.isAtPosition === 'function'
+			) {
+				return true;
 			}
 
 		}

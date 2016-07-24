@@ -19,8 +19,8 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	var _texture       = attachments["png"];
-	var _config        = attachments["json"].buffer;
+	var _CONFIG        = attachments["json"].buffer;
+	var _TEXTURE       = attachments["png"];
 	var _child_process = global.require('child_process');
 	var _root          = lychee.ROOT.lychee;
 
@@ -235,7 +235,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 			if (action !== null) {
 
-				var map = _config.map[action] || null;
+				var map = _CONFIG.map[action] || null;
 				if (map !== null) {
 
 					if (this.width > 96) {
@@ -243,7 +243,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 						renderer.drawSprite(
 							x - hwidth,
 							y - hheight,
-							_texture,
+							_TEXTURE,
 							map[0]
 						);
 
@@ -260,7 +260,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 						renderer.drawSprite(
 							x - map[0].w / 2,
 							y - hheight,
-							_texture,
+							_TEXTURE,
 							map[0]
 						);
 

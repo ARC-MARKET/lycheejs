@@ -31,13 +31,11 @@ lychee.define('strainer.Template').requires([
 
 			if (attachments === true) {
 
-				if (node.indexOf('json') !== -1)  files.push(path + '.json');
-				if (node.indexOf('fnt') !== -1)   files.push(path + '.fnt');
-				if (node.indexOf('msc') !== -1)   files.push(path + '.msc');
-				if (node.indexOf('pkg') !== -1)   files.push(path + '.pkg');
-				if (node.indexOf('png') !== -1)   files.push(path + '.png');
-				if (node.indexOf('snd') !== -1)   files.push(path + '.snd');
-				if (node.indexOf('store') !== -1) files.push(path + '.store');
+				node.filter(function(ext) {
+					return ext !== 'js';
+				}).forEach(function(ext) {
+					files.push(path + '.' + ext);
+				});
 
 			}
 
@@ -189,6 +187,8 @@ lychee.define('strainer.Template').requires([
 				for (var c = 0, cl = codes.length; c < cl; c++) {
 
 					var code = codes[c];
+					var url  = code.url.replace(/source/, 'api').replace(/\.js$/, '.json');
+
 					if (code.buffer !== null) {
 
 						var data   = _API.decode(code.buffer);
@@ -240,7 +240,7 @@ lychee.define('strainer.Template').requires([
 				var configs = this.configs;
 
 
-				stash.bind('write', function(type, assets) {
+				stash.bind('batch', function(type, assets) {
 
 					if (assets.length === configs.length) {
 						oncomplete(true);

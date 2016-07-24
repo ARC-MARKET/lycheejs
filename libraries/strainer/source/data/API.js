@@ -269,6 +269,13 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		} else if (raw.substr(0, 1) === '\'') {
 			val = raw.substr(1, raw.indexOf('\'', 1) - 1);
+		} else if (raw.substr(0, 3) === 'new') {
+
+			var construct = raw.substr(0, raw.indexOf('(')).split(' ')[1].trim();
+			if (/Buffer|Font|Music|Sound|Texture|Stuff|/g.test(construct)) {
+				val = construct;
+			}
+
 		}
 
 		return val;
@@ -665,7 +672,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							typ = 'Font';
 						}
 
-						if (value === '_texture') {
+						if (value === '_TEXTURE') {
 							val = 'Texture';
 							typ = 'Texture';
 						}
@@ -775,9 +782,19 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 					// TODO: Resolver for properties?
 
+					console.info(method, value);
+
+				} else if (value.substr(0, 1) === '_') {
+
+					values.push(true);
+					values.push(false);
+					types.push('Boolean');
+
 				} else if (value !== '') {
+
 					values.push(_dynamic_value(value));
 					types.push(_dynamic_type(value));
+
 				} else {
 					values.push(undefined);
 					types.push('void');
@@ -794,6 +811,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 						key = line.substr(0, line.indexOf('=')).trim();
 						val = undefined;
 						typ = undefined;
+
 
 						if (line.indexOf('typeof') !== -1) {
 
@@ -833,6 +851,11 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							typ = 'Object';
 							val = line.split(':')[1].split(';')[0].trim();
 
+						}
+
+
+						if (typ === undefined && val === undefined) {
+							console.warn(method, param.name, line);
 						}
 
 					}
