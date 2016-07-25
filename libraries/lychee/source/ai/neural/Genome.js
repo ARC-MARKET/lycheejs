@@ -10,7 +10,7 @@ lychee.define('lychee.ai.neural.Genome').exports(function(lychee, global, attach
 		this.weights = [];
 
 
-		for (var w = 0; w < settings.weights; w++) {
+		for (var w = 0; w < weights; w++) {
 			this.weights.push(Math.random() - Math.random());
 		}
 
