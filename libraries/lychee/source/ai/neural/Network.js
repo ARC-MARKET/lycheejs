@@ -50,7 +50,7 @@ lychee.define('lychee.ai.neural.Network').exports(function(lychee, global, attac
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = lychee.assignsafe({
 			inputs:  2,
@@ -77,7 +77,7 @@ lychee.define('lychee.ai.neural.Network').exports(function(lychee, global, attac
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		update: function(inputs) {
 
@@ -204,7 +204,7 @@ lychee.define('lychee.ai.neural.Network').exports(function(lychee, global, attac
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

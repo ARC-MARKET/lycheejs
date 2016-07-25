@@ -7,7 +7,7 @@ lychee.define('lychee.net.remote.Storage').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		lychee.net.Service.call(this, 'storage', remote, lychee.net.Service.TYPE.remote);
 
@@ -40,7 +40,7 @@ lychee.define('lychee.net.remote.Storage').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -74,7 +74,7 @@ lychee.define('lychee.net.remote.Storage').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

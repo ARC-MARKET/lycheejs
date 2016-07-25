@@ -18,7 +18,7 @@ lychee.define('harvester.net.Remote').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -30,7 +30,7 @@ lychee.define('harvester.net.Remote').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -114,7 +114,7 @@ lychee.define('harvester.net.Remote').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -17,7 +17,7 @@ lychee.define('app.state.Welcome').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(main) {
+	var Composite = function(main) {
 
 		_State.call(this, main);
 
@@ -27,7 +27,7 @@ lychee.define('app.state.Welcome').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -70,6 +70,6 @@ lychee.define('app.state.Welcome').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

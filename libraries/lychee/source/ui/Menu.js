@@ -20,7 +20,7 @@ lychee.define('lychee.ui.Menu').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -253,7 +253,7 @@ lychee.define('lychee.ui.Menu').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -616,7 +616,7 @@ lychee.define('lychee.ui.Menu').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

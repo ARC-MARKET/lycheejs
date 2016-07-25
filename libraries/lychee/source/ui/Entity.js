@@ -7,7 +7,7 @@ lychee.define('lychee.ui.Entity').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -20,7 +20,7 @@ lychee.define('lychee.ui.Entity').includes([
 		this.alpha     = 1;
 		this.collision = 1; // Used for event flow, NOT modifiable
 		this.effects   = [];
-		this.shape     = Class.SHAPE.rectangle;
+		this.shape     = Composite.SHAPE.rectangle;
 		this.state     = 'default';
 		this.position  = { x: 0, y: 0, z: 0 };
 		this.visible   = true;
@@ -58,7 +58,7 @@ lychee.define('lychee.ui.Entity').includes([
 
 
 	// Same ENUM values as lychee.app.Entity
-	Class.SHAPE = {
+	Composite.SHAPE = {
 		circle:    0,
 		rectangle: 1,
 		sphere:    2,
@@ -66,7 +66,7 @@ lychee.define('lychee.ui.Entity').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -89,7 +89,7 @@ lychee.define('lychee.ui.Entity').includes([
 			if (this.radius !== 0) settings.radius = this.radius;
 
 			if (this.alpha !== 1)                      settings.alpha   = this.alpha;
-			if (this.shape !== Class.SHAPE.rectangle)  settings.shape   = this.shape;
+			if (this.shape !== Composite.SHAPE.rectangle)  settings.shape   = this.shape;
 			if (this.state !== 'default')              settings.state   = this.state;
 			if (Object.keys(this.__states).length > 0) settings.states  = this.__states;
 			if (this.visible !== true)                 settings.visible = this.visible;
@@ -157,14 +157,14 @@ lychee.define('lychee.ui.Entity').includes([
 
 
 					var shape = this.shape;
-					if (shape === Class.SHAPE.circle) {
+					if (shape === Composite.SHAPE.circle) {
 
 						var dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
 						if (dist < this.radius) {
 							return true;
 						}
 
-					} else if (shape === Class.SHAPE.rectangle) {
+					} else if (shape === Composite.SHAPE.rectangle) {
 
 						var hwidth  = this.width  / 2;
 						var hheight = this.height / 2;
@@ -286,7 +286,7 @@ lychee.define('lychee.ui.Entity').includes([
 
 		setShape: function(shape) {
 
-			shape = lychee.enumof(Class.SHAPE, shape) ? shape : null;
+			shape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;
 
 
 			if (shape !== null) {
@@ -342,7 +342,7 @@ lychee.define('lychee.ui.Entity').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

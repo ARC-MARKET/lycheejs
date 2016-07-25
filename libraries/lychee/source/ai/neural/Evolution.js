@@ -33,7 +33,7 @@ lychee.define('lychee.ai.neural.Evolution').exports(function(lychee, global, att
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -61,7 +61,7 @@ lychee.define('lychee.ai.neural.Evolution').exports(function(lychee, global, att
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * LOGIC API
@@ -194,7 +194,7 @@ lychee.define('lychee.ai.neural.Evolution').exports(function(lychee, global, att
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -282,7 +282,7 @@ lychee.define('lychee.net.remote.Session').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id, remote, data) {
+	var Composite = function(id, remote, data) {
 
 		id = typeof id === 'string' ? id : 'session';
 
@@ -327,7 +327,7 @@ lychee.define('lychee.net.remote.Session').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -351,7 +351,7 @@ lychee.define('lychee.net.remote.Session').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

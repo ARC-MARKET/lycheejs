@@ -130,7 +130,7 @@ lychee.define('harvester.net.remote.Project').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		_Service.call(this, 'project', remote, _Service.TYPE.remote);
 
@@ -144,7 +144,7 @@ lychee.define('harvester.net.remote.Project').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -192,7 +192,7 @@ lychee.define('harvester.net.remote.Project').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

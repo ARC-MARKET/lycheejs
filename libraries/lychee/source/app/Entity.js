@@ -14,12 +14,12 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 		var rxy = 0;
 		var rxz = 0;
 
-		if (a.shape === Class.SHAPE.sphere) {
+		if (a.shape === Composite.SHAPE.sphere) {
 			rxy += a.radius;
 			rxz += a.radius;
 		}
 
-		if (b.shape === Class.SHAPE.sphere) {
+		if (b.shape === Composite.SHAPE.sphere) {
 			rxy += b.radius;
 			rxz += b.radius;
 		}
@@ -46,7 +46,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 		var colx = (ax + r >= bx - hw) && (ax - r <= bx + hw);
 		var coly = (ay + r >= by - hh) && (ay - r <= by + hh);
 
-		if (a.shape === Class.SHAPE.circle) {
+		if (a.shape === Composite.SHAPE.circle) {
 			r = 0;
 		}
 
@@ -76,7 +76,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -87,9 +87,9 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 		this.radius = typeof settings.radius === 'number' ? settings.radius : 0;
 
 		this.alpha     = 1;
-		this.collision = Class.COLLISION.none;
+		this.collision = Composite.COLLISION.none;
 		this.effects   = [];
-		this.shape     = Class.SHAPE.rectangle;
+		this.shape     = Composite.SHAPE.rectangle;
 		this.state     = 'default';
 		this.position  = { x: 0, y: 0, z: 0 };
 		this.velocity  = { x: 0, y: 0, z: 0 };
@@ -125,7 +125,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 	};
 
 
-	Class.COLLISION = {
+	Composite.COLLISION = {
 		none: 0,
 		A:    1,
 		B:    2,
@@ -135,7 +135,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 
 	// Same ENUM values as lychee.ui.Entity
-	Class.SHAPE = {
+	Composite.SHAPE = {
 		circle:    0,
 		rectangle: 1,
 		sphere:    2,
@@ -143,7 +143,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -162,8 +162,8 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 			if (this.radius !== 0) settings.radius = this.radius;
 
 			if (this.alpha !== 1)                        settings.alpha     = this.alpha;
-			if (this.collision !== Class.COLLISION.none) settings.collision = this.collision;
-			if (this.shape !== Class.SHAPE.rectangle)    settings.shape     = this.shape;
+			if (this.collision !== Composite.COLLISION.none) settings.collision = this.collision;
+			if (this.shape !== Composite.SHAPE.rectangle)    settings.shape     = this.shape;
 			if (this.state !== 'default')                settings.state     = this.state;
 			if (Object.keys(this.__states).length > 1)   settings.states    = this.__states;
 
@@ -273,21 +273,21 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 
 					var shape = this.shape;
-					if (shape === Class.SHAPE.circle) {
+					if (shape === Composite.SHAPE.circle) {
 
 						var dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2));
 						if (dist < this.radius) {
 							return true;
 						}
 
-					} else if (shape === Class.SHAPE.sphere) {
+					} else if (shape === Composite.SHAPE.sphere) {
 
 						var dist = Math.sqrt(Math.pow(ax - bx, 2) + Math.pow(ay - by, 2) + Math.pow(az - bz, 2));
 						if (dist < this.radius) {
 							return true;
 						}
 
-					} else if (shape === Class.SHAPE.rectangle) {
+					} else if (shape === Composite.SHAPE.rectangle) {
 
 						var hwidth  = this.width  / 2;
 						var hheight = this.height / 2;
@@ -297,7 +297,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 						return colX && colY;
 
-					} else if (shape === Class.SHAPE.cuboid) {
+					} else if (shape === Composite.SHAPE.cuboid) {
 
 						var hwidth  = this.width  / 2;
 						var hheight = this.height / 2;
@@ -327,16 +327,16 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 			if (entity !== null) {
 
-				var none = Class.COLLISION.none;
+				var none = Composite.COLLISION.none;
 				if (this.collision !== entity.collision || this.collision === none || entity.collision === none) {
 					return false;
 				}
 
 
-				var circle    = Class.SHAPE.circle;
-				var sphere    = Class.SHAPE.sphere;
-				var rectangle = Class.SHAPE.rectangle;
-				var cuboid    = Class.SHAPE.cuboid;
+				var circle    = Composite.SHAPE.circle;
+				var sphere    = Composite.SHAPE.sphere;
+				var rectangle = Composite.SHAPE.rectangle;
+				var cuboid    = Composite.SHAPE.cuboid;
 
 				var shapeA    = this.shape;
 				var shapeB    = entity.shape;
@@ -383,7 +383,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		setCollision: function(collision) {
 
-			collision = lychee.enumof(Class.COLLISION, collision) ? collision : null;
+			collision = lychee.enumof(Composite.COLLISION, collision) ? collision : null;
 
 
 			if (collision !== null) {
@@ -486,7 +486,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 
 		setShape: function(shape) {
 
-			shape = lychee.enumof(Class.SHAPE, shape) ? shape : null;
+			shape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;
 
 
 			if (shape !== null) {
@@ -547,7 +547,7 @@ lychee.define('lychee.app.Entity').exports(function(lychee, global, attachments)
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

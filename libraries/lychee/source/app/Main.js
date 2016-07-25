@@ -234,8 +234,9 @@ lychee.define('lychee.app.Main').requires([
 			delay:       0,
 			key:         true,
 			keymodifier: false,
-			touch:       true,
-			swipe:       true
+			scroll:      true,
+			swipe:       true,
+			touch:       true
 		},
 
 		jukebox: {
@@ -279,7 +280,7 @@ lychee.define('lychee.app.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({}, _defaults, settings);
 		this.defaults = lychee.assignunlink({}, this.settings);
@@ -304,7 +305,7 @@ lychee.define('lychee.app.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -630,7 +631,7 @@ lychee.define('lychee.app.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

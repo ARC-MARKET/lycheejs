@@ -1,7 +1,7 @@
 
 lychee.define('lychee.ai.neural.Genome').exports(function(lychee, global, attachments) {
 
-	var Class = function(weights) {
+	var Composite = function(weights) {
 
 		weights = typeof weights === 'number' ? weights : 0;
 
@@ -16,7 +16,7 @@ lychee.define('lychee.ai.neural.Genome').exports(function(lychee, global, attach
 
 	};
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		crossover: function(partner, babies) {
 
@@ -24,7 +24,7 @@ lychee.define('lychee.ai.neural.Genome').exports(function(lychee, global, attach
 
 
 			partner = partner instanceof _Genome ? partner : null;
-			babies  = babies instanceof Array    ? babies  : [ new Class(dnalength), new Class(dnalength) ];
+			babies  = babies instanceof Array    ? babies  : [ new Composite(dnalength), new Composite(dnalength) ];
 
 
 			if (partner !== null && babies.length > 0) {
@@ -78,7 +78,7 @@ lychee.define('lychee.ai.neural.Genome').exports(function(lychee, global, attach
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -13,7 +13,7 @@ lychee.define('lychee.verlet.Layer').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -39,7 +39,7 @@ lychee.define('lychee.verlet.Layer').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -167,7 +167,7 @@ lychee.define('lychee.verlet.Layer').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -3,18 +3,22 @@ lychee.define('Renderer').tags({
 	platform: 'node'
 }).supports(function(lychee, global) {
 
-	if (typeof process !== 'undefined') {
-
-		if (typeof process.stdout === 'object') {
-			return true;
-		}
-
+	if (
+		typeof global.process !== 'undefined'
+		&& typeof global.process.stdout === 'object'
+		&& typeof global.process.stdout.write === 'function'
+	) {
+		return true;
 	}
 
 
 	return false;
 
 }).exports(function(lychee, global, attachments) {
+
+	var _process = global.process;
+
+
 
 	/*
 	 * HELPERS
@@ -155,7 +159,7 @@ lychee.define('Renderer').tags({
 
 	var _id = 0;
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -184,7 +188,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -269,7 +273,7 @@ lychee.define('Renderer').tags({
 			if (width !== null) {
 				this.width = width;
 			} else {
-				this.width = process.stdout.columns - 1;
+				this.width = _process.stdout.columns - 1;
 			}
 
 
@@ -287,7 +291,7 @@ lychee.define('Renderer').tags({
 			if (height !== null) {
 				this.height = height;
 			} else {
-				this.height = process.stdout.rows - 1;
+				this.height = _process.stdout.rows - 1;
 			}
 
 
@@ -314,7 +318,7 @@ lychee.define('Renderer').tags({
 
 			} else {
 
-				process.stdout.write('\u001B[2J\u001B[0;0f');
+				_process.stdout.write('\u001B[2J\u001B[0;0f');
 
 				this.__buffer.clear();
 
@@ -334,7 +338,7 @@ lychee.define('Renderer').tags({
 			}
 
 			for (var y = 0; y < this.height; y++) {
-				process.stdout.write(ctx[y].join('') + '\n');
+				_process.stdout.write(ctx[y].join('') + '\n');
 			}
 
 		},
@@ -623,7 +627,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -142,7 +142,7 @@ lychee.define('lychee.net.socket.WS').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.__connection = null;
 		this.__protocol   = null;
@@ -153,7 +153,7 @@ lychee.define('lychee.net.socket.WS').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -288,7 +288,7 @@ lychee.define('lychee.net.socket.WS').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

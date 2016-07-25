@@ -14,7 +14,7 @@ lychee.define('game.net.Client').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data, main) {
+	var Composite = function(data, main) {
 
 		var settings = Object.assign({
 			reconnect: 10000
@@ -62,7 +62,7 @@ lychee.define('game.net.Client').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -81,7 +81,7 @@ lychee.define('game.net.Client').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -251,11 +251,11 @@ lychee.define('Stash').tags({
 
 
 		var type = this.type;
-		if (type === Class.TYPE.persistent) {
+		if (type === Composite.TYPE.persistent) {
 
 			blob = _PERSISTENT.read();
 
-		} else if (type === Class.TYPE.temporary) {
+		} else if (type === Composite.TYPE.temporary) {
 
 			blob = _TEMPORARY.read();
 
@@ -322,13 +322,13 @@ lychee.define('Stash').tags({
 
 
 			var type = this.type;
-			if (type === Class.TYPE.persistent) {
+			if (type === Composite.TYPE.persistent) {
 
 				for (var id in filtered) {
 					_PERSISTENT.write(id, filtered[id]);
 				}
 
-			} else if (type === Class.TYPE.temporary) {
+			} else if (type === Composite.TYPE.temporary) {
 
 				for (var id in filtered) {
 					_PERSISTENT.write(id, filtered[id]);
@@ -359,13 +359,13 @@ lychee.define('Stash').tags({
 
 	var _id = 0;
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
 
 		this.id   = 'lychee-Stash-' + _id++;
-		this.type = Class.TYPE.persistent;
+		this.type = Composite.TYPE.persistent;
 
 
 		this.__assets     = {};
@@ -391,13 +391,13 @@ lychee.define('Stash').tags({
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		persistent: 0,
 		temporary:  1
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -455,7 +455,7 @@ lychee.define('Stash').tags({
 
 
 			if (this.id.substr(0, 13) !== 'lychee-Stash-') settings.id   = this.id;
-			if (this.type !== Class.TYPE.persistent)       settings.type = this.type;
+			if (this.type !== Composite.TYPE.persistent)       settings.type = this.type;
 
 
 			if (Object.keys(this.__assets).length > 0) {
@@ -679,7 +679,7 @@ lychee.define('Stash').tags({
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -698,7 +698,7 @@ lychee.define('Stash').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

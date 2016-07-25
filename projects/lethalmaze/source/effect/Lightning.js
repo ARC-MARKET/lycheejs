@@ -75,9 +75,9 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
-		this.type     = Class.TYPE.easeout;
+		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
 		this.duration = 250;
 		this.position = { x: null, y: null };
@@ -90,7 +90,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Class.TYPE, settings.type) ? settings.type           : null;
+		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
 		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
 		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
 		var position = settings.position instanceof Object      ? settings.position       : null;
@@ -115,7 +115,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		linear:        0,
 		easein:        1,
 		easeout:       2,
@@ -124,7 +124,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -137,7 +137,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 			var settings = {};
 
 
-			if (this.type !== Class.TYPE.easeout) settings.type     = this.type;
+			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
 			if (this.delay !== 0)                 settings.delay    = this.delay;
 			if (this.duration !== 250)            settings.duration = this.duration;
 
@@ -245,23 +245,23 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 
 
 				var type = this.type;
-				if (type === Class.TYPE.linear) {
+				if (type === Composite.TYPE.linear) {
 
 					a += t * da;
 
-				} else if (type === Class.TYPE.easein) {
+				} else if (type === Composite.TYPE.easein) {
 
 					f = 1 * Math.pow(t, 3);
 
 					a += f * da;
 
-				} else if (type === Class.TYPE.easeout) {
+				} else if (type === Composite.TYPE.easeout) {
 
 					f = Math.pow(t - 1, 3) + 1;
 
 					a += f * da;
 
-				} else if (type === Class.TYPE.bounceeasein) {
+				} else if (type === Composite.TYPE.bounceeasein) {
 
 					var k = 1 - t;
 
@@ -277,7 +277,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 
 					a += (1 - f) * da;
 
-				} else if (type === Class.TYPE.bounceeaseout) {
+				} else if (type === Composite.TYPE.bounceeaseout) {
 
 					if ((t /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(t, 2) );
@@ -312,7 +312,7 @@ lychee.define('game.effect.Lightning').exports(function(lychee, global, attachme
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

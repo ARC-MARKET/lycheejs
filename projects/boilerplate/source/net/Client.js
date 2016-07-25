@@ -14,7 +14,7 @@ lychee.define('app.net.Client').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			reconnect: 10000
@@ -55,7 +55,7 @@ lychee.define('app.net.Client').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -76,7 +76,7 @@ lychee.define('app.net.Client').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

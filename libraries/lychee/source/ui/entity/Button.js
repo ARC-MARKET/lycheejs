@@ -6,7 +6,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 	var _FONT = attachments["fnt"];
 
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -88,7 +88,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -368,7 +368,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

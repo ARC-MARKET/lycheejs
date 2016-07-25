@@ -26,6 +26,28 @@
 					"server": "/api/server/connect?identifier=/projects/over-there"
 				}
 			},
+			"html-webview/main": {
+				"build": "app.Main",
+				"debug": false,
+				"packages": [
+					[
+						"app",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-webview",
+						"html"
+					]
+				},
+				"variant": "application",
+				"profile": {
+					"client": "/api/server/connect?identifier=/projects/over-there",
+					"server": "/api/server/connect?identifier=/projects/over-there"
+				}
+			},
 			"html/main": {
 				"build": "app.Main",
 				"debug": false,

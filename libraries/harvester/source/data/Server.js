@@ -5,7 +5,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -21,7 +21,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -72,7 +72,7 @@ lychee.define('harvester.data.Server').exports(function(lychee, global, attachme
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

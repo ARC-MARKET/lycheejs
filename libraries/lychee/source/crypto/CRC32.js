@@ -54,14 +54,14 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.__crc = 0;
 
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		update: function(data) {
 
@@ -88,7 +88,7 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

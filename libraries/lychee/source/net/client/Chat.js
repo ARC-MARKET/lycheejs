@@ -3,7 +3,7 @@ lychee.define('lychee.net.client.Chat').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
-	var Class = function(id, client, data) {
+	var Composite = function(id, client, data) {
 
 		id = typeof id === 'string' ? id : 'chat';
 
@@ -35,7 +35,7 @@ lychee.define('lychee.net.client.Chat').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * CUSTOM API
@@ -134,7 +134,7 @@ lychee.define('lychee.net.client.Chat').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

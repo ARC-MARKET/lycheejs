@@ -110,7 +110,7 @@ lychee.define('lychee.net.Tunnel').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -119,7 +119,7 @@ lychee.define('lychee.net.Tunnel').requires([
 		this.host      = 'localhost';
 		this.port      = 1337;
 		this.reconnect = 0;
-		this.type      = Class.TYPE.WS;
+		this.type      = Composite.TYPE.WS;
 
 
 		this.__isConnected = false;
@@ -188,14 +188,14 @@ lychee.define('lychee.net.Tunnel').requires([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		WS:   0,
 		HTTP: 1,
 		TCP:  2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -232,7 +232,7 @@ lychee.define('lychee.net.Tunnel').requires([
 			if (this.host !== 'localhost')   settings.host      = this.host;
 			if (this.port !== 1337)          settings.port      = this.port;
 			if (this.reconnect !== 0)        settings.reconnect = this.reconnect;
-			if (this.type !== Class.TYPE.WS) settings.type      = this.type;
+			if (this.type !== Composite.TYPE.WS) settings.type      = this.type;
 
 
 			if (this.__socket !== null) blob.socket = lychee.serialize(this.__socket);
@@ -275,16 +275,16 @@ lychee.define('lychee.net.Tunnel').requires([
 			if (this.__isConnected === false) {
 
 				var type = this.type;
-				if (type === Class.TYPE.WS) {
+				if (type === Composite.TYPE.WS) {
 					this.__socket = new lychee.net.socket.WS();
-				} else if (type === Class.TYPE.HTTP) {
+				} else if (type === Composite.TYPE.HTTP) {
 					this.__socket = new lychee.net.socket.HTTP();
 				}
 
 
 				this.__socket.bind('connect', function() {
 					this.trigger('connect');
-				}, this)
+				}, this);
 
 				this.__socket.bind('receive', function(payload, headers) {
 					this.receive(payload, headers);
@@ -621,9 +621,24 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		},
 
+		removeServices: function() {
+
+			this.__services.waiting.slice(0).forEach(function(service) {
+				_unplug_service.call(this, service.id, service);
+			}.bind(this));
+
+			this.__services.active.slice(0).forEach(function(service) {
+				_unplug_service.call(this, service.id, service);
+			}.bind(this));
+
+
+			return true;
+
+		},
+
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -654,7 +669,7 @@ lychee.define('lychee.net.Tunnel').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

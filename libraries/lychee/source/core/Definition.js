@@ -3,9 +3,136 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	var lychee = global.lychee;
 
-	var Class = function(id) {
+
+
+	/*
+	 * HELPERS
+	 */
+
+	var _lint = function(method) {
+
+		var code  = method.toString();
+		var file  = this.__file;
+		var lines = code.split('\n');
+
+
+		lines.forEach(function(line, l) {
+
+			var curr = line.trim();
+			var next = (lines[l + 1] || '').trim();
+
+			if (curr.substr(0, 2) !== '//') {
+
+				var next_lim = next.substr(0, 1);
+
+				if (curr.substr(curr.length - 1, 1) === ')' && next_lim !== '}' && next_lim !== ']') {
+					console.warn('lychee.Definition: Missing trailing ";" (' + file + '#L' + l + ')');
+					console.warn(curr);
+				}
+
+			}
+
+		});
+
+	};
+
+	var _fuzz_asset = function(type) {
+
+		var asset = {
+			url: '/tmp/Dummy.' + type,
+			serialize: function() {
+				return null;
+			}
+		};
+
+
+		var file = this.__file;
+		if (file !== null) {
+			asset.url = file.split('.').slice(0, -1).join('.') + '.' + type;
+		}
+
+
+		Object.defineProperty(asset, 'buffer', {
+			get: function() {
+				console.warn('lychee.Definition: Injecting Attachment "' + this.url + '" (' + file + ')');
+				return null;
+			},
+			set: function() {
+				return false;
+			},
+			enumerable:   true,
+			configurable: false
+		});
+
+
+		return asset;
+
+	};
+
+	var _fuzz_id = function() {
+
+		var file = this.__file;
+		if (file !== null) {
+
+			var packages = lychee.environment.packages.filter(function(pkg) {
+				return pkg.type === 'source';
+			}).map(function(pkg) {
+
+				return {
+					id:  pkg.id,
+					url: pkg.url.split('/').slice(0, -1).join('/')
+				};
+
+			});
+
+
+			var ns  = file.split('/');
+			var pkg = packages.find(function(pkg) {
+				return file.substr(0, pkg.url.length) === pkg.url;
+			}) || null;
+
+
+			if (pkg !== null) {
+
+				var tmp_i = ns.indexOf('source');
+				var tmp_s = ns[ns.length - 1];
+
+				if (/\.js$/g.test(tmp_s)) {
+					ns[ns.length - 1] = tmp_s.split('.').slice(0, -1).join('.');
+				}
+
+				var classId = '';
+				if (tmp_i !== -1) {
+					classId = ns.slice(tmp_i + 1).join('.');
+				}
+
+
+				this.id        = pkg.id + '.' + classId;
+				this.classId   = classId;
+				this.packageId = pkg.id;
+
+			}
+
+		}
+
+	};
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	var Composite = function(id) {
 
 		id = typeof id === 'string' ? id : '';
+
+
+		this.id        = '';
+		this.classId   = '';
+		this.packageId = '';
+
+		this.__file    = lychee.Environment.__FILENAME || null;
 
 
 		if (id.match(/\./)) {
@@ -16,16 +143,33 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			this.classId   = tmp.slice(1).join('.');
 			this.packageId = tmp[0];
 
-		} else {
+		} else if (/^([A-Za-z0-9\.]+)/g.test(id) === true) {
 
 			this.id        = 'lychee.' + id;
 			this.classId   = id;
 			this.packageId = 'lychee';
 
+		} else {
+
+			var fuzz_id = _fuzz_id.call(this);
+			if (fuzz_id === true) {
+				console.warn('lychee.Definition: Injecting Identifier "' + this.id + '" (' + this.__file + ')');
+			} else {
+				console.error('lychee.Definition: Invalid Identifier "' + id + '" (' + this.__file + ')');
+			}
+
 		}
 
 
-		this._attaches = {};
+		this._attaches = {
+			'json':  _fuzz_asset.call(this, 'json'),
+			'fnt':   _fuzz_asset.call(this, 'fnt'),
+			'msc':   _fuzz_asset.call(this, 'msc'),
+			'pkg':   _fuzz_asset.call(this, 'pkg'),
+			'png':   _fuzz_asset.call(this, 'png'),
+			'snd':   _fuzz_asset.call(this, 'snd'),
+			'store': _fuzz_asset.call(this, 'store')
+		};
 		this._tags     = {};
 		this._requires = [];
 		this._includes = [];
@@ -38,7 +182,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -116,7 +260,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 				blob.attaches = {};
 
 				for (var aid in this._attaches) {
-					blob.attaches[aid] = lychee.serialize(this._attaches[aid]);
+
+					var asset = lychee.serialize(this._attaches[aid]);
+					if (asset !== null) {
+						blob.attaches[aid] = asset;
+					}
+
 				}
 
 			}
@@ -180,7 +329,10 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 
 			if (callback !== null) {
+
 				this._exports = callback;
+				_lint.call(this, this._exports);
+
 			}
 
 
@@ -249,6 +401,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (callback !== null) {
 				this._supports = callback;
+				_lint.call(this, this._supports);
 			}
 
 
@@ -282,7 +435,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	};
 
 
-	return Class;
+	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

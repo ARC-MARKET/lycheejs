@@ -12,7 +12,7 @@ lychee.define('game.ui.Label').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -27,7 +27,7 @@ lychee.define('game.ui.Label').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -46,7 +46,7 @@ lychee.define('game.ui.Label').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

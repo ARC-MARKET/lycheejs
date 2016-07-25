@@ -113,13 +113,13 @@ lychee.define('Storage').tags({
 
 
 		var type = this.type;
-		if (type === Class.TYPE.persistent) {
+		if (type === Composite.TYPE.persistent) {
 
 			if (_PERSISTENT !== null) {
 				blob = JSON.parse(_PERSISTENT.getItem(id));
 			}
 
-		} else if (type === Class.TYPE.temporary) {
+		} else if (type === Composite.TYPE.temporary) {
 
 			if (_TEMPORARY !== null) {
 				blob = JSON.parse(_TEMPORARY.getItem(id));
@@ -204,13 +204,13 @@ lychee.define('Storage').tags({
 
 
 			var type = this.type;
-			if (type === Class.TYPE.persistent) {
+			if (type === Composite.TYPE.persistent) {
 
 				if (_PERSISTENT !== null) {
 					_PERSISTENT.setItem(id, _JSON.encode(blob));
 				}
 
-			} else if (type === Class.TYPE.temporary) {
+			} else if (type === Composite.TYPE.temporary) {
 
 				if (_TEMPORARY !== null) {
 					_TEMPORARY.setItem(id, _JSON.encode(blob));
@@ -241,14 +241,14 @@ lychee.define('Storage').tags({
 
 	var _id = 0;
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
 
 		this.id    = 'lychee-Storage-' + _id++;
 		this.model = {};
-		this.type  = Class.TYPE.persistent;
+		this.type  = Composite.TYPE.persistent;
 
 		this.__objects    = {};
 		this.__operations = [];
@@ -274,13 +274,13 @@ lychee.define('Storage').tags({
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		persistent: 0,
 		temporary:  1
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -336,7 +336,7 @@ lychee.define('Storage').tags({
 
 			if (this.id.substr(0, 15) !== 'lychee-Storage-') settings.id    = this.id;
 			if (Object.keys(this.model).length !== 0)        settings.model = this.model;
-			if (this.type !== Class.TYPE.persistent)         settings.type  = this.type;
+			if (this.type !== Composite.TYPE.persistent)         settings.type  = this.type;
 
 
 			if (Object.keys(this.__objects).length > 0) {
@@ -515,7 +515,7 @@ lychee.define('Storage').tags({
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -534,7 +534,7 @@ lychee.define('Storage').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

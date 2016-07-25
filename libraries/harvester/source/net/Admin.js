@@ -22,7 +22,7 @@ lychee.define('harvester.net.Admin').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			host:   'localhost',
@@ -85,7 +85,7 @@ lychee.define('harvester.net.Admin').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -106,7 +106,7 @@ lychee.define('harvester.net.Admin').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

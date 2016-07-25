@@ -18,8 +18,8 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	var _texture = attachments["png"];
-	var _config  = attachments["json"].buffer;
+	var _CONFIG  = attachments["json"].buffer;
+	var _TEXTURE = attachments["png"];
 
 
 
@@ -93,7 +93,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			label: 'HELPER'
@@ -120,7 +120,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -188,7 +188,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 
 			if (action !== null) {
 
-				var map = _config.map[action] || null;
+				var map = _CONFIG.map[action] || null;
 				if (map !== null) {
 
 					if (this.width > 96) {
@@ -196,7 +196,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 						renderer.drawSprite(
 							x - hwidth,
 							y - hheight,
-							_texture,
+							_TEXTURE,
 							map[0]
 						);
 
@@ -213,7 +213,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 						renderer.drawSprite(
 							x - map[0].w / 2,
 							y - hheight,
-							_texture,
+							_TEXTURE,
 							map[0]
 						);
 
@@ -278,7 +278,7 @@ lychee.define('lychee.ui.entity.Helper').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

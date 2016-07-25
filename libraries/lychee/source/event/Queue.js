@@ -40,7 +40,7 @@ lychee.define('lychee.event.Queue').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.___init  = false;
 		this.___stack = [];
@@ -50,7 +50,7 @@ lychee.define('lychee.event.Queue').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -137,7 +137,7 @@ lychee.define('lychee.event.Queue').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

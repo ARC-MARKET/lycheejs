@@ -41,7 +41,7 @@ lychee.define('fertilizer.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({}, _defaults, settings);
 		this.defaults = _lychee.assignunlink({}, this.settings);
@@ -318,7 +318,7 @@ lychee.define('fertilizer.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -366,7 +366,7 @@ lychee.define('fertilizer.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

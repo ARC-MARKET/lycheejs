@@ -14,7 +14,7 @@ lychee.define('game.app.sprite.Bullet').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -35,7 +35,7 @@ lychee.define('game.app.sprite.Bullet').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -54,7 +54,7 @@ lychee.define('game.app.sprite.Bullet').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

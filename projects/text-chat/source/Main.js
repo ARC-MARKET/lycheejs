@@ -17,7 +17,7 @@ lychee.define('app.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 
@@ -93,7 +93,7 @@ lychee.define('app.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -126,6 +126,6 @@ lychee.define('app.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

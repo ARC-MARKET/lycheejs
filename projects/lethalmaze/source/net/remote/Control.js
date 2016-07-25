@@ -212,7 +212,7 @@ lychee.define('game.net.remote.Control').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		var settings = {};
 
@@ -227,7 +227,7 @@ lychee.define('game.net.remote.Control').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -246,7 +246,7 @@ lychee.define('game.net.remote.Control').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

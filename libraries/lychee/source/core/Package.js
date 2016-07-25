@@ -343,7 +343,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(id, url) {
+	var Composite = function(id, url) {
 
 		id  = typeof id === 'string'  ? id  : 'app';
 		url = typeof url === 'string' ? url : null;
@@ -407,7 +407,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -533,7 +533,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	};
 
 
-	return Class;
+	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));
 

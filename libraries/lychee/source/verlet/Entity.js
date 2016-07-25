@@ -24,7 +24,7 @@ lychee.define('lychee.verlet.Entity').requires([
 		var shape       = this.shape;
 
 
-		if (shape === Class.SHAPE.circle) {
+		if (shape === Composite.SHAPE.circle) {
 
 			var origin   = new _Vector3(this.position);
 			var radius   = this.radius;
@@ -64,9 +64,9 @@ lychee.define('lychee.verlet.Entity').requires([
 
 // TODO: Implement this stuff here
 
-		} else if (shape === Class.SHAPE.sphere) {
-		} else if (shape === Class.SHAPE.rectangle) {
-		} else if (shape === Class.SHAPE.cuboid) {
+		} else if (shape === Composite.SHAPE.sphere) {
+		} else if (shape === Composite.SHAPE.rectangle) {
+		} else if (shape === Composite.SHAPE.cuboid) {
 		}
 
 
@@ -81,7 +81,7 @@ lychee.define('lychee.verlet.Entity').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -103,7 +103,7 @@ lychee.define('lychee.verlet.Entity').requires([
 	};
 
 
-	Class.SHAPE = {
+	Composite.SHAPE = {
 		circle:    0,
 		rectangle: 1,
 		sphere:    2,
@@ -111,7 +111,7 @@ lychee.define('lychee.verlet.Entity').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -190,7 +190,7 @@ lychee.define('lychee.verlet.Entity').requires([
 
 		setShape: function(shape) {
 
-			shape = lychee.enumof(Class.SHAPE, shape) ? shape : null;
+			shape = lychee.enumof(Composite.SHAPE, shape) ? shape : null;
 
 
 			if (shape !== null) {
@@ -211,7 +211,7 @@ lychee.define('lychee.verlet.Entity').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

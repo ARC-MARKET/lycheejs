@@ -29,7 +29,7 @@ lychee.define('app.net.remote.Ping').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		lychee.net.Service.call(this, 'ping', remote, lychee.net.Service.TYPE.remote);
 
@@ -39,7 +39,7 @@ lychee.define('app.net.remote.Ping').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -61,7 +61,7 @@ lychee.define('app.net.remote.Ping').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

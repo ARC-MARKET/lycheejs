@@ -82,7 +82,7 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(remote) {
+	var Composite = function(remote) {
 
 		lychee.net.Service.call(this, 'debugger', remote, lychee.net.Service.TYPE.remote);
 
@@ -123,12 +123,12 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

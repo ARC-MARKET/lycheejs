@@ -12,7 +12,7 @@ lychee.define('fertilizer.template.html.Library').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		_Template.call(this, data);
 
@@ -71,7 +71,7 @@ lychee.define('fertilizer.template.html.Library').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -90,7 +90,7 @@ lychee.define('fertilizer.template.html.Library').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

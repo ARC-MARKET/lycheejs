@@ -31,7 +31,7 @@ lychee.define('breeder.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = _lychee.assignunlink({}, _defaults, settings);
 		this.defaults = _lychee.assignunlink({}, this.settings);
@@ -109,7 +109,7 @@ lychee.define('breeder.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -157,7 +157,7 @@ lychee.define('breeder.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

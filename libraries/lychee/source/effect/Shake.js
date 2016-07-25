@@ -1,9 +1,9 @@
 
 lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachments) {
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
-		this.type     = Class.TYPE.easeout;
+		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
 		this.duration = 250;
 		this.shake    = { x: null, y: null, z: null };
@@ -14,7 +14,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Class.TYPE, settings.type) ? settings.type           : null;
+		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
 		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
 		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
 		var shake    = settings.shake instanceof Object         ? settings.shake          : null;
@@ -40,7 +40,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		linear:        0,
 		easein:        1,
 		easeout:       2,
@@ -49,7 +49,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -62,7 +62,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 			var settings = {};
 
 
-			if (this.type !== Class.TYPE.easeout) settings.type     = this.type;
+			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
 			if (this.delay !== 0)                 settings.delay    = this.delay;
 			if (this.duration !== 250)            settings.duration = this.duration;
 
@@ -131,13 +131,13 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 
 
 				var type = this.type;
-				if (type === Class.TYPE.linear) {
+				if (type === Composite.TYPE.linear) {
 
 					x += Math.sin(t * pi2) * dx;
 					y += Math.sin(t * pi2) * dy;
 					z += Math.sin(t * pi2) * dz;
 
-				} else if (type === Class.TYPE.easein) {
+				} else if (type === Composite.TYPE.easein) {
 
 					f = 1 * Math.pow(t, 3);
 
@@ -145,7 +145,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 					y += Math.sin(f * pi2) * dy;
 					z += Math.sin(f * pi2) * dz;
 
-				} else if (type === Class.TYPE.easeout) {
+				} else if (type === Composite.TYPE.easeout) {
 
 					f = Math.pow(t - 1, 3) + 1;
 
@@ -153,7 +153,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 					y += Math.sin(f * pi2) * dy;
 					z += Math.sin(f * pi2) * dz;
 
-				} else if (type === Class.TYPE.bounceeasein) {
+				} else if (type === Composite.TYPE.bounceeasein) {
 
 					var k = 1 - t;
 
@@ -171,7 +171,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 					y += Math.sin((1 - f) * pi2) * dy;
 					z += Math.sin((1 - f) * pi2) * dz;
 
-				} else if (type === Class.TYPE.bounceeaseout) {
+				} else if (type === Composite.TYPE.bounceeaseout) {
 
 					if ((t /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(t, 2) );
@@ -213,7 +213,7 @@ lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachment
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

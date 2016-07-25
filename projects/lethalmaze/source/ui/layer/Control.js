@@ -16,7 +16,7 @@ lychee.define('game.ui.layer.Control').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -274,7 +274,7 @@ lychee.define('game.ui.layer.Control').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -293,7 +293,7 @@ lychee.define('game.ui.layer.Control').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

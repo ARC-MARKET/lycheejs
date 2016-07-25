@@ -18,14 +18,14 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 			label: 'UPLOAD'
 		}, data);
 
 
-		this.type  = Class.TYPE.asset;
+		this.type  = Composite.TYPE.asset;
 		this.value = [];
 
 
@@ -56,7 +56,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		all:     0,
 		config:  1,
 		font:    2,
@@ -67,11 +67,11 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -121,7 +121,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

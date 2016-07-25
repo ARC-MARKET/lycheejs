@@ -17,7 +17,7 @@ lychee.define('app.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({
 
@@ -25,8 +25,9 @@ lychee.define('app.Main').requires([
 				delay:       0,
 				key:         true,
 				keymodifier: false,
-				touch:       true,
-				swipe:       true
+				scroll:      true,
+				swipe:       true,
+				touch:       true
 			},
 
 			jukebox: {
@@ -90,7 +91,7 @@ lychee.define('app.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -123,6 +124,6 @@ lychee.define('app.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });

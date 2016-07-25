@@ -11,7 +11,7 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.delay    = 0;
 		this.duration = 250;
@@ -48,7 +48,7 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		// deserialize: function(blob) {},
 
@@ -165,7 +165,7 @@ lychee.define('game.effect.Explosion').exports(function(lychee, global, attachme
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

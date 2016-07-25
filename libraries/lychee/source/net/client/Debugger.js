@@ -35,7 +35,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(client) {
+	var Composite = function(client) {
 
 		lychee.net.Service.call(this, 'debugger', client, lychee.net.Service.TYPE.client);
 
@@ -185,7 +185,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * DEBUGGER API
@@ -320,7 +320,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

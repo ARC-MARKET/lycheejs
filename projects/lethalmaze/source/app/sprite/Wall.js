@@ -14,7 +14,7 @@ lychee.define('game.app.sprite.Wall').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -47,7 +47,7 @@ lychee.define('game.app.sprite.Wall').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -88,7 +88,7 @@ lychee.define('game.app.sprite.Wall').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

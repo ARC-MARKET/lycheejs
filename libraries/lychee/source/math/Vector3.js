@@ -7,7 +7,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -22,7 +22,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -56,7 +56,7 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 
 		clone: function() {
 
-			return new Class({
+			return new Composite({
 				x: this.x,
 				y: this.y,
 				z: this.z
@@ -68,6 +68,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 
 			vector.set(this.x, this.y, this.z);
 
+
+			return this;
+
 		},
 
 		set: function(x, y, z) {
@@ -75,6 +78,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x = x;
 			this.y = y;
 			this.z = z;
+
+
+			return this;
 
 		},
 
@@ -84,6 +90,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y += vector.y;
 			this.z += vector.z;
 
+
+			return this;
+
 		},
 
 		sub: function(vector) {
@@ -91,6 +100,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x -= vector.x;
 			this.y -= vector.y;
 			this.z -= vector.z;
+
+
+			return this;
 
 		},
 
@@ -100,6 +112,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y *= vector.y;
 			this.z *= vector.z;
 
+
+			return this;
+
 		},
 
 		divide: function(vector) {
@@ -107,6 +122,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x /= vector.x;
 			this.y /= vector.y;
 			this.z /= vector.z;
+
+
+			return this;
 
 		},
 
@@ -116,6 +134,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y = Math.min(this.y, vector.y);
 			this.z = Math.min(this.z, vector.z);
 
+
+			return this;
+
 		},
 
 		max: function(vector) {
@@ -124,6 +145,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y = Math.max(this.y, vector.y);
 			this.z = Math.max(this.z, vector.z);
 
+
+			return this;
+
 		},
 
 		scale: function(scale) {
@@ -131,6 +155,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x *= scale;
 			this.y *= scale;
 			this.z *= scale;
+
+
+			return this;
 
 		},
 
@@ -184,6 +211,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y *= -1;
 			this.z *= -1;
 
+
+			return this;
+
 		},
 
 		normalize: function() {
@@ -203,6 +233,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 				this.z *= length;
 
 			}
+
+
+			return this;
 
 		},
 
@@ -227,6 +260,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y = az * bx - ax * bz;
 			this.z = ax * by - ay * bx;
 
+
+			return this;
+
 		},
 
 		interpolate: function(vector, t) {
@@ -240,6 +276,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y += t * dy;
 			this.z += t * dz;
 
+
+			return this;
+
 		},
 
 		interpolateAdd: function(vector, t) {
@@ -248,6 +287,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y += t * vector.y;
 			this.z += t * vector.z;
 
+
+			return this;
+
 		},
 
 		interpolateSet: function(vector, t) {
@@ -255,6 +297,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x = t * vector.x;
 			this.y = t * vector.y;
 			this.z = t * vector.z;
+
+
+			return this;
 
 		},
 
@@ -269,6 +314,9 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.x = m[0] * x + m[4] * y + m[8]  * z + m[12];
 			this.y = m[1] * x + m[5] * y + m[9]  * z + m[13];
 			this.z = m[2] * x + m[6] * y + m[10] * z + m[14];
+
+
+			return this;
 
 		},
 
@@ -294,12 +342,15 @@ lychee.define('lychee.math.Vector3').exports(function(lychee, global, attachment
 			this.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
 			this.z = iz * qw + iw * -qz + ix * -qy - iy * -qx;
 
+
+			return this;
+
 		}
 
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

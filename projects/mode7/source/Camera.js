@@ -5,7 +5,7 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(main) {
+	var Composite = function(main) {
 
 		this.renderer = main.renderer || null;
 
@@ -21,7 +21,7 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -59,7 +59,7 @@ lychee.define('game.Camera').exports(function(lychee, global, attachments) {
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

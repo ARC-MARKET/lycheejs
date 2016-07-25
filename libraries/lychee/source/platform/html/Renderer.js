@@ -4,9 +4,7 @@ lychee.define('Renderer').tags({
 }).supports(function(lychee, global) {
 
 	/*
-	 * Hint for check against undefined:
-	 *
-	 * typeof CanvasRenderingContext2D is:
+	 * XXX: typeof CanvasRenderingContext2D is:
 	 * > function in Chrome, Firefox, IE10
 	 * > object in Safari, Safari Mobile
 	 *
@@ -16,12 +14,7 @@ lychee.define('Renderer').tags({
 	if (typeof global.document !== 'undefined' && typeof global.document.createElement === 'function') {
 
 		if (typeof global.CanvasRenderingContext2D !== 'undefined') {
-
-			var canvas = global.document.createElement('canvas');
-			if (typeof canvas.getContext === 'function') {
-				return true;
-			}
-
+			return true;
 		}
 
 	}
@@ -34,8 +27,6 @@ lychee.define('Renderer').tags({
 	/*
 	 * HELPERS
 	 */
-
-	var _color_cache = {};
 
 	var _is_color = function(color) {
 
@@ -100,7 +91,7 @@ lychee.define('Renderer').tags({
 	var _id = 0;
 
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -130,8 +121,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-
-	Class.prototype = {
+	Composite.prototype = {
 
 		destroy: function() {
 
@@ -664,7 +654,7 @@ lychee.define('Renderer').tags({
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

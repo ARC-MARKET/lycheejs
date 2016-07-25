@@ -25,7 +25,7 @@ lychee.define('app.net.client.Ping').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(client) {
+	var Composite = function(client) {
 
 		lychee.net.Service.call(this, 'ping', client, lychee.net.Service.TYPE.client);
 
@@ -35,7 +35,7 @@ lychee.define('app.net.client.Ping').includes([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -83,7 +83,7 @@ lychee.define('app.net.client.Ping').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

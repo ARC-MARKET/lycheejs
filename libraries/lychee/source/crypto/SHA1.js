@@ -158,7 +158,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function() {
+	var Composite = function() {
 
 		this.__a = 0x67452301 | 0;
 		this.__b = 0xefcdab89 | 0;
@@ -174,7 +174,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		update: function(data) {
 
@@ -247,7 +247,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

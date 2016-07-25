@@ -7,7 +7,7 @@ lychee.define('lychee.verlet.Constraint').requires([
 	var _cache   = new _Vector3();
 
 
-	var Class = function(a_vector, b_vector, rigidity) {
+	var Composite = function(a_vector, b_vector, rigidity) {
 
         this.__a_vector = a_vector instanceof _Vector3 ? a_vector : null;
         this.__b_vector = b_vector instanceof _Vector3 ? b_vector : null;
@@ -27,7 +27,7 @@ lychee.define('lychee.verlet.Constraint').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -104,7 +104,7 @@ lychee.define('lychee.verlet.Constraint').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

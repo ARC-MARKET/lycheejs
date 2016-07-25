@@ -16,7 +16,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -32,7 +32,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -167,7 +167,7 @@ lychee.define('app.ui.layer.Overlay').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

@@ -269,6 +269,13 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		} else if (raw.substr(0, 1) === '\'') {
 			val = raw.substr(1, raw.indexOf('\'', 1) - 1);
+		} else if (raw.substr(0, 3) === 'new') {
+
+			var construct = raw.substr(0, raw.indexOf('(')).split(' ')[1].trim();
+			if (/Buffer|Font|Music|Sound|Texture|Stuff|/g.test(construct)) {
+				val = construct;
+			}
+
 		}
 
 		return val;
@@ -300,6 +307,22 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		if (id !== null) {
 			that.identifier = id;
+		}
+
+	};
+
+	var _parse_head_attaches = function(code) {
+
+		var that = this;
+		var i1   = code.indexOf('.attaches(') + 10;
+		var i2   = code.indexOf(')', i1);
+
+
+		var attaches = {};
+
+
+		if (Object.keys(attaches).length > 0) {
+			that.attaches = attaches;
 		}
 
 	};
@@ -497,15 +520,15 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_enums = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tvar Class = ') + 14;
-		var i2   = code.indexOf('\n\t};', i1 + 14)  +  4;
-		var i3   = code.indexOf('\n\tClass.prototype = {');
+		var i1   = code.indexOf('\n\tvar Composite = ') + 18;
+		var i2   = code.indexOf('\n\t};', i1 + 14) + 4;
+		var i3   = code.indexOf('\n\tComposite.prototype = {');
 
 		var enam   = '';
 		var values = [];
 
 
-		if (i1 > 14 && i2 > i1 && i3 > i2) {
+		if (i1 > 18 && i2 > i1 && i3 > i2) {
 			code = code.substr(i2, i3 - i2);
 		} else {
 			code = '';
@@ -514,7 +537,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		code.split('\n').filter(function(line) {
 
-			if (line.substr(0, 7) === '\tClass.') {
+			if (line.substr(0, 11) === '\tComposite.') {
 				return true;
 			}
 
@@ -527,9 +550,9 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 		}).forEach(function(line) {
 
-			if (line.substr(0, 7) === '\tClass.') {
+			if (line.substr(0, 11) === '\tComposite.') {
 
-				enam   = line.split('=')[0].split('Class.')[1].trim();
+				enam   = line.split('=')[0].split('Composite.')[1].trim();
 				values = [];
 
 			} else if (line.substr(0, 2) === '\t\t' && line.indexOf(':') !== -1) {
@@ -616,11 +639,11 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_properties = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tvar Class = ') + 14;
-		var i2   = code.indexOf('\n\t};', i1)       +  3;
+		var i1   = code.indexOf('\n\tvar Composite = ') + 18;
+		var i2   = code.indexOf('\n\t};', i1) + 3;
 
 
-		if (i1 > 14 && i2 > i1) {
+		if (i1 > 18 && i2 > i1) {
 			code = code.substr(i1, i2 - i1);
 		} else {
 			code = '';
@@ -649,7 +672,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							typ = 'Font';
 						}
 
-						if (value === '_texture') {
+						if (value === '_TEXTURE') {
 							val = 'Texture';
 							typ = 'Texture';
 						}
@@ -661,7 +684,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							val = line.split(':')[1].split(';')[0].trim();
 							val = _dynamic_value(val);
 
-						} else if (value.substr(0, 6) === 'Class.') {
+						} else if (value.substr(0, 10) === 'Composite.') {
 
 							typ = 'Enum';
 							val = value;
@@ -690,10 +713,10 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 	var _parse_body_methods = function(code) {
 
 		var that = this;
-		var i1   = code.indexOf('\n\tClass.prototype = {') + 21;
-		var i2   = code.indexOf('\n\t};', i1)              +  4;
-		var i3   = code.indexOf('\n\tvar Module = {')      + 16;
-		var i4   = code.indexOf('\n\t};', i3)              +  4;
+		var i1   = code.indexOf('\n\tComposite.prototype = {') + 25;
+		var i2   = code.indexOf('\n\t};', i1) + 4;
+		var i3   = code.indexOf('\n\tvar Module = {') + 16;
+		var i4   = code.indexOf('\n\t};', i3) + 4;
 
 		var method = '';
 		var params = [];
@@ -701,7 +724,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 		var values = [];
 
 
-		if (i1 > 21 && i2 > i1) {
+		if (i1 > 25 && i2 > i1) {
 			code = code.substr(i1, i2 - i1);
 		} else if (i3 > 16 && i4 > i3) {
 			code = code.substr(i3, i4 - i3);
@@ -759,9 +782,19 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 
 					// TODO: Resolver for properties?
 
+					console.info(method, value);
+
+				} else if (value.substr(0, 1) === '_') {
+
+					values.push(true);
+					values.push(false);
+					types.push('Boolean');
+
 				} else if (value !== '') {
+
 					values.push(_dynamic_value(value));
 					types.push(_dynamic_type(value));
+
 				} else {
 					values.push(undefined);
 					types.push('void');
@@ -778,6 +811,7 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 						key = line.substr(0, line.indexOf('=')).trim();
 						val = undefined;
 						typ = undefined;
+
 
 						if (line.indexOf('typeof') !== -1) {
 
@@ -817,6 +851,11 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 							typ = 'Object';
 							val = line.split(':')[1].split(';')[0].trim();
 
+						}
+
+
+						if (typ === undefined && val === undefined) {
+							console.warn(method, param.name, line);
 						}
 
 					}
@@ -897,25 +936,31 @@ lychee.define('strainer.data.API').exports(function(lychee, global, attachments)
 		};
 
 
-		if (stream.indexOf('return Class;') !== -1) {
-			object.TYPE = 'Class';
+		if (stream.indexOf('return Composite;') !== -1) {
+			object.TYPE = 'Composite';
 		} else if (stream.indexOf('return Module;') !== -1) {
 			object.TYPE = 'Module';
 		}
 
 
-		_parse_head_identifier.call(object.HEAD, stream);
-		_parse_head_tags.call(      object.HEAD, stream);
-		_parse_head_requires.call(  object.HEAD, stream);
-		_parse_head_includes.call(  object.HEAD, stream);
-//		_parse_head_attaches.call(  object.HEAD, stream);
-//		_parse_head_supports.call(  object.HEAD, stream);
-//		_parse_head_exports.call(   object.HEAD, stream);
+		if (stream.length > 0) {
 
-		_parse_body_enums.call(     object.BODY, stream);
-		_parse_body_events.call(    object.BODY, stream);
-		_parse_body_properties.call(object.BODY, stream);
-		_parse_body_methods.call(   object.BODY, stream);
+			_parse_head_identifier.call(object.HEAD, stream);
+			_parse_head_tags.call(      object.HEAD, stream);
+			_parse_head_requires.call(  object.HEAD, stream);
+			_parse_head_includes.call(  object.HEAD, stream);
+			_parse_head_attaches.call(  object.HEAD, stream);
+
+// TODO: Parser for supports/exports
+//			_parse_head_supports.call(  object.HEAD, stream);
+//			_parse_head_exports.call(   object.HEAD, stream);
+
+			_parse_body_enums.call(     object.BODY, stream);
+			_parse_body_events.call(    object.BODY, stream);
+			_parse_body_properties.call(object.BODY, stream);
+			_parse_body_methods.call(   object.BODY, stream);
+
+		}
 
 
 		return object;

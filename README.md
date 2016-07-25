@@ -6,12 +6,23 @@ brought to you as libre software with joy and pride by [Artificial Engineering](
 Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin:1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2?amount=0.5&label=lychee.js%20Support).
 
 
+## Work-in-Progress (aka alpha)
+
+These are the things that we are currently working on:
+
+- The lychee.js Editor is currently being refactored until the 2016-Q3 release.
+- The lychee.js Guide is subject to change (to integrate the Editor).
+- The lychee.js Strainer is being refactored until the 2016-Q4 release.
+- The lychee.js CARTEL (AI implementation) is being refactored until the 2016-Q4 release.
+
 
 ## Overview
 
-The following repositories are related to the lychee.js project:
+The lychee.js Project started in 2012 and is in active development.
+The following Repositories are related to the lychee.js Engine:
 
 - [lychee.js CARTEL](https://github.com/Artificial-Engineering/lycheejs-cartel.git) contains all academic work related to the CARTEL/ES-HyperNEAT concept (WIP).
+- [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git) contains architecture explanations and concept documentations (WIP).
 - [lychee.js Runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) contains all pre-compiled lychee.js Runtimes and Fertilizers.
 - [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library.git) contains the lychee.js Library (installable via `bower` and `npm`).
 - [lychee.js Harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) contains the lychee.js Harvester (forked from `/libraries/harvester`).
@@ -19,7 +30,7 @@ The following repositories are related to the lychee.js project:
 - [lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) generates the OS-ready lychee.js Bundles (published at [releases](https://github.com/Artificial-Engineering/lycheejs-bundle/releases) section).
 - [lychee.js Future](https://github.com/Artificial-Engineering/lycheejs-future.git) contains all Concepts and Ideas not yet finished.
 
-The following accounts are related to the lychee.js project:
+The following Accounts are related to the lychee.js Engine:
 
 - [@cookiengineer](https://github.com/cookiengineer) is the core maintainer and founder of this project.
 - [@humansneednotapply](https://github.com/humansneednotapply) is the account used by our software bots.
@@ -32,24 +43,56 @@ technology stack does not matter (HTML5, WebGL, OpenGL,
 OpenGLES, libSDL) and is completely automated behind the
 scenes.
 
-The project's goal is to ease up and automate the design
-and engineering process of applications through intelligent
-software bots that learn from your application code. In
-particular, we use a CARTEL/ES-HyperNEAT architecture
-across a world-wide botnet with over 500k+ active computers
-that constantly improve and learn from your code.
 
-Every (not sandboxed) lychee.js Harvester connected to the
-lychee.js peer cloud is contributing to the evolutionary
+
+## Features
+
+The lychee.js Engine aims to deliver Total Automation through
+Artificial Intelligence and better Software Architecture.
+
+Here is a selected subset of Features that the lychee.js Engine
+already covers and delivers. Everything listed here requires
+zero lines of code overhead and is already fully integrated
+in the [lychee.js Boilerplate](./projects/boilerplate):
+
+- Isomorphic Application Engine (runs pretty much everywhere)
+- Language is only ES5/ES6 JavaScript Code, nothing else
+- Automated Code Refactoring, Bug Fixing and Code Improvements
+- Automated Design Tracking, Layout and Flow Optimization
+- Automated Packaging for Embedded, Console, Mobile, Desktop and Server Apps
+- Automated Deployment via git and Live-Updates
+- Automated Reactive/Responsive UI/UX Components
+- Automated Debugging, Network and UI/UX Flow Analysis
+- Automated Testing and Integration with the AI
+- Automated Networking (Peer-to-Peer HTTP1.1/2.0 and WS13 with Local/Global Discovery)
+- Automated Network Services and Traffic Balancing/Sharding
+- Graphical Editor and Project Management Tool (Ranger)
+- Command-Line Wizard for Projects and Libraries (Breeder)
+- Command-Line Fuzz-Tester and Code-Refactorer (Strainer)
+- Built-In Offline Storage Management and Synchronization
+
+
+
+## Workflow
+
+Every (not sandboxed) lychee.js Harvester is connected to the
+lychee.js Peer Cloud and is contributing to the evolutionary
 AI's knowledge and improves its capabilities for all others.
 
-The development process is optimized for Blink-based
+The lychee.js Engine uses CARTEL/ES-HyperNEAT as an evolutionary
+AI that is connected to a Botnet of lychee.js Harvesters. Each
+and every Definition written in lychee.js contributes to the AI
+so that it can predict, suggest and improve all other Projects.
+
+The development process is optimized for Blink-based web
 browsers (Chromium, Google Chrome, Opera) and their
 developer tools. We honestly recommend NOT using Firefox
 due to lack of developer and debugging tools nor has it
 any remote debugging protocol.
 
 We ain't doing HTML5 websites or single-page-webapps here.
+This is an isomorphic application engine, not a framework.
+
 
 
 ## Platform / Fertilizer Support
@@ -62,155 +105,82 @@ each project's or library's `lychee.pkg` file.
 
 | Target       | Fertilizer                   | Package   | armv7 |  x86  | x86\_64 |
 |:-------------|:-----------------------------|:----------|:-----:|:-----:|:-------:|
-| Browser      | html                         | zip, html |   ✓   |   ✓   |    ✓    |
-| Linux        | html-nwjs, node, node-sdl    | bin       |   ✓   |   ✓   |    ✓    |
-| OSX          | html-nwjs, node, node-sdl    | app, bin  |   ✗   |   ✗   |    ✓    |
-| Windows      | html-nwjs, node, node-sdl    | exe       |   ✗   |   ✓   |    ✓    |
-| Android      | html-webview, node, node-sdl | apk, bin  |   ✓   |   ✓   |    ✓    |
-| BlackberryOS | html-webview, node, node-sdl | apk, bin  |   ✓   |   ✓   |    ✓    |
-| FirefoxOS    | html-webview                 | zip       |   ✓   |   ✓   |    ✓    |
-| iOS          | html                         |           |   ✗   |   ✗   |    ✗    |
-| Ubuntu Touch | html-webview, node           | deb, bin  |   ✓   |   ✓   |    ✓    |
+| Browser      | html                         | zip, html |   x   |   x   |    x    |
+| GNU/Linux    | html-nwjs, node, node-sdl    | bin       |   x   |   x   |    x    |
+| OSX          | html-nwjs, node, node-sdl    | app, bin  |       |       |    x    |
+| Windows      | html-nwjs, node, node-sdl    | exe       |       |   x   |    x    |
+| Android      | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
+| BlackberryOS | html-webview, node, node-sdl | apk, bin  |   x   |   x   |    x    |
+| FirefoxOS    | html-webview                 | zip       |   x   |   x   |    x    |
+| iOS          | html                         |           |   x   |       |         |
+| Ubuntu Touch | html-webview, node           | deb, bin  |   x   |   x   |    x    |
 
 The iOS Fertilizer has currently no support for cross-compilation
-due to XCode limitations. You can still create an own WebView
-iOS app and use the `html` platform adapter.
+due to XCode's gcc limitations. You can still create an own WebView
+iOS App and use the `html` platform adapter.
 
 
 
-## Install lychee.js Engine (Bundles)
+## Quickstart
 
-The lychee.js Bundles (such as a Debian package, OSX package or
-the Raspberry Pi image) can be downloaded by anyone using the
-[lychee.js Bundle](https://github.com/Artificial-Engineering/lycheejs-bundle)
-repository and its release section.
-
-These bundles ship with an integrated git repository, leading to
-auto-updates via the `master` (quarterly release-cycle) branch.
-If you want to change update behaviour of a lychee.js Engine 
-installation, read the [Maintain section](#maintain-lycheejs-engine)
-of this README file.
-
-The lychee.js Library (available via `bower` and `npm`) is
-available in the [lychee.js Library](https://github.com/Artificial-Engineering/lycheejs-library)
-repository and follows updates via the `master` (quarterly
-release-cycle) branch.
+This is the directly-it-works-failsafe guide of how to install
+the lychee.js Engine. For everything related to Bundles, Dev Ops,
+Security, Deployments and Virtualization - please consult the
+[lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide.git).
 
 
+![Quickstart](./guides/asset/quickstart.gif)
 
-## Install lychee.js Engine (Developer Machine)
 
-The netinstaller shell script allows to automatically install
-the lychee.js Engine on any UNIX-compatible machine (arm, x86
-or amd64). The only requirements beforehand are working `bash`,
-`curl` and `git`.
+**1) Installation**
+
+The Net Installer automatically installs the lychee.js Engine
+on any UNIX-compatible machine (arm, x86 or amd64). The only
+requirements beforehand are working `bash`, `curl` and `git`.
+
+Notes:
+
+- OSX requires [brew](https://brew.sh) installed beforehand.
+- BSD requires `pkg` installed beforehand.
+
 
 ```bash
-# This will clone lycheejs into /opt/lycheejs
-
+# Install lychee.js Engine into /opt/lycheejs
 sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
 ```
 
-The above installation procedure will look similar to this:
 
-![Install lychee.js](./guides/asset/readme-install.gif)
+**2) Bootup**
 
-
-
-## Bootup lychee.js Engine
-
-After you've installed the lychee.js Engine, you can directly
-start the `lycheejs-harvester`.
-
-The `./bin/configure.sh` script has to be executed initially
-one time via `sudo` (not `su`) in order to compile down all
-the lychee.js core libraries and to symlink the `lycheejs-`
-tools correctly into `/usr/local/bin`.
-
-We try to support as much package managers as possible inside
-the `./bin/configure.sh`, but if your package manager isn't
-supported - please let us know.
-
-If you want a sandboxed installation without the system-wide
-integration of the `lycheejs-` tools, you can use the `--sandbox`
-flag. The sandbox flag can also be used with the harvester so
-it does not use any native tools outside the `/opt/lycheejs`
-folder, which, in return will use less resources and runs
-better on slower machines like a Raspberry Pi.
-
-However, the sandbox flag disables all software bots like
-auto-testing, auto-documentation, auto-fertilization and
-auto-synchronization of all lychee.js Libraries and Projects.
+The `lycheejs-harvester` integrates all projects with the
+Software Bots. Start the `development` profile and open
+`http://localhost:8080` in your Blink-based Browser.
 
 ```bash
 cd /opt/lycheejs;
 
-sudo ./bin/configure.sh;              # --sandbox to install in isolation
-lycheejs-harvester start development; # --sandbox to enforce sandbox mode
-```
-
-The above bootup procedure will look similar to this:
-
-![Bootup lychee.js](./guides/asset/readme-bootup.gif)
-
-
-
-## Update lychee.js Engine
-
-Every developer can update the lychee.js Engine Installation
-simply by using git. The `development` branch is the most
-up-to-date branch and is the branch that both our humans and
-software bots are actively working on.
-
-```bash
-cd /opt/lycheejs;
-
-# development branch (recommended, but unstable)
-git checkout development;
-git pull origin development;
-
-# master branch (quarterly release-cycle, more stable)
-git checkout master;
-git pull origin master;
+# Bootup lychee.js Harvester
+lycheejs-harvester start development;
 ```
 
 
 
-## Maintain lychee.js Engine
+## Developer Guide
 
-The update channels of lychee.js are defined as follows:
+The lychee.js Guide tries to help developers to get started as
+easy as possible. Please let us know if we can improve anything
+in these documents by opening up an [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/new).
 
-- `master` ships quarterly release cycles.
-- `development` ships everything up-to-date (recommended).
-- `humansneednotapply` ships everything that the software bots are working on (not recommended).
-
-The `humansneednotapply` branch is constantly merged with
-`development`. Use with care, as this is heavily updated and
-constantly squashed in its history. No influence by humans
-is possible, as this is beyond human knowability since 2016.
-
-There are multiple maintenance scripts in the `./bin/maintenance`
-folder that will ensure an almost-automated process for our
-human and bot maintainers:
-
-- `do-release.sh` automates a lychee.js quarterly release (relevant only for lychee.js core maintainers).
-- `do-uninstall.sh` removes a lychee.js installation from the system.
-- `do-update.sh` selects an update channel and updates a lychee.js installation.
+- [lychee.js Guide](https://github.com/Artificial-Engineering/lycheejs-guide)
 
 
 
-## Guides
-
-These guides help developers to get started as easy as possible.
-Please let us know if we can improve anything in these documents
-by opening up an [Issue directly on GitHub](https://github.com/Artificial-Engineering/lycheejs/issues/new).
+## Contributor Guide
 
 - [Contribution Guide](./guides/CONTRIBUTION.md)
 - [Codestyle Guide](./guides/CODESTYLE.md)
 - [ECMAScript Guide](./guides/ECMASCRIPT.md)
 - [Release Guide](./guides/RELEASE.md)
-
-We also have some tutorials available at [lychee.js.org/#!tutorials](https://lychee.js.org/#!tutorials).
 
 
 

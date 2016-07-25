@@ -261,7 +261,7 @@ lychee.define('harvester.Main').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(settings) {
+	var Composite = function(settings) {
 
 		this.settings = lychee.assignunlink({}, _defaults, settings);
 		this.defaults = lychee.assignunlink({}, this.settings);
@@ -308,8 +308,10 @@ lychee.define('harvester.Main').requires([
 			this.server.connect();
 
 
-			console.log('\n\n');
-			console.log('Open your web browser and surf to one of the following hosts:');
+			console.log('\n');
+			console.info('+-------------------------------------------------------+');
+			console.info('| Open one of these URLs with a Blink-based Web Browser |');
+			console.info('+-------------------------------------------------------+');
 			console.log('\n');
 			this.getHosts().forEach(function(host) {
 				console.log(host);
@@ -326,7 +328,7 @@ lychee.define('harvester.Main').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -457,7 +459,7 @@ lychee.define('harvester.Main').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

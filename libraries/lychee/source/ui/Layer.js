@@ -13,12 +13,13 @@ lychee.define('lychee.ui.Layer').requires([
 
 		if (entity instanceof Object) {
 
-			if (typeof entity.update === 'function' && typeof entity.render === 'function' && typeof entity.shape === 'number') {
-
-				if (typeof entity.isAtPosition === 'function') {
-					return true;
-				}
-
+			if (
+				typeof entity.update === 'function'
+				&& typeof entity.render === 'function'
+				&& typeof entity.shape === 'number'
+				&& typeof entity.isAtPosition === 'function'
+			) {
+				return true;
 			}
 
 		}
@@ -46,7 +47,7 @@ lychee.define('lychee.ui.Layer').requires([
 				var z = entity.position.z;
 
 
-				if (projection === Class.PROJECTION.tile) {
+				if (projection === Composite.PROJECTION.tile) {
 
 					w = w * grid.width;
 					h = h * grid.height;
@@ -55,7 +56,7 @@ lychee.define('lychee.ui.Layer').requires([
 					y = y * grid.height;
 					z = z * grid.depth;
 
-				} else if (projection === Class.PROJECTION.isometry) {
+				} else if (projection === Composite.PROJECTION.isometry) {
 
 					w = w * grid.width;
 					h = h * grid.height;
@@ -88,7 +89,7 @@ lychee.define('lychee.ui.Layer').requires([
 				var z = entity.position.z;
 
 
-				if (projection === Class.PROJECTION.tile) {
+				if (projection === Composite.PROJECTION.tile) {
 
 					w = w / grid.width;
 					h = h / grid.height;
@@ -97,7 +98,7 @@ lychee.define('lychee.ui.Layer').requires([
 					y = y / grid.height;
 					z = z / grid.depth;
 
-				} else if (projection === Class.PROJECTION.isometry) {
+				} else if (projection === Composite.PROJECTION.isometry) {
 
 					w = w / grid.width;
 					h = h / grid.height;
@@ -183,6 +184,42 @@ lychee.define('lychee.ui.Layer').requires([
 
 	};
 
+	var _on_scroll = function(id, direction, position, delta) {
+
+		if (this.visible === false) return null;
+
+
+		var triggered = null;
+		var args      = [ id, direction, {
+			x: position.x - this.offset.x,
+			y: position.y - this.offset.y
+		}, delta ];
+
+
+		var entity = this.getEntity(null, args[2]);
+		if (entity !== null) {
+
+			if (typeof entity.trigger === 'function') {
+
+				args[2].x -= entity.position.x;
+				args[2].y -= entity.position.y;
+
+				var result = entity.trigger('scroll', args);
+				if (result === true) {
+					triggered = entity;
+				} else if (result !== false) {
+					triggered = result;
+				}
+
+			}
+
+		}
+
+
+		return triggered;
+
+	};
+
 	var _on_touch = function(id, position, delta) {
 
 		if (this.visible === false) return null;
@@ -225,7 +262,7 @@ lychee.define('lychee.ui.Layer').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -241,7 +278,7 @@ lychee.define('lychee.ui.Layer').requires([
 		this.grid       = { width: 0, height: 0, depth: 0 };
 		this.offset     = { x: 0, y: 0, z: 0 };
 		this.position   = { x: 0, y: 0, z: 0 };
-		this.projection = Class.PROJECTION.pixel;
+		this.projection = Composite.PROJECTION.pixel;
 		this.shape      = lychee.ui.Entity.SHAPE.rectangle;
 		this.visible    = true;
 
@@ -270,20 +307,21 @@ lychee.define('lychee.ui.Layer').requires([
 		 * INITIALIZATION
 		 */
 
+		this.bind('scroll',   _on_scroll,   this);
 		this.bind('touch',    _on_touch,    this);
 		this.bind('relayout', _on_relayout, this);
 
 	};
 
 
-	Class.PROJECTION = {
+	Composite.PROJECTION = {
 		pixel:    0,
 		tile:     1,
 		isometry: 2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -388,7 +426,7 @@ lychee.define('lychee.ui.Layer').requires([
 
 			if (this.alpha !== 1)                           settings.alpha      = this.alpha;
 			if (this.__project !== true)                    blob.project        = this.__project;
-			if (this.projection !== Class.PROJECTION.pixel) settings.projection = this.projection;
+			if (this.projection !== Composite.PROJECTION.pixel) settings.projection = this.projection;
 			if (this.__relayout !== true)                   settings.relayout   = this.__relayout;
 			if (this.visible !== true)                      settings.visible    = this.visible;
 
@@ -877,7 +915,7 @@ lychee.define('lychee.ui.Layer').requires([
 
 		setProjection: function(projection) {
 
-			projection = lychee.enumof(Class.PROJECTION, projection) ? projection : null;
+			projection = lychee.enumof(Composite.PROJECTION, projection) ? projection : null;
 
 
 			if (projection !== null) {
@@ -926,7 +964,7 @@ lychee.define('lychee.ui.Layer').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

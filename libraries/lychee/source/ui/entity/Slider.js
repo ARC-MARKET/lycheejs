@@ -23,14 +23,14 @@ lychee.define('lychee.ui.entity.Slider').includes([
 		}
 
 
-		if (type === Class.TYPE.horizontal) {
+		if (type === Composite.TYPE.horizontal) {
 
 			var vx = (val - this.min) / (this.max - this.min);
 
 			map.x = vx * (this.width - 44);
 			map.y = 0;
 
-		} else if (type === Class.TYPE.vertical) {
+		} else if (type === Composite.TYPE.vertical) {
 
 			var vy = (val - this.min) / (this.max - this.min);
 
@@ -50,7 +50,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -59,7 +59,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 		this.max   = 128;
 		this.min   = 0;
 		this.step  = 1;
-		this.type  = Class.TYPE.horizontal;
+		this.type  = Composite.TYPE.horizontal;
 		this.value = 0;
 
 		this.__cursor  = {
@@ -95,10 +95,10 @@ lychee.define('lychee.ui.entity.Slider').includes([
 		delete settings.type;
 
 
-		if (this.type === Class.TYPE.horizontal) {
+		if (this.type === Composite.TYPE.horizontal) {
 			settings.width  = typeof settings.width === 'number'  ? settings.width  : 192;
 			settings.height = typeof settings.height === 'number' ? settings.height :  32;
-		} else if (this.type === Class.TYPE.vertical) {
+		} else if (this.type === Composite.TYPE.vertical) {
 			settings.width  = typeof settings.width === 'number'  ? settings.width  :  32;
 			settings.height = typeof settings.height === 'number' ? settings.height : 192;
 		}
@@ -123,14 +123,14 @@ lychee.define('lychee.ui.entity.Slider').includes([
 			var val  = null;
 			var type = this.type;
 
-			if (type === Class.TYPE.horizontal) {
+			if (type === Composite.TYPE.horizontal) {
 
 				var qx = Math.max(-0.5, Math.min(0.5, position.x / (this.width - 44))) + 0.5;
 				var vx = (this.min + qx * (this.max - this.min)) | 0;
 
 				val = ((vx / this.step) | 0) * this.step;
 
-			} else if (type === Class.TYPE.vertical) {
+			} else if (type === Composite.TYPE.vertical) {
 
 				var qy = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44))) + 0.5;
 				var vy = (this.min + qy * (this.max - this.min)) | 0;
@@ -153,14 +153,14 @@ lychee.define('lychee.ui.entity.Slider').includes([
 			var step = this.step;
 			var type = this.type;
 
-			if (type === Class.TYPE.horizontal) {
+			if (type === Composite.TYPE.horizontal) {
 
 				var qx = Math.max(-0.5, Math.min(0.5, position.x / (this.width - 44))) + 0.5;
 				var vx = (this.min + qx * (this.max - this.min)) | 0;
 
 				val = ((vx / step) | 0) * step;
 
-			} else if (type === Class.TYPE.vertical) {
+			} else if (type === Composite.TYPE.vertical) {
 
 				var qy = Math.max(-0.5, Math.min(0.5, position.y / (this.height - 44))) + 0.5;
 				var vy = (this.min + qy * (this.max - this.min)) | 0;
@@ -185,12 +185,12 @@ lychee.define('lychee.ui.entity.Slider').includes([
 				var step = this.step;
 				var type = this.type;
 
-				if (type === Class.TYPE.horizontal) {
+				if (type === Composite.TYPE.horizontal) {
 
 					if (key === 'a' || key === 'arrow-left')  val -= step;
 					if (key === 'd' || key === 'arrow-right') val += step;
 
-				} else if (type === Class.TYPE.vertical) {
+				} else if (type === Composite.TYPE.vertical) {
 
 					if (key === 'w' || key === 'arrow-up')    val -= step;
 					if (key === 's' || key === 'arrow-down')  val += step;
@@ -227,13 +227,13 @@ lychee.define('lychee.ui.entity.Slider').includes([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		horizontal: 0,
 		vertical:   1
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -260,7 +260,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 			if (this.max !== 100)                    settings.max   = this.max;
 			if (this.min !== 0)                      settings.min   = this.min;
 			if (this.step !== 1)                     settings.step  = this.step;
-			if (this.type !== Class.TYPE.horizontal) settings.type  = this.type;
+			if (this.type !== Composite.TYPE.horizontal) settings.type  = this.type;
 			if (this.value !== 0)                    settings.value = this.value;
 
 
@@ -348,7 +348,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 			}
 
 
-			if (type === Class.TYPE.horizontal) {
+			if (type === Composite.TYPE.horizontal) {
 
 				cx  = x - hwidth  + map.x + 20;
 				cy  = y - hheight + 15;
@@ -372,7 +372,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 					2
 				);
 
-			} else if (type === Class.TYPE.vertical) {
+			} else if (type === Composite.TYPE.vertical) {
 
 				cx  = x - hwidth  + 15;
 				cy  = y - hheight + map.y + 20;
@@ -423,7 +423,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 				renderer.setAlpha(alpha);
 
 
-				if (type === Class.TYPE.horizontal) {
+				if (type === Composite.TYPE.horizontal) {
 
 					renderer.drawText(
 						cx,
@@ -433,7 +433,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 						true
 					);
 
-				} else if (type === Class.TYPE.vertical) {
+				} else if (type === Composite.TYPE.vertical) {
 
 					renderer.drawText(
 						cx + 6 + font.measure('' + this.value).realwidth,
@@ -604,7 +604,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 
 		setType: function(type) {
 
-			type = lychee.enumof(Class.TYPE, type) ? type : null;
+			type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 			if (type !== null) {
@@ -649,7 +649,7 @@ lychee.define('lychee.ui.entity.Slider').includes([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

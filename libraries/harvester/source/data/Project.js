@@ -17,7 +17,7 @@ lychee.define('harvester.data.Project').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(identifier) {
+	var Composite = function(identifier) {
 
 		identifier = typeof identifier === 'string' ? identifier : null;
 
@@ -36,7 +36,7 @@ lychee.define('harvester.data.Project').requires([
 
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * ENTITY API
@@ -112,7 +112,7 @@ lychee.define('harvester.data.Project').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

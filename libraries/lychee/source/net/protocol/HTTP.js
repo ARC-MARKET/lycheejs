@@ -29,7 +29,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 		var payload_length = payload.length;
 
 
-		if (type === Class.TYPE.client) {
+		if (type === Composite.TYPE.client) {
 
 			var url            = headers['url']             || null;
 			var method         = headers['method']          || null;
@@ -80,7 +80,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 		} else {
 
-			var status  = headers['status'] || Class.STATUS.normal_okay;
+			var status  = headers['status'] || Composite.STATUS.normal_okay;
 			var exposed = [ 'Content-Type' ];
 
 
@@ -295,9 +295,9 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(type) {
+	var Composite = function(type) {
 
-		type = lychee.enumof(Class.TYPE, type) ? type : null;
+		type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 		this.type = type;
@@ -319,11 +319,11 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 	};
 
 
-	// Class.FRAMESIZE = 32768; // 32kB
-	Class.FRAMESIZE = 0x800000; // 8MiB
+	// Composite.FRAMESIZE = 32768; // 32kB
+	Composite.FRAMESIZE = 0x800000; // 8MiB
 
 
-	Class.STATUS = {
+	Composite.STATUS = {
 
 		// RFC7231
 		normal_continue: '100 Continue',
@@ -342,14 +342,14 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		// 'default': 0, (deactivated)
 		'client': 1,
 		'remote': 2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * PROTOCOL API
@@ -385,9 +385,9 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 			if (blob !== null) {
 
-				if (blob.length > Class.FRAMESIZE) {
+				if (blob.length > Composite.FRAMESIZE) {
 
-					chunks.push(this.close(Class.STATUS.message_too_big));
+					chunks.push(this.close(Composite.STATUS.message_too_big));
 
 				} else if (this.__isClosed === false) {
 
@@ -432,7 +432,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 		close: function(status) {
 
-			status = typeof status === 'number' ? status : Class.STATUS.no_content;
+			status = typeof status === 'number' ? status : Composite.STATUS.no_content;
 
 
 			if (this.__isClosed === false) {
@@ -460,6 +460,6 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 	};
 
 
-	return Class;
+	return Composite;
 
 });

@@ -95,7 +95,7 @@ lychee.define('lychee.ai.neural.Agent').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(data) {
+	var Composite = function(data) {
 
 		var settings = Object.assign({}, data);
 
@@ -127,7 +127,7 @@ lychee.define('lychee.ai.neural.Agent').requires([
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		reward: function() {
 			// TODO: Reward method
@@ -160,7 +160,7 @@ lychee.define('lychee.ai.neural.Agent').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 

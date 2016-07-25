@@ -37,7 +37,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 	var _on_ping_frame = function() {
 
 		var type = this.type;
-		if (type === Class.TYPE.remote) {
+		if (type === Composite.TYPE.remote) {
 
 			var buffer = new Buffer(2);
 
@@ -60,7 +60,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 	var _on_pong_frame = function() {
 
 		var type = this.type;
-		if (type === Class.TYPE.client) {
+		if (type === Composite.TYPE.client) {
 
 			var buffer = new Buffer(6);
 
@@ -100,7 +100,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 		var type           = this.type;
 
 
-		if (type === Class.TYPE.client) {
+		if (type === Composite.TYPE.client) {
 
 			mask      = true;
 			mask_data = new Buffer(4);
@@ -358,7 +358,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 		// 8: Connection Close
 		} else if (operator === 0x08) {
 
-			chunk.payload = this.close(Class.STATUS.normal_closure);
+			chunk.payload = this.close(Composite.STATUS.normal_closure);
 
 
 		// 9: Ping Frame
@@ -376,7 +376,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 		// 3-7: Reserved Non-Control Frames, 11-15: Reserved Control Frames
 		} else {
 
-			chunk.payload = this.close(Class.STATUS.protocol_error);
+			chunk.payload = this.close(Composite.STATUS.protocol_error);
 
 		}
 
@@ -391,9 +391,9 @@ lychee.define('lychee.net.protocol.WS').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Class = function(type) {
+	var Composite = function(type) {
 
-		type = lychee.enumof(Class.TYPE, type) ? type : null;
+		type = lychee.enumof(Composite.TYPE, type) ? type : null;
 
 
 		this.type = type;
@@ -415,11 +415,11 @@ lychee.define('lychee.net.protocol.WS').requires([
 	};
 
 
-	// Class.FRAMESIZE = 32768; // 32kB
-	Class.FRAMESIZE = 0x800000; // 8MiB
+	// Composite.FRAMESIZE = 32768; // 32kB
+	Composite.FRAMESIZE = 0x800000; // 8MiB
 
 
-	Class.STATUS = {
+	Composite.STATUS = {
 
 		// IESG_HYBI
 		normal_closure:  1000,
@@ -446,14 +446,14 @@ lychee.define('lychee.net.protocol.WS').requires([
 	};
 
 
-	Class.TYPE = {
+	Composite.TYPE = {
 		// 'default': 0, (deactivated)
 		'client': 1,
 		'remote': 2
 	};
 
 
-	Class.prototype = {
+	Composite.prototype = {
 
 		/*
 		 * PROTOCOL API
@@ -489,10 +489,10 @@ lychee.define('lychee.net.protocol.WS').requires([
 
 			if (blob !== null) {
 
-				if (blob.length > Class.FRAMESIZE) {
+				if (blob.length > Composite.FRAMESIZE) {
 
 					chunks.push({
-						payload: this.close(Class.STATUS.message_too_big)
+						payload: this.close(Composite.STATUS.message_too_big)
 					});
 
 				} else if (this.__isClosed === false) {
@@ -538,7 +538,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 
 		close: function(status) {
 
-			status = typeof status === 'number' ? status : Class.STATUS.normal_closure;
+			status = typeof status === 'number' ? status : Composite.STATUS.normal_closure;
 
 
 			if (this.__isClosed === false) {
@@ -577,7 +577,7 @@ lychee.define('lychee.net.protocol.WS').requires([
 	};
 
 
-	return Class;
+	return Composite;
 
 });
 
