@@ -67,9 +67,7 @@ lychee.define('lychee.math.Matrix').exports(function(lychee, global, attachments
 
 		clone: function() {
 
-			return new Composite(
-				this.data.slice(0)
-			);
+			return new Composite(this.data.slice(0));
 
 		},
 

@@ -59,9 +59,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		clone: function() {
 
-			return new Composite(
-				this.data.slice(0)
-			);
+			return new Composite(this.data.slice(0));
 
 		},
 

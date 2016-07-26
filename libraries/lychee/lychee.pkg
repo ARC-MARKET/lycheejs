@@ -364,7 +364,7 @@
 				]
 			},
 			"math": {
-				"Matrix4": [
+				"Matrix": [
 					"js"
 				],
 				"Quaternion": [
