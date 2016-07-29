@@ -45,20 +45,6 @@ fi;
 
 
 
-_fertilize() {
-
-	cd $LYCHEEJS_ROOT;
-
-	./bin/fertilizer.sh $1 $2;
-
-	if [ "$?" != "0" ]; then
-		exit 1;
-	fi;
-
-}
-
-
-
 if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
 	echo "";
@@ -73,27 +59,11 @@ if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
 	if [ "$?" == "0" ]; then
 
-		_fertilize html/dist /libraries/lychee;
-		_fertilize html-nwjs/dist /libraries/lychee;
-		_fertilize html-webview/dist /libraries/lychee;
-		_fertilize node/dist /libraries/lychee;
-		# _fertilize node-sdl/dist /libraries/lychee;
-
-		# _fertilize node/dist /libraries/breeder;
-		# _fertilize node-sdl/dist /libraries/breeder;
-
-		_fertilize node/dist /libraries/fertilizer;
-		# _fertilize node-sdl/dist /libraries/fertilizer;
-
-		_fertilize html/dist /libraries/harvester;
-		_fertilize html-nwjs/dist /libraries/harvester;
-		_fertilize html-webview/dist /libraries/harvester;
-		_fertilize node/dist /libraries/harvester;
-		# _fertilize node-sdl/dist /libraries/harvester;
-
-		# _fertilize node/dist /libraries/strainer;
-		# _fertilize node-sdl/dist /libraries/strainer;
-
+		./bin/fertilizer.sh auto /libraries/lychee;
+		# ./bin/fertilizer.sh auto /libraries/breeder;
+		./bin/fertilizer.sh auto /libraries/fertilizer;
+		./bin/fertilizer.sh auto /libraries/harvester;
+		# ./bin/fertilizer.sh auto /libraries/strainer;
 
 		echo "> DONE";
 		echo "";
