@@ -10,10 +10,11 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 These are the things that we are currently working on:
 
-- The lychee.js Editor is currently being refactored until the 2016-Q3 release.
-- The lychee.js Guide is subject to change (to integrate the Editor).
-- The lychee.js Strainer is being refactored until the 2016-Q4 release.
-- The lychee.js CARTEL (AI implementation) is being refactored until the 2016-Q4 release.
+- 2016-Q3: Engine stack is being migrated to ES6. [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/160)
+- 2016-Q3: Editor is being refactored.
+- 2016-Q3: Guide is subject to change (to integrate the Editor). [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/159)
+- 2016-Q4: Strainer is being refactored to support better AI implementation.
+- 2016-Q4: CARTEL (AI implementation) is being refactored. [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/91)
 
 
 ## Overview
