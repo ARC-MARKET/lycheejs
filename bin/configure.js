@@ -347,7 +347,7 @@
 		}
 
 
-		console.log('> Cleaning lychee.js builds');
+		console.log('Cleaning lychee.js Projects and Libraries');
 
 		libraries.forEach(function(path) {
 
@@ -388,7 +388,6 @@
 
 	(function() {
 
-		console.log('\n');
 		console.log('Distributing lychee.js Library');
 
 
@@ -469,7 +468,6 @@
 		}
 
 
-		console.log('\n');
 		console.log('Generating lychee.js Core');
 
 
@@ -521,7 +519,6 @@
 		});
 
 
-		console.log('\n');
 		console.log('Generating lychee.js Fertilizer Adapters');
 
 
