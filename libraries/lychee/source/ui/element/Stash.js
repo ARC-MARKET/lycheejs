@@ -7,22 +7,29 @@ lychee.define('lychee.ui.element.Stash').requires([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Input   = lychee.import('lychee.ui.entity.Input');
+	const _Select  = lychee.import('lychee.ui.entity.Select');
+	const _Stash   = lychee.import('lychee.Stash');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _clear = function() {
+	const _clear = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var stash = main.stash || null;
+			let stash = main.stash || null;
 			if (stash !== null) {
 
-				var data = lychee.serialize(stash);
+				let data = lychee.serialize(stash);
 				if (data !== null) {
 
-					var blob = data.blob || null;
+					let blob = data.blob || null;
 					if (blob !== null) {
 						delete data.blob;
 					}
@@ -37,23 +44,23 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 	};
 
-	var _read = function() {
+	const _read = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var stash = main.stash || null;
+			let stash = main.stash || null;
 			if (stash !== null) {
 
-				var id   = stash.id;
-				var type = stash.type;
+				let id   = stash.id;
+				let type = stash.type;
 
 
 				this.getEntity('id').setValue(id);
 
-				if (type === lychee.Stash.TYPE.persistent) {
+				if (type === _Stash.TYPE.persistent) {
 					this.getEntity('mode').setValue('persistent');
-				} else if (type === lychee.Stash.TYPE.temporary) {
+				} else if (type === _Stash.TYPE.temporary) {
 					this.getEntity('mode').setValue('temporary');
 				}
 
@@ -63,24 +70,24 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 	};
 
-	var _save = function() {
+	const _save = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var stash = main.stash || null;
+			let stash = main.stash || null;
 			if (stash !== null) {
 
-				var id   = this.getEntity('id').value;
-				var mode = this.getEntity('mode').value;
+				let id   = this.getEntity('id').value;
+				let mode = this.getEntity('mode').value;
 
 
 				stash.setId(id);
 
 				if (mode === 'persistent') {
-					stash.setType(lychee.Stash.TYPE.persistent);
+					stash.setType(_Stash.TYPE.persistent);
 				} else if (mode === 'temporary') {
-					stash.setType(lychee.Stash.TYPE.temporary);
+					stash.setType(_Stash.TYPE.temporary);
 				}
 
 			}
@@ -95,16 +102,16 @@ lychee.define('lychee.ui.element.Stash').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		settings.label   = 'Stash';
 		settings.options = [ 'Save', 'Clear' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -112,13 +119,13 @@ lychee.define('lychee.ui.element.Stash').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setEntity('mode', new lychee.ui.entity.Select({
+		this.setEntity('mode', new _Select({
 			options: [ 'persistent', 'temporary' ],
 			value:   'persistent'
 		}));
 
-		this.setEntity('id', new lychee.ui.entity.Input({
-			type:  lychee.ui.entity.Input.TYPE.text,
+		this.setEntity('id', new _Input({
+			type:  _Input.TYPE.text,
 			value: 'app'
 		}));
 
@@ -148,7 +155,7 @@ lychee.define('lychee.ui.element.Stash').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Stash';
 
 

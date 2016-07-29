@@ -8,24 +8,30 @@ lychee.define('lychee.ui.element.Viewport').requires([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Input   = lychee.import('lychee.ui.entity.Input');
+	const _Select  = lychee.import('lychee.ui.entity.Select');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _read = function() {
+	const _read = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var renderer = main.renderer || null;
-			var viewport = main.viewport || null;
+			let renderer = main.renderer || null;
+			let viewport = main.viewport || null;
 
 			if (renderer !== null && viewport !== null) {
 
-				var background = renderer.background;
-				var fullscreen = viewport.fullscreen;
-				var width      = renderer.width;
-				var height     = renderer.height;
+				let background = renderer.background;
+				let fullscreen = viewport.fullscreen;
+				let width      = renderer.width;
+				let height     = renderer.height;
 
 
 				if (width  === viewport.width)  width  = null;
@@ -57,20 +63,20 @@ lychee.define('lychee.ui.element.Viewport').requires([
 
 	};
 
-	var _save = function() {
+	const _save = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var renderer = main.renderer || null;
-			var viewport = main.viewport || null;
+			let renderer = main.renderer || null;
+			let viewport = main.viewport || null;
 
 			if (renderer !== null && viewport !== null) {
 
-				var background = this.getEntity('background').value;
-				var mode       = this.getEntity('mode').value;
-				var width      = this.getEntity('width').value;
-				var height     = this.getEntity('height').value;
+				let background = this.getEntity('background').value;
+				let mode       = this.getEntity('mode').value;
+				let width      = this.getEntity('width').value;
+				let height     = this.getEntity('height').value;
 
 
 				if (mode === 'fullscreen') {
@@ -111,16 +117,16 @@ lychee.define('lychee.ui.element.Viewport').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		settings.label   = 'Viewport';
 		settings.options = [ 'Save' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -128,25 +134,25 @@ lychee.define('lychee.ui.element.Viewport').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setEntity('mode', new lychee.ui.entity.Select({
+		this.setEntity('mode', new _Select({
 			options: [ 'fullscreen', 'dynamic', 'static' ],
 			value:   'dynamic'
 		}));
 
-		this.setEntity('width', new lychee.ui.entity.Input({
-			type:    lychee.ui.entity.Input.TYPE.number,
+		this.setEntity('width', new _Input({
+			type:    _Input.TYPE.number,
 			value:   1024,
 			visible: false
 		}));
 
-		this.setEntity('height', new lychee.ui.entity.Input({
-			type:    lychee.ui.entity.Input.TYPE.number,
+		this.setEntity('height', new _Input({
+			type:    _Input.TYPE.number,
 			value:   768,
 			visible: false
 		}));
 
-		this.setEntity('background', new lychee.ui.entity.Input({
-			type:  lychee.ui.entity.Input.TYPE.text,
+		this.setEntity('background', new _Input({
+			type:  _Input.TYPE.text,
 			value: '#405050'
 		}));
 
@@ -198,7 +204,7 @@ lychee.define('lychee.ui.element.Viewport').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Viewport';
 
 

@@ -5,12 +5,13 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	'lychee.ui.entity.Button'
 ]).supports(function(lychee, global) {
 
-	if (typeof global.document !== 'undefined' && typeof global.document.createElement === 'function') {
-
-		if (typeof global.FileReader !== 'undefined' && typeof global.FileReader.prototype.readAsDataURL === 'function') {
-			return true;
-		}
-
+	if (
+		typeof global.document !== 'undefined'
+		&& typeof global.document.createElement === 'function'
+		&& typeof global.FileReader !== 'undefined'
+		&& typeof global.FileReader.prototype.readAsDataURL === 'function'
+	) {
+		return true;
 	}
 
 
@@ -18,8 +19,9 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	var _instances = [];
-	var _wrappers  = [];
+	const _Button    = lychee.import('lychee.ui.entity.Button');
+	const _INSTANCES = [];
+	const _WRAPPERS  = [];
 
 
 
@@ -27,7 +29,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	 * HELPERS
 	 */
 
-	var _MIME_TYPE = [
+	const _MIME_TYPE = [
 		null,
 		'json',
 		'fnt',
@@ -37,10 +39,10 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		'*'
 	];
 
-	var _wrap = function(instance) {
+	const _wrap = function(instance) {
 
-		var allowed = [ 'json', 'fnt', 'msc', 'snd', 'png', 'js', 'tpl' ];
-		var element = global.document.createElement('input');
+		let allowed = [ 'json', 'fnt', 'msc', 'snd', 'png', 'js', 'tpl' ];
+		let element = global.document.createElement('input');
 
 		if (instance.type !== Composite.TYPE.all) {
 			allowed = [ _MIME_TYPE[instance.type] ];
@@ -53,16 +55,16 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 		element.onchange = function() {
 
-			var val = [];
+			let val = [];
 
 
 			[].slice.call(this.files).forEach(function(file) {
 
-				var reader = new global.FileReader();
+				let reader = new global.FileReader();
 
 				reader.onload = function() {
 
-					var asset = new lychee.Asset('/tmp/' + file.name, null, true);
+					let asset = new lychee.Asset('/tmp/' + file.name, null, true);
 					if (asset !== null) {
 
 						asset.deserialize({
@@ -82,7 +84,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 			setTimeout(function() {
 
-				var result = instance.setValue(val);
+				let result = instance.setValue(val);
 				if (result === true) {
 					instance.trigger('change', [ val ]);
 				}
@@ -92,7 +94,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		};
 
 
-		_wrappers.push(element);
+		_WRAPPERS.push(element);
 
 	};
 
@@ -102,9 +104,9 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({
+		let settings = Object.assign({
 			label: 'UPLOAD'
 		}, data);
 
@@ -120,13 +122,13 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		delete settings.value;
 
 
-		lychee.ui.entity.Button.call(this, settings);
+		_Button.call(this, settings);
 
 		settings = null;
 
 
-		_instances.push(this);
-		_wrappers.push(_wrap(this));
+		_INSTANCES.push(this);
+		_WRAPPERS.push(_wrap(this));
 
 
 
@@ -137,7 +139,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		this.unbind('touch');
 		this.bind('touch', function() {
 
-			var wrapper = _wrappers[_instances.indexOf(this)] || null;
+			let wrapper = _WRAPPERS[_INSTANCES.indexOf(this)] || null;
 			if (wrapper !== null) {
 				wrapper.click();
 			}
@@ -148,17 +150,39 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 
 	Composite.TYPE = {
-		all:     0,
-		config:  1,
-		font:    2,
-		music:   3,
-		sound:   4,
-		texture: 5,
-		stuff:   6
+		'all':     0,
+		'config':  1,
+		'font':    2,
+		'music':   3,
+		'sound':   4,
+		'texture': 5,
+		'stuff':   6
 	};
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Button.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.ui.entity.Upload';
+
+
+			return data;
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
 
 		setType: function(type) {
 

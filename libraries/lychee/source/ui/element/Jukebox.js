@@ -7,22 +7,28 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Slider  = lychee.import('lychee.ui.entity.Slider');
+	const _Switch  = lychee.import('lychee.ui.entity.Switch');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _read = function() {
+	const _read = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var jukebox = main.jukebox || null;
+			let jukebox = main.jukebox || null;
 			if (jukebox !== null) {
 
-				var channels = jukebox.channels;
-				var music    = jukebox.music;
-				var sound    = jukebox.sound;
-				var volume   = jukebox.volume;
+				let channels = jukebox.channels;
+				let music    = jukebox.music;
+				let sound    = jukebox.sound;
+				let volume   = jukebox.volume;
 
 
 				this.getEntity('channels').setValue(channels);
@@ -36,18 +42,18 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 
 	};
 
-	var _save = function() {
+	const _save = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var jukebox = main.jukebox || null;
+			let jukebox = main.jukebox || null;
 			if (jukebox !== null) {
 
-				var channels = this.getEntity('channels').value;
-				var music    = this.getEntity('music').value;
-				var sound    = this.getEntity('sound').value;
-				var volume   = this.getEntity('volume').value;
+				let channels = this.getEntity('channels').value;
+				let music    = this.getEntity('music').value;
+				let sound    = this.getEntity('sound').value;
+				let volume   = this.getEntity('volume').value;
 
 
 				jukebox.setChannels(channels);
@@ -67,16 +73,16 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		settings.label   = 'Jukebox';
 		settings.options = [ 'Save' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -84,24 +90,24 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setEntity('music', new lychee.ui.entity.Switch({
+		this.setEntity('music', new _Switch({
 			value: 'on'
 		}));
 
-		this.setEntity('sound', new lychee.ui.entity.Switch({
+		this.setEntity('sound', new _Switch({
 			value: 'on'
 		}));
 
-		this.setEntity('channels', new lychee.ui.entity.Slider({
-			type:  lychee.ui.entity.Slider.TYPE.horizontal,
+		this.setEntity('channels', new _Slider({
+			type:  _Slider.TYPE.horizontal,
 			min:   0,
 			max:   16,
 			step:  1,
 			value: 8
 		}));
 
-		this.setEntity('volume', new lychee.ui.entity.Slider({
-			type:  lychee.ui.entity.Slider.TYPE.horizontal,
+		this.setEntity('volume', new _Slider({
+			type:  _Slider.TYPE.horizontal,
 			min:    0,
 			max:   10,
 			step:   1,
@@ -132,7 +138,7 @@ lychee.define('lychee.ui.element.Jukebox').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Jukebox';
 
 

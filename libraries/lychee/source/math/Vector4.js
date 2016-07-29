@@ -7,9 +7,9 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.x = typeof settings.x === 'number' ? (settings.x | 0) : 0;
@@ -30,7 +30,7 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.x !== 0) settings.x = this.x;
@@ -171,10 +171,10 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		distance: function(vector) {
 
-			var x = vector.x - this.x;
-			var y = vector.y - this.y;
-			var z = vector.z - this.z;
-			var w = vector.w - this.w;
+			let x = vector.x - this.x;
+			let y = vector.y - this.y;
+			let z = vector.z - this.z;
+			let w = vector.w - this.w;
 
 
 			return Math.sqrt(x * x + y * y + z * z + w * w);
@@ -183,10 +183,10 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		squaredDistance: function(vector) {
 
-			var x = vector.x - this.x;
-			var y = vector.y - this.y;
-			var z = vector.z - this.z;
-			var w = vector.w - this.w;
+			let x = vector.x - this.x;
+			let y = vector.y - this.y;
+			let z = vector.z - this.z;
+			let w = vector.w - this.w;
 
 
 			return (x * x + y * y + z * z + w * w);
@@ -195,10 +195,10 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		length: function() {
 
-			var x = this.x;
-			var y = this.y;
-			var z = this.z;
-			var w = this.w;
+			let x = this.x;
+			let y = this.y;
+			let z = this.z;
+			let w = this.w;
 
 
 			return Math.sqrt(x * x + y * y + z * z + w * w);
@@ -207,10 +207,10 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		squaredLength: function() {
 
-			var x = this.x;
-			var y = this.y;
-			var z = this.z;
-			var w = this.w;
+			let x = this.x;
+			let y = this.y;
+			let z = this.z;
+			let w = this.w;
 
 
 			return (x * x + y * y + z * z + w * w);
@@ -231,13 +231,13 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		normalize: function() {
 
-			var x = this.x;
-			var y = this.y;
-			var z = this.z;
-			var w = this.w;
+			let x = this.x;
+			let y = this.y;
+			let z = this.z;
+			let w = this.w;
 
 
-			var length = (x * x + y * y + z * z + w * w);
+			let length = (x * x + y * y + z * z + w * w);
 			if (length > 0) {
 
 				length = 1 / Math.sqrt(length);
@@ -262,15 +262,15 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		cross: function(vector) {
 
-			var ax = this.x;
-			var ay = this.y;
-			var az = this.z;
-			var aw = this.w;
+			let ax = this.x;
+			let ay = this.y;
+			let az = this.z;
+			let aw = this.w;
 
-			var bx = this.x;
-			var by = this.y;
-			var bz = this.z;
-			var bw = this.w;
+			let bx = this.x;
+			let by = this.y;
+			let bz = this.z;
+			let bw = this.w;
 
 
 			this.x = ay * bz - az * by;
@@ -285,10 +285,10 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		interpolate: function(vector, t) {
 
-			var dx = (vector.x - this.x);
-			var dy = (vector.y - this.y);
-			var dz = (vector.z - this.z);
-			var dw = (vector.w - this.w);
+			let dx = (vector.x - this.x);
+			let dy = (vector.y - this.y);
+			let dz = (vector.z - this.z);
+			let dw = (vector.w - this.w);
 
 
 			this.x += t * dx;
@@ -327,11 +327,11 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		applyMatrix: function(matrix) {
 
-			var x = this.x;
-			var y = this.y;
-			var z = this.z;
-			var w = this.w;
-			var m = matrix.data;
+			let x = this.x;
+			let y = this.y;
+			let z = this.z;
+			let w = this.w;
+			let m = matrix.data;
 
 
 			this.x = m[0] * x + m[4] * y + m[8]  * z + m[12] * w;
@@ -346,20 +346,20 @@ lychee.define('lychee.math.Vector4').exports(function(lychee, global, attachment
 
 		applyQuaternion: function(quaternion) {
 
-			var vx = this.x;
-			var vy = this.y;
-			var vz = this.z;
+			let vx = this.x;
+			let vy = this.y;
+			let vz = this.z;
 
-			var q  = quaternion.data;
-			var qx = q[0];
-			var qy = q[1];
-			var qz = q[2];
-			var qw = q[3];
+			let q  = quaternion.data;
+			let qx = q[0];
+			let qy = q[1];
+			let qz = q[2];
+			let qw = q[3];
 
-			var ix =  qw * vx + qy * vz - qz * vy;
-			var iy =  qw * vy + qz * vx - qx * vz;
-			var iz =  qw * vz + qx * vy - qy * vx;
-			var iw = -qx * vx - qy * vy - qz * vz;
+			let ix =  qw * vx + qy * vz - qz * vy;
+			let iy =  qw * vy + qz * vx - qx * vz;
+			let iz =  qw * vz + qx * vy - qy * vx;
+			let iw = -qx * vx - qy * vy - qz * vz;
 
 
 			this.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;

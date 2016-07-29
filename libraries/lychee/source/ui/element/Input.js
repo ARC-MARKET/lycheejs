@@ -7,23 +7,29 @@ lychee.define('lychee.ui.element.Input').requires([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Slider  = lychee.import('lychee.ui.entity.Slider');
+	const _Switch  = lychee.import('lychee.ui.entity.Switch');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _read = function() {
+	const _read = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var input = main.input || null;
+			let input = main.input || null;
 			if (input !== null) {
 
-				var delay       = input.delay;
-				var key         = input.key;
-				var keymodifier = input.keymodifier;
-				var touch       = input.touch;
-				var swipe       = input.swipe;
+				let delay       = input.delay;
+				let key         = input.key;
+				let keymodifier = input.keymodifier;
+				let touch       = input.touch;
+				let swipe       = input.swipe;
 
 
 				this.getEntity('delay').setValue(delay);
@@ -38,19 +44,19 @@ lychee.define('lychee.ui.element.Input').requires([
 
 	};
 
-	var _save = function() {
+	const _save = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var input = main.input || null;
+			let input = main.input || null;
 			if (input !== null) {
 
-				var delay       = this.getEntity('delay').value;
-				var key         = this.getEntity('key').value;
-				var keymodifier = this.getEntity('keymodifier').value;
-				var touch       = this.getEntity('touch').value;
-				var swipe       = this.getEntity('swipe').value;
+				let delay       = this.getEntity('delay').value;
+				let key         = this.getEntity('key').value;
+				let keymodifier = this.getEntity('keymodifier').value;
+				let touch       = this.getEntity('touch').value;
+				let swipe       = this.getEntity('swipe').value;
 
 
 				input.setDelay(delay);
@@ -71,16 +77,16 @@ lychee.define('lychee.ui.element.Input').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		settings.label   = 'Input';
 		settings.options = [ 'Save' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -88,27 +94,27 @@ lychee.define('lychee.ui.element.Input').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setEntity('delay', new lychee.ui.entity.Slider({
-			type:  lychee.ui.entity.Slider.TYPE.horizontal,
+		this.setEntity('delay', new _Slider({
+			type:  _Slider.TYPE.horizontal,
 			min:   0,
 			max:   1000,
 			step:  100,
 			value: 0
 		}));
 
-		this.setEntity('key', new lychee.ui.entity.Switch({
+		this.setEntity('key', new _Switch({
 			value: 'on'
 		}));
 
-		this.setEntity('keymodifier', new lychee.ui.entity.Switch({
+		this.setEntity('keymodifier', new _Switch({
 			value: 'on'
 		}));
 
-		this.setEntity('touch', new lychee.ui.entity.Switch({
+		this.setEntity('touch', new _Switch({
 			value: 'on'
 		}));
 
-		this.setEntity('swipe', new lychee.ui.entity.Switch({
+		this.setEntity('swipe', new _Switch({
 			value: 'on'
 		}));
 
@@ -136,7 +142,7 @@ lychee.define('lychee.ui.element.Input').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Input';
 
 

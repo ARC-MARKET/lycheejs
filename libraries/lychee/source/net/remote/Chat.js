@@ -3,42 +3,45 @@ lychee.define('lychee.net.remote.Chat').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Service = lychee.import('lychee.net.Service');
+	const _CHATS   = {};
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _CACHE = {};
+	const _on_disconnect = function() {
 
-	var _on_disconnect = function() {
+		for (let rId in _CHATS) {
 
-		for (var rId in _CACHE) {
-
-			var index = _CACHE[rId].tunnels.indexOf(this.tunnel);
+			let index = _CHATS[rId].tunnels.indexOf(this.tunnel);
 			if (index !== -1) {
-				_CACHE[rId].users.splice(index, 1);
-				_CACHE[rId].tunnels.splice(index, 1);
-				_sync_room.call(this, _CACHE[rId]);
+				_CHATS[rId].users.splice(index, 1);
+				_CHATS[rId].tunnels.splice(index, 1);
+				_sync_chat.call(this, _CHATS[rId]);
 			}
 
 		}
 
 	};
 
-	var _on_sync = function(data) {
+	const _on_sync = function(data) {
 
-		var user = data.user || null;
-		var room = data.room || null;
+		let user = data.user || null;
+		let room = data.room || null;
 		if (user !== null && room !== null) {
 
 
-			var sync = false;
+			let sync = false;
 
 
 			// 1. Create Room
-			var cache = _CACHE[room] || null;
-			if (cache === null) {
+			let chat = _CHATS[room] || null;
+			if (chat === null) {
 
-				cache = _CACHE[room] = {
+				chat = _CHATS[room] = {
 					messages: [],
 					users:    [ user ],
 					tunnels:  [ this.tunnel ]
@@ -47,32 +50,32 @@ lychee.define('lychee.net.remote.Chat').includes([
 			// 2. Join Room
 			} else {
 
-				var tid = cache.tunnels.indexOf(this.tunnel);
+				let tid = chat.tunnels.indexOf(this.tunnel);
 				if (tid === -1) {
-					cache.tunnels.push(this.tunnel);
-					cache.users.push(user);
+					chat.tunnels.push(this.tunnel);
+					chat.users.push(user);
 				} else {
-					cache.users[tid] = user;
+					chat.users[tid] = user;
 				}
 
 
-				_sync_room.call(this, cache);
+				_sync_chat.call(this, chat);
 
 			}
 
 
 			// 3. Leave Room (only one at a time allowed)
-			for (var rId in _CACHE) {
+			for (let rId in _CHATS) {
 
 				if (rId === room) continue;
 
-				var index = _CACHE[rId].tunnels.indexOf(this.tunnel);
+				let index = _CHATS[rId].tunnels.indexOf(this.tunnel);
 				if (index !== -1) {
 
-					_CACHE[rId].users.splice(index, 1);
-					_CACHE[rId].tunnels.splice(index, 1);
+					_CHATS[rId].users.splice(index, 1);
+					_CHATS[rId].tunnels.splice(index, 1);
 
-					_sync_room.call(this, _CACHE[rId]);
+					_sync_chat.call(this, _CHATS[rId]);
 
 				}
 
@@ -82,28 +85,28 @@ lychee.define('lychee.net.remote.Chat').includes([
 
 	};
 
-	var _on_message = function(data) {
+	const _on_message = function(data) {
 
-		var user    = data.user    || null;
-		var room    = data.room    || null;
-		var message = data.message || null;
+		let user    = data.user    || null;
+		let room    = data.room    || null;
+		let message = data.message || null;
 		if (user !== null && room !== null && message !== null) {
 
-			var cache = _CACHE[room] || null;
-			if (cache !== null) {
+			let chat = _CHATS[room] || null;
+			if (chat !== null) {
 
-				var limit = this.limit;
-				if (cache.messages.length > limit - 1) {
-					cache.messages.splice(0, 1);
+				let limit = this.limit;
+				if (chat.messages.length > limit - 1) {
+					chat.messages.splice(0, 1);
 				}
 
-				cache.messages.push({
+				chat.messages.push({
 					user:    user,
 					message: message
 				});
 
 
-				_sync_room.call(this, cache);
+				_sync_chat.call(this, chat);
 
 			}
 
@@ -111,17 +114,17 @@ lychee.define('lychee.net.remote.Chat').includes([
 
 	};
 
-	var _sync_room = function(room) {
+	const _sync_chat = function(chat) {
 
-		var data = {
-			messages: room.messages,
-			users:    room.users
+		let data = {
+			messages: chat.messages,
+			users:    chat.users
 		};
 
 
-		for (var t = 0, tl = room.tunnels.length; t < tl; t++) {
+		for (let t = 0, tl = chat.tunnels.length; t < tl; t++) {
 
-			var tunnel = room.tunnels[t];
+			let tunnel = chat.tunnels[t];
 			if (tunnel !== null) {
 
 				tunnel.send(data, {
@@ -141,12 +144,12 @@ lychee.define('lychee.net.remote.Chat').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(id, remote, data) {
+	let Composite = function(id, remote, data) {
 
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.limit = 128;
@@ -157,7 +160,7 @@ lychee.define('lychee.net.remote.Chat').includes([
 		delete settings.limit;
 
 
-		lychee.net.Service.call(this, id, remote, lychee.net.Service.TYPE.remote);
+		_Service.call(this, id, remote, _Service.TYPE.remote);
 
 
 
@@ -177,6 +180,38 @@ lychee.define('lychee.net.remote.Chat').includes([
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.remote.Chat';
+
+			let settings = {};
+			let blob     = (data['blob'] || {});
+
+
+			if (this.limit !== 128) settings.limit = this.limit;
+
+
+			data['arguments'] = [ this.id, null, settings ];
+			data['blob']      = Object.keys(blob).length > 0 ? blob : null;
+
+
+			return data;
+
+		},
+
+
+
+		/*
+		 * CUSTOM API
+		 */
 
 		setLimit: function(limit) {
 

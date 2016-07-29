@@ -1,17 +1,17 @@
 
 lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (function(global) {
 
-	var lychee = global.lychee;
+	const lychee = global.lychee;
 
 
 	/*
 	 * HELPERS
 	 */
 
-	var _resolve_root = function() {
+	const _resolve_root = function() {
 
-		var root = this.root;
-		var type = this.type;
+		let root = this.root;
+		let type = this.type;
 		if (type === 'source') {
 			root += '/source';
 		} else if (type === 'export') {
@@ -25,25 +25,25 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _resolve_path = function(candidate) {
+	const _resolve_path = function(candidate) {
 
-		var path = typeof candidate === 'string' ? candidate.split('/') : null;
+		let path = typeof candidate === 'string' ? candidate.split('/') : null;
 
 
 		if (path !== null) {
 
-			var type = this.type;
+			let type = this.type;
 			if (type === 'export') {
 				type = 'source';
 			}
 
 
-			var pointer = this.__config.buffer[type].files || null;
+			let pointer = this.__config.buffer[type].files || null;
 			if (pointer !== null) {
 
-				for (var p = 0, pl = path.length; p < pl; p++) {
+				for (let p = 0, pl = path.length; p < pl; p++) {
 
-					var name = path[p];
+					let name = path[p];
 					if (pointer[name] !== undefined) {
 						pointer = pointer[name];
 					} else {
@@ -65,18 +65,18 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _resolve_attachments = function(candidate) {
+	const _resolve_attachments = function(candidate) {
 
-		var attachments = {};
-		var path        = candidate.split('/');
+		let attachments = {};
+		let path        = candidate.split('/');
 		if (path.length > 0) {
 
-			var pointer = this.__config.buffer.source.files || null;
+			let pointer = this.__config.buffer.source.files || null;
 			if (pointer !== null) {
 
-				for (var pa = 0, pal = path.length; pa < pal; pa++) {
+				for (let pa = 0, pal = path.length; pa < pal; pa++) {
 
-					var name = path[pa];
+					let name = path[pa];
 					if (pointer[name] !== undefined) {
 						pointer = pointer[name];
 					} else {
@@ -89,11 +89,11 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 				if (pointer !== null && pointer instanceof Array) {
 
-					var classpath = _resolve_root.call(this) + '/' + path.join('/');
+					let classpath = _resolve_root.call(this) + '/' + path.join('/');
 
-					for (var po = 0, pol = pointer.length; po < pol; po++) {
+					for (let po = 0, pol = pointer.length; po < pol; po++) {
 
-						var type = pointer[po];
+						let type = pointer[po];
 						if (type !== 'js') {
 							attachments[type] = classpath + '.' + type;
 						}
@@ -111,15 +111,15 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _resolve_candidates = function(id, tags) {
+	const _resolve_candidates = function(id, tags) {
 
 		tags = tags instanceof Object ? tags : null;
 
 
-		var that          = this;
-		var candidatepath = id.split('.').join('/');
-		var candidates    = [];
-		var filter_values = function(tags, tag) {
+		let that          = this;
+		let candidatepath = id.split('.').join('/');
+		let candidates    = [];
+		let filter_values = function(tags, tag) {
 
 			return tags[tag].map(function(value) {
 				return _resolve_tag.call(that, tag, value) + '/' + candidatepath;
@@ -132,9 +132,9 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		if (tags !== null) {
 
-			for (var tag in tags) {
+			for (let tag in tags) {
 
-				var values = filter_values(tags, tag);
+				let values = filter_values(tags, tag);
 				if (values.length > 0) {
 					candidates.push.apply(candidates, values);
 				}
@@ -153,7 +153,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _resolve_tag = function(tag, value) {
+	const _resolve_tag = function(tag, value) {
 
 		tag   = typeof tag === 'string'   ? tag   : null;
 		value = typeof value === 'string' ? value : null;
@@ -161,18 +161,18 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		if (tag !== null && value !== null) {
 
-			var type = this.type;
+			let type = this.type;
 			if (type === 'export') {
 				type = 'source';
 			}
 
 
-			var pointer = this.__config.buffer[type].tags || null;
+			let pointer = this.__config.buffer[type].tags || null;
 			if (pointer !== null) {
 
 				if (pointer[tag] instanceof Object) {
 
-					var path = pointer[tag][value] || null;
+					let path = pointer[tag][value] || null;
 					if (path !== null) {
 						return path;
 					}
@@ -188,11 +188,11 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _load_candidate = function(id, candidates) {
+	const _load_candidate = function(id, candidates) {
 
 		if (candidates.length > 0) {
 
-			var map = {
+			let map = {
 				id:           id,
 				candidate:    null,
 				candidates:   [].concat(candidates),
@@ -205,7 +205,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			this.__requests[id] = map;
 
 
-			var candidate = map.candidates.shift();
+			let candidate = map.candidates.shift();
 
 			while (candidate !== undefined) {
 
@@ -221,9 +221,9 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 			// Try to load the first suggested Candidate Implementation
 			if (candidate !== undefined) {
 
-				var url            = _resolve_root.call(this) + '/' + candidate + '.js';
-				var implementation = new lychee.Asset(url, null, false);
-				var attachments    = _resolve_attachments.call(this, candidate);
+				let url            = _resolve_root.call(this) + '/' + candidate + '.js';
+				let implementation = new lychee.Asset(url, null, false);
+				let attachments    = _resolve_attachments.call(this, candidate);
 
 				if (implementation !== null) {
 					_load_candidate_implementation.call(this, candidate, implementation, attachments, map);
@@ -235,10 +235,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 	};
 
-	var _load_candidate_implementation = function(candidate, implementation, attachments, map) {
+	const _load_candidate_implementation = function(candidate, implementation, attachments, map) {
 
-		var that       = this;
-		var identifier = this.id + '.' + map.id;
+		let that       = this;
+		let identifier = this.id + '.' + map.id;
 
 
 		implementation.onload = function(result) {
@@ -248,14 +248,14 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 			if (result === true) {
 
-				var environment = that.environment;
-				var definition  = environment.definitions[identifier] || null;
+				let environment = that.environment;
+				let definition  = environment.definitions[identifier] || null;
 				if (definition !== null) {
 
 					map.candidate = this;
 
 
-					var attachmentIds = Object.keys(attachments);
+					let attachmentIds = Object.keys(attachments);
 
 
 					// Temporary delete definition from environment and re-define it after attachments are all loaded
@@ -268,15 +268,15 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 						attachmentIds.forEach(function(assetId) {
 
-							var url   = attachments[assetId];
-							var asset = new lychee.Asset(url);
+							let url   = attachments[assetId];
+							let asset = new lychee.Asset(url);
 							if (asset !== null) {
 
 								asset.onload = function(result) {
 
 									map.loading--;
 
-									var tmp = {};
+									let tmp = {};
 									if (result === true) {
 										tmp[assetId] = this;
 									} else {
@@ -305,11 +305,11 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 					}
 
 
-					for (var i = 0, il = definition._includes.length; i < il; i++) {
+					for (let i = 0, il = definition._includes.length; i < il; i++) {
 						environment.load(definition._includes[i]);
 					}
 
-					for (var r = 0, rl = definition._requires.length; r < rl; r++) {
+					for (let r = 0, rl = definition._requires.length; r < rl; r++) {
 						environment.load(definition._requires[r]);
 					}
 
@@ -343,7 +343,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(id, url) {
+	let Composite = function(id, url) {
 
 		id  = typeof id === 'string'  ? id  : 'app';
 		url = typeof url === 'string' ? url : null;
@@ -366,10 +366,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		if (url !== null) {
 
-			var that = this;
-			var tmp  = url.split('/');
+			let that = this;
+			let tmp  = url.split('/');
 
-			var file = tmp.pop();
+			let file = tmp.pop();
 			if (file === 'lychee.pkg') {
 
 				this.root = tmp.join('/');
@@ -432,8 +432,8 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 		isReady: function() {
 
-			var ready  = false;
-			var config = this.__config;
+			let ready  = false;
+			let config = this.__config;
 
 			if (config !== null && config.buffer !== null) {
 
@@ -456,10 +456,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 
 			if (id !== null && this.isReady() === true) {
 
-				var request = this.__requests[id] || null;
+				let request = this.__requests[id] || null;
 				if (request === null) {
 
-					var candidates = _resolve_candidates.call(this, id, tags);
+					let candidates = _resolve_candidates.call(this, id, tags);
 					if (candidates.length > 0) {
 
 						_load_candidate.call(this, id, candidates);
@@ -469,7 +469,7 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 					} else {
 
 						if (lychee.debug === true) {
-							var info = Object.keys(tags).length > 0 ? ('(' + JSON.stringify(tags) + ')') : '';
+							let info = Object.keys(tags).length > 0 ? ('(' + JSON.stringify(tags) + ')') : '';
 							console.error('lychee.Package-' + this.id + ': Invalid Definition "' + id + '" ' + info);
 						}
 

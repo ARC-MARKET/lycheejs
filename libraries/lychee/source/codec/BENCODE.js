@@ -5,9 +5,9 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 	 * HELPERS
 	 */
 
-	var _CHARS_DANGEROUS = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	var _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	var _CHARS_META      = {
+	const _CHARS_DANGEROUS = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_META      = {
 		'\b': '\\b',
 		'\t': '\\t',
 		'\n': '\\n',
@@ -17,16 +17,16 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 		'\\': '\\\\'
 	};
 
-	var _sanitize_string = function(str) {
+	const _sanitize_string = function(str) {
 
-		var san = str;
+		let san = str;
 
 
 		if (_CHARS_ESCAPABLE.test(san)) {
 
 			san = san.replace(_CHARS_ESCAPABLE, function(char) {
 
-				var val = _CHARS_META[char];
+				let val = _CHARS_META[char];
 				if (typeof val === 'string') {
 					return val;
 				} else {
@@ -41,7 +41,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 	};
 
-	var _Stream = function(buffer, mode) {
+	const _Stream = function(buffer, mode) {
 
 		this.__buffer = typeof buffer === 'string' ? buffer : '';
 		this.__mode   = typeof mode === 'number'   ? mode   : 0;
@@ -73,12 +73,12 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 		seek: function(array) {
 
-			var bytes = Infinity;
+			let bytes = Infinity;
 
-			for (var a = 0, al = array.length; a < al; a++) {
+			for (let a = 0, al = array.length; a < al; a++) {
 
-				var token = array[a];
-				var size  = this.__buffer.indexOf(token, this.__index + 1) - this.__index;
+				let token = array[a];
+				let size  = this.__buffer.indexOf(token, this.__index + 1) - this.__index;
 				if (size > -1 && size < bytes) {
 					bytes = size;
 				}
@@ -101,7 +101,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 		readRAW: function(bytes) {
 
-			var buffer = '';
+			let buffer = '';
 
 			buffer       += this.__buffer.substr(this.__index, bytes);
 			this.__index += bytes;
@@ -125,7 +125,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 	 * ENCODER and DECODER
 	 */
 
-	var _encode = function(stream, data) {
+	const _encode = function(stream, data) {
 
 		// bne, bfe, bte : null, false, true
 		if (typeof data === 'boolean' || data === null) {
@@ -142,8 +142,8 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 		// i123e : Integer or Float (converted as Integer)
 		} else if (typeof data === 'number') {
 
-			var hi = (data / 0x80000000) << 0;
-			var lo = (data % 0x80000000) << 0;
+			let hi = (data / 0x80000000) << 0;
+			let lo = (data % 0x80000000) << 0;
 
 			stream.writeRAW('i');
 			stream.writeRAW('' + (hi * 0x80000000 + lo).toString());
@@ -164,7 +164,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 			stream.writeRAW('l');
 
-			for (var d = 0, dl = data.length; d < dl; d++) {
+			for (let d = 0, dl = data.length; d < dl; d++) {
 				_encode(stream, data[d]);
 			}
 
@@ -176,15 +176,15 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 			stream.writeRAW('d');
 
-			var keys = Object.keys(data).sort(function(a, b) {
+			let keys = Object.keys(data).sort(function(a, b) {
 				if (a > b) return  1;
 				if (a < b) return -1;
 				return 0;
 			});
 
-			for (var k = 0, kl = keys.length; k < kl; k++) {
+			for (let k = 0, kl = keys.length; k < kl; k++) {
 
-				var key = keys[k];
+				let key = keys[k];
 
 				_encode(stream, key);
 				_encode(stream, data[key]);
@@ -199,7 +199,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 			stream.writeRAW('s');
 
-			var blob = lychee.serialize(data);
+			let blob = lychee.serialize(data);
 
 			_encode(stream, blob);
 
@@ -209,10 +209,9 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 	};
 
+	const _is_decodable_value = function(str) {
 
-	var _is_decodable_value = function(str) {
-
-		var head = str.charAt(0);
+		let head = str.charAt(0);
 		if (head.match(/([bilds]+)/g)) {
 			return true;
 		} else if (!isNaN(parseInt(head, 10))) {
@@ -223,18 +222,18 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 	};
 
-	var _decode = function(stream) {
+	const _decode = function(stream) {
 
-		var value  = undefined;
-		var size   = 0;
-		var tmp    = 0;
-		var errors = 0;
-		var check  = null;
+		let value  = undefined;
+		let size   = 0;
+		let tmp    = 0;
+		let errors = 0;
+		let check  = null;
 
 
 		if (stream.pointer() < stream.length()) {
 
-			var seek = stream.seekRAW(1);
+			let seek = stream.seekRAW(1);
 
 
 			// bne, bfe, bte : null, false, true
@@ -320,8 +319,8 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 				while (errors === 0) {
 
-					var object_key   = _decode(stream);
-					var object_value = _decode(stream);
+					let object_key   = _decode(stream);
+					let object_value = _decode(stream);
 
 					check = stream.seekRAW(1);
 
@@ -343,7 +342,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 				stream.readRAW(1);
 
-				var blob = _decode(stream);
+				let blob = _decode(stream);
 
 				value = lychee.deserialize(blob);
 				check = stream.readRAW(1);
@@ -367,7 +366,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 	 * IMPLEMENTATION
 	 */
 
-	var Module = {
+	const Module = {
 
 		// deserialize: function(blob) {},
 
@@ -387,7 +386,7 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 			if (data !== null) {
 
-				var stream = new _Stream('', _Stream.MODE.write);
+				let stream = new _Stream('', _Stream.MODE.write);
 
 				_encode(stream, data);
 
@@ -407,8 +406,8 @@ lychee.define('lychee.codec.BENCODE').exports(function(lychee, global, attachmen
 
 			if (data !== null) {
 
-				var stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
-				var object = _decode(stream);
+				let stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
+				let object = _decode(stream);
 				if (object !== undefined) {
 					return object;
 				}

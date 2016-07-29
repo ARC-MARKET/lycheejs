@@ -1,7 +1,7 @@
 
 lychee.define('lychee.net.Tunnel').requires([
 	'lychee.net.socket.HTTP',
-//	'lychee.net.socket.REST',
+//	'lychee.net.socket.TCP',
 	'lychee.net.socket.WS',
 	'lychee.codec.BENCODE',
 	'lychee.codec.BITON',
@@ -11,9 +11,12 @@ lychee.define('lychee.net.Tunnel').requires([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
-	var _BENCODE = lychee.import('lychee.codec.BENCODE');
-	var _BITON   = lychee.import('lychee.codec.BITON');
-	var _JSON    = lychee.import('lychee.codec.JSON');
+	const _socket  = lychee.import('lychee.net.socket');
+	const _Emitter = lychee.import('lychee.event.Emitter');
+	const _Service = lychee.import('lychee.net.Service');
+	const _BENCODE = lychee.import('lychee.codec.BENCODE');
+	const _BITON   = lychee.import('lychee.codec.BITON');
+	const _JSON    = lychee.import('lychee.codec.JSON');
 
 
 
@@ -21,7 +24,7 @@ lychee.define('lychee.net.Tunnel').requires([
 	 * HELPERS
 	 */
 
-	var _plug_service = function(id, service) {
+	const _plug_service = function(id, service) {
 
 		id = typeof id === 'string' ? id : null;
 
@@ -30,9 +33,9 @@ lychee.define('lychee.net.Tunnel').requires([
 		}
 
 
-		var found = false;
+		let found = false;
 
-		for (var w = 0, wl = this.__services.waiting.length; w < wl; w++) {
+		for (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {
 
 			if (this.__services.waiting[w] === service) {
 				this.__services.waiting.splice(w, 1);
@@ -58,7 +61,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 	};
 
-	var _unplug_service = function(id, service) {
+	const _unplug_service = function(id, service) {
 
 		id = typeof id === 'string' ? id : null;
 
@@ -67,9 +70,9 @@ lychee.define('lychee.net.Tunnel').requires([
 		}
 
 
-		var found = false;
+		let found = false;
 
-		for (var w = 0, wl = this.__services.waiting.length; w < wl; w++) {
+		for (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {
 
 			if (this.__services.waiting[w] === service) {
 				this.__services.waiting.splice(w, 1);
@@ -80,7 +83,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		}
 
-		for (var a = 0, al = this.__services.active.length; a < al; a++) {
+		for (let a = 0, al = this.__services.active.length; a < al; a++) {
 
 			if (this.__services.active[a] === service) {
 				this.__services.active.splice(a, 1);
@@ -110,9 +113,9 @@ lychee.define('lychee.net.Tunnel').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.codec     = lychee.interfaceof(_JSON, settings.codec) ? settings.codec : _JSON;
@@ -136,7 +139,7 @@ lychee.define('lychee.net.Tunnel').requires([
 		this.setType(settings.type);
 
 
-		lychee.event.Emitter.call(this);
+		_Emitter.call(this);
 
 		settings = null;
 
@@ -165,7 +168,7 @@ lychee.define('lychee.net.Tunnel').requires([
 			this.__isConnected = false;
 
 
-			for (var a = 0, al = this.__services.active.length; a < al; a++) {
+			for (let a = 0, al = this.__services.active.length; a < al; a++) {
 				this.__services.active[a].trigger('unplug');
 			}
 
@@ -175,11 +178,9 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (this.reconnect > 0) {
 
-				var that = this;
-
 				setTimeout(function() {
-					that.trigger('connect');
-				}, this.reconnect);
+					this.trigger('connect');
+				}.bind(this), this.reconnect);
 
 			}
 
@@ -203,7 +204,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		deserialize: function(blob) {
 
-			var socket = lychee.deserialize(blob.socket);
+			let socket = lychee.deserialize(blob.socket);
 			if (socket !== null) {
 				this.__socket = socket;
 			}
@@ -211,7 +212,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (blob.services instanceof Array) {
 
-				for (var s = 0, sl = blob.services.length; s < sl; s++) {
+				for (let s = 0, sl = blob.services.length; s < sl; s++) {
 					this.addService(lychee.deserialize(blob.services[s]));
 				}
 
@@ -221,17 +222,17 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.Tunnel';
 
-			var settings = {};
-			var blob     = (data['blob'] || {});
+			let settings = {};
+			let blob     = (data['blob'] || {});
 
 
-			if (this.codec !== _JSON)        settings.codec     = lychee.serialize(this.codec);
-			if (this.host !== 'localhost')   settings.host      = this.host;
-			if (this.port !== 1337)          settings.port      = this.port;
-			if (this.reconnect !== 0)        settings.reconnect = this.reconnect;
+			if (this.codec !== _JSON)            settings.codec     = lychee.serialize(this.codec);
+			if (this.host !== 'localhost')       settings.host      = this.host;
+			if (this.port !== 1337)              settings.port      = this.port;
+			if (this.reconnect !== 0)            settings.reconnect = this.reconnect;
 			if (this.type !== Composite.TYPE.WS) settings.type      = this.type;
 
 
@@ -242,9 +243,9 @@ lychee.define('lychee.net.Tunnel').requires([
 
 				blob.services = [];
 
-				for (var a = 0, al = this.__services.active.length; a < al; a++) {
+				for (let a = 0, al = this.__services.active.length; a < al; a++) {
 
-					var service = this.__services.active[a];
+					let service = this.__services.active[a];
 
 					blob.services.push(lychee.serialize(service));
 
@@ -274,11 +275,13 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (this.__isConnected === false) {
 
-				var type = this.type;
+				let type = this.type;
 				if (type === Composite.TYPE.WS) {
-					this.__socket = new lychee.net.socket.WS();
+					this.__socket = new _socket.WS();
 				} else if (type === Composite.TYPE.HTTP) {
-					this.__socket = new lychee.net.socket.HTTP();
+					this.__socket = new _socket.HTTP();
+				} else if (type === Composite.TYPE.TCP) {
+					this.__socket = new _socket.TCP();
 				}
 
 
@@ -316,14 +319,14 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (this.__isConnected === true) {
 
-				var socket = this.__socket;
+				let socket = this.__socket;
 				if (socket !== null) {
 
-					this.__socket.unbind('connect');
-					this.__socket.unbind('receive');
-					this.__socket.unbind('disconnect');
-					this.__socket.unbind('error');
-					this.__socket.disconnect();
+					socket.unbind('connect');
+					socket.unbind('receive');
+					socket.unbind('disconnect');
+					socket.unbind('error');
+					socket.disconnect();
 					this.__socket = null;
 
 				}
@@ -357,14 +360,12 @@ lychee.define('lychee.net.Tunnel').requires([
 			if (typeof headers.method === 'string') headers['@service-method'] = headers.method;
 
 
-			// TODO: Figure out a smarter way to have a clean send() API
-			// that also works across all network protocols and is in sync with receive()
 			delete headers.id;
 			delete headers.event;
 			delete headers.method;
 
 
-			var payload = null;
+			let payload = null;
 			if (data !== null) {
 				payload = this.codec.encode(data);
 			}
@@ -389,11 +390,11 @@ lychee.define('lychee.net.Tunnel').requires([
 			headers = headers instanceof Object ? headers : {};
 
 
-			var id     = headers['@service-id']     || null;
-			var event  = headers['@service-event']  || null;
-			var method = headers['@service-method'] || null;
+			let id     = headers['@service-id']     || null;
+			let event  = headers['@service-event']  || null;
+			let method = headers['@service-method'] || null;
 
-			var data = null;
+			let data = null;
 			if (payload.length === 0) {
 				payload = this.codec.encode({});
 			}
@@ -403,7 +404,7 @@ lychee.define('lychee.net.Tunnel').requires([
 			}
 
 
-			var instance = this.getService(id);
+			let instance = this.getService(id);
 			if (instance !== null && data !== null) {
 
 				if (method === '@plug' || method === '@unplug') {
@@ -495,14 +496,14 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		addService: function(service) {
 
-			service = lychee.interfaceof(lychee.net.Service, service) ? service : null;
+			service = lychee.interfaceof(_Service, service) ? service : null;
 
 
 			if (service !== null) {
 
-				var found = false;
+				let found = false;
 
-				for (var w = 0, wl = this.__services.waiting.length; w < wl; w++) {
+				for (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {
 
 					if (this.__services.waiting[w] === service) {
 						found = true;
@@ -511,7 +512,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 				}
 
-				for (var a = 0, al = this.__services.active.length; a < al; a++) {
+				for (let a = 0, al = this.__services.active.length; a < al; a++) {
 
 					if (this.__services.active[a] === service) {
 						found = true;
@@ -549,18 +550,18 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (id !== null) {
 
-				for (var w = 0, wl = this.__services.waiting.length; w < wl; w++) {
+				for (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {
 
-					var wservice = this.__services.waiting[w];
+					let wservice = this.__services.waiting[w];
 					if (wservice.id === id) {
 						return wservice;
 					}
 
 				}
 
-				for (var a = 0, al = this.__services.active.length; a < al; a++) {
+				for (let a = 0, al = this.__services.active.length; a < al; a++) {
 
-					var aservice = this.__services.active[a];
+					let aservice = this.__services.active[a];
 					if (aservice.id === id) {
 						return aservice;
 					}
@@ -576,14 +577,14 @@ lychee.define('lychee.net.Tunnel').requires([
 
 		removeService: function(service) {
 
-			service = lychee.interfaceof(lychee.net.Service, service) ? service : null;
+			service = lychee.interfaceof(_Service, service) ? service : null;
 
 
 			if (service !== null) {
 
-				var found = false;
+				let found = false;
 
-				for (var w = 0, wl = this.__services.waiting.length; w < wl; w++) {
+				for (let w = 0, wl = this.__services.waiting.length; w < wl; w++) {
 
 					if (this.__services.waiting[w] === service) {
 						found = true;
@@ -592,7 +593,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 				}
 
-				for (var a = 0, al = this.__services.active.length; a < al; a++) {
+				for (let a = 0, al = this.__services.active.length; a < al; a++) {
 
 					if (this.__services.active[a] === service) {
 						found = true;
@@ -643,7 +644,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (type !== null) {
 
-				var oldtype = this.type;
+				let oldtype = this.type;
 				if (oldtype !== type) {
 
 					this.type = type;

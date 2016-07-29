@@ -5,24 +5,28 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 	 * HELPERS
 	 */
 
-	var CHAR_TABLE = new Array(256);
-	for (var c = 0; c < 256; c++) {
-		CHAR_TABLE[c] = String.fromCharCode(c);
-	}
+	const _CHAR_TABLE = new Array(256);
+	const _MASK_TABLE = new Array(9);
+	const _POW_TABLE  = new Array(9);
+	const _RPOW_TABLE = new Array(9);
+
+	(function() {
+
+		for (let c = 0; c < 256; c++) {
+			_CHAR_TABLE[c] = String.fromCharCode(c);
+		}
+
+		for (let m = 0; m < 9; m++) {
+			_POW_TABLE[m]  = Math.pow(2, m) - 1;
+			_MASK_TABLE[m] = ~(_POW_TABLE[m] ^ 0xff);
+			_RPOW_TABLE[m] = Math.pow(10, m);
+		}
+
+	})();
 
 
-	var MASK_TABLE = new Array(9);
-	var POW_TABLE  = new Array(9);
-	var RPOW_TABLE = new Array(9);
-	for (var m = 0; m < 9; m++) {
-		POW_TABLE[m]  = Math.pow(2, m) - 1;
-		MASK_TABLE[m] = ~(POW_TABLE[m] ^ 0xff);
-		RPOW_TABLE[m] = Math.pow(10, m);
-	}
-
-
-	var _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	var _CHARS_META      = {
+	const _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_META      = {
 		'\b': '\\b',
 		'\t': '\\t',
 		'\n': '\\n',
@@ -32,13 +36,11 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 		'\\': '\\\\'
 	};
 
-	var _sanitize_string = function(str) {
+	const _sanitize_string = function(str) {
 
-		var san = str;
-
-
-		var keys = Object.keys(_CHARS_META);
-		var vals = Object.values(_CHARS_META);
+		let san  = str;
+		let keys = Object.keys(_CHARS_META);
+		let vals = Object.values(_CHARS_META);
 
 
 		keys.forEach(function(key, i) {
@@ -58,13 +60,11 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 	};
 
-	var _desanitize_string = function(san) {
+	const _desanitize_string = function(san) {
 
-		var str = san;
-
-
-		var keys = Object.keys(_CHARS_META);
-		var vals = Object.values(_CHARS_META);
+		let str  = san;
+		let keys = Object.keys(_CHARS_META);
+		let vals = Object.values(_CHARS_META);
 
 
 		vals.forEach(function(val, i) {
@@ -80,15 +80,14 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 	};
 
+	const _resolve_constructor = function(identifier, scope) {
 
-	var _resolve_constructor = function(identifier, scope) {
+		let pointer = scope;
 
-		var pointer = scope;
+		let ns = identifier.split('.');
+		for (let n = 0, l = ns.length; n < l; n++) {
 
-		var ns = identifier.split('.');
-		for (var n = 0, l = ns.length; n < l; n++) {
-
-			var name = ns[n];
+			let name = ns[n];
 
 			if (pointer[name] !== undefined) {
 				pointer = pointer[name];
@@ -106,7 +105,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 
 
-	var _Stream = function(buffer, mode) {
+	const _Stream = function(buffer, mode) {
 
 		this.__buffer    = typeof buffer === 'string' ? buffer : '';
 		this.__mode      = typeof mode === 'number'   ? mode   : 0;
@@ -136,7 +135,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			if (this.__mode === _Stream.MODE.write) {
 
 				if (this.__value > 0) {
-					this.__buffer += CHAR_TABLE[this.__value];
+					this.__buffer += _CHAR_TABLE[this.__value];
 					this.__value   = 0;
 				}
 
@@ -162,12 +161,12 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 		read: function(bits) {
 
-			var overflow = bits - this.__remaining;
-			var captured = this.__remaining < bits ? this.__remaining : bits;
-			var shift    = this.__remaining - captured;
+			let overflow = bits - this.__remaining;
+			let captured = this.__remaining < bits ? this.__remaining : bits;
+			let shift    = this.__remaining - captured;
 
 
-			var buffer = (this.__value & MASK_TABLE[this.__remaining]) >> shift;
+			let buffer = (this.__value & _MASK_TABLE[this.__remaining]) >> shift;
 
 
 			this.__pointer   += captured;
@@ -180,7 +179,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 				this.__remaining = 8;
 
 				if (overflow > 0) {
-					buffer = buffer << overflow | ((this.__value & MASK_TABLE[this.__remaining]) >> (8 - overflow));
+					buffer = buffer << overflow | ((this.__value & _MASK_TABLE[this.__remaining]) >> (8 - overflow));
 					this.__remaining -= overflow;
 				}
 
@@ -202,7 +201,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			}
 
 
-			var buffer = '';
+			let buffer = '';
 
 			if (this.__remaining === 8) {
 
@@ -219,9 +218,9 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 		write: function(buffer, bits) {
 
-			var overflow = bits - this.__remaining;
-			var captured = this.__remaining < bits ? this.__remaining : bits;
-			var shift    = this.__remaining - captured;
+			let overflow = bits - this.__remaining;
+			let captured = this.__remaining < bits ? this.__remaining : bits;
+			let shift    = this.__remaining - captured;
 
 
 			if (overflow > 0) {
@@ -237,12 +236,12 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			if (this.__remaining === 0) {
 
-				this.__buffer    += CHAR_TABLE[this.__value];
+				this.__buffer    += _CHAR_TABLE[this.__value];
 				this.__remaining  = 8;
 				this.__value      = 0;
 
 				if (overflow > 0) {
-					this.__value     += (buffer & POW_TABLE[overflow]) << (8 - overflow);
+					this.__value     += (buffer & _POW_TABLE[overflow]) << (8 - overflow);
 					this.__remaining -= overflow;
 				}
 
@@ -254,7 +253,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			if (this.__remaining !== 8) {
 
-				this.__buffer    += CHAR_TABLE[this.__value];
+				this.__buffer    += _CHAR_TABLE[this.__value];
 				this.__value      = 0;
 				this.__remaining  = 8;
 
@@ -277,7 +276,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 	 * ENCODER and DECODER
 	 */
 
-	var _encode = function(stream, data) {
+	const _encode = function(stream, data) {
 
 		// 0: Boolean or Null or EOS
 		if (typeof data === 'boolean' || data === null) {
@@ -296,7 +295,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 		// 1: Integer, 2: Float
 		} else if (typeof data === 'number') {
 
-			var type = 1;
+			let type = 1;
 			if (data < 268435456 && data !== (data | 0)) {
 				type = 2;
 			}
@@ -306,7 +305,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 
 			// Negative value
-			var sign = 0;
+			let sign = 0;
 			if (data < 0) {
 				data = -data;
 				sign = 1;
@@ -314,13 +313,13 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 
 			// Float only: Calculate the integer value and remember the shift
-			var shift = 0;
+			let shift = 0;
 
 			if (type === 2) {
 
-				var step = 10;
-				var m    = data;
-				var tmp  = 0;
+				let step = 10;
+				let m    = data;
+				let tmp  = 0;
 
 
 				// Calculate the exponent and shift
@@ -426,7 +425,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			stream.write(3, 3);
 
 
-			var l = data.length;
+			let l = data.length;
 
 			// Write Size Field
 			if (l > 65535) {
@@ -466,7 +465,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			stream.write(4, 3);
 
-			for (var d = 0, dl = data.length; d < dl; d++) {
+			for (let d = 0, dl = data.length; d < dl; d++) {
 				stream.write(0, 3);
 				_encode(stream, data[d]);
 			}
@@ -480,7 +479,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			stream.write(5, 3);
 
-			for (var prop in data) {
+			for (let prop in data) {
 
 				if (data.hasOwnProperty(prop)) {
 					stream.write(0, 3);
@@ -499,7 +498,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			stream.write(6, 3);
 
-			var blob = lychee.serialize(data);
+			let blob = lychee.serialize(data);
 
 			_encode(stream, blob);
 
@@ -510,17 +509,16 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 	};
 
+	const _decode = function(stream) {
 
-	var _decode = function(stream) {
-
-		var value  = undefined;
-		var tmp    = 0;
-		var errors = 0;
-		var check  = 0;
+		let value  = undefined;
+		let tmp    = 0;
+		let errors = 0;
+		let check  = 0;
 
 		if (stream.pointer() < stream.length()) {
 
-			var type = stream.read(3);
+			let type = stream.read(3);
 
 
 			// 0: Boolean or Null (or EOS)
@@ -577,7 +575,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 				} else if (tmp === 8) {
 
-					var str = _decode(stream);
+					let str = _decode(stream);
 
 					value = parseInt(str, 10);
 
@@ -585,7 +583,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 
 				// Negative value
-				var sign = stream.read(1);
+				let sign = stream.read(1);
 				if (sign === 1) {
 					value = -1 * value;
 				}
@@ -593,15 +591,15 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 				// Float only: Shift it back by the precision
 				if (type === 2) {
-					var shift = stream.read(4);
-					value /= RPOW_TABLE[shift];
+					let shift = stream.read(4);
+					value /= _RPOW_TABLE[shift];
 				}
 
 
 			// 3: String
 			} else if (type === 3) {
 
-				var size = stream.read(5);
+				let size = stream.read(5);
 
 				if (size === 31) {
 
@@ -665,7 +663,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 			// 6: Custom High-Level Implementation
 			} else if (type === 6) {
 
-				var blob = _decode(stream);
+				let blob = _decode(stream);
 
 				value = lychee.deserialize(blob);
 				check = stream.read(3);
@@ -689,7 +687,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	var Module = {
+	const Module = {
 
 		// deserialize: function(blob) {},
 
@@ -709,7 +707,7 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			if (data !== null) {
 
-				var stream = new _Stream('', _Stream.MODE.write);
+				let stream = new _Stream('', _Stream.MODE.write);
 
 				_encode(stream, data);
 
@@ -729,8 +727,8 @@ lychee.define('lychee.codec.BITON').exports(function(lychee, global, attachments
 
 			if (data !== null) {
 
-				var stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
-				var object = _decode(stream);
+				let stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
+				let object = _decode(stream);
 				if (object !== undefined) {
 					return object;
 				}

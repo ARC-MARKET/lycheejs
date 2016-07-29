@@ -4,8 +4,8 @@ lychee.define('lychee.verlet.Layer').requires([
 	'lychee.math.Vector3'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Layer   = lychee.import('lychee.app.Layer');
-	var _Vector3 = lychee.import('lychee.math.Vector3');
+	const _Layer   = lychee.import('lychee.app.Layer');
+	const _Vector3 = lychee.import('lychee.math.Vector3');
 
 
 
@@ -13,9 +13,9 @@ lychee.define('lychee.verlet.Layer').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.friction   = 0.99;
@@ -49,11 +49,11 @@ lychee.define('lychee.verlet.Layer').requires([
 
 		serialize: function() {
 
-			var data = _Layer.prototype.serialize.call(this);
+			let data = _Layer.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.verlet.Layer';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.friction !== 0.99)      settings.friction = this.friction;
@@ -69,24 +69,24 @@ lychee.define('lychee.verlet.Layer').requires([
 			_Layer.prototype.update.call(this, clock, delta);
 
 
-			var entities = this.entities;
-			var friction = this.friction;
-			var gravity  = this.gravity;
-			var velocity = this.__velocity;
+			let entities = this.entities;
+			let friction = this.friction;
+			let gravity  = this.gravity;
+			let velocity = this.__velocity;
 
 
-			var hwidth  = this.width  / 2;
-			var hheight = this.height / 2;
+			let hwidth  = this.width  / 2;
+			let hheight = this.height / 2;
 
-			for (var e = 0, el = entities.length; e < el; e++) {
+			for (let e = 0, el = entities.length; e < el; e++) {
 
-				var entity    = entities[e];
-				var position  = entity.position.clone();
-                var particles = entity.particles;
+				let entity    = entities[e];
+				let position  = entity.position.clone();
+                let particles = entity.particles;
 
-				for (var p = 0, pl = particles.length; p < pl; p++) {
+				for (let p = 0, pl = particles.length; p < pl; p++) {
 
-					var particle = particles[p];
+					let particle = particles[p];
 
 
 					particle.copy(velocity);
@@ -96,7 +96,7 @@ lychee.define('lychee.verlet.Layer').requires([
 
 					if (particle.y >= hheight && velocity.squaredLength() > 0.00000001) {
 
-						var m = velocity.length();
+						let m = velocity.length();
 
 						velocity.x /= m;
 						velocity.y /= m;

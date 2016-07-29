@@ -1,8 +1,8 @@
 
 lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(global) {
 
-	var lychee  = global.lychee;
-	var console = global.console;
+	const lychee  = global.lychee;
+	const console = global.console;
 
 
 
@@ -10,9 +10,9 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 	 * HELPERS
 	 */
 
-	var _resolve_constructor = function(type) {
+	const _resolve_constructor = function(type) {
 
-		var construct = null;
+		let construct = null;
 
 
 		if (type === 'json')  construct = global.Config;
@@ -39,14 +39,14 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 	 * IMPLEMENTATION
 	 */
 
-	var Callback = function(url, type, ignore) {
+	const Callback = function(url, type, ignore) {
 
 		url    = typeof url === 'string'  ? url  : null;
 		type   = typeof type === 'string' ? type : null;
 		ignore = ignore === true;
 
 
-		var asset = null;
+		let asset = null;
 
 		if (url !== null) {
 
@@ -61,7 +61,7 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 			}
 
 
-			var construct = _resolve_constructor(type);
+			let construct = _resolve_constructor(type);
 			if (construct !== null) {
 
 				if (url.substr(0, 5) === 'data:') {

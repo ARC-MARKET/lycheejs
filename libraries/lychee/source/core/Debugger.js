@@ -5,17 +5,17 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 	 * HELPERS
 	 */
 
-	var _client      = null;
-	var _environment = null;
+	let _client      = null;
+	let _environment = null;
 
-	var _bootstrap_environment = function() {
+	const _bootstrap_environment = function() {
 
 		if (_environment === null) {
 
-			var currentenv = lychee.environment;
+			let currentenv = lychee.environment;
 			lychee.setEnvironment(null);
 
-			var defaultenv = lychee.environment;
+			let defaultenv = lychee.environment;
 			lychee.setEnvironment(currentenv);
 
 			_environment = defaultenv;
@@ -24,15 +24,15 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 	};
 
-	var _diff_environment = function(environment) {
+	const _diff_environment = function(environment) {
 
-		var cache1 = {};
-		var cache2 = {};
+		let cache1 = {};
+		let cache2 = {};
 
-		var global1 = _environment.global;
-		var global2 = environment.global;
+		let global1 = _environment.global;
+		let global2 = environment.global;
 
-		for (var prop1 in global1) {
+		for (let prop1 in global1) {
 
 			if (global1[prop1] === global2[prop1]) continue;
 
@@ -42,7 +42,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 		}
 
-		for (var prop2 in global2) {
+		for (let prop2 in global2) {
 
 			if (global2[prop2] === global1[prop2]) continue;
 
@@ -53,7 +53,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 		}
 
 
-		var diff = Object.assign({}, cache1, cache2);
+		let diff = Object.assign({}, cache1, cache2);
 		if (Object.keys(diff).length > 0) {
 			return diff;
 		}
@@ -63,15 +63,15 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 	};
 
-	var _report_error = function(environment, data) {
+	const _report_error = function(environment, data) {
 
-		var main = environment.global.MAIN || null;
+		let main = environment.global.MAIN || null;
 		if (main !== null) {
 
-			var client = main.client || null;
+			let client = main.client || null;
 			if (client !== null) {
 
-				var service = client.getService('debugger');
+				let service = client.getService('debugger');
 				if (service !== null) {
 					service.report('lychee.Debugger: Report from ' + data.file + '#L' + data.line + ' in ' + data.method + '', data);
 				}
@@ -92,7 +92,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 	 * IMPLEMENTATION
 	 */
 
-	var Module = {
+	const Module = {
 
 		// deserialize: function(blob) {},
 
@@ -115,12 +115,12 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 			if (environment !== null && environment !== _environment) {
 
-				var project = environment.id;
+				let project = environment.id;
 				if (project !== null) {
 
 					if (lychee.diff(environment.global, _environment.global) === true) {
 
-						var diff = _diff_environment(environment);
+						let diff = _diff_environment(environment);
 						if (diff !== null) {
 							return diff;
 						}
@@ -149,7 +149,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 			if (environment !== null && error !== null) {
 
-				var definition = null;
+				let definition = null;
 
 				if (referer !== null) {
 
@@ -162,7 +162,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 				}
 
 
-				var data = {
+				let data = {
 					project:     environment.id,
 					definition:  definition,
 					environment: environment.serialize(),
@@ -176,7 +176,7 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				if (typeof error.stack === 'string') {
 
-					var callsite = error.stack.split('\n')[0].trim();
+					let callsite = error.stack.split('\n')[0].trim();
 					if (callsite.charAt(0) === '/') {
 
 						data.file = callsite.split(':')[0];
@@ -190,14 +190,14 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 						if (typeof callsite === 'string') {
 
-							var tmp1 = callsite.split(' ');
-							var tmp2 = tmp1[2];
+							let tmp1 = callsite.trim().split(' ');
+							let tmp2 = tmp1[2];
 
 							if (tmp2.charAt(0) === '(')               tmp2 = tmp2.substr(1);
 							if (tmp2.charAt(tmp2.length - 1) === ')') tmp2 = tmp2.substr(0, tmp2.length - 1);
 
 
-							var tmp3 = tmp2.split(':');
+							let tmp3 = tmp2.split(':');
 
 							data.file   = tmp3[0];
 							data.line   = tmp3[1];
@@ -210,15 +210,15 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 				} else if (typeof Error.captureStackTrace === 'function') {
 
-					var orig = Error.prepareStackTrace;
+					let orig = Error.prepareStackTrace;
 
 					Error.prepareStackTrace = function(err, stack) { return stack; };
 					Error.captureStackTrace(new Error());
 
 
-					var stack    = [].slice.call(error.stack);
-					var callsite = stack.shift();
-					var FILTER   = [ 'module.js', 'vm.js', 'internal/module.js' ];
+					let stack    = [].slice.call(error.stack);
+					let callsite = stack.shift();
+					let FILTER   = [ 'module.js', 'vm.js', 'internal/module.js' ];
 
 					while (callsite !== undefined && FILTER.indexOf(callsite.getFileName()) !== -1) {
 						callsite = stack.shift();
@@ -242,6 +242,10 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 
 
 				return true;
+
+			} else {
+
+				console.error(error);
 
 			}
 

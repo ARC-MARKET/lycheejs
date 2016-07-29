@@ -1,7 +1,13 @@
 
 lychee.define('lychee.effect.Event').exports(function(lychee, global, attachments) {
 
-	var Composite = function(settings) {
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(settings) {
 
 		this.delay = 0;
 		this.event = null;
@@ -11,8 +17,8 @@ lychee.define('lychee.effect.Event').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		var delay = typeof settings.delay === 'number' ? (settings.delay | 0) : null;
-		var event = typeof settings.event === 'string' ? settings.event       : null;
+		let delay = typeof settings.delay === 'number' ? (settings.delay | 0) : null;
+		let event = typeof settings.event === 'string' ? settings.event       : null;
 
 		if (delay !== null) {
 			this.delay = delay;
@@ -35,7 +41,7 @@ lychee.define('lychee.effect.Event').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.delay !== 0)    settings.delay = this.delay;
@@ -60,13 +66,13 @@ lychee.define('lychee.effect.Event').exports(function(lychee, global, attachment
 			}
 
 
-			var t = (clock - this.__start) / this.delay;
+			let t = (clock - this.__start) / this.delay;
 			if (t < 0) {
 				return true;
 			}
 
 
-			var event = this.event;
+			let event = this.event;
 
 			if (t <= 1) {
 

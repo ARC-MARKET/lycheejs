@@ -3,28 +3,32 @@ lychee.define('lychee.event.Queue').includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Emitter = lychee.import('lychee.event.Emitter');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _process_stack = function() {
+	const _process_recursive = function(result) {
 
-		var data = this.___stack.shift() || null;
+		if (result instanceof Object) {
+			_process_stack.call(this);
+		} else if (result === true) {
+			_process_stack.call(this);
+		} else {
+			this.trigger('error');
+		}
+
+	};
+
+	const _process_stack = function() {
+
+		let data = this.___stack.shift() || null;
 		if (data !== null) {
 
-			var that = this;
-
-			this.trigger('update', [ data, function(result) {
-
-				if (result instanceof Object) {
-					_process_stack.call(that);
-				} else if (result === true) {
-					_process_stack.call(that);
-				} else {
-					that.trigger('error');
-				}
-
-			}]);
+			this.trigger('update', [ data, _process_recursive.bind(this) ]);
 
 		} else {
 
@@ -40,12 +44,12 @@ lychee.define('lychee.event.Queue').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.___init  = false;
 		this.___stack = [];
 
-		lychee.event.Emitter.call(this);
+		_Emitter.call(this);
 
 	};
 
@@ -60,17 +64,17 @@ lychee.define('lychee.event.Queue').includes([
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.event.Queue';
 
-			var blob = (data['blob'] || {});
+			let blob = (data['blob'] || {});
 
 
 			if (this.___stack.length > 0) {
 
 				blob.stack = [];
 
-				for (var s = 0, sl = this.___stack.length; s < sl; s++) {
+				for (let s = 0, sl = this.___stack.length; s < sl; s++) {
 					blob.stack.push(lychee.serialize(this.___stack[s]));
 				}
 

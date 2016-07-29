@@ -3,11 +3,8 @@ lychee.define('lychee.net.client.Session').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
-	/*
-	 * HELPERS
-	 */
-
-	var _id = 0;
+	const _Service = lychee.import('lychee.net.Service');
+	let   _id      = 0;
 
 
 
@@ -15,39 +12,39 @@ lychee.define('lychee.net.client.Session').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(id, client, data) {
+	let Composite = function(id, client, data) {
 
 		id = typeof id === 'string' ? id : 'session';
 
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.admin     = false;
 		this.autoadmin = true;
 		this.autolock  = true;
 		this.autostart = true;
-		this.sid       = 'session-' + _id++;
-		this.tid       = null;
 		this.min       = 2;
 		this.max       = 4;
+		this.sid       = 'session-' + _id++;
 
 
 		this.setAutoadmin(settings.autoadmin);
 		this.setAutolock(settings.autolock);
 		this.setAutostart(settings.autostart);
-		this.setSid(settings.sid);
-		this.setMin(settings.min);
 		this.setMax(settings.max);
+		this.setMin(settings.min);
+		this.setSid(settings.sid);
 
+		delete settings.autoadmin;
 		delete settings.autolock;
 		delete settings.autostart;
-		delete settings.sid;
-		delete settings.min;
 		delete settings.max;
+		delete settings.min;
+		delete settings.sid;
 
 
-		lychee.net.Service.call(this, id, client, lychee.net.Service.TYPE.client);
+		_Service.call(this, id, client, _Service.TYPE.client);
 
 
 
@@ -57,7 +54,7 @@ lychee.define('lychee.net.client.Session').includes([
 
 		this.bind('sync', function(data) {
 
-			var type = data.type;
+			let type = data.type;
 			if (type === 'update') {
 
 				this.admin = data.admin;
@@ -94,6 +91,48 @@ lychee.define('lychee.net.client.Session').includes([
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		deserialize: function(blob) {
+
+			if (blob.admin === true) {
+				this.admin = true;
+			}
+
+		},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.client.Session';
+
+			let settings = {};
+			let blob     = (data['blob'] || {});
+
+
+			if (this.autoadmin !== true)              settings.autoadmin = this.autoadmin;
+			if (this.autolock !== true)               settings.autolock  = this.autolock;
+			if (this.autostart !== true)              settings.autostart = this.autostart;
+			if (this.max !== 4)                       settings.max       = this.max;
+			if (this.min !== 2)                       settings.min       = this.min;
+			if (this.sid.substr(0, 8) !== 'session-') settings.sid       = this.sid;
+
+
+			if (this.admin !== false) blob.admin = this.admin;
+
+
+			data['arguments'][2] = settings;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
+
+
+			return data;
+
+		},
+
+
 
 		/*
 		 * CUSTOM API
@@ -235,24 +274,6 @@ lychee.define('lychee.net.client.Session').includes([
 
 		},
 
-		setSid: function(sid) {
-
-			sid = typeof sid === 'string' ? sid : null;
-
-
-			if (sid !== null) {
-
-				this.sid = sid;
-
-				return true;
-
-			}
-
-
-			return false;
-
-		},
-
 		setMax: function(max) {
 
 			max = typeof max === 'number' ? max : null;
@@ -279,6 +300,24 @@ lychee.define('lychee.net.client.Session').includes([
 			if (min !== null) {
 
 				this.min = min;
+
+				return true;
+
+			}
+
+
+			return false;
+
+		},
+
+		setSid: function(sid) {
+
+			sid = typeof sid === 'string' ? sid : null;
+
+
+			if (sid !== null) {
+
+				this.sid = sid;
 
 				return true;
 

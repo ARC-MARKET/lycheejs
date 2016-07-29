@@ -7,7 +7,7 @@ lychee.define('Storage').tags({
 
 	if (typeof global.require === 'function') {
 
-		var fs = global.require('fs');
+		let fs = global.require('fs');
 		if (typeof fs.readFileSync === 'function' && typeof fs.writeFileSync === 'function') {
 			return true;
 		}
@@ -19,12 +19,37 @@ lychee.define('Storage').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	var _JSON       = {
+	let   _id         = 0;
+	const _Emitter    = lychee.import('lychee.event.Emitter');
+	const _JSON       = {
 		encode: JSON.stringify,
 		decode: JSON.parse
 	};
-	var _PERSISTENT = {};
-	var _TEMPORARY  = {};
+	const _PERSISTENT = {
+		data: {},
+		read: function() {
+			return null;
+		},
+		write: function() {
+			return false;
+		}
+	};
+	const _TEMPORARY  = {
+		data: {},
+		read: function() {
+
+			if (Object.keys(this.data).length > 0) {
+				return this.data;
+			}
+
+
+			return null;
+
+		},
+		write: function() {
+			return true;
+		}
+	};
 
 
 
@@ -32,23 +57,20 @@ lychee.define('Storage').tags({
 	 * FEATURE DETECTION
 	 */
 
-	var _read_persistent  = function() { return false; };
-	var _write_persistent = function() { return false; };
-
 	(function() {
 
-		var _fs = require('fs');
+		const _fs = global.require('fs');
 
 
-		var read = 'readFileSync' in _fs;
+		let read = 'readFileSync' in _fs;
 		if (read === true) {
 
-			_read_persistent = function() {
+			_PERSISTENT.read = function() {
 
-				var url = lychee.environment.resolve('./lychee.store');
+				let url = lychee.environment.resolve('./lychee.store');
 
 
-				var raw = null;
+				let raw = null;
 				try {
 					raw = _fs.readFileSync(url, 'utf8');
 				} catch(err) {
@@ -56,7 +78,7 @@ lychee.define('Storage').tags({
 				}
 
 
-				var buffer = null;
+				let buffer = null;
 				try {
 					buffer = JSON.parse(raw);
 				} catch(err) {
@@ -66,8 +88,8 @@ lychee.define('Storage').tags({
 
 				if (buffer !== null) {
 
-					for (var id in buffer) {
-						_PERSISTENT[id] = buffer[id];
+					for (let id in buffer) {
+						_PERSISTENT.data[id] = buffer[id];
 					}
 
 
@@ -83,16 +105,16 @@ lychee.define('Storage').tags({
 		}
 
 
-		var write = 'writeFileSync' in _fs;
+		let write = 'writeFileSync' in _fs;
 		if (write === true) {
 
-			_write_persistent = function() {
+			_PERSISTENT.write = function() {
 
-				var buffer = _JSON.encode(_PERSISTENT);
-				var url    = lychee.environment.resolve('./lychee.store');
+				let buffer = _JSON.encode(_PERSISTENT.data);
+				let url    = lychee.environment.resolve('./lychee.store');
 
 
-				var result = false;
+				let result = false;
 				try {
 					result = _fs.writeFileSync(url, buffer, 'utf8');
 				} catch(err) {
@@ -109,7 +131,7 @@ lychee.define('Storage').tags({
 
 		if (lychee.debug === true) {
 
-			var methods = [];
+			let methods = [];
 
 			if (read && write) methods.push('Persistent');
 			if (_TEMPORARY)    methods.push('Temporary');
@@ -123,7 +145,7 @@ lychee.define('Storage').tags({
 		}
 
 
-		_read_persistent();
+		_PERSISTENT.read();
 
 	})();
 
@@ -133,20 +155,20 @@ lychee.define('Storage').tags({
 	 * HELPERS
 	 */
 
-	var _read_storage = function(silent) {
+	const _read_storage = function(silent) {
 
 		silent = silent === true;
 
 
-		var id   = this.id;
-		var blob = null;
+		let id   = this.id;
+		let blob = null;
 
 
-		var type = this.type;
+		let type = this.type;
 		if (type === Composite.TYPE.persistent) {
-			blob = _PERSISTENT[id] || null;
+			blob = _PERSISTENT.data[id] || null;
 		} else if (type === Composite.TYPE.temporary) {
-			blob = _TEMPORARY[id]  || null;
+			blob = _TEMPORARY.data[id]  || null;
 		}
 
 
@@ -167,7 +189,7 @@ lychee.define('Storage').tags({
 
 					this.__objects = {};
 
-					for (var o in blob['@objects']) {
+					for (let o in blob['@objects']) {
 						this.__objects[o] = blob['@objects'][o];
 					}
 
@@ -190,17 +212,17 @@ lychee.define('Storage').tags({
 
 	};
 
-	var _write_storage = function(silent) {
+	const _write_storage = function(silent) {
 
 		silent = silent === true;
 
 
-		var operations = this.__operations;
+		let operations = this.__operations;
 		if (operations.length > 0) {
 
 			while (operations.length > 0) {
 
-				var operation = operations.shift();
+				let operation = operations.shift();
 				if (operation.type === 'update') {
 
 					if (this.__objects[operation.id] !== operation.object) {
@@ -218,22 +240,22 @@ lychee.define('Storage').tags({
 			}
 
 
-			var id   = this.id;
-			var blob = {
+			let id   = this.id;
+			let blob = {
 				'@model':   this.model,
 				'@objects': this.__objects
 			};
 
 
-			var type = this.type;
+			let type = this.type;
 			if (type === Composite.TYPE.persistent) {
 
-				_PERSISTENT[id] = blob;
-				_write_persistent();
+				_PERSISTENT.data[id] = blob;
+				_PERSISTENT.write();
 
 			} else if (type === Composite.TYPE.temporary) {
 
-				_TEMPORARY[id] = blob;
+				_TEMPORARY.data[id] = blob;
 
 			}
 
@@ -258,11 +280,9 @@ lychee.define('Storage').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var _id = 0;
+	let Composite = function(data) {
 
-	var Composite = function(data) {
-
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.id    = 'lychee-Storage-' + _id++;
@@ -279,7 +299,7 @@ lychee.define('Storage').tags({
 		this.setType(settings.type);
 
 
-		lychee.event.Emitter.call(this);
+		_Emitter.call(this);
 
 		settings = null;
 
@@ -311,7 +331,7 @@ lychee.define('Storage').tags({
 			silent = silent === true;
 
 
-			var result = false;
+			let result = false;
 
 
 			if (this.__operations.length > 0) {
@@ -331,9 +351,9 @@ lychee.define('Storage').tags({
 
 				this.__objects = {};
 
-				for (var o in blob.objects) {
+				for (let o in blob.objects) {
 
-					var object = blob.objects[o];
+					let object = blob.objects[o];
 
 					if (lychee.interfaceof(this.model, object) === true) {
 						this.__objects[o] = object;
@@ -347,25 +367,25 @@ lychee.define('Storage').tags({
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.Storage';
 
-			var settings = {};
-			var blob     = (data['blob'] || {});
+			let settings = {};
+			let blob     = (data['blob'] || {});
 
 
 			if (this.id.substr(0, 15) !== 'lychee-Storage-') settings.id    = this.id;
 			if (Object.keys(this.model).length !== 0)        settings.model = this.model;
-			if (this.type !== Composite.TYPE.persistent)         settings.type  = this.type;
+			if (this.type !== Composite.TYPE.persistent)     settings.type  = this.type;
 
 
 			if (Object.keys(this.__objects).length > 0) {
 
 				blob.objects = {};
 
-				for (var o in this.__objects) {
+				for (let o in this.__objects) {
 
-					var object = this.__objects[o];
+					let object = this.__objects[o];
 					if (object instanceof Object) {
 						blob.objects[o] = _JSON.decode(_JSON.encode(object));
 					}
@@ -399,14 +419,14 @@ lychee.define('Storage').tags({
 			scope    = scope !== undefined          ? scope    : this;
 
 
-			var filtered = [];
+			let filtered = [];
 
 
 			if (callback !== null) {
 
-				for (var o in this.__objects) {
+				for (let o in this.__objects) {
 
-					var object = this.__objects[o];
+					let object = this.__objects[o];
 
 					if (callback.call(scope, object, o) === true) {
 						filtered.push(object);
@@ -429,7 +449,7 @@ lychee.define('Storage').tags({
 
 			if (id !== null) {
 
-				var object = this.__objects[id] || null;
+				let object = this.__objects[id] || null;
 				if (object !== null) {
 					return object;
 				}
@@ -448,7 +468,7 @@ lychee.define('Storage').tags({
 
 			if (id !== null) {
 
-				var object = this.__objects[id] || null;
+				let object = this.__objects[id] || null;
 				if (object !== null) {
 
 					this.__operations.push({

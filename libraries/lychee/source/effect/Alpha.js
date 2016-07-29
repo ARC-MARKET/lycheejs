@@ -5,7 +5,7 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 	 * HELPERS
 	 */
 
-	var _is_alpha = function(alpha) {
+	const _is_alpha = function(alpha) {
 
 		if (typeof alpha === 'number') {
 			return alpha >= 0 && alpha <= 1;
@@ -22,7 +22,7 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(settings) {
+	let Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -35,10 +35,10 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
-		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
-		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
-		var alpha    = _is_alpha(settings.alpha)                ? settings.alpha          : null;
+		let type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
+		let delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
+		let duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
+		let alpha    = _is_alpha(settings.alpha)                ? settings.alpha          : null;
 
 		if (type !== null) {
 			this.type = type;
@@ -78,13 +78,13 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                 settings.delay    = this.delay;
-			if (this.duration !== 250)            settings.duration = this.duration;
-			if (this.alpha !== 1)                 settings.alpha    = this.alpha;
+			if (this.delay !== 0)                     settings.delay    = this.delay;
+			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.alpha !== 1)                     settings.alpha    = this.alpha;
 
 
 			return {
@@ -108,24 +108,24 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 			}
 
 
-			var t = (clock - this.__start) / this.duration;
+			let t = (clock - this.__start) / this.duration;
 			if (t < 0) {
 				return true;
 			}
 
 
-			var origin = this.__origin;
-			var alpha  = this.alpha;
+			let origin = this.__origin;
+			let alpha  = this.alpha;
 
-			var a      = origin;
+			let a      = origin;
 
 			if (t <= 1) {
 
-				var f  = 0;
-				var da = alpha - origin;
+				let f  = 0;
+				let da = alpha - origin;
 
 
-				var type = this.type;
+				let type = this.type;
 				if (type === Composite.TYPE.linear) {
 
 					a += t * da;
@@ -144,7 +144,7 @@ lychee.define('lychee.effect.Alpha').exports(function(lychee, global, attachment
 
 				} else if (type === Composite.TYPE.bounceeasein) {
 
-					var k = 1 - t;
+					let k = 1 - t;
 
 					if ((k /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(k, 2) );

@@ -3,26 +3,15 @@ lychee.define('lychee.ui.sprite.Background').includes([
 	'lychee.ui.Sprite'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Sprite = lychee.import('lychee.ui.Sprite');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _is_color = function(color) {
-
-		if (typeof color === 'string') {
-
-			if (color.match(/(#[AaBbCcDdEeFf0-9]{6})/) || color.match(/(#[AaBbCcDdEeFf0-9]{8})/)) {
-				return true;
-			}
-
-		}
-
-
-		return false;
-
-	};
-
-	var _render_buffer = function(renderer) {
+	const _render_buffer = function(renderer) {
 
 		if (this.__buffer !== null) {
 			this.__buffer.resize(this.width, this.height);
@@ -36,7 +25,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 		renderer.setAlpha(1.0);
 
 
-		var color = this.color;
+		let color = this.color;
 		if (color !== null) {
 
 			renderer.drawBox(
@@ -51,14 +40,14 @@ lychee.define('lychee.ui.sprite.Background').includes([
 		}
 
 
-		var texture = this.texture;
-		var map     = this.getMap();
+		let texture = this.texture;
+		let map     = this.getMap();
 		if (texture !== null && map !== null) {
 
 			if (map.w !== 0 && map.h !== 0 && (map.w <= this.width || map.h <= this.height)) {
 
-				var px = this.origin.x - map.w;
-				var py = this.origin.y - map.h;
+				let px = this.origin.x - map.w;
+				let py = this.origin.y - map.h;
 
 
 				while (px < this.width) {
@@ -107,9 +96,9 @@ lychee.define('lychee.ui.sprite.Background').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.color  = null;
@@ -130,7 +119,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
 
 
-		lychee.ui.Sprite.call(this, settings);
+		_Sprite.call(this, settings);
 
 
 
@@ -168,10 +157,10 @@ lychee.define('lychee.ui.sprite.Background').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Sprite.prototype.serialize.call(this);
+			let data = _Sprite.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.sprite.Background';
 
-			var settings = data['arguments'][0];
+			let settings = data['arguments'][0];
 
 
 			if (this.color !== null) settings.color = this.color;
@@ -196,12 +185,12 @@ lychee.define('lychee.ui.sprite.Background').includes([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
-			var hwidth   = this.width  / 2;
-			var hheight  = this.height / 2;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
+			let hwidth   = this.width  / 2;
+			let hheight  = this.height / 2;
 
 
 			if (this.__isDirty === true) {
@@ -237,7 +226,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 
 		setColor: function(color) {
 
-			color = _is_color(color) ? color : null;
+			color = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;
 
 
 			if (color !== null) {
@@ -265,7 +254,7 @@ lychee.define('lychee.ui.sprite.Background').includes([
 				this.origin.x = typeof origin.x === 'number' ? origin.x : this.origin.x;
 				this.origin.y = typeof origin.y === 'number' ? origin.y : this.origin.y;
 
-				var map = this.getMap();
+				let map = this.getMap();
 				if (map !== null) {
 					this.origin.x %= map.w;
 					this.origin.y %= map.h;

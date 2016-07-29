@@ -3,11 +3,16 @@ lychee.define('lychee.verlet.Constraint').requires([
 	'lychee.math.Vector3'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Vector3 = lychee.import('lychee.math.Vector3');
-	var _cache   = new _Vector3();
+	const _Vector3 = lychee.import('lychee.math.Vector3');
+	const _CACHE   = new _Vector3();
 
 
-	var Composite = function(a_vector, b_vector, rigidity) {
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(a_vector, b_vector, rigidity) {
 
         this.__a_vector = a_vector instanceof _Vector3 ? a_vector : null;
         this.__b_vector = b_vector instanceof _Vector3 ? b_vector : null;
@@ -18,9 +23,9 @@ lychee.define('lychee.verlet.Constraint').requires([
 
 		if (this.__a_vector !== null && this.__b_vector !== null) {
 
-			this.__a_vector.copy(_cache);
-			_cache.subtract(this.__b_vector);
-			this.__distance = _cache.squaredLength();
+			this.__a_vector.copy(_CACHE);
+			_CACHE.subtract(this.__b_vector);
+			this.__distance = _CACHE.squaredLength();
 
 		}
 
@@ -37,8 +42,8 @@ lychee.define('lychee.verlet.Constraint').requires([
 
 		serialize: function() {
 
-			var a_vector = lychee.serialize(this.__a_vector);
-			var b_vector = lychee.serialize(this.__b_vector);
+			let a_vector = lychee.serialize(this.__a_vector);
+			let b_vector = lychee.serialize(this.__b_vector);
 
 
 			return {
@@ -57,24 +62,24 @@ lychee.define('lychee.verlet.Constraint').requires([
 
 		update: function(clock, delta) {
 
-			var u = delta / 1000;
-			var a = this.__a_vector;
-			var b = this.__b_vector;
+			let u = delta / 1000;
+			let a = this.__a_vector;
+			let b = this.__b_vector;
 
 
 			if (a !== null && b !== null) {
 
-				a.copy(_cache);
-				_cache.sub(b);
+				a.copy(_CACHE);
+				_CACHE.sub(b);
 
-				var distance = this.__distance;
-				var rigidity = this.rigidity;
-				var m        = _cache.squaredLength();
-				var scale    = ((distance - m) / m) * rigidity * u;
+				let distance = this.__distance;
+				let rigidity = this.rigidity;
+				let m        = _CACHE.squaredLength();
+				let scale    = ((distance - m) / m) * rigidity * u;
 
-				_cache.scale(scale);
-				a.add(_cache);
-				b.sub(_cache);
+				_CACHE.scale(scale);
+				a.add(_CACHE);
+				b.sub(_CACHE);
 
 			}
 
@@ -82,8 +87,8 @@ lychee.define('lychee.verlet.Constraint').requires([
 
 		render: function(renderer, offsetX, offsetY) {
 
-			var a = this.__a_vector;
-			var b = this.__b_vector;
+			let a = this.__a_vector;
+			let b = this.__b_vector;
 
 
 			if (a !== null && b !== null) {

@@ -5,11 +5,11 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	 * HELPERS
 	 */
 
-	var _bytes_to_words = function(bytes) {
+	const _bytes_to_words = function(bytes) {
 
-		var words = [];
+		let words = [];
 
-		for (var i = 0, b = 0; i < bytes.length; i++, b += 8) {
+		for (let i = 0, b = 0; i < bytes.length; i++, b += 8) {
 			words[b >>> 5] |= bytes[i] << (24 - b % 32);
 		}
 
@@ -17,11 +17,11 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	var _words_to_bytes = function(words) {
+	const _words_to_bytes = function(words) {
 
-		var bytes = [];
+		let bytes = [];
 
-		for (var b = 0; b < words.length * 32; b += 8) {
+		for (let b = 0; b < words.length * 32; b += 8) {
 			bytes.push((words[b >>> 5] >>> (24 - b % 32) & 0xff));
 		}
 
@@ -29,22 +29,36 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	};
 
-	var _md5_FF = function (a, b, c, d, x, s, t) {
-		var n = a + (b & c | ~b & d) + (x >>> 0) + t;
+	const _md5_FF = function (a, b, c, d, x, s, t) {
+
+		let n = a + (b & c | ~b & d) + (x >>> 0) + t;
+
 		return ((n << s) | (n >>> (32 - s))) + b;
+
 	};
 
-	var _md5_GG = function (a, b, c, d, x, s, t) {
-		var n = a + (b & d | c & ~d) + (x >>> 0) + t;
+	const _md5_GG = function (a, b, c, d, x, s, t) {
+
+		let n = a + (b & d | c & ~d) + (x >>> 0) + t;
+
 		return ((n << s) | (n >>> (32 - s))) + b;
+
 	};
-	var _md5_HH = function (a, b, c, d, x, s, t) {
-		var n = a + (b ^ c ^ d) + (x >>> 0) + t;
+
+	const _md5_HH = function (a, b, c, d, x, s, t) {
+
+		let n = a + (b ^ c ^ d) + (x >>> 0) + t;
+
 		return ((n << s) | (n >>> (32 - s))) + b;
+
 	};
-	var _md5_II = function (a, b, c, d, x, s, t) {
-		var n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
+
+	const _md5_II = function (a, b, c, d, x, s, t) {
+
+		let n = a + (c ^ (b | ~d)) + (x >>> 0) + t;
+
 		return ((n << s) | (n >>> (32 - s))) + b;
+
 	};
 
 
@@ -53,7 +67,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.__a = 1732584193;
 		this.__b = -271733879;
@@ -65,20 +79,42 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 	Composite.prototype = {
 
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.crypto.MD5',
+				'arguments':   []
+			};
+
+		},
+
+
+
+		/*
+		 * CRYPTO API
+		 */
+
 		update: function(data) {
 
 			data = data instanceof Buffer ? data : new Buffer(data, 'utf8');
 
 
-			var words = _bytes_to_words(data);
-			var length = data.length * 8;
-			var a      = 1732584193;
-			var b      = -271733879;
-			var c      = -1732584194;
-			var d      = 271733878;
+			let words = _bytes_to_words(data);
+			let length = data.length * 8;
+			let a      = 1732584193;
+			let b      = -271733879;
+			let c      = -1732584194;
+			let d      = 271733878;
+			let w      = 0;
 
 
-			for (var w = 0; w < words.length; w++) {
+			for (w = 0; w < words.length; w++) {
 
 				words[w] = ((words[w] <<  8) | (words[w] >>> 24)) & 0x00FF00FF
 						 | ((words[w] << 24) | (words[w] >>>  8)) & 0xFF00FF00;
@@ -89,12 +125,12 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 			words[(((length + 64) >>> 9) << 4) + 14] = length;
 
 
-			for (var w = 0; w < words.length; w += 16) {
+			for (w = 0; w < words.length; w += 16) {
 
-				var aa = a;
-				var bb = b;
-				var cc = c;
-				var dd = d;
+				let aa = a;
+				let bb = b;
+				let cc = c;
+				let dd = d;
 
 
 				a = _md5_FF(a, b, c, d, words[w +  0],  7, -680876936);
@@ -183,7 +219,7 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 
 		digest: function() {
 
-			var bytes = _words_to_bytes([
+			let bytes = _words_to_bytes([
 				this.__a,
 				this.__b,
 				this.__c,
@@ -191,8 +227,8 @@ lychee.define('lychee.crypto.MD5').exports(function(lychee, global, attachments)
 			]);
 
 
-			var hash = '';
-			for (var b = 0; b < bytes.length; b++) {
+			let hash = '';
+			for (let b = 0; b < bytes.length; b++) {
 
 				hash += (bytes[b] >>> 4).toString(16);
 				hash += (bytes[b] &  15).toString(16);

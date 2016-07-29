@@ -1,7 +1,7 @@
 
 lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachments) {
 
-	var _Array = typeof Float32Array !== 'undefined' ? Float32Array : Array;
+	const _Array = typeof Float32Array !== 'undefined' ? Float32Array : Array;
 
 
 
@@ -9,7 +9,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
 		this.data = new _Array(4);
 
@@ -40,7 +40,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		serialize: function() {
 
-			var data = this.data.slice(0);
+			let data = this.data.slice(0);
 
 
 			return {
@@ -65,8 +65,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		copy: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			q[0] = d[0];
@@ -81,7 +81,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		set: function(x, y, z, w) {
 
-			var d = this.data;
+			let d = this.data;
 
 
 			d[0] = x;
@@ -96,8 +96,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		add: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			d[0] += q[0];
@@ -112,8 +112,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		subtract: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			d[0] -= q[0];
@@ -128,11 +128,11 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		multiply: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
-			var ax = d[0], ay = d[1], az = d[2], aw = d[3];
-			var bx = q[0], by = q[1], bz = q[2], bw = q[3];
+			let ax = d[0], ay = d[1], az = d[2], aw = d[3];
+			let bx = q[0], by = q[1], bz = q[2], bw = q[3];
 
 
 			d[0] = ax * bw + aw * bx + ay * bz - az * by;
@@ -147,8 +147,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		min: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			d[0] = Math.min(d[0], q[0]);
@@ -163,8 +163,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		max: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			d[0] = Math.max(d[0], q[0]);
@@ -179,7 +179,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		scale: function(scale) {
 
-			var d = this.data;
+			let d = this.data;
 
 
 			d[0] *= scale;
@@ -194,11 +194,11 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		length: function() {
 
-			var d = this.data;
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
 
 			return Math.sqrt(x * x + y * y + z * z + w * w);
@@ -207,11 +207,11 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		squaredLength: function() {
 
-			var d = this.data;
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
 
 			return (x * x + y * y + z * z + w * w);
@@ -220,16 +220,15 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		invert: function() {
 
-			var d = 0;
+			let d = 0;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
 
-
-			var invDot = 0;
-			var dot = (x * x + y * y + z * z + w * w);
+			let invDot = 0;
+			let dot = (x * x + y * y + z * z + w * w);
 			if (dot > 0) {
 
 				invDot = 1.0 / dot;
@@ -248,15 +247,14 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		normalize: function() {
 
-			var d = this.data;
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
 
-
-			var length = (x * x + y * y + z * z + w * w);
+			let length = (x * x + y * y + z * z + w * w);
 			if (length > 0) {
 
 				length = 1 / Math.sqrt(length);
@@ -275,8 +273,8 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		scalar: function(quaternion) {
 
-			var d = this.data;
-			var q = quaternion.data;
+			let d = this.data;
+			let q = quaternion.data;
 
 
 			return (d[0] * q[0] + d[1] * q[1] + d[2] * q[2] + d[3] * q[3]);
@@ -285,7 +283,7 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		interpolate: function(vector, t) {
 
-			var d = this.data;
+			let d = this.data;
 
 
 			d[0] += t * (vector.x - d[0]);
@@ -300,15 +298,14 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		rotateX: function(radian) {
 
-			var sin = Math.sin(radian * 0.5);
-			var cos = Math.cos(radian * 0.5);
+			let sin = Math.sin(radian * 0.5);
+			let cos = Math.cos(radian * 0.5);
 
-			var d = this.data;
-
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
 
 			d[0] = x * cos + w * sin;
@@ -323,15 +320,14 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		rotateY: function(radian) {
 
-			var sin = Math.sin(radian * 0.5);
-			var cos = Math.cos(radian * 0.5);
+			let sin = Math.sin(radian * 0.5);
+			let cos = Math.cos(radian * 0.5);
 
-			var d = this.data;
-
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
 
 			d[0] = x * cos - z * sin;
@@ -346,15 +342,14 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		rotateZ: function(radian) {
 
-			var sin = Math.sin(radian * 0.5);
-			var cos = Math.cos(radian * 0.5);
+			let sin = Math.sin(radian * 0.5);
+			let cos = Math.cos(radian * 0.5);
 
-			var d = this.data;
-
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
-			var w = d[3];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
+			let w = d[3];
 
 
 			d[0] = x * cos + y * sin;
@@ -369,10 +364,10 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		rotateAxis: function(vector, radian) {
 
-			var sin = Math.sin(radian * 0.5);
-			var cos = Math.cos(radian * 0.5);
+			let sin = Math.sin(radian * 0.5);
+			let cos = Math.cos(radian * 0.5);
 
-			var d = this.data;
+			let d = this.data;
 
 
 			d[0] = sin * vector.x;
@@ -387,11 +382,10 @@ lychee.define('lychee.math.Quaternion').exports(function(lychee, global, attachm
 
 		calculateW: function() {
 
-			var d = this.data;
-
-			var x = d[0];
-			var y = d[1];
-			var z = d[2];
+			let d = this.data;
+			let x = d[0];
+			let y = d[1];
+			let z = d[2];
 
 
 			d[3] = -Math.sqrt(Math.abs(1.0 - x * x - y * y - z * z));

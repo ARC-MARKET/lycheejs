@@ -7,16 +7,23 @@ lychee.define('lychee.net.Client').requires([
 	'lychee.net.Tunnel'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Debugger = lychee.import('lychee.net.client.Debugger');
+	const _Stash    = lychee.import('lychee.net.client.Stash');
+	const _Storage  = lychee.import('lychee.net.client.Storage');
+	const _Tunnel   = lychee.import('lychee.net.Tunnel');
+
+
+
 	/*
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
-		lychee.net.Tunnel.call(this, settings);
+		_Tunnel.call(this, settings);
 
 		settings = null;
 
@@ -29,7 +36,7 @@ lychee.define('lychee.net.Client').requires([
 		if (lychee.debug === true) {
 
 			this.bind('connect', function() {
-				this.addService(new lychee.net.client.Debugger(this));
+				this.addService(new _Debugger(this));
 			}, this);
 
 		}
@@ -37,8 +44,8 @@ lychee.define('lychee.net.Client').requires([
 
 		this.bind('connect', function() {
 
-			this.addService(new lychee.net.client.Stash(this));
-			this.addService(new lychee.net.client.Storage(this));
+			this.addService(new _Stash(this));
+			this.addService(new _Storage(this));
 
 		}, this);
 
@@ -55,7 +62,7 @@ lychee.define('lychee.net.Client').requires([
 
 		serialize: function() {
 
-			var data = lychee.net.Tunnel.prototype.serialize.call(this);
+			let data = _Tunnel.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.Client';
 
 

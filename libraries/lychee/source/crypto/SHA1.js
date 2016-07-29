@@ -5,11 +5,11 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	 * HELPERS
 	 */
 
-	var _read_int32BE = function(buffer, offset) {
+	const _read_int32BE = function(buffer, offset) {
 		return (buffer[offset] << 24) | (buffer[offset + 1] << 16) | (buffer[offset + 2] << 8) | (buffer[offset + 3]);
 	};
 
-	var _write_int32BE = function(buffer, value, offset) {
+	const _write_int32BE = function(buffer, value, offset) {
 
 		value  = +value;
 		offset = offset | 0;
@@ -19,7 +19,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 			value = 0xffffffff + value + 1;
 		}
 
-		for (var b = 0, bl = Math.min(buffer.length - offset, 4); b < bl; b++) {
+		for (let b = 0, bl = Math.min(buffer.length - offset, 4); b < bl; b++) {
 			buffer[offset + b] = (value >>> (3 - b) * 8) & 0xff;
 		}
 
@@ -28,7 +28,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 
 	};
 
-	var _write_zero = function(buffer, start, end) {
+	const _write_zero = function(buffer, start, end) {
 
 		start = typeof start === 'number' ? (start | 0) : 0;
 		end   = typeof end === 'number'   ? (end   | 0) : buffer.length;
@@ -40,33 +40,33 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 		end = Math.min(end, buffer.length);
 
 
-		var diff = end - start;
-		for (var b = 0; b < diff; b++) {
+		let diff = end - start;
+		for (let b = 0; b < diff; b++) {
 			buffer[b + start] = 0;
 		}
 
 	};
 
-	var _calculate_w = function(w, i) {
+	const _calculate_w = function(w, i) {
 		return _rotate(w[i - 3] ^ w[i - 8] ^ w[i - 14] ^ w[i - 16], 1);
 	};
 
-	var _rotate = function(number, count) {
+	const _rotate = function(number, count) {
 		return (number << count) | (number >>> (32 - count));
 	};
 
-	var _update_chunk = function(buffer) {
+	const _update_chunk = function(buffer) {
 
-		var a = this.__a;
-		var b = this.__b;
-		var c = this.__c;
-		var d = this.__d;
-		var e = this.__e;
-		var w = this.__w;
+		let a = this.__a;
+		let b = this.__b;
+		let c = this.__c;
+		let d = this.__d;
+		let e = this.__e;
+		let w = this.__w;
 
 
-		var j = 0;
-		var tmp1, tmp2;
+		let j = 0;
+		let tmp1, tmp2;
 
 		while (j < 16) {
 
@@ -158,7 +158,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.__a = 0x67452301 | 0;
 		this.__b = 0xefcdab89 | 0;
@@ -176,23 +176,44 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 
 	Composite.prototype = {
 
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.crypto.SHA1',
+				'arguments':   []
+			};
+
+		},
+
+
+
+		/*
+		 * CRYPTO API
+		 */
+
 		update: function(data) {
 
 			data = data instanceof Buffer ? data : new Buffer(data, 'utf8');
 
 
-			var buffer  = this.__buffer;
-			var length  = this.__length + data.length;
-			var pointer = this.__pointer;
+			let buffer  = this.__buffer;
+			let length  = this.__length + data.length;
+			let pointer = this.__pointer;
 
 
-			var p = 0;
+			let p = 0;
 
 			while (pointer < length) {
 
-				var size = (Math.min(data.length, p + 64 - (pointer % 64)) - p);
+				let size = (Math.min(data.length, p + 64 - (pointer % 64)) - p);
 
-				for (var s = 0; s < size; s++) {
+				for (let s = 0; s < size; s++) {
 					buffer[(pointer % 64) + s] = data[s + p];
 				}
 
@@ -213,8 +234,8 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 
 		digest: function() {
 
-			var buffer = this.__buffer;
-			var length = this.__length;
+			let buffer = this.__buffer;
+			let length = this.__length;
 
 
 			buffer[length % 64] = 0x80;
@@ -232,7 +253,7 @@ lychee.define('lychee.crypto.SHA1').exports(function(lychee, global, attachments
 			_update_chunk.call(this, buffer);
 
 
-			var hash = new Buffer(20);
+			let hash = new Buffer(20);
 
 			_write_int32BE(hash, this.__a | 0,  0);
 			_write_int32BE(hash, this.__b | 0,  4);

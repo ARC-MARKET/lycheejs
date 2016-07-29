@@ -3,12 +3,18 @@ lychee.define('lychee.ui.entity.Button').includes([
 	'lychee.ui.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _FONT = attachments["fnt"];
+	const _Entity = lychee.import('lychee.ui.Entity');
+	const _FONT   = attachments["fnt"];
 
 
-	var Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(data) {
+
+		let settings = Object.assign({}, data);
 
 
 		this.label = null;
@@ -41,10 +47,10 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 		settings.width  = typeof settings.width === 'number'  ? settings.width  : 128;
 		settings.height = typeof settings.height === 'number' ? settings.height :  32;
-		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
+		settings.shape  = _Entity.SHAPE.rectangle;
 
 
-		lychee.ui.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 		settings = null;
 
@@ -96,7 +102,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 		deserialize: function(blob) {
 
-			var font = lychee.deserialize(blob.font);
+			let font = lychee.deserialize(blob.font);
 			if (font !== null) {
 				this.setFont(font);
 			}
@@ -105,11 +111,11 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Button';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.label !== null) settings.label = this.label;
@@ -128,14 +134,14 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 		update: function(clock, delta) {
 
-			var pulse = this.__pulse;
+			let pulse = this.__pulse;
 			if (pulse.active === true) {
 
 				if (pulse.start === null) {
 					pulse.start = clock;
 				}
 
-				var t = (clock - pulse.start) / pulse.duration;
+				let t = (clock - pulse.start) / pulse.duration;
 				if (t <= 1) {
 					pulse.alpha = (1 - t);
 				} else {
@@ -146,7 +152,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 			}
 
 
-			var cursor = this.__cursor;
+			let cursor = this.__cursor;
 			if (cursor.active === true) {
 
 				if (cursor.start === null) {
@@ -154,7 +160,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 				}
 
 
-				var ct = (clock - cursor.start) / cursor.duration;
+				let ct = (clock - cursor.start) / cursor.duration;
 				if (ct <= 1) {
 					cursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;
 				} else {
@@ -165,7 +171,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 			}
 
 
-			lychee.ui.Entity.prototype.update.call(this, clock, delta);
+			_Entity.prototype.update.call(this, clock, delta);
 
 		},
 
@@ -174,12 +180,12 @@ lychee.define('lychee.ui.entity.Button').includes([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
-			var hwidth   = this.width  / 2;
-			var hheight  = this.height / 2;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
+			let hwidth   = this.width  / 2;
+			let hheight  = this.height / 2;
 
 
 			if (alpha !== 1) {
@@ -196,7 +202,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 			);
 
 
-			var cursor = this.__cursor;
+			let cursor = this.__cursor;
 			if (cursor.active === true) {
 
 				renderer.drawBox(
@@ -225,7 +231,7 @@ lychee.define('lychee.ui.entity.Button').includes([
 			}
 
 
-			var pulse = this.__pulse;
+			let pulse = this.__pulse;
 			if (pulse.active === true) {
 
 				renderer.setAlpha(pulse.alpha);
@@ -249,8 +255,8 @@ lychee.define('lychee.ui.entity.Button').includes([
 			}
 
 
-			var label = this.label;
-			var font  = this.font;
+			let label = this.label;
+			let font  = this.font;
 
 			if (label !== null && font !== null) {
 
@@ -315,11 +321,11 @@ lychee.define('lychee.ui.entity.Button').includes([
 
 		setState: function(id) {
 
-			var result = lychee.ui.Entity.prototype.setState.call(this, id);
+			let result = _Entity.prototype.setState.call(this, id);
 			if (result === true) {
 
-				var cursor = this.__cursor;
-				var pulse  = this.__pulse;
+				let cursor = this.__cursor;
+				let pulse  = this.__pulse;
 
 
 				if (id === 'active') {

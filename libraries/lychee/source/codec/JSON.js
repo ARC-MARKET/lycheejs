@@ -5,9 +5,9 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 	 * HELPERS
 	 */
 
-	var _CHARS_DANGEROUS = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	var _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-	var _CHARS_META      = {
+	const _CHARS_DANGEROUS = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_ESCAPABLE = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+	const _CHARS_META      = {
 		'\b': '\\b',
 		'\t': '\\t',
 		'\n': '\\n',
@@ -17,16 +17,16 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 		'\\': '\\\\'
 	};
 
-	var _sanitize_string = function(str) {
+	const _sanitize_string = function(str) {
 
-		var san = str;
+		let san = str;
 
 
 		if (_CHARS_ESCAPABLE.test(san)) {
 
 			san = san.replace(_CHARS_ESCAPABLE, function(char) {
 
-				var val = _CHARS_META[char];
+				let val = _CHARS_META[char];
 				if (typeof val === 'string') {
 					return val;
 				} else {
@@ -41,7 +41,9 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 	};
 
-	var _Stream = function(buffer, mode) {
+
+
+	const _Stream = function(buffer, mode) {
 
 		this.__buffer = typeof buffer === 'string'        ? buffer : '';
 		this.__mode   = lychee.enumof(_Stream.MODE, mode) ? mode   : 0;
@@ -73,7 +75,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 		read: function(bytes) {
 
-			var buffer = '';
+			let buffer = '';
 
 			buffer       += this.__buffer.substr(this.__index, bytes);
 			this.__index += bytes;
@@ -84,12 +86,12 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 		search: function(array) {
 
-			var bytes = Infinity;
+			let bytes = Infinity;
 
-			for (var a = 0, al = array.length; a < al; a++) {
+			for (let a = 0, al = array.length; a < al; a++) {
 
-				var token = array[a];
-				var size  = this.__buffer.indexOf(token, this.__index + 1) - this.__index;
+				let token = array[a];
+				let size  = this.__buffer.indexOf(token, this.__index + 1) - this.__index;
 				if (size > -1 && size < bytes) {
 					bytes = size;
 				}
@@ -125,7 +127,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 	 * ENCODER and DECODER
 	 */
 
-	var _encode = function(stream, data) {
+	const _encode = function(stream, data) {
 
 		// null,false,true: Boolean or Null or EOS
 		if (typeof data === 'boolean' || data === null) {
@@ -142,14 +144,14 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 		// 123,12.3: Integer or Float
 		} else if (typeof data === 'number') {
 
-			var type = 1;
+			let type = 1;
 			if (data < 268435456 && data !== (data | 0)) {
 				type = 2;
 			}
 
 
 			// Negative value
-			var sign = 0;
+			let sign = 0;
 			if (data < 0) {
 				data = -data;
 				sign = 1;
@@ -186,7 +188,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			stream.write('[');
 
-			for (var d = 0, dl = data.length; d < dl; d++) {
+			for (let d = 0, dl = data.length; d < dl; d++) {
 
 				_encode(stream, data[d]);
 
@@ -204,11 +206,11 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			stream.write('{');
 
-			var keys = Object.keys(data);
+			let keys = Object.keys(data);
 
-			for (var k = 0, kl = keys.length; k < kl; k++) {
+			for (let k = 0, kl = keys.length; k < kl; k++) {
 
-				var key = keys[k];
+				let key = keys[k];
 
 				_encode(stream, key);
 				stream.write(':');
@@ -229,7 +231,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			stream.write('%');
 
-			var blob = lychee.serialize(data);
+			let blob = lychee.serialize(data);
 
 			_encode(stream, blob);
 
@@ -239,15 +241,14 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 	};
 
+	const _decode = function(stream) {
 
-	var _decode = function(stream) {
-
-		var value  = undefined;
-		var seek   = '';
-		var size   = 0;
-		var tmp    = 0;
-		var errors = 0;
-		var check  = null;
+		let value  = undefined;
+		let seek   = '';
+		let size   = 0;
+		let tmp    = 0;
+		let errors = 0;
+		let check  = null;
 
 
 		if (stream.pointer() < stream.length()) {
@@ -308,7 +309,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 					value[value.length - 1] = check;
 
-					var special = stream.seek(1);
+					let special = stream.seek(1);
 					if (special === 'b') {
 
 						stream.read(1);
@@ -400,7 +401,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 					}
 
 
-					var object_key = _decode(stream);
+					let object_key = _decode(stream);
 					check = stream.seek(1);
 
 					if (check === '}') {
@@ -411,7 +412,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 						errors++;
 					}
 
-					var object_value = _decode(stream);
+					let object_value = _decode(stream);
 					check = stream.seek(1);
 
 
@@ -435,7 +436,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 				stream.read(1);
 
-				var blob = _decode(stream);
+				let blob = _decode(stream);
 
 				value = lychee.deserialize(blob);
 				check = stream.read(1);
@@ -466,7 +467,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 	 * IMPLEMENTATION
 	 */
 
-	var Module = {
+	const Module = {
 
 		// deserialize: function(blob) {},
 
@@ -486,7 +487,7 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			if (data !== null) {
 
-				var stream = new _Stream('', _Stream.MODE.write);
+				let stream = new _Stream('', _Stream.MODE.write);
 
 				_encode(stream, data);
 
@@ -506,8 +507,8 @@ lychee.define('lychee.codec.JSON').exports(function(lychee, global, attachments)
 
 			if (data !== null) {
 
-				var stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
-				var object = _decode(stream);
+				let stream = new _Stream(data.toString('utf8'), _Stream.MODE.read);
+				let object = _decode(stream);
 				if (object !== undefined) {
 					return object;
 				}

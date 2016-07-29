@@ -16,7 +16,8 @@ lychee.define('Renderer').tags({
 
 }).exports(function(lychee, global, attachments) {
 
-	var _process = global.process;
+	const _process = global.process;
+	let   _id      = 0;
 
 
 
@@ -24,65 +25,10 @@ lychee.define('Renderer').tags({
 	 * HELPERS
 	 */
 
-	var _color_cache = {};
+	const _draw_ctx = function(x, y, value) {
 
-	var _is_color = function(color) {
-
-		if (typeof color === 'string') {
-
-			if (color.match(/(#[AaBbCcDdEeFf0-9]{6})/) || color.match(/(#[AaBbCcDdEeFf0-9]{8})/)) {
-				return true;
-			}
-
-		}
-
-
-		return false;
-
-	};
-
-	var _hex_to_rgba = function(hex) {
-
-		if (_color_cache[hex] !== undefined) {
-			return _color_cache[hex];
-		}
-
-		var rgba = [ 0, 0, 0, 255 ];
-
-		if (typeof hex === 'string') {
-
-			if (hex.length === 7) {
-
-				rgba[0] = parseInt(hex[1] + hex[2], 16);
-				rgba[1] = parseInt(hex[3] + hex[4], 16);
-				rgba[2] = parseInt(hex[5] + hex[6], 16);
-				rgba[3] = 255;
-
-			} else if (hex.length === 9) {
-
- 				rgba[0] = parseInt(hex[1] + hex[2], 16);
-				rgba[1] = parseInt(hex[3] + hex[4], 16);
-				rgba[2] = parseInt(hex[5] + hex[6], 16);
-				rgba[3] = parseInt(hex[7] + hex[8], 16);
-
-			}
-
-		}
-
-
-		var color = 'rgba(' + rgba[0] + ',' + rgba[1] + ',' + rgba[2] + ',' + (rgba[3] / 255) + ')';
-
-		_color_cache[hex] = color;
-
-
-		return color;
-
-	};
-
-	var _draw_ctx = function(x, y, value) {
-
-		var max_x = (this[0] || '').length;
-		var max_y = (this    || '').length;
+		let max_x = (this[0] || '').length;
+		let max_y = (this    || '').length;
 
 		if (x >= 0 && x < max_x && y >= 0 && y < max_y) {
 			this[y][x] = value;
@@ -90,13 +36,7 @@ lychee.define('Renderer').tags({
 
 	};
 
-
-
-	/*
-	 * STRUCTS
-	 */
-
-	var _buffer = function(width, height) {
+	const _Buffer = function(width, height) {
 
 		this.width  = typeof width === 'number'  ? width  : 1;
 		this.height = typeof height === 'number' ? height : 1;
@@ -109,17 +49,17 @@ lychee.define('Renderer').tags({
 
 	};
 
-	_buffer.prototype = {
+	_Buffer.prototype = {
 
 		clear: function() {
 
-			var ctx    = this.__ctx;
-			var width  = this.width;
-			var height = this.height;
+			let ctx    = this.__ctx;
+			let width  = this.width;
+			let height = this.height;
 
-			for (var y = 0; y < this.height; y++) {
+			for (let y = 0; y < this.height; y++) {
 
-				for (var x = 0; x < this.width; x++) {
+				for (let x = 0; x < this.width; x++) {
 					this.__ctx[y][x] = ' ';
 				}
 
@@ -136,10 +76,10 @@ lychee.define('Renderer').tags({
 			this.__ctx = [];
 
 
-			for (var y = 0; y < this.height; y++) {
+			for (let y = 0; y < this.height; y++) {
 
-				var line = new Array(this.width);
-				for (var x = 0; x < this.width; x++) {
+				let line = new Array(this.width);
+				for (let x = 0; x < this.width; x++) {
 					line[x] = ' ';
 				}
 
@@ -157,11 +97,9 @@ lychee.define('Renderer').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var _id = 0;
+	let Composite = function(data) {
 
-	var Composite = function(data) {
-
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.alpha      = 1.0;
@@ -204,7 +142,7 @@ lychee.define('Renderer').tags({
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.alpha !== 1.0)                           settings.alpha      = this.alpha;
@@ -245,7 +183,7 @@ lychee.define('Renderer').tags({
 
 		setBackground: function(color) {
 
-			color = _is_color(color) === true ? color : null;
+			color = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : null;
 
 
 			if (color !== null) {
@@ -309,7 +247,7 @@ lychee.define('Renderer').tags({
 
 		clear: function(buffer) {
 
-			buffer = buffer instanceof _buffer ? buffer : null;
+			buffer = buffer instanceof _Buffer ? buffer : null;
 
 
 			if (buffer !== null) {
@@ -328,28 +266,28 @@ lychee.define('Renderer').tags({
 
 		flush: function() {
 
-			var ctx = this.__ctx;
+			let ctx = this.__ctx;
 
-			var line = ctx[0] || '';
-			var info = this.width + 'x' + this.height;
+			let line = ctx[0] || '';
+			let info = this.width + 'x' + this.height;
 
-			for (var i = 0; i < info.length; i++) {
+			for (let i = 0; i < info.length; i++) {
 				line[i] = info[i];
 			}
 
-			for (var y = 0; y < this.height; y++) {
+			for (let y = 0; y < this.height; y++) {
 				_process.stdout.write(ctx[y].join('') + '\n');
 			}
 
 		},
 
 		createBuffer: function(width, height) {
-			return new _buffer(width, height);
+			return new _Buffer(width, height);
 		},
 
 		setBuffer: function(buffer) {
 
-			buffer = buffer instanceof _buffer ? buffer : null;
+			buffer = buffer instanceof _Buffer ? buffer : null;
 
 
 			if (buffer !== null) {
@@ -368,13 +306,13 @@ lychee.define('Renderer').tags({
 
 		drawArc: function(x, y, start, end, radius, color, background, lineWidth) {
 
-			color      = _is_color(color) === true ? color : '#000000';
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			var ctx = this.__ctx;
-			var pi2 = Math.PI * 2;
+			let ctx = this.__ctx;
+			let pi2 = Math.PI * 2;
 
 
 			// TODO: Implement arc-drawing ASCII art algorithm
@@ -390,14 +328,14 @@ lychee.define('Renderer').tags({
 			x2 = x2 | 0;
 			y2 = y2 | 0;
 
-			color      = _is_color(color) === true ? color : '#000000';
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			var ctx = this.__ctx;
-			var x = 0;
-			var y = 0;
+			let ctx = this.__ctx;
+			let x = 0;
+			let y = 0;
 
 
 			if (background === true) {
@@ -431,21 +369,21 @@ lychee.define('Renderer').tags({
 
 		drawBuffer: function(x1, y1, buffer) {
 
-			buffer = buffer instanceof _buffer ? buffer : null;
+			buffer = buffer instanceof _Buffer ? buffer : null;
 
 
 			if (buffer !== null) {
 
-				var ctx = this.__ctx;
+				let ctx = this.__ctx;
 
 
-				var x2 = Math.min(x1 + buffer.width,  this.__buffer.width);
-				var y2 = Math.min(y1 + buffer.height, this.__buffer.height);
+				let x2 = Math.min(x1 + buffer.width,  this.__buffer.width);
+				let y2 = Math.min(y1 + buffer.height, this.__buffer.height);
 
 
-				for (var y = y1; y < y2; y++) {
+				for (let y = y1; y < y2; y++) {
 
-					for (var x = x1; x < x2; x++) {
+					for (let x = x1; x < x2; x++) {
 						this.__ctx[y][x] = buffer.__ctx[y - y1][x - x1];
 					}
 
@@ -457,39 +395,25 @@ lychee.define('Renderer').tags({
 
 		drawCircle: function(x, y, radius, color, background, lineWidth) {
 
-			color      = _is_color(color) === true ? color : '#000000';
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			var ctx = this.__ctx;
+			let ctx = this.__ctx;
 
 
 			// TODO: Implement circle-drawing ASCII art algorithm
 
 		},
 
-		drawLight: function(x, y, radius, color, background, lineWidth) {
-
-			color      = _is_color(color) ? _hex_to_rgba(color) : 'rgba(255,255,255,1.0)';
-			background = background === true;
-			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
-
-
-			var ctx = this.__ctx;
-
-
-			// TODO: Implement light-drawing ASCII art algorithm
-
-		},
-
 		drawLine: function(x1, y1, x2, y2, color, lineWidth) {
 
-			color     = _is_color(color) === true ? color : '#000000';
+			color     = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			lineWidth = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			var ctx = this.__ctx;
+			let ctx = this.__ctx;
 
 
 			// TODO: Implement line-drawing ASCII art algorithm
@@ -498,12 +422,12 @@ lychee.define('Renderer').tags({
 
 		drawTriangle: function(x1, y1, x2, y2, x3, y3, color, background, lineWidth) {
 
-			color      = _is_color(color) === true ? color : '#000000';
+			color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 			background = background === true;
 			lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-			var ctx = this.__ctx;
+			let ctx = this.__ctx;
 
 
 			// TODO: Implement triangle-drawing ASCII art algorithm
@@ -513,14 +437,14 @@ lychee.define('Renderer').tags({
 		// points, x1, y1, [ ... x(a), y(a) ... ], [ color, background, lineWidth ]
 		drawPolygon: function(points, x1, y1) {
 
-			var l = arguments.length;
+			let l = arguments.length;
 
 			if (points > 3) {
 
-				var optargs = l - (points * 2) - 1;
+				let optargs = l - (points * 2) - 1;
 
 
-				var color, background, lineWidth;
+				let color, background, lineWidth;
 
 				if (optargs === 3) {
 
@@ -540,12 +464,12 @@ lychee.define('Renderer').tags({
 				}
 
 
-				color      = _is_color(color) === true ? color : '#000000';
+				color      = /(#[AaBbCcDdEeFf0-9]{6})/g.test(color) ? color : '#000000';
 				background = background === true;
 				lineWidth  = typeof lineWidth === 'number' ? lineWidth : 1;
 
 
-				var ctx = this.__ctx;
+				let ctx = this.__ctx;
 
 
 				// TODO: Implement polygon-drawing ASCII art algorithm
@@ -582,7 +506,7 @@ lychee.define('Renderer').tags({
 
 				if (center === true) {
 
-					var dim = font.measure(text);
+					let dim = font.measure(text);
 
 					x1 -= dim.realwidth / 2;
 					y1 -= (dim.realheight - font.baseline) / 2;
@@ -597,18 +521,18 @@ lychee.define('Renderer').tags({
 				y1 = y1 | 0;
 
 
-				var ctx = this.__ctx;
+				let ctx = this.__ctx;
 
-				var margin  = 0;
-				var texture = font.texture;
+				let margin  = 0;
+				let texture = font.texture;
 				if (texture !== null && texture.buffer !== null) {
 
-					for (var t = 0, l = text.length; t < l; t++) {
+					for (let t = 0, l = text.length; t < l; t++) {
 
-						var chr = font.measure(text[t]);
+						let chr = font.measure(text[t]);
 
-						var x = x1 + margin - font.spacing;
-						var y = y1;
+						let x = x1 + margin - font.spacing;
+						let y = y1;
 
 
 						_draw_ctx.call(ctx, x, y, text[t]);

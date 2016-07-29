@@ -1,7 +1,13 @@
 
 lychee.define('lychee.effect.Width').exports(function(lychee, global, attachments) {
 
-	var Composite = function(settings) {
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -14,10 +20,10 @@ lychee.define('lychee.effect.Width').exports(function(lychee, global, attachment
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
-		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
-		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
-		var width    = typeof settings.width === 'number'       ? (settings.width | 0)    : null;
+		let type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
+		let delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : null;
+		let duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : null;
+		let width    = typeof settings.width === 'number'           ? (settings.width | 0)    : null;
 
 		if (type !== null) {
 			this.type = type;
@@ -57,13 +63,13 @@ lychee.define('lychee.effect.Width').exports(function(lychee, global, attachment
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                 settings.delay    = this.delay;
-			if (this.duration !== 250)            settings.duration = this.duration;
-			if (this.width !== 0)                 settings.width    = this.width;
+			if (this.delay !== 0)                     settings.delay    = this.delay;
+			if (this.duration !== 250)                settings.duration = this.duration;
+			if (this.width !== 0)                     settings.width    = this.width;
 
 
 			return {
@@ -85,24 +91,24 @@ lychee.define('lychee.effect.Width').exports(function(lychee, global, attachment
 			}
 
 
-			var t = (clock - this.__start) / this.duration;
+			let t = (clock - this.__start) / this.duration;
 			if (t < 0) {
 				return true;
 			}
 
 
-			var origin = this.__origin;
-			var width  = this.width;
+			let origin = this.__origin;
+			let width  = this.width;
 
-			var w      = origin;
+			let w      = origin;
 
 			if (t <= 1) {
 
-				var f  = 0;
-				var dw = width - origin;
+				let f  = 0;
+				let dw = width - origin;
 
 
-				var type = this.type;
+				let type = this.type;
 				if (type === Composite.TYPE.linear) {
 
 					w += t * dw;
@@ -121,7 +127,7 @@ lychee.define('lychee.effect.Width').exports(function(lychee, global, attachment
 
 				} else if (type === Composite.TYPE.bounceeasein) {
 
-					var k = 1 - t;
+					let k = 1 - t;
 
 					if ((k /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(k, 2) );

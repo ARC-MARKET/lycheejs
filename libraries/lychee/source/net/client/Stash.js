@@ -3,13 +3,17 @@ lychee.define('lychee.net.client.Stash').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Service = lychee.import('lychee.net.Service');
+
+
+
 	/*
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(client) {
+	let Composite = function(client) {
 
-		lychee.net.Service.call(this, 'stash', client, lychee.net.Service.TYPE.client);
+		_Service.call(this, 'stash', client, _Service.TYPE.client);
 
 
 
@@ -19,10 +23,10 @@ lychee.define('lychee.net.client.Stash').includes([
 
 		this.bind('sync', function(data) {
 
-			var main = global.MAIN || null;
+			let main = global.MAIN || null;
 			if (main !== null) {
 
-				var stash = main.stash || null;
+				let stash = main.stash || null;
 				if (stash !== null) {
 
 					stash.deserialize({
@@ -43,6 +47,25 @@ lychee.define('lychee.net.client.Stash').includes([
 	Composite.prototype = {
 
 		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.client.Stash';
+			data['arguments']   = [ data['arguments'][1] ];
+
+
+			return data;
+
+		},
+
+
+
+		/*
 		 * CUSTOM API
 		 */
 
@@ -53,9 +76,9 @@ lychee.define('lychee.net.client.Stash').includes([
 
 			if (assets !== null && this.tunnel !== null) {
 
-				var data = {};
+				let data = {};
 
-				for (var id in assets) {
+				for (let id in assets) {
 					data[id] = lychee.serialize(assets[id]);
 				}
 

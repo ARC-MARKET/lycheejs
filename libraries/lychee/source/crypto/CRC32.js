@@ -1,15 +1,11 @@
 
 lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachments) {
 
-	/*
-	 * FEATURE DETECTION
-	 */
+	const _CRC_TABLE = (function(table) {
 
-	var _CRC_TABLE = (function(table) {
+        let value = 0;
 
-        var value = 0;
-
-		for (var t = 0, tl = table.length; t < tl; t++) {
+		for (let t = 0, tl = table.length; t < tl; t++) {
 
 			value = t;
 
@@ -36,11 +32,11 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 	 * HELPERS
 	 */
 
-	var _bytes_to_value = function(buffer) {
+	const _bytes_to_value = function(buffer) {
 
-		var value = -1;
+		let value = -1;
 
-		for (var b = 0; b < buffer.length; b++) {
+		for (let b = 0; b < buffer.length; b++) {
 			value = (value >>> 8) ^ _CRC_TABLE[(value ^ buffer[b]) & 0xff];
 		}
 
@@ -54,7 +50,7 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.__crc = 0;
 
@@ -62,6 +58,27 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			return {
+				'constructor': 'lychee.crypto.CRC32',
+				'arguments':   []
+			};
+
+		},
+
+
+
+		/*
+		 * CRYPTO API
+		 */
 
 		update: function(data) {
 
@@ -74,8 +91,8 @@ lychee.define('lychee.crypto.CRC32').exports(function(lychee, global, attachment
 
 		digest: function() {
 
-			var crc  = this.__crc;
-			var hash = (this.__crc).toString(16);
+			let crc  = this.__crc;
+			let hash = (this.__crc).toString(16);
 
 			if (hash.length % 2 === 1) {
 				hash = '0' + hash;

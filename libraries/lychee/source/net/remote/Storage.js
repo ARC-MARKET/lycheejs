@@ -3,13 +3,17 @@ lychee.define('lychee.net.remote.Storage').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Service = lychee.import('lychee.net.Service');
+
+
+
 	/*
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(remote) {
+	let Composite = function(remote) {
 
-		lychee.net.Service.call(this, 'storage', remote, lychee.net.Service.TYPE.remote);
+		_Service.call(this, 'storage', remote, _Service.TYPE.remote);
 
 
 
@@ -19,10 +23,10 @@ lychee.define('lychee.net.remote.Storage').includes([
 
 		this.bind('sync', function(data) {
 
-			var main = global.MAIN || null;
+			let main = global.MAIN || null;
 			if (main !== null) {
 
-				var storage = main.storage || null;
+				let storage = main.storage || null;
 				if (storage !== null) {
 
 					storage.deserialize({
@@ -41,6 +45,25 @@ lychee.define('lychee.net.remote.Storage').includes([
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.remote.Storage';
+			data['arguments']   = [];
+
+
+			return data;
+
+		},
+
+
 
 		/*
 		 * CUSTOM API

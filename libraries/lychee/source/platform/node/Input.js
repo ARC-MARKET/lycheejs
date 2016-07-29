@@ -18,17 +18,21 @@ lychee.define('Input').tags({
 
 }).exports(function(lychee, global, attachments) {
 
+	const _process   = global.process;
+	const _Emitter   = lychee.import('lychee.event.Emitter');
+	const _INSTANCES = [];
+
+
+
 	/*
 	 * EVENTS
 	 */
 
-	var _instances = [];
+	const _listeners = {
 
-	var _listeners = {
+		keypress: function(key) {
 
-		keyboard: function(key) {
-
-			// This is apparently a hack to have a TTY conform behaviour
+			// TTY conform behaviour
 			if (key.ctrl === true && key.name === 'c') {
 
 				key.name  = 'escape';
@@ -39,8 +43,8 @@ lychee.define('Input').tags({
 			}
 
 
-			for (var i = 0, l = _instances.length; i < l; i++) {
-				_process_key.call(_instances[i], key.name, key.ctrl, key.meta, key.shift);
+			for (let i = 0, l = _INSTANCES.length; i < l; i++) {
+				_process_key.call(_INSTANCES[i], key.name, key.ctrl, key.meta, key.shift);
 			}
 
 		}
@@ -55,11 +59,24 @@ lychee.define('Input').tags({
 
 	(function() {
 
-		process.stdin.on('keypress', _listeners.keyboard);
+		let keypress = true;
+		if (keypress === true) {
+			_process.stdin.on('keypress', _listeners.keypress);
+		}
 
 
 		if (lychee.debug === true) {
-			console.info('lychee.Input: Supported methods are Keyboard');
+
+			let methods = [];
+
+			if (keypress) methods.push('Keyboard');
+
+			if (methods.length === 0) {
+				console.error('lychee.Input: Supported methods are NONE');
+			} else {
+				console.info('lychee.Input: Supported methods are ' + methods.join(', '));
+			}
+
 		}
 
 	})();
@@ -70,15 +87,13 @@ lychee.define('Input').tags({
 	 * HELPERS
 	 */
 
-	// TODO: Modifier support is missing, I have no idea how to work around the TTY behaviour.
-
-	var _process_key = function(key, ctrl, alt, shift) {
+	const _process_key = function(key, ctrl, alt, shift) {
 
 		if (this.key === false) return false;
 
 
 		// 2. Only fire after the enforced delay
-		var delta = Date.now() - this.__clock.key;
+		let delta = Date.now() - this.__clock.key;
 		if (delta < this.delay) {
 			return;
 		}
@@ -94,7 +109,7 @@ lychee.define('Input').tags({
 		}
 
 
-		var name = '';
+		let name = '';
 
 		if (ctrl  === true) name += 'ctrl-';
 		if (alt   === true) name += 'alt-';
@@ -104,7 +119,7 @@ lychee.define('Input').tags({
 
 
 
-		var handled = false;
+		let handled = false;
 
 		if (key !== null) {
 
@@ -129,9 +144,9 @@ lychee.define('Input').tags({
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.delay       = 0;
@@ -154,9 +169,9 @@ lychee.define('Input').tags({
 		this.setSwipe(settings.swipe);
 
 
-		lychee.event.Emitter.call(this);
+		_Emitter.call(this);
 
-		_instances.push(this);
+		_INSTANCES.push(this);
 
 		settings = null;
 
@@ -167,12 +182,12 @@ lychee.define('Input').tags({
 
 		destroy: function() {
 
-			var found = false;
+			let found = false;
 
-			for (var i = 0, il = _instances.length; i < il; i++) {
+			for (let i = 0, il = _INSTANCES.length; i < il; i++) {
 
-				if (_instances[i] === this) {
-					_instances.splice(i, 1);
+				if (_INSTANCES[i] === this) {
+					_INSTANCES.splice(i, 1);
 					found = true;
 					il--;
 					i--;
@@ -197,10 +212,10 @@ lychee.define('Input').tags({
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.Input';
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.delay !== 0)           settings.delay       = this.delay;

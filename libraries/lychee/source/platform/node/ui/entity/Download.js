@@ -1,15 +1,21 @@
 
 lychee.define('lychee.ui.entity.Download').tags({
-	platform: 'html'
+	platform: 'node'
 }).includes([
 	'lychee.ui.entity.Button'
 ]).supports(function(lychee, global) {
 
 	if (
-		typeof global.document !== 'undefined'
-		&& typeof global.document.createElement === 'function'
+		typeof global.require === 'function'
+		&& typeof global.process !== 'undefined'
+		&& typeof global.process.env === 'object'
 	) {
-		return true;
+
+		let fs = global.require('fs');
+		if (typeof fs.readFileSync === 'function' && typeof fs.writeFileSync === 'function') {
+			return true;
+		}
+
 	}
 
 
@@ -18,6 +24,20 @@ lychee.define('lychee.ui.entity.Download').tags({
 }).exports(function(lychee, global, attachments) {
 
 	const _Button = lychee.import('lychee.ui.entity.Button');
+	const _HOME   = (function(env) {
+
+		let home    = env.HOME || null;
+		let appdata = env.APPDATA || null;
+
+		if (home !== null) {
+			return home;
+		} else if (appdata !== null) {
+			return appdata;
+		} else {
+			return '/tmp';
+		}
+
+	})(global.process.env);
 
 
 
@@ -26,18 +46,18 @@ lychee.define('lychee.ui.entity.Download').tags({
 	 */
 
 	const _MIME_TYPE = {
-		'Config':  { name: 'Entity', ext: 'json',    mime: 'application/json'         },
-		'Font':    { name: 'Entity', ext: 'fnt',     mime: 'application/json'         },
+		'Config':  { name: 'Entity', ext: 'json',    enc: 'utf8'   },
+		'Font':    { name: 'Entity', ext: 'fnt',     enc: 'utf8'   },
 		'Music':   {
-			'mp3': { name: 'Entity', ext: 'msc.mp3', mime: 'audio/mp3'                },
-			'ogg': { name: 'Entity', ext: 'msc.ogg', mime: 'application/ogg'          },
+			'mp3': { name: 'Entity', ext: 'msc.mp3', enc: 'binary' },
+			'ogg': { name: 'Entity', ext: 'msc.ogg', enc: 'binary' },
 		},
 		'Sound':   {
-			'mp3': { name: 'Entity', ext: 'snd.mp3', mime: 'audio/mp3'                },
-			'ogg': { name: 'Entity', ext: 'snd.ogg', mime: 'application/ogg'          },
+			'mp3': { name: 'Entity', ext: 'snd.mp3', enc: 'binary' },
+			'ogg': { name: 'Entity', ext: 'snd.ogg', enc: 'binary' },
 		},
-		'Texture': { name: 'Entity', ext: 'png',     mime: 'image/png'                },
-		'Stuff':   { name: 'Entity', ext: 'stuff',   mime: 'application/octet-stream' }
+		'Texture': { name: 'Entity', ext: 'png',     enc: 'binary' },
+		'Stuff':   { name: 'Entity', ext: 'stuff',   enc: 'utf8'   }
 	};
 
 	const _download = function(asset) {
@@ -54,27 +74,23 @@ lychee.define('lychee.ui.entity.Download').tags({
 
 				for (let ext in mime) {
 
-					let element = global.document.createElement('a');
+					let blob = new Buffer(data.blob.buffer[ext], 'base64');
+					let path = _HOME + '/' + name + '.' + mime[ext].ext;
 
-					element.download = name + '.' + ext;
-					element.href     = data.blob.buffer[ext];
-
-					element.click();
+					_fs.writeFileSync(path, buffer, mime[ext].enc);
 
 				}
 
 			} else {
 
+				let blob = new Buffer(data.blob.buffer, 'base64');
+				let path = _HOME + '/' + name + '.' + mime.ext;
+
 				if (url.substr(0, 5) === 'data:') {
-					name = mime.name + '.' + mime.ext;
+					path = _HOME + '/' + mime.name + '.' + mime.ext;
 				}
 
-				let element = global.document.createElement('a');
-
-				element.download = name;
-				element.href     = data.blob.buffer;
-
-				element.click();
+				_fs.writeFileSync(path, buffer, mime.enc);
 
 			}
 

@@ -536,6 +536,9 @@
 					},
 					"ui": {
 						"entity": {
+							"Download": [
+								"js"
+							],
 							"Helper": [
 								"js",
 								"json",

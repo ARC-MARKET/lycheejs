@@ -1,11 +1,14 @@
 
 lychee.define('lychee.ui.element.Search').requires([
-	'lychee.ui.entity.Button',
 	'lychee.ui.entity.Input',
 	'lychee.ui.entity.Select'
 ]).includes([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
+
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Input   = lychee.import('lychee.ui.entity.Input');
+	const _Select  = lychee.import('lychee.ui.entity.Select');
 
 
 
@@ -13,9 +16,9 @@ lychee.define('lychee.ui.element.Search').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.data     = [];
@@ -34,7 +37,7 @@ lychee.define('lychee.ui.element.Search').requires([
 		settings.options = [ 'Open', 'Clear' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -42,14 +45,14 @@ lychee.define('lychee.ui.element.Search').requires([
 		 * INITIALIZATION
 		 */
 
-		this.__search = new lychee.ui.entity.Input({
-			type:  lychee.ui.entity.Input.TYPE.text,
+		this.__search = new _Input({
+			type:  _Input.TYPE.text,
 			value: ''
 		});
 
 		this.__search.bind('change', function(value) {
 
-			var filtered = this.data.filter(function(other) {
+			let filtered = this.data.filter(function(other) {
 				return other.indexOf(value) !== -1;
 			});
 
@@ -64,7 +67,7 @@ lychee.define('lychee.ui.element.Search').requires([
 
 		}, this);
 
-		this.__select = new lychee.ui.entity.Select({
+		this.__select = new _Select({
 			options: this.data,
 			value:   this.data[0]
 		});
@@ -97,7 +100,7 @@ lychee.define('lychee.ui.element.Search').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Search';
 
 
@@ -123,7 +126,7 @@ lychee.define('lychee.ui.element.Search').requires([
 				}).sort();
 
 
-				var select = this.__select;
+				let select = this.__select;
 				if (select !== null) {
 					select.setOptions(this.data);
 				}

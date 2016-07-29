@@ -18,9 +18,9 @@ lychee.define('lychee.ui.State').requires([
 	'lychee.app.State'
 ]).exports(function(lychee, global, attachments) {
 
-	var _BLOB      = attachments["json"].buffer;
-	var _MENU      = null;
-	var _instances = [];
+	const _BLOB      = attachments["json"].buffer;
+	const _INSTANCES = [];
+	let   _MENU      = null;
 
 
 
@@ -28,9 +28,9 @@ lychee.define('lychee.ui.State').requires([
 	 * HELPERS
 	 */
 
-	var _on_escape = function() {
+	const _on_escape = function() {
 
-		var menu = this.queryLayer('ui', 'menu');
+		let menu = this.queryLayer('ui', 'menu');
 		if (menu !== null) {
 
 			if (menu.state === 'active') {
@@ -57,11 +57,11 @@ lychee.define('lychee.ui.State').requires([
 
 	};
 
-	var _on_fade = function(id) {
+	const _on_fade = function(id) {
 
-		var fade_offset = -3/2 * this.getLayer('ui').height;
-		var entity      = this.queryLayer('ui', id);
-		var layers      = this.getLayer('ui').entities.filter(function(layer) {
+		let fade_offset = -3/2 * this.getLayer('ui').height;
+		let entity      = this.queryLayer('ui', id);
+		let layers      = this.getLayer('ui').entities.filter(function(layer) {
 			return lychee.interfaceof(lychee.ui.Menu, layer) === false;
 		});
 
@@ -135,15 +135,15 @@ lychee.define('lychee.ui.State').requires([
 
 	};
 
-	var _on_relayout = function() {
+	const _on_relayout = function() {
 
-		var viewport = this.viewport;
+		let viewport = this.viewport;
 		if (viewport !== null) {
 
-			var entity = null;
-			var width  = viewport.width;
-			var height = viewport.height;
-			var menu   = this.queryLayer('ui', 'menu');
+			let entity = null;
+			let width  = viewport.width;
+			let height = viewport.height;
+			let menu   = this.queryLayer('ui', 'menu');
 			if (menu !== null) {
 
 				entity = this.getLayer('ui');
@@ -151,9 +151,9 @@ lychee.define('lychee.ui.State').requires([
 				entity.height = height;
 
 
-				for (var e = 0, el = entity.entities.length; e < el; e++) {
+				for (let e = 0, el = entity.entities.length; e < el; e++) {
 
-					var blueprint = entity.entities[e];
+					let blueprint = entity.entities[e];
 					if (blueprint !== menu) {
 
 						blueprint.width      = width - menu.width;
@@ -177,7 +177,7 @@ lychee.define('lychee.ui.State').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(main) {
+	let Composite = function(main) {
 
 		lychee.app.State.call(this, main);
 
@@ -185,7 +185,7 @@ lychee.define('lychee.ui.State').requires([
 		this.__layers.ui = new lychee.ui.Layer();
 
 
-		_instances.push(this);
+		_INSTANCES.push(this);
 
 	};
 
@@ -198,7 +198,7 @@ lychee.define('lychee.ui.State').requires([
 
 		serialize: function() {
 
-			var data = lychee.app.State.prototype.serialize.call(this);
+			let data = lychee.app.State.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.State';
 
 
@@ -208,26 +208,26 @@ lychee.define('lychee.ui.State').requires([
 
 		deserialize: function(blob) {
 
-			if (_instances[0] === this) {
+			if (_INSTANCES[0] === this) {
 
 				lychee.app.State.prototype.deserialize.call(this, _BLOB);
 				lychee.app.State.prototype.deserialize.call(this, blob);
 
 
-				var menu = this.queryLayer('ui', 'menu');
-				var main = this.main;
+				let menu = this.queryLayer('ui', 'menu');
+				let main = this.main;
 				if (main !== null && menu !== null) {
 
 					_MENU = menu;
 
 					_MENU.bind('change', function(value) {
 
-						var val = value.toLowerCase();
+						let val = value.toLowerCase();
 
-						for (var sid in this.__states) {
+						for (let sid in this.__states) {
 
-							var state = this.__states[sid];
-							var layer = state.queryLayer('ui', val);
+							let state = this.__states[sid];
+							let layer = state.queryLayer('ui', val);
 
 							if (layer !== null) {
 
@@ -244,7 +244,7 @@ lychee.define('lychee.ui.State').requires([
 					}, this.main);
 
 
-					var viewport = this.viewport;
+					let viewport = this.viewport;
 					if (viewport !== null) {
 
 						viewport.relay('reshape', this.queryLayer('bg', 'background'));
@@ -263,7 +263,7 @@ lychee.define('lychee.ui.State').requires([
 				lychee.app.State.prototype.deserialize.call(this, blob);
 
 
-				var menu = this.queryLayer('ui', 'menu');
+				let menu = this.queryLayer('ui', 'menu');
 				if (menu !== null && menu !== _MENU) {
 
 					this.getLayer('ui').removeEntity(menu);
@@ -277,18 +277,20 @@ lychee.define('lychee.ui.State').requires([
 				}
 
 
-				var main = this.main;
+				let main = this.main;
 				if (main !== null && menu !== null) {
 
-					var options = [];
-					var ui, bid, entity;
+					let options = [];
+					let ui      = null;
+					let bid     = null;
+					let entity  = null;
 
 
-					for (var sid in main.__states) {
+					for (let sid in main.__states) {
 
-						var state = main.__states[sid];
+						let state = main.__states[sid];
 
-						if (_instances.indexOf(state) !== -1) {
+						if (_INSTANCES.indexOf(state) !== -1) {
 
 							ui = state.getLayer('ui');
 
@@ -332,7 +334,7 @@ lychee.define('lychee.ui.State').requires([
 					}
 
 
-					var index = options.indexOf('Settings');
+					let index = options.indexOf('Settings');
 					if (index !== -1) {
 						options.splice(index, 1);
 						options.push('Settings');
@@ -356,7 +358,7 @@ lychee.define('lychee.ui.State').requires([
 			}
 
 
-			var viewport = this.viewport;
+			let viewport = this.viewport;
 			if (viewport !== null) {
 
 				viewport.bind('reshape', function(orientation, rotation, width, height) {
@@ -381,14 +383,14 @@ lychee.define('lychee.ui.State').requires([
 			_on_fade.call(this, data);
 
 
-			var focus = this.queryLayer('ui', data);
+			let focus = this.queryLayer('ui', data);
 			if (focus !== null && focus !== _MENU) {
 				focus.trigger('focus');
 				this.__focus = focus;
 			}
 
 
-			var input = this.input;
+			let input = this.input;
 			if (input !== null) {
 				input.bind('escape', _on_escape, this);
 			}
@@ -405,13 +407,13 @@ lychee.define('lychee.ui.State').requires([
 			_on_fade.call(this, null);
 
 
-			var input = this.input;
+			let input = this.input;
 			if (input !== null) {
 				input.unbind('escape', _on_escape, this);
 			}
 
 
-			var focus = this.__focus;
+			let focus = this.__focus;
 			if (focus !== null && focus !== _MENU) {
 				focus.trigger('blur');
 				this.__focus = null;

@@ -3,7 +3,8 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 	'lychee.ui.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _FONT = attachments["fnt"];
+	const _Entity = lychee.import('lychee.ui.Entity');
+	const _FONT   = attachments["fnt"];
 
 
 
@@ -11,9 +12,9 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 	 * HELPERS
 	 */
 
-	var _render_buffer = function(renderer) {
+	const _render_buffer = function(renderer) {
 
-		var font = this.font;
+		let font = this.font;
 		if (font !== null && font.texture !== null) {
 
 			if (this.__buffer !== null) {
@@ -28,17 +29,17 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			renderer.setAlpha(1.0);
 
 
-			var lines  = this.__lines;
-			var buffer = this.__buffer;
-			var cur    = this.__cursor.map;
-			var lh     = font.lineheight;
-			var ll     = lines.length;
+			let lines  = this.__lines;
+			let buffer = this.__buffer;
+			let cur    = this.__cursor.map;
+			let lh     = font.lineheight;
+			let ll     = lines.length;
 			if (ll > 0) {
 
-				var dim_x = font.measure(lines[ll - 1]).width;
-				var dim_y = ll * lh;
-				var off_x = 0;
-				var off_y = 0;
+				let dim_x = font.measure(lines[ll - 1]).width;
+				let dim_y = ll * lh;
+				let off_x = 0;
+				let off_y = 0;
 
 
 				if (dim_x > buffer.width)  {
@@ -57,7 +58,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 				}
 
 
-				for (var l = 0; l < ll; l++) {
+				for (let l = 0; l < ll; l++) {
 
 					renderer.drawText(
 						off_x,
@@ -85,9 +86,9 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -127,10 +128,10 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		settings.width  = typeof settings.width  === 'number' ? settings.width  : 256;
 		settings.height = typeof settings.height === 'number' ? settings.height : 128;
-		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
+		settings.shape  = _Entity.SHAPE.rectangle;
 
 
-		lychee.ui.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 
 
@@ -146,8 +147,8 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		this.bind('key', function(key, name, delta) {
 
-			var line      = this.__lines[this.__lines.length - 1];
-			var character = key;
+			let line      = this.__lines[this.__lines.length - 1];
+			let character = key;
 
 			if (key === 'enter') {
 
@@ -165,7 +166,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 				}
 
 
-				var ll = this.__lines.length;
+				let ll = this.__lines.length;
 
 				if (character.length === 1) {
 
@@ -222,7 +223,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		deserialize: function(blob) {
 
-			var font = lychee.deserialize(blob.font);
+			let font = lychee.deserialize(blob.font);
 			if (font !== null) {
 				this.setFont(font);
 			}
@@ -231,11 +232,11 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Textarea';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.value !== '') settings.value = this.value;
@@ -253,14 +254,14 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		update: function(clock, delta) {
 
-			var pulse = this.__pulse;
+			let pulse = this.__pulse;
 			if (pulse.active === true) {
 
 				if (pulse.start === null) {
 					pulse.start = clock;
 				}
 
-				var pt = (clock - pulse.start) / pulse.duration;
+				let pt = (clock - pulse.start) / pulse.duration;
 				if (pt <= 1) {
 					pulse.alpha = (1 - pt);
 				} else {
@@ -271,7 +272,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			}
 
 
-			var cursor = this.__cursor;
+			let cursor = this.__cursor;
 			if (cursor.active === true) {
 
 				if (cursor.start === null) {
@@ -279,7 +280,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 				}
 
 
-				var ct = (clock - cursor.start) / cursor.duration;
+				let ct = (clock - cursor.start) / cursor.duration;
 				if (ct <= 1) {
 					cursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;
 				} else {
@@ -290,7 +291,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			}
 
 
-			lychee.ui.Entity.prototype.update.call(this, clock, delta);
+			_Entity.prototype.update.call(this, clock, delta);
 
 		},
 
@@ -299,12 +300,12 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
-			var hwidth   = (this.width  - 2) / 2;
-			var hheight  = (this.height - 2) / 2;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
+			let hwidth   = (this.width  - 2) / 2;
+			let hheight  = (this.height - 2) / 2;
 
 
 			if (alpha !== 1) {
@@ -331,12 +332,12 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			}
 
 
-			var cursor = this.__cursor;
+			let cursor = this.__cursor;
 			if (cursor.active === true) {
 
-				var map = cursor.map;
-				var cx1 = x - hwidth  + map.x + 8;
-				var cy1 = y - hheight + map.y + 8;
+				let map = cursor.map;
+				let cx1 = x - hwidth  + map.x + 8;
+				let cy1 = y - hheight + map.y + 8;
 
 
 				renderer.setAlpha(cursor.alpha);
@@ -355,7 +356,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 			}
 
 
-			var pulse = this.__pulse;
+			let pulse = this.__pulse;
 			if (pulse.active === true) {
 
 				renderer.setAlpha(pulse.alpha);
@@ -410,7 +411,7 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 				this.font = font;
 
 
-				var map = this.__cursor.map;
+				let map = this.__cursor.map;
 
 				map.w = font.measure('_').realwidth;
 				map.h = font.measure('_').realheight;
@@ -427,11 +428,11 @@ lychee.define('lychee.ui.entity.Textarea').includes([
 
 		setState: function(id) {
 
-			var result = lychee.ui.Entity.prototype.setState.call(this, id);
+			let result = _Entity.prototype.setState.call(this, id);
 			if (result === true) {
 
-				var cursor = this.__cursor;
-				var pulse  = this.__pulse;
+				let cursor = this.__cursor;
+				let pulse  = this.__pulse;
 
 
 				if (id === 'active') {

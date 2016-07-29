@@ -5,14 +5,19 @@ lychee.define('lychee.ui.entity.Texture').requires([
 	'lychee.ui.Sprite'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Entity = lychee.import('lychee.ui.Entity');
-	var _Upload = lychee.import('lychee.ui.entity.Upload');
-	var _Sprite = lychee.import('lychee.ui.Sprite');
+	const _Entity = lychee.import('lychee.ui.Entity');
+	const _Upload = lychee.import('lychee.ui.entity.Upload');
+	const _Sprite = lychee.import('lychee.ui.Sprite');
 
 
-	var Composite = function() {
 
-		var settings = Object.assign({}, data);
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function() {
+
+		let settings = Object.assign({}, data);
 
 
 		this.font    = null;
@@ -57,9 +62,9 @@ lychee.define('lychee.ui.entity.Texture').requires([
 
 		this.bind('relayout', function() {
 
-			var sprite  = this.__sprite;
-			var upload  = this.__upload;
-			var dim     = (Math.min(this.width, this.height) / 32 | 0) * 32;
+			let sprite  = this.__sprite;
+			let upload  = this.__upload;
+			let dim     = (Math.min(this.width, this.height) / 32 | 0) * 32;
 
 
 			upload.position.x =  0;
@@ -84,12 +89,12 @@ lychee.define('lychee.ui.entity.Texture').requires([
 
 		deserialize: function(blob) {
 
-			var font = lychee.deserialize(blob.font);
+			let font = lychee.deserialize(blob.font);
 			if (font !== null) {
 				this.setFont(font);
 			}
 
-			var texture = lychee.deserialize(blob.texture);
+			let texture = lychee.deserialize(blob.texture);
 			if (texture !== null) {
 				this.setTexture(texture);
 			}
@@ -98,11 +103,11 @@ lychee.define('lychee.ui.entity.Texture').requires([
 
 		serialize: function() {
 
-			var data = _Entity.prototype.serialize.call(this);
+			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Button';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.label !== null) settings.label = this.label;
@@ -134,10 +139,10 @@ lychee.define('lychee.ui.entity.Texture').requires([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
 
 
 			_Entity.prototype.render.call(this, renderer, offsetX, offsetY);

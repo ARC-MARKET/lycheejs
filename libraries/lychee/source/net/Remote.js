@@ -7,10 +7,10 @@ lychee.define('lychee.net.Remote').requires([
 	'lychee.net.Tunnel'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Debugger = lychee.import('lychee.net.remote.Debugger');
-	var _Stash    = lychee.import('lychee.net.remote.Stash');
-	var _Storage  = lychee.import('lychee.net.remote.Storage');
-	var _Tunnel   = lychee.import('lychee.net.Tunnel');
+	const _Debugger = lychee.import('lychee.net.remote.Debugger');
+	const _Stash    = lychee.import('lychee.net.remote.Stash');
+	const _Storage  = lychee.import('lychee.net.remote.Storage');
+	const _Tunnel   = lychee.import('lychee.net.Tunnel');
 
 
 
@@ -18,9 +18,9 @@ lychee.define('lychee.net.Remote').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		_Tunnel.call(this, settings);
@@ -62,7 +62,7 @@ lychee.define('lychee.net.Remote').requires([
 
 		serialize: function() {
 
-			var data = _Tunnel.prototype.serialize.call(this);
+			let data = _Tunnel.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.net.Remote';
 
 

@@ -3,7 +3,8 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
-	var _tunnels = [];
+	const _Service = lychee.import('lychee.net.Service');
+	const _TUNNELS = [];
 
 
 
@@ -11,16 +12,16 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	 * HELPERS
 	 */
 
-	var _bind_console = function(event) {
+	const _bind_console = function(event) {
 
 		this.bind(event, function(data) {
 
 			if (this.tunnel !== null) {
 
-				var receiver = data.tid || null;
+				let receiver = data.tid || null;
 				if (receiver !== null) {
 
-					var tunnel = _tunnels.find(function(client) {
+					let tunnel = _TUNNELS.find(function(client) {
 						return (client.host + ':' + client.port) === receiver;
 					}) || null;
 
@@ -41,12 +42,12 @@ lychee.define('lychee.net.remote.Debugger').includes([
 
 	};
 
-	var _bind_relay = function(event) {
+	const _bind_relay = function(event) {
 
 		this.bind(event, function(data) {
 
-			var sender   = null;
-			var receiver = data.tid || null;
+			let sender   = null;
+			let receiver = data.tid || null;
 
 			if (this.tunnel !== null) {
 				sender = this.tunnel.host + ':' + this.tunnel.port;
@@ -55,7 +56,7 @@ lychee.define('lychee.net.remote.Debugger').includes([
 
 			if (sender !== null && receiver !== null) {
 
-				var tunnel = _tunnels.find(function(client) {
+				let tunnel = _TUNNELS.find(function(client) {
 					return (client.host + ':' + client.port) === receiver;
 				}) || null;
 
@@ -82,9 +83,9 @@ lychee.define('lychee.net.remote.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(remote) {
+	let Composite = function(remote) {
 
-		lychee.net.Service.call(this, 'debugger', remote, lychee.net.Service.TYPE.remote);
+		_Service.call(this, 'debugger', remote, _Service.TYPE.remote);
 
 
 
@@ -94,15 +95,15 @@ lychee.define('lychee.net.remote.Debugger').includes([
 
 		this.bind('plug', function() {
 
-			_tunnels.push(this.tunnel);
+			_TUNNELS.push(this.tunnel);
 
 		}, this);
 
 		this.bind('unplug', function() {
 
-			var index = _tunnels.indexOf(this.tunnel);
+			let index = _TUNNELS.indexOf(this.tunnel);
 			if (index !== -1) {
-				_tunnels.splice(index, 1);
+				_TUNNELS.splice(index, 1);
 			}
 
 		}, this);
@@ -124,6 +125,23 @@ lychee.define('lychee.net.remote.Debugger').includes([
 
 
 	Composite.prototype = {
+
+		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.remote.Debugger';
+			data['arguments']   = [];
+
+
+			return data;
+
+		}
 
 	};
 

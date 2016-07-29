@@ -1,8 +1,7 @@
 
 (function(lychee, global) {
 
-	var _fs       = require('fs');
-	var _filename = null;
+	let _filename = null;
 
 
 
@@ -12,15 +11,15 @@
 
 	(function(process, selfpath) {
 
-		var cwd  = typeof process.cwd === 'function' ? process.cwd() : '';
-		var tmp1 = selfpath.indexOf('/libraries/lychee');
+		let cwd  = typeof process.cwd === 'function' ? process.cwd() : '';
+		let tmp1 = selfpath.indexOf('/libraries/lychee');
 
 		if (tmp1 !== -1) {
 			lychee.ROOT.lychee = selfpath.substr(0, tmp1);
 		}
 
 
-		var tmp2 = selfpath.split('/').slice(0, 3).join('/');
+		let tmp2 = selfpath.split('/').slice(0, 3).join('/');
 		if (tmp2.substr(0, 13) === '/opt/lycheejs') {
 			lychee.ROOT.lychee = tmp2;
 		}
@@ -38,15 +37,17 @@
 	 * HELPERS
 	 */
 
-	var _load_asset = function(settings, callback, scope) {
+	const _fs = require('fs');
 
-		var path     = lychee.environment.resolve(settings.url);
-		var encoding = settings.encoding === 'binary' ? 'binary': 'utf8';
+	const _load_asset = function(settings, callback, scope) {
+
+		let path     = lychee.environment.resolve(settings.url);
+		let encoding = settings.encoding === 'binary' ? 'binary': 'utf8';
 
 
 		_fs.readFile(path, encoding, function(error, buffer) {
 
-			var raw = null;
+			let raw = null;
 			if (!error) {
 				raw = buffer;
 			}
@@ -67,19 +68,19 @@
 	 * POLYFILLS
 	 */
 
-	var _log     = console.log   || function() {};
-	var _info    = console.info  || console.log;
-	var _warn    = console.warn  || console.log;
-	var _error   = console.error || console.log;
-	var _std_out = '';
-	var _std_err = '';
+	const _log     = console.log   || function() {};
+	const _info    = console.info  || console.log;
+	const _warn    = console.warn  || console.log;
+	const _error   = console.error || console.log;
+	let   _std_out = '';
+	let   _std_err = '';
 
 
 	console.log = function() {
 
-		var al   = arguments.length;
-		var args = [ '(L)' ];
-		for (var a = 0; a < al; a++) {
+		let al   = arguments.length;
+		let args = [ '(L)' ];
+		for (let a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
@@ -96,9 +97,9 @@
 
 	console.info = function() {
 
-		var al   = arguments.length;
-		var args = [ '(I)' ];
-		for (var a = 0; a < al; a++) {
+		let al   = arguments.length;
+		let args = [ '(I)' ];
+		for (let a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
@@ -117,9 +118,9 @@
 
 	console.warn = function() {
 
-		var al   = arguments.length;
-		var args = [ '(W)' ];
-		for (var a = 0; a < al; a++) {
+		let al   = arguments.length;
+		let args = [ '(W)' ];
+		for (let a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
@@ -138,9 +139,9 @@
 
 	console.error = function() {
 
-		var al   = arguments.length;
-		var args = [ '(E)' ];
-		for (var a = 0; a < al; a++) {
+		let al   = arguments.length;
+		let args = [ '(E)' ];
+		for (let a = 0; a < al; a++) {
 			args.push(arguments[a]);
 		}
 
@@ -171,7 +172,7 @@
 
 	console.serialize = function() {
 
-		var blob = {};
+		let blob = {};
 
 
 		if (_std_out.length > 0) blob.stdout = _std_out;
@@ -187,12 +188,12 @@
 
 
 
-	var _META_KEYCODE     = /^(?:\x1b)([a-zA-Z0-9])$/;
-	var _FUNCTION_KEYCODE = /^(?:\x1b+)(O|N|\[|\[\[)(?:(\d+)(?:;(\d+))?([~^$])|(?:1;)?(\d+)?([a-zA-Z]))/;
+	const _META_KEYCODE     = /^(?:\x1b)([a-zA-Z0-9])$/;
+	const _FUNCTION_KEYCODE = /^(?:\x1b+)(O|N|\[|\[\[)(?:(\d+)(?:;(\d+))?([~^$])|(?:1;)?(\d+)?([a-zA-Z]))/;
 
-	var _parse_keypress   = function(str) {
+	const _parse_keypress   = function(str) {
 
-		var parts;
+		let parts;
 
 
 		if (Buffer.isBuffer(str)) {
@@ -207,7 +208,7 @@
 		}
 
 
-		var key = {
+		let key = {
 			name:     null,
 			ctrl:     false,
 			meta:     false,
@@ -271,8 +272,8 @@
 		// Function Key (ANSI ESCAPE SEQUENCE)
 		} else if ((parts = _FUNCTION_KEYCODE.exec(str))) {
 
-			var code = (parts[1] || '') + (parts[2] || '') + (parts[4] || '') + (parts[6] || '');
-			var mod  = (parts[3] || parts[5] || 1) - 1;
+			let code = (parts[1] || '') + (parts[2] || '') + (parts[4] || '') + (parts[6] || '');
+			let mod  = (parts[3] || parts[5] || 1) - 1;
 
 			key.ctrl = !!(mod & 4);
 			key.meta = !!(mod & 10);
@@ -365,23 +366,20 @@
 	 * FEATURE DETECTION
 	 */
 
-	var _codecs = {
-		aac: true,
-		ogg: true,
-		mp3: true
-	};
+	let _audio_supports_ogg = false;
+	let _audio_supports_mp3 = false;
 
 	(function() {
 
-		var consol  = 'console' in global;
-		var audio   = false;
-		var buffer  = true;
-		var image   = false;
+		let consol  = 'console' in global;
+		let audio   = false;
+		let buffer  = true;
+		let image   = false;
 
 
 		if (lychee.debug === true) {
 
-			var methods = [];
+			let methods = [];
 
 			if (consol)  methods.push('console');
 			if (audio)   methods.push('Audio');
@@ -418,9 +416,9 @@
 		callback = callback instanceof Function ? callback : function(value) { return value; };
 
 
-		var clone = new Buffer(this.length);
+		let clone = new Buffer(this.length);
 
-		for (var b = 0; b < this.length; b++) {
+		for (let b = 0; b < this.length; b++) {
 			clone[b] = callback(this[b], b);
 		}
 
@@ -435,10 +433,9 @@
 	 * CONFIG IMPLEMENTATION
 	 */
 
-	var _config_cache = {};
+	const _CONFIG_CACHE = {};
 
-
-	var _clone_config = function(origin, clone) {
+	const _clone_config = function(origin, clone) {
 
 		if (origin.buffer !== null) {
 
@@ -451,7 +448,7 @@
 	};
 
 
-	var Config = function(url) {
+	const Config = function(url) {
 
 		url = typeof url === 'string' ? url : null;
 
@@ -465,10 +462,10 @@
 
 		if (url !== null) {
 
-			if (_config_cache[url] !== undefined) {
-				_clone_config(_config_cache[url], this);
+			if (_CONFIG_CACHE[url] !== undefined) {
+				_clone_config(_CONFIG_CACHE[url], this);
 			} else {
-				_config_cache[url] = this;
+				_CONFIG_CACHE[url] = this;
 			}
 
 		}
@@ -489,7 +486,7 @@
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (this.buffer !== null) {
@@ -524,7 +521,7 @@
 				encoding: 'utf8'
 			}, function(raw) {
 
-				var data = null;
+				let data = null;
 				try {
 					data = JSON.parse(raw);
 				} catch(err) {
@@ -562,9 +559,9 @@
 	 * FONT IMPLEMENTATION
 	 */
 
-	var _parse_font = function() {
+	const _parse_font = function() {
 
-		var data = this.__buffer;
+		let data = this.__buffer;
 
 		if (typeof data.kerning === 'number' && typeof data.spacing === 'number') {
 
@@ -577,8 +574,8 @@
 
 		if (data.texture !== undefined) {
 
-			var texture = new Texture(data.texture);
-			var that    = this;
+			let texture = new Texture(data.texture);
+			let that    = this;
 
 			texture.onload = function() {
 				that.texture = this;
@@ -604,13 +601,17 @@
 
 		if (data.map instanceof Array) {
 
-			var offset = this.spacing;
+			let offset = this.spacing;
+			let url    = this.url;
 
-			for (var c = 0, cl = this.charset.length; c < cl; c++) {
+			if (_CHAR_CACHE[url] === undefined) {
+				_CHAR_CACHE[url] = {};
+			}
 
-				var id = this.charset[c];
+			for (let c = 0, cl = this.charset.length; c < cl; c++) {
 
-				var chr = {
+				let id = this.charset[c];
+				let chr = {
 					width:      data.map[c] + this.spacing * 2,
 					height:     this.lineheight,
 					realwidth:  data.map[c],
@@ -621,8 +622,7 @@
 
 				offset += chr.width;
 
-
-				this.__charset[id] = chr;
+				_CHAR_CACHE[url][id] = chr;
 
 			}
 
@@ -631,10 +631,10 @@
 	};
 
 
-	var _font_cache = {};
+	const _CHAR_CACHE = {};
+	const _FONT_CACHE = {};
 
-
-	var _clone_font = function(origin, clone) {
+	const _clone_font = function(origin, clone) {
 
 		if (origin.__buffer !== null) {
 
@@ -648,7 +648,7 @@
 	};
 
 
-	var Font = function(url) {
+	const Font = function(url) {
 
 		url = typeof url === 'string' ? url : null;
 
@@ -679,10 +679,10 @@
 
 		if (url !== null) {
 
-			if (_font_cache[url] !== undefined) {
-				_clone_font(_font_cache[url], this);
+			if (_FONT_CACHE[url] !== undefined) {
+				_clone_font(_FONT_CACHE[url], this);
 			} else {
-				_font_cache[url] = this;
+				_FONT_CACHE[url] = this;
 			}
 
 		}
@@ -704,7 +704,7 @@
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (this.__buffer !== null) {
@@ -725,30 +725,32 @@
 			text = typeof text === 'string' ? text : null;
 
 
-			if (text !== null) {
+			let cache = _CHAR_CACHE[this.url] || null;
+			if (cache !== null) {
 
-				if (text.length === 1) {
+				let tl = text.length;
+				if (tl === 1) {
 
-					if (this.__charset[text] !== undefined) {
-						return this.__charset[text];
+					if (cache[text] !== undefined) {
+						return cache[text];
 					}
 
-				} else if (text.length > 1) {
+				} else if (tl > 1) {
 
-					var data = this.__charset[text] || null;
+					let data = cache[text] || null;
 					if (data === null) {
 
-						var width = 0;
+						let width = 0;
 
-						for (var t = 0, tl = text.length; t < tl; t++) {
-							var chr = this.measure(text[t]);
+						for (let t = 0; t < tl; t++) {
+							let chr = this.measure(text[t]);
 							width  += chr.realwidth + this.kerning;
 						}
 
 
 						// TODO: Embedded Font ligatures will set x and y values based on settings.map
 
-						data = this.__charset[text] = {
+						data = cache[text] = {
 							width:      width,
 							height:     this.lineheight,
 							realwidth:  width,
@@ -764,10 +766,13 @@
 
 				}
 
+
+				return cache[''];
+
 			}
 
 
-			return this.__charset[''];
+			return null;
 
 		},
 
@@ -790,7 +795,7 @@
 				encoding: 'utf8'
 			}, function(raw) {
 
-				var data = null;
+				let data = null;
 				try {
 					data = JSON.parse(raw);
 				} catch(err) {
@@ -824,10 +829,9 @@
 	 * MUSIC IMPLEMENTATION
 	 */
 
-	var _music_cache = {};
+	const _music_cache = {};
 
-
-	var _clone_music = function(origin, clone) {
+	const _clone_music = function(origin, clone) {
 
 		if (origin.__buffer.ogg !== null || origin.__buffer.mp3 !== null) {
 
@@ -840,7 +844,7 @@
 	};
 
 
-	var Music = function(url) {
+	const Music = function(url) {
 
 		url = typeof url === 'string' ? url : null;
 
@@ -857,10 +861,10 @@
 
 		if (url !== null) {
 
-			if (_music_cache[url] !== undefined) {
-				_clone_music(_music_cache[url], this);
+			if (_MUSIC_CACHE[url] !== undefined) {
+				_clone_music(_MUSIC_CACHE[url], this);
 			} else {
-				_music_cache[url] = this;
+				_MUSIC_CACHE[url] = this;
 			}
 
 		}
@@ -891,7 +895,7 @@
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (this.__buffer.ogg !== null || this.__buffer.mp3 !== null) {
@@ -1001,10 +1005,9 @@
 	 * SOUND IMPLEMENTATION
 	 */
 
-	var _sound_cache = {};
+	const _SOUND_CACHE = {};
 
-
-	var _clone_sound = function(origin, clone) {
+	const _clone_sound = function(origin, clone) {
 
 		if (origin.__buffer.ogg !== null || origin.__buffer.mp3 !== null) {
 
@@ -1017,7 +1020,7 @@
 	};
 
 
-	var Sound = function(url) {
+	const Sound = function(url) {
 
 		url = typeof url === 'string' ? url : null;
 
@@ -1034,10 +1037,10 @@
 
 		if (url !== null) {
 
-			if (_sound_cache[url] !== undefined) {
-				_clone_sound(_sound_cache[url], this);
+			if (_SOUND_CACHE[url] !== undefined) {
+				_clone_sound(_SOUND_CACHE[url], this);
 			} else {
-				_sound_cache[url] = this;
+				_SOUND_CACHE[url] = this;
 			}
 
 		}
@@ -1068,7 +1071,7 @@
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (this.__buffer.ogg !== null || this.__buffer.mp3 !== null) {
@@ -1178,18 +1181,17 @@
 	 * TEXTURE IMPLEMENTATION
 	 */
 
-	var _texture_id    = 0;
-	var _texture_cache = {};
+	let   _TEXTURE_ID    = 0;
+	const _TEXTURE_CACHE = {};
 
-	var _parse_texture = function(data) {
+	const _parse_texture = function(data) {
 
 		this.width  = (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3];
 		this.height = (data[4] << 24) | (data[5] << 16) | (data[6] << 8) | data[7];
 
 	};
 
-
-	var _clone_texture = function(origin, clone) {
+	const _clone_texture = function(origin, clone) {
 
 		if (origin.buffer !== null) {
 
@@ -1206,12 +1208,12 @@
 	};
 
 
-	var Texture = function(url) {
+	const Texture = function(url) {
 
 		url = typeof url === 'string' ? url : null;
 
 
-		this.id     = _texture_id++;
+		this.id     = _TEXTURE_ID++;
 		this.url    = url;
 		this.onload = null;
 		this.buffer = null;
@@ -1223,10 +1225,10 @@
 
 		if (url !== null && url.substr(0, 10) !== 'data:image') {
 
-			if (_texture_cache[url] !== undefined) {
-				_clone_texture(_texture_cache[url], this);
+			if (_TEXTURE_CACHE[url] !== undefined) {
+				_clone_texture(_TEXTURE_CACHE[url], this);
 			} else {
-				_texture_cache[url] = this;
+				_TEXTURE_CACHE[url] = this;
 			}
 
 		}
@@ -1247,7 +1249,7 @@
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (this.buffer !== null) {
@@ -1277,19 +1279,19 @@
 			}
 
 
-			var url = this.url;
+			let url = this.url;
 			if (url.substr(0, 5) === 'data:') {
 
 				if (url.substr(0, 15) === 'data:image/png;') {
 
-					var b64data = url.substr(15, url.length - 15);
+					let b64data = url.substr(15, url.length - 15);
 					this.buffer = new Buffer(b64data, 'base64');
 					this.__load = false;
 
 					_parse_texture.call(this, this.buffer.slice(16, 24));
 
 
-					var is_power_of_two = (this.width & (this.width - 1)) === 0 && (this.height & (this.height - 1)) === 0;
+					let is_power_of_two = (this.width & (this.width - 1)) === 0 && (this.height & (this.height - 1)) === 0;
 					if (lychee.debug === true && is_power_of_two === false) {
 						console.warn('bootstrap.js: Texture at data:image/png; is NOT power-of-two');
 					}
@@ -1327,7 +1329,7 @@
 						}
 
 
-  						var is_power_of_two = (this.width & (this.width - 1)) === 0 && (this.height & (this.height - 1)) === 0;
+  						let is_power_of_two = (this.width & (this.width - 1)) === 0 && (this.height & (this.height - 1)) === 0;
 						if (lychee.debug === true && is_power_of_two === false) {
 							console.warn('bootstrap.js: Texture at ' + this.url + ' is NOT power-of-two');
 						}
@@ -1366,10 +1368,9 @@
 	 * PRELOADER IMPLEMENTATION
 	 */
 
-	var _stuff_cache = {};
+	const _STUFF_CACHE = {};
 
-
-	var _clone_stuff = function(origin, clone) {
+	const _clone_stuff = function(origin, clone) {
 
 		if (origin.buffer !== null) {
 
@@ -1381,14 +1382,14 @@
 
 	};
 
-	var _execute_stuff = function(callback, stuff) {
+	const _execute_stuff = function(callback, stuff) {
 
-		var type = stuff.url.split('/').pop().split('.').pop();
+		let type = stuff.url.split('/').pop().split('.').pop();
 		if (type === 'js' && stuff.__ignore === false) {
 
 			_filename = stuff.url;
 
-			var cid = lychee.environment.resolve(stuff.url);
+			let cid = lychee.environment.resolve(stuff.url);
 			if (require.cache[cid] !== undefined) {
 				delete require.cache[cid];
 			}
@@ -1415,7 +1416,7 @@
 	};
 
 
-	var Stuff = function(url, ignore) {
+	const Stuff = function(url, ignore) {
 
 		url    = typeof url === 'string' ? url : null;
 		ignore = ignore === true;
@@ -1431,10 +1432,10 @@
 
 		if (url !== null) {
 
-			if (_stuff_cache[url] !== undefined) {
-				_clone_stuff(_stuff_cache[url], this);
+			if (_STUFF_CACHE[url] !== undefined) {
+				_clone_stuff(_STUFF_CACHE[url], this);
 			} else {
-				_stuff_cache[url] = this;
+				_STUFF_CACHE[url] = this;
 			}
 
 		}
@@ -1455,9 +1456,9 @@
 
 		serialize: function() {
 
-			var blob = {};
-			var type = this.url.split('/').pop().split('.').pop();
-			var mime = 'application/octet-stream';
+			let blob = {};
+			let type = this.url.split('/').pop().split('.').pop();
+			let mime = 'application/octet-stream';
 
 
 			if (type === 'js') {
@@ -1530,16 +1531,15 @@
 	 * EXPORTS
 	 */
 
-	// global.Buffer  = Buffer; // Not necessary, IOJS data type
+	// global.Buffer  = Buffer; // Not necessary, node.js data type
 	global.Config  = Config;
 	global.Font    = Font;
 	global.Music   = Music;
 	global.Sound   = Sound;
 	global.Texture = Texture;
 	global.Stuff   = Stuff;
-
-
 	global.require = require;
+
 
 	Object.defineProperty(lychee.Environment, '__FILENAME', {
 
@@ -1563,8 +1563,8 @@
 
 	module.exports = function(root) {
 
-		var stream      = process.stdin;
-		var is_emitting = stream._emitsKeypress === true;
+		let stream      = process.stdin;
+		let is_emitting = stream._emitsKeypress === true;
 		if (is_emitting === false) {
 
 			// Note: This fixes issues with running IOJS with nohup
@@ -1580,7 +1580,7 @@
 
 					if (this.listeners('keypress').length > 0) {
 
-						var key = _parse_keypress(data);
+						let key = _parse_keypress(data);
 						if (key !== null) {
 							this.emit('keypress', key);
 						}

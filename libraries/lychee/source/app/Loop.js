@@ -11,8 +11,8 @@ lychee.define('lychee.app.Loop').includes([
 
 }).exports(function(lychee, global, attachments) {
 
-    var _instances = [];
- 	var _id        = 0;
+	const _instances = [];
+	let   _id        = 0;
 
 
 
@@ -20,21 +20,62 @@ lychee.define('lychee.app.Loop').includes([
 	 * EVENTS
 	 */
 
-	var _listeners = {
+	const _listeners = {
 
 		interval: function() {
 
-			var now = Date.now();
+			let now = Date.now();
 
-			for (var i = 0, l = _instances.length; i < l; i++) {
+			for (let i = 0, l = _instances.length; i < l; i++) {
 
-				var instance = _instances[i];
-				var clock    = now - instance.__start;
+				let instance = _instances[i];
+				let clock    = now - instance.__start;
 
 				_update_loop.call(instance, clock);
 				_render_loop.call(instance, clock);
 
 			}
+
+		},
+
+		update: function() {
+
+			let now = Date.now();
+
+			for (let i = 0, l = _instances.length; i < l; i++) {
+
+				let instance = _instances[i];
+				let clock    = now - instance.__start;
+
+				_update_loop.call(instance, clock);
+
+			}
+
+		},
+
+
+		// XXX: render loop is inlined for maximum performance
+		render: function() {
+
+			let now = Date.now();
+
+			for (let i = 0, l = _instances.length; i < l; i++) {
+
+				let instance = _instances[i];
+				if (instance.__state === 1) {
+
+					let clock = now   - instance.__start;
+					let delta = clock - instance.__renderclock;
+					if (delta >= instance.__renderdelay) {
+						instance.trigger('render', [ clock, delta ]);
+						instance.__renderclock = clock;
+					}
+
+				}
+
+			}
+
+			global.requestAnimationFrame(_listeners.render);
 
 		}
 
@@ -48,22 +89,29 @@ lychee.define('lychee.app.Loop').includes([
 
 	(function(delta) {
 
-		var interval = typeof global.setInterval === 'function';
-		if (interval === true) {
+		let interval = typeof global.setInterval === 'function';
+		let raf      = typeof global.requestAnimationFrame === 'function';
+
+		if (raf === true && interval === true) {
+			global.setInterval(_listeners.update, delta);
+			global.requestAnimationFrame(_listeners.render);
+		} else if (interval === true) {
 			global.setInterval(_listeners.interval, delta);
 		}
 
 
+
 		if (lychee.debug === true) {
 
-			var methods = [];
+			let methods = [];
 
 			if (interval) methods.push('setInterval');
+			if (raf)      methods.push('requestAnimationFrame');
 
 			if (methods.length === 0) {
 				console.error('lychee.app.Loop: Supported methods are NONE');
 			} else {
-				console.log('lychee.app.Loop: Supported methods are ' + methods.join(', '));
+				console.info('lychee.app.Loop: Supported methods are ' + methods.join(', '));
 			}
 
 		}
@@ -76,146 +124,67 @@ lychee.define('lychee.app.Loop').includes([
 	 * HELPERS
 	 */
 
-	var _update_loop;
-
-	if (lychee.debug === true) {
-
-		_update_loop = function(clock) {
-
-			if (this.__state !== 1) return;
-
-
-			var delta = clock - this.__updateclock;
-			if (delta >= this.__updatedelay) {
-
-				this.trigger('update', [ clock, delta ]);
-
-
-				for (var iid in this.__intervals) {
-
-					var interval = this.__intervals[iid];
-
-					if (clock >= interval.clock) {
-
-						try {
-
-							interval.callback.call(
-								interval.scope,
-								clock,
-								clock - interval.clock,
-								interval.step++
-							);
-
-						} catch(err) {
-							lychee.Debugger.report(null, err, null);
-							this.stop();
-						} finally {
-							interval.clock = clock + interval.delta;
-						}
-
-					}
-
-				}
-
-
-				for (var tid in this.__timeouts) {
-
-					var timeout = this.__timeouts[tid];
-					if (clock >= timeout.clock) {
-
-						try {
-
-							timeout.callback.call(
-								timeout.scope,
-								clock,
-								clock - timeout.clock
-							);
-
-						} catch(err) {
-							lychee.Debugger.report(null, err, null);
-							this.stop();
-						} finally {
-							delete this.__timeouts[tid];
-						}
-
-					}
-
-				}
-
-
-				this.__updateclock = clock;
-
-			}
-
-		};
-
-
-	} else {
-
-		_update_loop = function(clock) {
-
-			if (this.__state !== 1) return;
-
-
-			var delta = clock - this.__updateclock;
-			if (delta >= this.__updatedelay) {
-
-				this.trigger('update', [ clock, delta ]);
-
-
-				for (var iid in this.__intervals) {
-
-					var interval = this.__intervals[iid];
-
-					if (clock >= interval.clock) {
-
-						interval.callback.call(
-							interval.scope,
-							clock,
-							clock - interval.clock,
-							interval.step++
-						);
-
-						interval.clock = clock + interval.delta;
-
-					}
-
-				}
-
-
-				for (var tid in this.__timeouts) {
-
-					var timeout = this.__timeouts[tid];
-					if (clock >= timeout.clock) {
-
-						timeout.callback.call(
-							timeout.scope,
-							clock,
-							clock - timeout.clock
-						);
-
-						delete this.__timeouts[tid];
-
-					}
-
-				}
-
-
-				this.__updateclock = clock;
-
-			}
-
-		};
-
-	}
-
-
-	var _render_loop = function(clock) {
+	const _update_loop = function(clock) {
 
 		if (this.__state !== 1) return;
 
 
-		var delta = clock - this.__renderclock;
+		let delta = clock - this.__updateclock;
+		if (delta >= this.__updatedelay) {
+
+			this.trigger('update', [ clock, delta ]);
+
+
+			for (let iid in this.__intervals) {
+
+				let interval = this.__intervals[iid];
+
+				if (clock >= interval.clock) {
+
+					interval.callback.call(
+						interval.scope,
+						clock,
+						clock - interval.clock,
+						interval.step++
+					);
+
+					interval.clock = clock + interval.delta;
+
+				}
+
+			}
+
+
+			for (let tid in this.__timeouts) {
+
+				let timeout = this.__timeouts[tid];
+				if (clock >= timeout.clock) {
+
+					timeout.callback.call(
+						timeout.scope,
+						clock,
+						clock - timeout.clock
+					);
+
+					delete this.__timeouts[tid];
+
+				}
+
+			}
+
+
+			this.__updateclock = clock;
+
+		}
+
+	};
+
+	const _render_loop = function(clock) {
+
+		if (this.__state !== 1) return;
+
+
+		let delta = clock - this.__renderclock;
 		if (delta >= this.__renderdelay) {
 
 			this.trigger('render', [ clock, delta ]);
@@ -233,9 +202,9 @@ lychee.define('lychee.app.Loop').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.update = 40;
@@ -270,9 +239,9 @@ lychee.define('lychee.app.Loop').includes([
 
 		destroy: function() {
 
-			var found = false;
+			let found = false;
 
-			for (var i = 0, il = _instances.length; i < il; i++) {
+			for (let i = 0, il = _instances.length; i < il; i++) {
 
 				if (_instances[i] === this) {
 					_instances.splice(i, 1);
@@ -321,12 +290,12 @@ lychee.define('lychee.app.Loop').includes([
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = lychee.event.Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.app.Loop';
 
 
-			var settings = {};
-			var blob     = (data['blob'] || {});
+			let settings = {};
+			let blob     = (data['blob'] || {});
 
 
 			if (this.update !== 40) settings.update = this.update;
@@ -337,9 +306,9 @@ lychee.define('lychee.app.Loop').includes([
 
 				blob.timeouts = [];
 
-				for (var tid in this.__timeouts) {
+				for (let tid in this.__timeouts) {
 
-					var timeout = this.__timeouts[tid];
+					let timeout = this.__timeouts[tid];
 
 					blob.timeouts.push({
 						delta:    timeout.clock - this.__updateclock,
@@ -357,9 +326,9 @@ lychee.define('lychee.app.Loop').includes([
 
 				blob.intervals = [];
 
-				for (var iid in this.__intervals) {
+				for (let iid in this.__intervals) {
 
-					var interval = this.__intervals[iid];
+					let interval = this.__intervals[iid];
 
 					blob.intervals.push({
 						clock:    interval.clock - this.__updateclock,
@@ -440,7 +409,7 @@ lychee.define('lychee.app.Loop').includes([
 			}
 
 
-			var id = _id++;
+			let id = _id++;
 
 			this.__timeouts[id] = {
 				clock:    this.__updateclock + delta,
@@ -483,7 +452,7 @@ lychee.define('lychee.app.Loop').includes([
 			}
 
 
-			var id = _id++;
+			let id = _id++;
 
 			this.__intervals[id] = {
 				clock:    this.__updateclock + delta,

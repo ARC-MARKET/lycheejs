@@ -5,17 +5,17 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	 * HELPERS
 	 */
 
-	var _bind = function(event, callback, scope, once) {
+	const _bind = function(event, callback, scope, once) {
 
 		if (event === null || callback === null) {
 			return false;
 		}
 
 
-		var pass_event = false;
-		var pass_self  = false;
+		let pass_event = false;
+		let pass_self  = false;
 
-		var modifier = event.charAt(0);
+		let modifier = event.charAt(0);
 		if (modifier === '@') {
 
 			event      = event.substr(1, event.length - 1);
@@ -47,19 +47,19 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 	};
 
-	var _relay = function(event, instance, once) {
+	const _relay = function(event, instance, once) {
 
 		if (event === null || instance === null) {
 			return false;
 		}
 
 
-		var callback = function() {
+		let callback = function() {
 
-			var event = arguments[0];
-			var data  = [];
+			let event = arguments[0];
+			let data  = [];
 
-			for (var a = 1, al = arguments.length; a < al; a++) {
+			for (let a = 1, al = arguments.length; a < al; a++) {
 				data.push(arguments[a]);
 			}
 
@@ -86,16 +86,16 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 	};
 
-	var _trigger = function(event, data) {
+	const _trigger = function(event, data) {
 
 		if (this.___events !== undefined && this.___events[event] !== undefined) {
 
-			var value = undefined;
+			let value = undefined;
 
-			for (var e = 0; e < this.___events[event].length; e++) {
+			for (let e = 0; e < this.___events[event].length; e++) {
 
-				var args  = [];
-				var entry = this.___events[event][e];
+				let args  = [];
+				let entry = this.___events[event][e];
 
 				if (entry.pass_event === true) {
 
@@ -113,7 +113,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 				}
 
 
-				var result = entry.callback.apply(entry.scope, args);
+				let result = entry.callback.apply(entry.scope, args);
 				if (result !== undefined) {
 					value = result;
 				}
@@ -143,9 +143,9 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 	};
 
-	var _unbind = function(event, callback, scope) {
+	const _unbind = function(event, callback, scope) {
 
-		var found = false;
+		let found = false;
 
 		if (event !== null) {
 
@@ -155,7 +155,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 			for (event in this.___events) {
 
-				var result = _unbind_event.call(this, event, callback, scope);
+				let result = _unbind_event.call(this, event, callback, scope);
 				if (result === true) {
 					found = true;
 				}
@@ -169,15 +169,15 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 	};
 
-	var _unbind_event = function(event, callback, scope) {
+	const _unbind_event = function(event, callback, scope) {
 
 		if (this.___events !== undefined && this.___events[event] !== undefined) {
 
-			var found = false;
+			let found = false;
 
-			for (var e = 0, el = this.___events[event].length; e < el; e++) {
+			for (let e = 0, el = this.___events[event].length; e < el; e++) {
 
-				var entry = this.___events[event][e];
+				let entry = this.___events[event][e];
 
 				if ((callback === null || entry.callback === callback) && (scope === null || entry.scope === scope)) {
 
@@ -202,83 +202,18 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 	};
 
 
-	if (lychee.debug === true) {
-
-		var _original_bind    = _bind;
-		var _original_trigger = _trigger;
-		var _original_unbind  = _unbind;
-
-
-		_bind = function(event, callback, scope, once) {
-
-			var result = _original_bind.call(this, event, callback, scope, once);
-			if (result !== false) {
-
-				this.___timeline.bind.push({
-					time:     Date.now(),
-					event:    event,
-					callback: lychee.serialize(callback),
-					// scope:    lychee.serialize(scope),
-					scope:    null,
-					once:     once
-				});
-
-			}
-
-			return result;
-
-		};
-
-		_trigger = function(event, data) {
-
-			var result = _original_trigger.call(this, event, data);
-			if (result !== false) {
-
-				this.___timeline.trigger.push({
-					time:  Date.now(),
-					event: event,
-					data:  lychee.serialize(data)
-				});
-
-			}
-
-			return result;
-
-		};
-
-		_unbind = function(event, callback, scope) {
-
-			var result = _original_unbind.call(this, event, callback, scope);
-			if (result !== false) {
-
-				this.___timeline.unbind.push({
-					time:     Date.now(),
-					event:    event,
-					callback: lychee.serialize(callback),
-					// scope:    lychee.serialize(scope)
-					scope:    null
-				});
-
-			}
-
-			return result;
-
-		};
-
-	}
-
-
 
 	/*
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.___events   = {};
 		this.___timeline = {
 			bind:    [],
 			trigger: [],
+			relay:   [],
 			unbind:  []
 		};
 
@@ -305,20 +240,20 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 		serialize: function() {
 
-			var blob = {};
+			let blob = {};
 
 
 			if (Object.keys(this.___events).length > 0) {
 
 				blob.events = {};
 
-				for (var event in this.___events) {
+				for (let event in this.___events) {
 
 					blob.events[event] = [];
 
-					for (var e = 0, el = this.___events[event].length; e < el; e++) {
+					for (let e = 0, el = this.___events[event].length; e < el; e++) {
 
-						var entry = this.___events[event][e];
+						let entry = this.___events[event][e];
 
 						blob.events[event].push({
 							pass_event: entry.pass_event,
@@ -345,7 +280,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 					blob.timeline.bind = [];
 
-					for (var b = 0, bl = this.___timeline.bind.length; b < bl; b++) {
+					for (let b = 0, bl = this.___timeline.bind.length; b < bl; b++) {
 						blob.timeline.bind.push(this.___timeline.bind[b]);
 					}
 
@@ -355,7 +290,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 					blob.timeline.trigger = [];
 
-					for (var t = 0, tl = this.___timeline.trigger.length; t < tl; t++) {
+					for (let t = 0, tl = this.___timeline.trigger.length; t < tl; t++) {
 						blob.timeline.trigger.push(this.___timeline.trigger[t]);
 					}
 
@@ -365,7 +300,7 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 
 					blob.timeline.unbind = [];
 
-					for (var u = 0, ul = this.___timeline.unbind.length; u < ul; u++) {
+					for (let u = 0, ul = this.___timeline.unbind.length; u < ul; u++) {
 						blob.timeline.unbind.push(this.___timeline.unbind[u]);
 					}
 
@@ -396,18 +331,46 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 			once     = once === true;
 
 
-			return _bind.call(this, event, callback, scope, once);
+			let result = _bind.call(this, event, callback, scope, once);
+			if (result === true && lychee.debug === true) {
+
+				this.___timeline.bind.push({
+					time:     Date.now(),
+					event:    event,
+					callback: lychee.serialize(callback),
+					// scope:    lychee.serialize(scope),
+					scope:    null,
+					once:     once
+				});
+
+			}
+
+
+			return result;
 
 		},
 
 		relay: function(event, instance, once) {
 
-			event    = typeof event === 'string'           ? event    : null;
+			event    = typeof event === 'string'               ? event    : null;
 			instance = lychee.interfaceof(Composite, instance) ? instance : null;
 			once     = once === true;
 
 
-			return _relay.call(this, event, instance, once);
+			let result = _relay.call(this, event, instance, once);
+			if (result === true && lychee.debug === true) {
+
+				this.___timeline.relay.push({
+					time:     Date.now(),
+					event:    event,
+					instance: lychee.serialize(instance),
+					once:     once
+				});
+
+			}
+
+
+			return result;
 
 		},
 
@@ -417,7 +380,19 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 			data  = data instanceof Array     ? data : null;
 
 
-			return _trigger.call(this, event, data);
+			let result = _trigger.call(this, event, data);
+			if (result === true && lychee.debug === true) {
+
+				this.___timeline.trigger.push({
+					time:  Date.now(),
+					event: event,
+					data:  lychee.serialize(data)
+				});
+
+			}
+
+
+			return result;
 
 		},
 
@@ -428,7 +403,21 @@ lychee.define('lychee.event.Emitter').exports(function(lychee, global, attachmen
 			scope    = scope !== undefined          ? scope    : null;
 
 
-			return _unbind.call(this, event, callback, scope);
+			let result = _unbind.call(this, event, callback, scope);
+			if (result === true) {
+
+				this.___timeline.unbind.push({
+					time:     Date.now(),
+					event:    event,
+					callback: lychee.serialize(callback),
+					// scope:    lychee.serialize(scope)
+					scope:    null
+				});
+
+			}
+
+
+			return result;
 
 		}
 

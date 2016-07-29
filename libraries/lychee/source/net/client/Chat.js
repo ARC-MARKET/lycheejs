@@ -3,19 +3,27 @@ lychee.define('lychee.net.client.Chat').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
-	var Composite = function(id, client, data) {
+	const _Service = lychee.import('lychee.net.Service');
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(id, client, data) {
 
 		id = typeof id === 'string' ? id : 'chat';
 
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.room = null;
 		this.user = null;
 
 
-		lychee.net.Service.call(this, id, client, lychee.net.Service.TYPE.client);
+		_Service.call(this, id, client, _Service.TYPE.client);
 
 
 
@@ -38,13 +46,40 @@ lychee.define('lychee.net.client.Chat').includes([
 	Composite.prototype = {
 
 		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.client.Chat';
+
+			let settings = {};
+
+
+			if (this.room !== null) settings.room = this.room;
+			if (this.user !== null) settings.user = this.user;
+
+
+			data['arguments'][2] = settings;
+
+
+			return data;
+
+		},
+
+
+
+		/*
 		 * CUSTOM API
 		 */
 
 		sync: function() {
 
-			var user = this.user;
-			var room = this.room;
+			let user = this.user;
+			let room = this.room;
 			if (user !== null && room !== null) {
 
 				if (this.tunnel !== null) {
@@ -70,8 +105,8 @@ lychee.define('lychee.net.client.Chat').includes([
 
 			if (message !== null) {
 
-				var user = this.user;
-				var room = this.room;
+				let user = this.user;
+				let room = this.room;
 				if (user !== null && room !== null) {
 
 					if (this.tunnel !== null) {

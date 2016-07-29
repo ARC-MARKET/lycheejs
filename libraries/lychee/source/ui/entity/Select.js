@@ -3,7 +3,8 @@ lychee.define('lychee.ui.entity.Select').includes([
 	'lychee.ui.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _FONT = attachments["fnt"];
+	const _Entity = lychee.import('lychee.ui.Entity');
+	const _FONT   = attachments["fnt"];
 
 
 
@@ -11,9 +12,9 @@ lychee.define('lychee.ui.entity.Select').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.font    = _FONT;
@@ -72,14 +73,14 @@ lychee.define('lychee.ui.entity.Select').includes([
 			if (this.options.length === 0) return;
 
 
-			var lh  = this.height / this.options.length;
-			var pos = (position.y + this.height / 2);
+			let lh  = this.height / this.options.length;
+			let pos = (position.y + this.height / 2);
 
-			var q = (pos / lh) | 0;
+			let q = (pos / lh) | 0;
 			if (q >= 0) {
 
-				var val    = this.options[q] || null;
-				var result = this.setValue(val);
+				let val    = this.options[q] || null;
+				let result = this.setValue(val);
 				if (result === true) {
 					this.trigger('change', [ val ]);
 				}
@@ -95,8 +96,8 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 			if (this.state === 'active') {
 
-				var val = null;
-				var q   = this.options.indexOf(this.value);
+				let val = null;
+				let q   = this.options.indexOf(this.value);
 
 				if (key === 'w' || key === 'arrow-up')   val = this.options[q - 1] || null;
 				if (key === 's' || key === 'arrow-down') val = this.options[q + 1] || null;
@@ -106,7 +107,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 				if (key === 'enter') val = this.options[this.options.length - 1];
 
 
-				var result = this.setValue(val);
+				let result = this.setValue(val);
 				if (result === true) {
 					this.trigger('change', [ val ]);
 				}
@@ -137,7 +138,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 		deserialize: function(blob) {
 
-			var font = lychee.deserialize(blob.font);
+			let font = lychee.deserialize(blob.font);
 			if (font !== null) {
 				this.setFont(font);
 			}
@@ -146,11 +147,11 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			let data = lychee.ui.Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Select';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.options.length !== 0) settings.options = [].slice.call(this.options, 0);
@@ -169,14 +170,14 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 		update: function(clock, delta) {
 
-			var pulse = this.__pulse;
+			let pulse = this.__pulse;
 			if (pulse.active === true) {
 
 				if (pulse.start === null) {
 					pulse.start = clock;
 				}
 
-				var pt = (clock - pulse.start) / pulse.duration;
+				let pt = (clock - pulse.start) / pulse.duration;
 				if (pt <= 1) {
 					pulse.alpha = (1 - pt);
 				} else {
@@ -188,7 +189,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 			}
 
 
-			var cursor = this.__cursor;
+			let cursor = this.__cursor;
 			if (cursor.active === true) {
 
 				if (cursor.start === null) {
@@ -196,7 +197,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 				}
 
 
-				var ct = (clock - cursor.start) / cursor.duration;
+				let ct = (clock - cursor.start) / cursor.duration;
 				if (ct <= 1) {
 					cursor.alpha = cursor.pingpong === true ? (1 - ct) : ct;
 				} else {
@@ -216,16 +217,16 @@ lychee.define('lychee.ui.entity.Select').includes([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var cursor   = this.__cursor;
-			var pulse    = this.__pulse;
-			var font     = this.font;
-			var value    = this.value;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
-			var hwidth   = this.width  / 2;
-			var hheight  = this.height / 2;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let cursor   = this.__cursor;
+			let pulse    = this.__pulse;
+			let font     = this.font;
+			let value    = this.value;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
+			let hwidth   = this.width  / 2;
+			let hheight  = this.height / 2;
 
 
 			if (alpha !== 1) {
@@ -233,13 +234,13 @@ lychee.define('lychee.ui.entity.Select').includes([
 			}
 
 
-			var x1 = x - hwidth;
-			var lh = this.height / this.options.length;
+			let x1 = x - hwidth;
+			let lh = this.height / this.options.length;
 
-			for (var o = 0, ol = this.options.length; o < ol; o++) {
+			for (let o = 0, ol = this.options.length; o < ol; o++) {
 
-				var option = this.options[o];
-				var y1     = y - hheight + o * lh;
+				let option = this.options[o];
+				let y1     = y - hheight + o * lh;
 
 
 				if (pulse.active === true) {
@@ -398,7 +399,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 			if (options !== null) {
 
-				var height = this.height || null;
+				let height = this.height || null;
 				if (height !== null) {
 
 					if (this.options.length > 0) {
@@ -430,11 +431,11 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 		setState: function(id) {
 
-			var result = lychee.ui.Entity.prototype.setState.call(this, id);
+			let result = lychee.ui.Entity.prototype.setState.call(this, id);
 			if (result === true) {
 
-				var cursor = this.__cursor;
-				var pulse  = this.__pulse;
+				let cursor = this.__cursor;
+				let pulse  = this.__pulse;
 
 
 				if (id === 'active') {
@@ -471,7 +472,7 @@ lychee.define('lychee.ui.entity.Select').includes([
 
 				if (this.options.indexOf(value) !== -1) {
 
-					var pulse = this.__pulse;
+					let pulse = this.__pulse;
 
 					pulse.alpha    = 1.0;
 					pulse.start    = null;

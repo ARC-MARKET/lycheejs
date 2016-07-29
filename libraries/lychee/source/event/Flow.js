@@ -3,49 +3,54 @@ lychee.define('lychee.event.Flow').includes([
 	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Emitter = lychee.import('lychee.event.Emitter');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _process_stack = function() {
+	const _process_recursive = function(event, result) {
 
-		var entry = this.___stack.shift() || null;
+		if (result === true) {
+
+			if (this.___timeout === null) {
+
+				this.___timeout = setTimeout(function() {
+
+					this.___timeout = null;
+					_process_stack.call(this);
+
+				}.bind(this), 0);
+
+			}
+
+		} else {
+
+			this.trigger('error', [ event ]);
+
+		}
+
+	};
+
+	const _process_stack = function() {
+
+		let entry = this.___stack.shift() || null;
 		if (entry !== null) {
 
-			var that  = this;
-			var data  = entry.data;
-			var event = entry.event;
-			var args  = [ event, [] ];
+			let data  = entry.data;
+			let event = entry.event;
+			let args  = [ event, [] ];
 
 			if (data !== null) {
 				args[1].push.apply(args[1], data);
 			}
 
-			args[1].push(function(result) {
-
-				if (result === true) {
-
-					if (that.___timeout === null) {
-
-						that.___timeout = setTimeout(function() {
-
-							that.___timeout = null;
-							_process_stack.call(that);
-
-						}, 0);
-
-					}
-
-				} else {
-
-					that.trigger('error', [ event ]);
-
-				}
-
-			});
+			args[1].push(_process_recursive.bind(this, event));
 
 
-			var result = this.trigger.apply(this, args);
+			let result = this.trigger.apply(this, args);
 			if (result === false) {
 				this.trigger('error', [ event ]);
 			}
@@ -64,13 +69,13 @@ lychee.define('lychee.event.Flow').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function() {
+	let Composite = function() {
 
 		this.___init    = false;
 		this.___stack   = [];
 		this.___timeout = null;
 
-		lychee.event.Emitter.call(this);
+		_Emitter.call(this);
 
 	};
 
@@ -85,19 +90,19 @@ lychee.define('lychee.event.Flow').includes([
 
 		serialize: function() {
 
-			var data = lychee.event.Emitter.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.event.Flow';
 
-			var blob = (data['blob'] || {});
+			let blob = (data['blob'] || {});
 
 
 			if (this.___stack.length > 0) {
 
 				blob.stack = [];
 
-				for (var s = 0, sl = this.___stack.length; s < sl; s++) {
+				for (let s = 0, sl = this.___stack.length; s < sl; s++) {
 
-					var entry = this.___stack[s];
+					let entry = this.___stack[s];
 
 					blob.stack.push({
 						event: entry.event,

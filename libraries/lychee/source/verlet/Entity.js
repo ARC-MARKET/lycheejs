@@ -6,9 +6,9 @@ lychee.define('lychee.verlet.Entity').requires([
 	'lychee.app.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _Constraint = lychee.import('lychee.verlet.Constraint');
-	var _Entity     = lychee.import('lychee.app.Entity');
-	var _Vector3    = lychee.import('lychee.math.Vector3');
+	const _Constraint = lychee.import('lychee.verlet.Constraint');
+	const _Entity     = lychee.import('lychee.app.Entity');
+	const _Vector3    = lychee.import('lychee.math.Vector3');
 
 
 
@@ -16,23 +16,24 @@ lychee.define('lychee.verlet.Entity').requires([
 	 * HELPERS
 	 */
 
-	var _on_change = function() {
+	const _on_change = function() {
 
-		var constraints = [];
-		var particles   = [ this.position ];
-		var rigidity    = this.rigidity;
-		var shape       = this.shape;
+		let constraints = [];
+		let particles   = [ this.position ];
+		let rigidity    = this.rigidity;
+		let shape       = this.shape;
 
 
 		if (shape === Composite.SHAPE.circle) {
 
-			var origin   = new _Vector3(this.position);
-			var radius   = this.radius;
-			var segments = Math.min(64, Math.max(4, Math.pow(radius / 8, 2)));
+			let origin   = new _Vector3(this.position);
+			let radius   = this.radius;
+			let segments = Math.min(64, Math.max(4, Math.pow(radius / 8, 2)));
+			let s        = 0;
 
-			for (var s = 0; s < segments; s++) {
+			for (s = 0; s < segments; s++) {
 
-				var theta = s * (2 * Math.PI) / segments;
+				let theta = s * (2 * Math.PI) / segments;
 
 				particles.push(new _Vector3({
 					x: origin.x + Math.cos(theta) * radius,
@@ -42,11 +43,11 @@ lychee.define('lychee.verlet.Entity').requires([
 
 			}
 
-			for (var s = 0; s < segments; s++) {
+			for (s = 0; s < segments; s++) {
 
-				var curr = particles[s % segments];
-				var prev = particles[(s - 1) % segments] || null;
-				var next = particles[(s + 1) % segments] || null;
+				let curr = particles[s % segments];
+				let prev = particles[(s - 1) % segments] || null;
+				let next = particles[(s + 1) % segments] || null;
 
 
 				if (curr !== prev && prev !== null) {
@@ -81,9 +82,9 @@ lychee.define('lychee.verlet.Entity').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.constraints = [];
@@ -121,7 +122,7 @@ lychee.define('lychee.verlet.Entity').requires([
 
 		serialize: function() {
 
-			var data = _Entity.prototype.serialize.call(this);
+			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.verlet.Entity';
 
 
@@ -137,8 +138,8 @@ lychee.define('lychee.verlet.Entity').requires([
 			_Entity.prototype.update.call(this, clock, delta);
 
 
-			var constraints = this.constraints;
-			for (var c = 0, cl = constraints.length; c < cl; c++) {
+			let constraints = this.constraints;
+			for (let c = 0, cl = constraints.length; c < cl; c++) {
 				constraints[c].update(clock, delta);
 			}
 

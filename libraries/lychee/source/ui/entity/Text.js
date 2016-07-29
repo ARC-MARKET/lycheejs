@@ -3,7 +3,8 @@ lychee.define('lychee.ui.entity.Text').includes([
 	'lychee.ui.Entity'
 ]).exports(function(lychee, global, attachments) {
 
-	var _FONT = attachments["fnt"];
+	const _Entity = lychee.import('lychee.ui.Entity');
+	const _FONT   = attachments["fnt"];
 
 
 
@@ -11,9 +12,9 @@ lychee.define('lychee.ui.entity.Text').includes([
 	 * HELPERS
 	 */
 
-	var _render_buffer = function(renderer) {
+	const _render_buffer = function(renderer) {
 
-		var font = this.font;
+		let font = this.font;
 		if (font !== null && font.texture !== null) {
 
 			if (this.__buffer !== null) {
@@ -28,12 +29,12 @@ lychee.define('lychee.ui.entity.Text').includes([
 			renderer.setAlpha(1.0);
 
 
-			var lines = this.__lines;
-			var lh    = font.lineheight;
-			var ll    = lines.length;
+			let lines = this.__lines;
+			let lh    = font.lineheight;
+			let ll    = lines.length;
 			if (ll > 0) {
 
-				for (var l = 0; l < ll; l++) {
+				for (let l = 0; l < ll; l++) {
 
 					renderer.drawText(
 						0,
@@ -61,9 +62,9 @@ lychee.define('lychee.ui.entity.Text').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		this.font  = _FONT;
@@ -83,10 +84,10 @@ lychee.define('lychee.ui.entity.Text').includes([
 
 		settings.width  = this.width;
 		settings.height = this.height;
-		settings.shape  = lychee.ui.Entity.SHAPE.rectangle;
+		settings.shape  = _Entity.SHAPE.rectangle;
 
 
-		lychee.ui.Entity.call(this, settings);
+		_Entity.call(this, settings);
 
 
 
@@ -116,7 +117,7 @@ lychee.define('lychee.ui.entity.Text').includes([
 
 		deserialize: function(blob) {
 
-			var font = lychee.deserialize(blob.font);
+			let font = lychee.deserialize(blob.font);
 			if (font !== null) {
 				this.setFont(font);
 			}
@@ -125,11 +126,11 @@ lychee.define('lychee.ui.entity.Text').includes([
 
 		serialize: function() {
 
-			var data = lychee.ui.Entity.prototype.serialize.call(this);
+			let data = _Entity.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.entity.Text';
 
-			var settings = data['arguments'][0];
-			var blob     = (data['blob'] || {});
+			let settings = data['arguments'][0];
+			let blob     = (data['blob'] || {});
 
 
 			if (this.value !== '') settings.value = this.value;
@@ -150,12 +151,12 @@ lychee.define('lychee.ui.entity.Text').includes([
 			if (this.visible === false) return;
 
 
-			var alpha    = this.alpha;
-			var position = this.position;
-			var x        = position.x + offsetX;
-			var y        = position.y + offsetY;
-			var hwidth   = this.width  / 2;
-			var hheight  = this.height / 2;
+			let alpha    = this.alpha;
+			let position = this.position;
+			let x        = position.x + offsetX;
+			let y        = position.y + offsetY;
+			let hwidth   = this.width  / 2;
+			let hheight  = this.height / 2;
 
 
 			if (this.__isDirty === true) {
@@ -219,16 +220,16 @@ lychee.define('lychee.ui.entity.Text').includes([
 
 			if (value !== null) {
 
-				var font = this.font;
+				let font = this.font;
 				if (font !== null) {
 
-					var realwidth  = 0;
-					var realheight = 0;
-					var lines      = value.split('\n');
+					let realwidth  = 0;
+					let realheight = 0;
+					let lines      = value.split('\n');
 
 					lines.forEach(function(line) {
 
-						var tmp = font.measure(line);
+						let tmp = font.measure(line);
 						if (tmp.realwidth  > realwidth)  realwidth  = tmp.realwidth;
 						if (tmp.realheight > realheight) realheight = tmp.realheight;
 

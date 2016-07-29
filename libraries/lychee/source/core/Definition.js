@@ -1,7 +1,7 @@
 
 lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition : (function(global) {
 
-	var lychee = global.lychee;
+	const lychee = global.lychee;
 
 
 
@@ -9,21 +9,21 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	 * HELPERS
 	 */
 
-	var _lint = function(method) {
+	const _lint = function(method) {
 
-		var code  = method.toString();
-		var file  = this.__file;
-		var lines = code.split('\n');
+		let code  = method.toString();
+		let file  = this.__file;
+		let lines = code.split('\n');
 
 
 		lines.forEach(function(line, l) {
 
-			var curr = line.trim();
-			var next = (lines[l + 1] || '').trim();
+			let curr = line.trim();
+			let next = (lines[l + 1] || '').trim();
 
 			if (curr.substr(0, 2) !== '//') {
 
-				var next_lim = next.substr(0, 1);
+				let next_lim = next.substr(0, 1);
 
 				if (curr.substr(curr.length - 1, 1) === ')' && next_lim !== '}' && next_lim !== ']') {
 					console.warn('lychee.Definition: Missing trailing ";" (' + file + '#L' + l + ')');
@@ -36,9 +36,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	};
 
-	var _fuzz_asset = function(type) {
+	const _fuzz_asset = function(type) {
 
-		var asset = {
+		let asset = {
 			url: '/tmp/Dummy.' + type,
 			serialize: function() {
 				return null;
@@ -46,7 +46,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 		};
 
 
-		var file = this.__file;
+		let file = this.__file;
 		if (file !== null) {
 			asset.url = file.split('.').slice(0, -1).join('.') + '.' + type;
 		}
@@ -69,12 +69,12 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 	};
 
-	var _fuzz_id = function() {
+	const _fuzz_id = function() {
 
-		var file = this.__file;
+		let file = this.__file;
 		if (file !== null) {
 
-			var packages = lychee.environment.packages.filter(function(pkg) {
+			let packages = lychee.environment.packages.filter(function(pkg) {
 				return pkg.type === 'source';
 			}).map(function(pkg) {
 
@@ -86,22 +86,22 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			});
 
 
-			var ns  = file.split('/');
-			var pkg = packages.find(function(pkg) {
+			let ns  = file.split('/');
+			let pkg = packages.find(function(pkg) {
 				return file.substr(0, pkg.url.length) === pkg.url;
 			}) || null;
 
 
 			if (pkg !== null) {
 
-				var tmp_i = ns.indexOf('source');
-				var tmp_s = ns[ns.length - 1];
+				let tmp_i = ns.indexOf('source');
+				let tmp_s = ns[ns.length - 1];
 
 				if (/\.js$/g.test(tmp_s)) {
 					ns[ns.length - 1] = tmp_s.split('.').slice(0, -1).join('.');
 				}
 
-				var classId = '';
+				let classId = '';
 				if (tmp_i !== -1) {
 					classId = ns.slice(tmp_i + 1).join('.');
 				}
@@ -123,7 +123,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(id) {
+	let Composite = function(id) {
 
 		id = typeof id === 'string' ? id : '';
 
@@ -137,7 +137,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		if (id.match(/\./)) {
 
-			var tmp = id.split('.');
+			let tmp = id.split('.');
 
 			this.id        = id;
 			this.classId   = tmp.slice(1).join('.');
@@ -151,7 +151,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		} else {
 
-			var fuzz_id = _fuzz_id.call(this);
+			let fuzz_id = _fuzz_id.call(this);
 			if (fuzz_id === true) {
 				console.warn('lychee.Definition: Injecting Identifier "' + this.id + '" (' + this.__file + ')');
 			} else {
@@ -192,9 +192,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (blob.attaches instanceof Object) {
 
-				var attachesmap = {};
+				let attachesmap = {};
 
-				for (var aid in blob.attaches) {
+				for (let aid in blob.attaches) {
 					attachesmap[aid] = lychee.deserialize(blob.attaches[aid]);
 				}
 
@@ -215,7 +215,10 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 			}
 
 
-			var index1, index2, tmp, bindargs;
+			let index1   = 0;
+			let index2   = 0;
+			let tmp      = null;
+			let bindargs = null;
 
 			if (typeof blob.supports === 'string') {
 
@@ -251,17 +254,17 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 		serialize: function() {
 
-			var settings = {};
-			var blob     = {};
+			let settings = {};
+			let blob     = {};
 
 
 			if (Object.keys(this._attaches).length > 0) {
 
 				blob.attaches = {};
 
-				for (var aid in this._attaches) {
+				for (let aid in this._attaches) {
 
-					var asset = lychee.serialize(this._attaches[aid]);
+					let asset = lychee.serialize(this._attaches[aid]);
 					if (asset !== null) {
 						blob.attaches[aid] = asset;
 					}
@@ -274,7 +277,7 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 				blob.tags = {};
 
-				for (var tid in this._tags) {
+				for (let tid in this._tags) {
 					blob.tags[tid] = this._tags[tid];
 				}
 
@@ -307,9 +310,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (map !== null) {
 
-				for (var id in map) {
+				for (let id in map) {
 
-					var value = map[id];
+					let value = map[id];
 					if (value instanceof Font || value instanceof Music || value instanceof Sound || value instanceof Texture || value !== undefined) {
 						this._attaches[id] = map[id];
 					}
@@ -347,9 +350,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (definitions !== null) {
 
-				for (var d = 0, dl = definitions.length; d < dl; d++) {
+				for (let d = 0, dl = definitions.length; d < dl; d++) {
 
-					var definition = definitions[d];
+					let definition = definitions[d];
 					if (typeof definition === 'string') {
 
 						if (definition.indexOf('.') !== -1 && this._includes.indexOf(definition) === -1) {
@@ -374,9 +377,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (definitions !== null) {
 
-				for (var d = 0, dl = definitions.length; d < dl; d++) {
+				for (let d = 0, dl = definitions.length; d < dl; d++) {
 
-					var definition = definitions[d];
+					let definition = definitions[d];
 					if (typeof definition === 'string') {
 
 						if (definition.indexOf('.') !== -1 && this._requires.indexOf(definition) === -1) {
@@ -416,9 +419,9 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 
 			if (map !== null) {
 
-				for (var id in map) {
+				for (let id in map) {
 
-					var value = map[id];
+					let value = map[id];
 					if (typeof value === 'string') {
 						this._tags[id] = value;
 					}

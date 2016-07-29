@@ -1,7 +1,13 @@
 
 lychee.define('lychee.effect.Position').exports(function(lychee, global, attachments) {
 
-	var Composite = function(settings) {
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let Composite = function(settings) {
 
 		this.type     = Composite.TYPE.easeout;
 		this.delay    = 0;
@@ -14,10 +20,10 @@ lychee.define('lychee.effect.Position').exports(function(lychee, global, attachm
 
 		// No data validation garbage allowed for effects
 
-		var type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
-		var delay    = typeof settings.delay === 'number'       ? (settings.delay | 0)    : null;
-		var duration = typeof settings.duration === 'number'    ? (settings.duration | 0) : null;
-		var position = settings.position instanceof Object      ? settings.position       : null;
+		let type     = lychee.enumof(Composite.TYPE, settings.type) ? settings.type           : null;
+		let delay    = typeof settings.delay === 'number'           ? (settings.delay | 0)    : null;
+		let duration = typeof settings.duration === 'number'        ? (settings.duration | 0) : null;
+		let position = settings.position instanceof Object          ? settings.position       : null;
 
 		if (type !== null) {
 			this.type = type;
@@ -59,12 +65,12 @@ lychee.define('lychee.effect.Position').exports(function(lychee, global, attachm
 
 		serialize: function() {
 
-			var settings = {};
+			let settings = {};
 
 
 			if (this.type !== Composite.TYPE.easeout) settings.type     = this.type;
-			if (this.delay !== 0)                 settings.delay    = this.delay;
-			if (this.duration !== 250)            settings.duration = this.duration;
+			if (this.delay !== 0)                     settings.delay    = this.delay;
+			if (this.duration !== 250)                settings.duration = this.duration;
 
 
 			if (this.position.x !== null || this.position.y !== null || this.position.z !== null) {
@@ -101,35 +107,35 @@ lychee.define('lychee.effect.Position').exports(function(lychee, global, attachm
 			}
 
 
-			var t = (clock - this.__start) / this.duration;
+			let t = (clock - this.__start) / this.duration;
 			if (t < 0) {
 				return true;
 			}
 
 
-			var origin    = this.__origin;
-			var originx   = origin.x;
-			var originy   = origin.y;
-			var originz   = origin.z;
+			let origin    = this.__origin;
+			let originx   = origin.x;
+			let originy   = origin.y;
+			let originz   = origin.z;
 
-			var position  = this.position;
-			var positionx = position.x;
-			var positiony = position.y;
-			var positionz = position.z;
+			let position  = this.position;
+			let positionx = position.x;
+			let positiony = position.y;
+			let positionz = position.z;
 
-			var x         = originx;
-			var y         = originy;
-			var z         = originz;
+			let x         = originx;
+			let y         = originy;
+			let z         = originz;
 
 			if (t <= 1) {
 
-				var f  = 0;
-				var dx = positionx - originx;
-				var dy = positiony - originy;
-				var dz = positionz - originz;
+				let f  = 0;
+				let dx = positionx - originx;
+				let dy = positiony - originy;
+				let dz = positionz - originz;
 
 
-				var type = this.type;
+				let type = this.type;
 				if (type === Composite.TYPE.linear) {
 
 					x += t * dx;
@@ -154,7 +160,7 @@ lychee.define('lychee.effect.Position').exports(function(lychee, global, attachm
 
 				} else if (type === Composite.TYPE.bounceeasein) {
 
-					var k = 1 - t;
+					let k = 1 - t;
 
 					if ((k /= 1) < ( 1 / 2.75 )) {
 						f = 1 * ( 7.5625 * Math.pow(k, 2) );

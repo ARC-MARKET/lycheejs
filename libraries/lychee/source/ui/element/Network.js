@@ -6,36 +6,44 @@ lychee.define('lychee.ui.element.Network').requires([
 	'lychee.ui.Element'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Element = lychee.import('lychee.ui.Element');
+	const _Input   = lychee.import('lychee.ui.entity.Input');
+	const _Select  = lychee.import('lychee.ui.entity.Select');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _api_origin = '';
+	const _API_ORIGIN = (function(location) {
 
-	(function(location) {
-
-		var origin = location.origin || '';
-		var proto  = origin.split(':')[0];
+		let origin = location.origin || '';
+		let proto  = origin.split(':')[0];
 
 		if (proto.match(/app|file/g)) {
 
-			_api_origin = 'http://harvester.artificial.engineering:4848';
+			return 'http://harvester.artificial.engineering:4848';
 
 		} else if (proto.match(/http|https/g)) {
 
-			_api_origin = location.origin;
+			return location.origin;
+
+		} else {
+
+			return '';
 
 		}
 
 	})(global.location || {});
 
 
-	var _load_api = function(url, callback, scope) {
+	const _load_api = function(url, callback, scope) {
 
 		url = typeof url === 'string' ? url : '/api/server/connect?identifier=/projects/boilerplate';
 
 
-		var config = new Config(_api_origin + url);
+		let config = new Config(_API_ORIGIN + url);
 
 		config.onload = function(result) {
 			callback.call(scope, result === true ? this.buffer : null);
@@ -45,13 +53,13 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	};
 
-	var _read = function() {
+	const _read = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var client = main.defaults.client;
-			var server = main.defaults.server;
+			let client = main.defaults.client;
+			let server = main.defaults.server;
 
 
 			if (typeof client === 'string') {
@@ -85,16 +93,16 @@ lychee.define('lychee.ui.element.Network').requires([
 
 	};
 
-	var _save = function() {
+	const _save = function() {
 
-		var main = global.MAIN || null;
+		let main = global.MAIN || null;
 		if (main !== null) {
 
-			var client = main.client || null;
-			var server = main.server || null;
+			let client = main.client || null;
+			let server = main.server || null;
 
 
-			var mode = this.getEntity('mode').value;
+			let mode = this.getEntity('mode').value;
 			if (mode === 'dynamic') {
 
 				if (client !== null) {
@@ -158,16 +166,16 @@ lychee.define('lychee.ui.element.Network').requires([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(data) {
+	let Composite = function(data) {
 
-		var settings = Object.assign({}, data);
+		let settings = Object.assign({}, data);
 
 
 		settings.label   = 'Network';
 		settings.options = [ 'Save' ];
 
 
-		lychee.ui.Element.call(this, settings);
+		_Element.call(this, settings);
 
 
 
@@ -175,29 +183,29 @@ lychee.define('lychee.ui.element.Network').requires([
 		 * INITIALIZATION
 		 */
 
-		this.setEntity('mode', new lychee.ui.entity.Select({
+		this.setEntity('mode', new _Select({
 			options: [ 'dynamic', 'static' ],
 			value:   'dynamic'
 		}));
 
-		this.setEntity('host', new lychee.ui.entity.Input({
-			type:    lychee.ui.entity.Input.TYPE.text,
+		this.setEntity('host', new _Input({
+			type:    _Input.TYPE.text,
 			min:     1,
 			max:     1024,
 			value:   'localhost',
 			visible: false
 		}));
 
-		this.setEntity('port', new lychee.ui.entity.Input({
-			type:    lychee.ui.entity.Input.TYPE.number,
+		this.setEntity('port', new _Input({
+			type:    _Input.TYPE.number,
 			min:     1024,
 			max:     65534,
 			value:   1337,
 			visible: false
 		}));
 
-		this.setEntity('API', new lychee.ui.entity.Input({
-			type:  lychee.ui.entity.Input.TYPE.text,
+		this.setEntity('API', new _Input({
+			type:  _Input.TYPE.text,
 			value: '/api/server/connect?identifier=/projects/boilerplate'
 		}));
 
@@ -246,7 +254,7 @@ lychee.define('lychee.ui.element.Network').requires([
 
 		serialize: function() {
 
-			var data = lychee.ui.Element.prototype.serialize.call(this);
+			let data = _Element.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ui.element.Network';
 
 

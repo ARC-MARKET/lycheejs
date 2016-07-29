@@ -3,18 +3,22 @@ lychee.define('lychee.net.client.Debugger').includes([
 	'lychee.net.Service'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Service = lychee.import('lychee.net.Service');
+
+
+
 	/*
 	 * HELPERS
 	 */
 
-	var _resolve_reference = function(identifier) {
+	const _resolve_reference = function(identifier) {
 
-		var pointer = this;
+		let pointer = this;
 
-		var ns = identifier.split('.');
-		for (var n = 0, l = ns.length; n < l; n++) {
+		let ns = identifier.split('.');
+		for (let n = 0, l = ns.length; n < l; n++) {
 
-			var name = ns[n];
+			let name = ns[n];
 
 			if (pointer[name] !== undefined) {
 				pointer = pointer[name];
@@ -35,9 +39,9 @@ lychee.define('lychee.net.client.Debugger').includes([
 	 * IMPLEMENTATION
 	 */
 
-	var Composite = function(client) {
+	let Composite = function(client) {
 
-		lychee.net.Service.call(this, 'debugger', client, lychee.net.Service.TYPE.client);
+		_Service.call(this, 'debugger', client, _Service.TYPE.client);
 
 
 
@@ -49,10 +53,10 @@ lychee.define('lychee.net.client.Debugger').includes([
 
 			if (typeof data.construtor === 'string' || typeof data.reference === 'string') {
 
-				var scope       = (lychee.environment !== null ? lychee.environment.global : global);
-				var environment = (lychee.environment !== null ? lychee.environment        : null);
-				var definition  = lychee.deserialize(data);
-				var value       = false;
+				let scope       = (lychee.environment !== null ? lychee.environment.global : global);
+				let environment = (lychee.environment !== null ? lychee.environment        : null);
+				let definition  = lychee.deserialize(data);
+				let value       = false;
 
 				if (environment !== null) {
 					value = environment.define(definition);
@@ -79,10 +83,10 @@ lychee.define('lychee.net.client.Debugger').includes([
 
 			if (typeof data.reference === 'string') {
 
-				var scope    = (lychee.environment !== null ? lychee.environment.global : global);
-				var value    = null;
-				var instance = _resolve_reference.call(scope, data.reference);
-				var bindargs = [].slice.call(data.arguments, 0).map(function(value) {
+				let scope    = (lychee.environment !== null ? lychee.environment.global : global);
+				let value    = null;
+				let instance = _resolve_reference.call(scope, data.reference);
+				let bindargs = [].slice.call(data.arguments, 0).map(function(value) {
 
 					if (typeof value === 'string' && value.charAt(0) === '#') {
 
@@ -90,7 +94,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 							console.log('lychee.net.client.Debugger: Injecting "' + value + '" from global');
 						}
 
-						var resolved_injection = _resolve_reference.call(scope, value.substr(1));
+						let resolved_injection = _resolve_reference.call(scope, value.substr(1));
 						if (resolved_injection !== null) {
 							value = null;
 						}
@@ -138,9 +142,9 @@ lychee.define('lychee.net.client.Debugger').includes([
 
 			if (typeof data.reference === 'string') {
 
-				var scope       = (lychee.environment !== null ? lychee.environment.global : global);
-				var environment = _resolve_reference.call(scope, data.reference);
-				var value       = lychee.Debugger.expose(environment);
+				let scope       = (lychee.environment !== null ? lychee.environment.global : global);
+				let environment = _resolve_reference.call(scope, data.reference);
+				let value       = lychee.Debugger.expose(environment);
 
 				if (this.tunnel !== null) {
 
@@ -162,9 +166,9 @@ lychee.define('lychee.net.client.Debugger').includes([
 
 			if (typeof data.reference === 'string') {
 
-				var scope    = (lychee.environment !== null ? lychee.environment.global : global);
-				var instance = _resolve_reference.call(scope, data.reference);
-				var value    = lychee.serialize(instance);
+				let scope    = (lychee.environment !== null ? lychee.environment.global : global);
+				let instance = _resolve_reference.call(scope, data.reference);
+				let value    = lychee.serialize(instance);
 
 				if (this.tunnel !== null) {
 
@@ -188,6 +192,26 @@ lychee.define('lychee.net.client.Debugger').includes([
 	Composite.prototype = {
 
 		/*
+		 * ENTITY API
+		 */
+
+		// deserialize: function(blob) {},
+
+		serialize: function() {
+
+			let data = _Service.prototype.serialize.call(this);
+			data['constructor'] = 'lychee.net.client.Debugger';
+			data['arguments']   = [ data['arguments'][1] ];
+
+
+
+			return data;
+
+		},
+
+
+
+		/*
 		 * DEBUGGER API
 		 */
 
@@ -199,7 +223,7 @@ lychee.define('lychee.net.client.Debugger').includes([
 
 			if (message !== null) {
 
-				var tunnel = this.tunnel;
+				let tunnel = this.tunnel;
 				if (tunnel !== null) {
 
 					tunnel.send({
