@@ -666,18 +666,23 @@
 		this.__buffer   = null;
 		this.__load     = true;
 
-		this.__charset     = {};
-		this.__charset[''] = {
-			width:      0,
-			height:     this.lineheight,
-			realwidth:  0,
-			realheight: this.lineheight,
-			x:          0,
-			y:          0
-		};
-
 
 		if (url !== null) {
+
+			if (_CHAR_CACHE[url] === undefined) {
+
+				_CHAR_CACHE[url]     = {};
+				_CHAR_CACHE[url][''] = {
+					width:      0,
+					height:     this.lineheight,
+					realwidth:  0,
+					realheight: this.lineheight,
+					x:          0,
+					y:          0
+				};
+
+			}
+
 
 			if (_FONT_CACHE[url] !== undefined) {
 				_clone_font(_FONT_CACHE[url], this);
@@ -829,7 +834,7 @@
 	 * MUSIC IMPLEMENTATION
 	 */
 
-	const _music_cache = {};
+	const _MUSIC_CACHE = {};
 
 	const _clone_music = function(origin, clone) {
 
