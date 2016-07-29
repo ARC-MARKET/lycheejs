@@ -47,17 +47,14 @@ fi;
 
 if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
-	echo "";
-	echo "> Building lychee.js core and fertilizers";
-	echo "";
-
-
 	cd $LYCHEEJS_ROOT;
-
 
 	$LYCHEEJS_NODE ./bin/configure.js;
 
 	if [ "$?" == "0" ]; then
+
+		echo -e "\n\n";
+		echo -e "  (L) Building lychee.js Libraries";
 
 		./bin/fertilizer.sh auto /libraries/lychee;
 		# ./bin/fertilizer.sh auto /libraries/breeder;
@@ -65,13 +62,11 @@ if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 		./bin/fertilizer.sh auto /libraries/harvester;
 		# ./bin/fertilizer.sh auto /libraries/strainer;
 
-		echo "> DONE";
-		echo "";
+		echo -e "  (I) SUCCESS\n";
 
 	else
 
-		echo "> FAIL";
-		echo "";
+		echo -e "  (E) FAILURE\n";
 
 		exit 1;
 
@@ -82,9 +77,7 @@ fi;
 
 if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 
-	echo "";
-	echo "> Fixing chmod rights";
-	echo "";
+	echo -e "  (L) Fixing CHMOD/CHOWN rights";
 
 
 	cd $LYCHEEJS_ROOT;
@@ -137,8 +130,7 @@ if [[ "$OS" == "linux" || "$OS" == "osx" ]]; then
 	fi;
 
 
-	echo "> DONE";
-	echo "";
+	echo -e "  (I) SUCCESS\n";
 
 fi;
 
