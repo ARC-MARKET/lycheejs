@@ -11,7 +11,7 @@ lychee.define('lychee.app.Loop').includes([
 
 }).exports(function(lychee, global, attachments) {
 
-	const _instances = [];
+	const _INSTANCES = [];
 	let   _id        = 0;
 
 
@@ -26,9 +26,9 @@ lychee.define('lychee.app.Loop').includes([
 
 			let now = Date.now();
 
-			for (let i = 0, l = _instances.length; i < l; i++) {
+			for (let i = 0, l = _INSTANCES.length; i < l; i++) {
 
-				let instance = _instances[i];
+				let instance = _INSTANCES[i];
 				let clock    = now - instance.__start;
 
 				_update_loop.call(instance, clock);
@@ -42,9 +42,9 @@ lychee.define('lychee.app.Loop').includes([
 
 			let now = Date.now();
 
-			for (let i = 0, l = _instances.length; i < l; i++) {
+			for (let i = 0, l = _INSTANCES.length; i < l; i++) {
 
-				let instance = _instances[i];
+				let instance = _INSTANCES[i];
 				let clock    = now - instance.__start;
 
 				_update_loop.call(instance, clock);
@@ -59,9 +59,9 @@ lychee.define('lychee.app.Loop').includes([
 
 			let now = Date.now();
 
-			for (let i = 0, l = _instances.length; i < l; i++) {
+			for (let i = 0, l = _INSTANCES.length; i < l; i++) {
 
-				let instance = _instances[i];
+				let instance = _INSTANCES[i];
 				if (instance.__state === 1) {
 
 					let clock = now   - instance.__start;
@@ -228,7 +228,7 @@ lychee.define('lychee.app.Loop').includes([
 
 		lychee.event.Emitter.call(this);
 
-		_instances.push(this);
+		_INSTANCES.push(this);
 
 		settings = null;
 
@@ -241,10 +241,10 @@ lychee.define('lychee.app.Loop').includes([
 
 			let found = false;
 
-			for (let i = 0, il = _instances.length; i < il; i++) {
+			for (let i = 0, il = _INSTANCES.length; i < il; i++) {
 
-				if (_instances[i] === this) {
-					_instances.splice(i, 1);
+				if (_INSTANCES[i] === this) {
+					_INSTANCES.splice(i, 1);
 					found = true;
 					il--;
 					i--;
