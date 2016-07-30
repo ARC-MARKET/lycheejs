@@ -191,7 +191,7 @@ lychee.define('lychee.data.MD').exports(function(lychee, global, attachments) {
 		var last_entity = null;
 
 
-		text.split(/\s/g).forEach(function(str) {
+        text.match(/(\[[^\)]+\)|[^\s]+)/gi).forEach(function(str) {
 
 			var entity = null;
 			var suffix = null;
