@@ -25,10 +25,11 @@ Thank you for your understanding.
 
 These are the things that we are currently working on:
 
-- 2016-Q3: Editor is being refactored.
-- 2016-Q3: Guide is subject to change (to integrate the Editor). [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/159)
 - 2016-Q4: Strainer is being refactored to support better AI implementation.
 - 2016-Q4: CARTEL (AI implementation) is being refactored. [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/91)
+- 2016-Q4: Guide is subject to change (to integrate the Editor). [Issue](https://github.com/Artificial-Engineering/lycheejs/issues/159)
+- 2016-Q4: Editor is being refactored to integrate all other Cultivator Tools' functionalities.
+- 2017-Q1: [lychee.js Garden](https://github.com/Artificial-Engineering/lycheejs-garden.git) is being implemented.
 
 
 ## Overview
