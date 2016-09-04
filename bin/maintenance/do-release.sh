@@ -119,13 +119,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	#
 
 	cd $LYCHEEJS_FOLDER/bin/runtime;
-	./bin/update.sh;
-
-	rm -rf .git/;
-	git init;
-	git remote add origin git@github.com:Artificial-Engineering/lycheejs-runtime.git;
-	git add ./;
-	git commit -m "lychee.js $NEW_VERSION release";
+	./bin/do-update.sh;
 
 
 
@@ -206,7 +200,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	#
 
 	cd $LYCHEEJS_FOLDER/bin/runtime;
-	git push origin master -f;
+	./bin/do-release.sh;
 
 
 
