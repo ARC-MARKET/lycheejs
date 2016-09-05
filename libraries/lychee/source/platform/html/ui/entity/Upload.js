@@ -88,15 +88,26 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 		element.oncancel = function() {
 			element._visible = false;
+			element.value    = '';
 			instance.trigger('change', [ null ]);
 		};
 
 		element.onchange = function() {
 
-			let val = [];
+			if (element._visible === false) {
+				return;
+			} else {
+				element._visible = false;
+			}
+
+
+			let val    = [];
+			let change = false;
 
 
 			[].slice.call(this.files).forEach(function(file) {
+
+				change = true;
 
 				let reader = new global.FileReader();
 
@@ -120,16 +131,24 @@ lychee.define('lychee.ui.entity.Upload').tags({
 			});
 
 
-			setTimeout(function() {
+			if (change === true) {
 
-				let result = instance.setValue(val);
-				if (result === true) {
-					instance.trigger('change', [ val ]);
-				} else {
-					instance.trigger('change', [ null ]);
-				}
+				setTimeout(function() {
 
-			}, 1000);
+					let result = instance.setValue(val);
+					if (result === true) {
+						instance.trigger('change', [ val ]);
+					} else {
+						instance.trigger('change', [ null ]);
+					}
+
+				}, 500);
+
+			} else {
+
+				instance.trigger('change', [ null ]);
+
+			}
 
 		};
 
