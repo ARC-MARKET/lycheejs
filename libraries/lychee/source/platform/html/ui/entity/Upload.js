@@ -70,7 +70,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 
 	const _wrap = function(instance) {
 
-		let allowed = [ 'json', 'fnt', 'msc', 'snd', 'png', 'js', 'tpl' ];
+		let allowed = [ 'json', 'fnt', 'msc', 'snd', 'png', 'js', 'tpl', 'md' ];
 		let element = global.document.createElement('input');
 
 		if (instance.type !== Composite.TYPE.all) {
