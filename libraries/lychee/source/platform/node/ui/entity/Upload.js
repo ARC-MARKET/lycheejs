@@ -51,6 +51,8 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		this.bind('touch', function() {
 
 			// TODO: Show file dialog
+			// TODO: trigger 'change' with null on no selection
+			// TODO: trigger 'change' with Asset array on selection
 
 		}, this);
 

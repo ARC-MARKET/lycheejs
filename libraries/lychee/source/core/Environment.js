@@ -131,6 +131,7 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				return function(){};
 			break;
 
+			case 'body':
 			case 'document':
 			case 'location':
 			case 'localStorage':

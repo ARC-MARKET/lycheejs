@@ -6,7 +6,8 @@ lychee.define('lychee.ui.entity.Upload').tags({
 ]).supports(function(lychee, global) {
 
 	if (
-		typeof global.document !== 'undefined'
+		typeof global.addEventListener === 'function'
+		&& typeof global.document !== 'undefined'
 		&& typeof global.document.createElement === 'function'
 		&& typeof global.FileReader !== 'undefined'
 		&& typeof global.FileReader.prototype.readAsDataURL === 'function'
@@ -22,6 +23,34 @@ lychee.define('lychee.ui.entity.Upload').tags({
 	const _Button    = lychee.import('lychee.ui.entity.Button');
 	const _INSTANCES = [];
 	const _WRAPPERS  = [];
+
+
+
+	/*
+	 * FEATURE DETECTION
+	 */
+
+	(function(document) {
+
+		let focus = 'onfocus' in document;
+		if (focus === true && typeof document.addEventListener === 'function') {
+
+			document.addEventListener('focus', function() {
+
+				for (let w = 0, wl = _WRAPPERS.length; w < wl; w++) {
+
+					let wrapper = _WRAPPERS[w];
+					if (wrapper._visible === true) {
+						wrapper.oncancel();
+					}
+
+				}
+
+			}, true);
+
+		}
+
+	})(global.document || {});
 
 
 
@@ -48,10 +77,19 @@ lychee.define('lychee.ui.entity.Upload').tags({
 			allowed = [ _MIME_TYPE[instance.type] ];
 		}
 
+		element._visible = false;
 		element.setAttribute('accept',   allowed.map(function(v) { return '.' + v; }).join(','));
 		element.setAttribute('type',     'file');
 		element.setAttribute('multiple', '');
 
+		element.onclick  = function() {
+			element._visible = true;
+		};
+
+		element.oncancel = function() {
+			element._visible = false;
+			instance.trigger('change', [ null ]);
+		};
 
 		element.onchange = function() {
 
@@ -87,6 +125,8 @@ lychee.define('lychee.ui.entity.Upload').tags({
 				let result = instance.setValue(val);
 				if (result === true) {
 					instance.trigger('change', [ val ]);
+				} else {
+					instance.trigger('change', [ null ]);
 				}
 
 			}, 1000);
@@ -94,7 +134,7 @@ lychee.define('lychee.ui.entity.Upload').tags({
 		};
 
 
-		_WRAPPERS.push(element);
+		return element;
 
 	};
 
