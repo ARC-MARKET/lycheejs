@@ -55,10 +55,10 @@
 					"png"
 				],
 				"Paddle": [
-					"enemy.png",
+					"evil.png",
+					"good.png",
 					"js",
-					"json",
-					"player.png"
+					"json"
 				]
 			},
 			"state": {

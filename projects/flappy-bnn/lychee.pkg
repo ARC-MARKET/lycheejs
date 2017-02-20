@@ -1,0 +1,99 @@
+{
+	"api": {
+		"files": {}
+	},
+	"build": {
+		"environments": {
+			"html-nwjs/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-nwjs",
+						"html"
+					]
+				},
+				"variant": "application"
+			},
+			"html/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"variant": "application"
+			}
+		},
+		"files": {}
+	},
+	"source": {
+		"environments": {},
+		"files": {
+			"Main": [
+				"js"
+			],
+			"ai": {
+				"Agent": [
+					"js"
+				]
+			},
+			"effect": {
+				"Explosion": [
+					"js",
+					"json",
+					"png",
+					"snd"
+				]
+			},
+			"entity": {
+				"Goal": [
+					"js",
+					"json",
+					"png"
+				],
+				"Plane": [
+					"js",
+					"json",
+					"png"
+				]
+			},
+			"policy": {
+				"Control": [
+					"js"
+				]
+			},
+			"state": {
+				"Game": [
+					"js",
+					"json"
+				]
+			},
+			"ui": {
+				"sprite": {
+					"Background": [
+						"js",
+						"json",
+						"png"
+					]
+				}
+			}
+		},
+		"tags": {}
+	}
+}

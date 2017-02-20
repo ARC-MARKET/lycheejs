@@ -84,6 +84,33 @@ lychee.define('strainer.api.Module').requires([
 
 	};
 
+	const _trace_variable = function(name, body) {
+
+		return body.split('\n').filter(function(line) {
+			return line.includes(name + ' = ');
+		}).map(function(line) {
+
+			let i1 = line.indexOf('=');
+			let i2 = line.indexOf(';', i1);
+			if (i2 === -1) {
+				i2 = line.length;
+			}
+
+			return line.substr(i1 + 2, i2 - i1 - 2);
+
+		}).map(function(value) {
+
+			return {
+				type:  _detect_type(value),
+				value: _detect_value(value)
+			};
+
+		}).filter(function(value) {
+			return value.type !== 'undefined';
+		});
+
+	};
+
 	const _detect_type = function(str) {
 
 		let type = 'undefined';
@@ -105,6 +132,16 @@ lychee.define('strainer.api.Module').requires([
 			type = 'Enum';
 		} else if (str.startsWith('new Composite')) {
 			type = 'Composite';
+		} else if (str.startsWith('new ')) {
+
+			let tmp = str.substr(4);
+			let i1  = tmp.indexOf('(');
+			if (i1 !== -1) {
+				tmp = tmp.substr(0, i1);
+			}
+
+			type = tmp;
+
 		} else if (str.startsWith('\'') && str.endsWith('\'')) {
 			type = 'String';
 		} else if (str.startsWith('"') && str.endsWith('"')) {
@@ -228,6 +265,24 @@ lychee.define('strainer.api.Module').requires([
 			value = str;
 		} else if (str.startsWith('new Composite')) {
 			value = str;
+		} else if (str.startsWith('new ')) {
+
+			let tmp = str.substr(4);
+			let i1  = tmp.indexOf('(');
+			let i2  = tmp.indexOf(')', i1);
+
+			if (i1 !== -1 && i2 !== -1) {
+
+				tmp = tmp.substr(i1 + 1, i2 - i1 - 1);
+
+				if (tmp.includes(',') === false) {
+					value = _parse_value(tmp);
+				}
+
+			} else if (i1 !== -1) {
+				value = '<' + tmp.substr(0, i1) + '>';
+			}
+
 		} else if (str.startsWith('\'') && str.endsWith('\'')) {
 			value = str.substr(1, str.length - 2);
 		} else if (str.startsWith('"') && str.endsWith('"')) {
@@ -363,11 +418,18 @@ lychee.define('strainer.api.Module').requires([
 
 					if (tmp3 === ' {' || tmp3 === ' {},') {
 
+						let body = _get_function_body(tmp2[1], stream);
+						let hash = null;
+						if (body !== null) {
+							hash = _get_function_hash(body);
+						}
+
+
 						if (tmp2[1] === 'serialize') {
 
 							methods['serialize'] = {
-								hash:       null,
-								body:       null,
+								body:       body,
+								hash:       hash,
 								parameters: [],
 								values:     [{
 									type:  'SerializationBlob',
@@ -382,8 +444,8 @@ lychee.define('strainer.api.Module').requires([
 						} else if (tmp2[1] === 'deserialize') {
 
 							methods['deserialize'] = {
-								hash:       null,
-								body:       null,
+								body:       body,
+								hash:       hash,
 								parameters: [{
 									name:  'blob',
 									type:  'SerializationBlob',
@@ -406,8 +468,8 @@ lychee.define('strainer.api.Module').requires([
 
 							// last_method = methods['setWhatever'] = { parameters: [{ name: 'foo', type: 'String', value: null }] }
 							last_method = methods[tmp2[1]] = {
-								hash:       null,
-								body:       null,
+								body:       body,
+								hash:       hash,
 								parameters: [],
 								values:     []
 							};
@@ -490,18 +552,33 @@ lychee.define('strainer.api.Module').requires([
 							let type  = _detect_type(tmp2);
 							let value = _detect_value(tmp2);
 
-							// XXX: Keep the non-guessable value
 							if (type === 'undefined' && value === undefined && tmp2 !== 'undefined') {
 
-								type  = 'undefined';
-								value = tmp2;
+								// XXX: Trace variable mutations
+								if (/^[A-Za-z0-9]+/g.test(tmp2) === true) {
 
-								errors.push({
-									ruleId:     'no-return-value',
-									methodName: last_name,
-									fileName:   null,
-									message:    'Unguessable return value "' + tmp2 + '"'
-								});
+									let mutation = _trace_variable(tmp2, last_method.body).pop();
+									if (mutation !== undefined) {
+										type  = mutation.type;
+										value = mutation.value;
+									}
+
+								}
+
+
+								if (type === 'undefined') {
+
+									type  = 'undefined';
+									value = tmp2;
+
+									errors.push({
+										ruleId:     'no-return-value',
+										methodName: last_name,
+										fileName:   null,
+										message:    'Unguessable return "' + last_name + '()" ("' + tmp2 + '").'
+									});
+
+								}
 
 							}
 
@@ -587,22 +664,16 @@ lychee.define('strainer.api.Module').requires([
 			});
 
 
-			for (let name in methods) {
+			for (let mid in methods) {
 
-				let method = methods[name];
-				if (method.body === null) {
-					method.body = _get_function_body(name, stream);
-				}
-
-				if (method.body !== null && method.hash === null) {
-					method.hash = _get_function_hash(method.body);
-				}
-
+				let method = methods[mid];
 				if (method.values.length === 0) {
+
 					method.values.push({
 						type:  'undefined',
 						value: undefined
 					});
+
 				}
 
 			}

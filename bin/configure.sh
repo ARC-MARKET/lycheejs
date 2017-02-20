@@ -30,14 +30,12 @@ fi;
 if [ "$OS" == "darwin" ]; then
 
 	OS="osx";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node";
 	LYCHEEJS_NWJS="$LYCHEEJS_ROOT/bin/runtime/html-nwjs/osx/$ARCH/nwjs.app";
 
 elif [ "$OS" == "linux" ]; then
 
 	OS="linux";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node";
 	LYCHEEJS_NWJS="$LYCHEEJS_ROOT/bin/runtime/html-nwjs/linux/$ARCH/nw";
 
@@ -46,7 +44,6 @@ elif [ "$OS" == "freebsd" ] || [ "$OS" == "netbsd" ]; then
 	# XXX: BSD requires Linux binary compatibility
 
 	OS="bsd";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 	LYCHEEJS_NODE="$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node";
 	LYCHEEJS_NWJS="$LYCHEEJS_ROOT/bin/runtime/html-nwjs/linux/$ARCH/nw";
 
@@ -65,11 +62,11 @@ if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 		echo -e "\n\n";
 		echo -e "  (L) Building lychee.js Libraries";
 
-		./bin/fertilizer.sh auto /libraries/lychee;
-		# ./bin/fertilizer.sh auto /libraries/breeder;
-		./bin/fertilizer.sh auto /libraries/fertilizer;
-		./bin/fertilizer.sh auto /libraries/harvester;
-		# ./bin/fertilizer.sh auto /libraries/strainer;
+		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/lychee;
+		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/breeder;
+		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/fertilizer;
+		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/harvester;
+		./libraries/fertilizer/bin/fertilizer.sh auto /libraries/strainer;
 
 		echo -e "  (I) SUCCESS\n";
 
@@ -111,20 +108,21 @@ if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 	chmod +x ./projects/*/bin/*.sh      2> /dev/null;
 
 	chmod 0777 ./bin;
-	chmod -R 0777 ./bin/harvester;
+	chmod -R 0777 ./libraries/harvester/profiles;
 
-	chmod +x ./bin/breeder.js;
-	chmod +x ./bin/breeder.sh;
+
 	chmod +x ./bin/configure.js;
 	chmod +x ./bin/editor.sh;
-	chmod +x ./bin/fertilizer.js;
-	chmod +x ./bin/fertilizer.sh;
-	chmod +x ./bin/harvester.js;
-	chmod +x ./bin/harvester.sh;
 	chmod +x ./bin/helper.sh;
 	chmod +x ./bin/ranger.sh;
-	chmod +x ./bin/strainer.js;
-	chmod +x ./bin/strainer.sh;
+
+
+
+	# Make fertilizers explicitely executable
+
+	chmod +x ./bin/runtime/bin/*.sh;
+	chmod +x ./bin/runtime/*/package.sh;
+	chmod +x ./bin/runtime/*/update.sh;
 
 
 
@@ -146,24 +144,27 @@ fi;
 
 if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 
-	echo -e "  (L) Fixing GIT config";
+	if [ -e "$LYCHEEJS_ROOT/.git/config" ]; then
+
+		echo -e "  (L) Fixing GIT config";
 
 
-	cd $LYCHEEJS_ROOT;
+		cd $LYCHEEJS_ROOT;
+
+		check_remote=$(cat .git/config | grep '\[remote "upstream"\]');
+
+		if [ "$check_remote" == "" ]; then
+
+			echo -e "[remote \"upstream\"]" >> .git/config;
+			echo -e "\turl = https://github.com/Artificial-Engineering/lycheejs.git" >> .git/config;
+			echo -e "\tfetch = +refs/heads/*:refs/remotes/upstream/*" >> .git/config;
+
+		fi;
 
 
-	check_remote=$(cat .git/config | grep '\[remote "upstream"\]');
-
-	if [ "$check_remote" == "" ]; then
-
-		echo -e "[remote \"upstream\"]" >> .git/config;
-		echo -e "\turl = https://github.com/Artificial-Engineering/lycheejs.git" >> .git/config;
-		echo -e "\tfetch = +refs/heads/*:refs/remotes/upstream/*" >> .git/config;
+		echo -e "  (I) SUCCESS\n";
 
 	fi;
-
-
-	echo -e "  (I) SUCCESS\n";
 
 fi;
 

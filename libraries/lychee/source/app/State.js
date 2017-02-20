@@ -1,9 +1,11 @@
 
 lychee.define('lychee.app.State').requires([
+	'lychee.ai.Layer',
 	'lychee.app.Layer',
 	'lychee.ui.Layer'
 ]).exports(function(lychee, global, attachments) {
 
+	const _Ai_layer  = lychee.import('lychee.ai.Layer');
 	const _App_layer = lychee.import('lychee.app.Layer');
 	const _Ui_layer  = lychee.import('lychee.ui.Layer');
 
@@ -12,6 +14,21 @@ lychee.define('lychee.app.State').requires([
 	/*
 	 * HELPERS
 	 */
+
+	const _validate_layer = function(layer) {
+
+		if (
+			lychee.interfaceof(_Ai_layer, layer)
+			|| lychee.interfaceof(_App_layer, layer)
+			|| lychee.interfaceof(_Ui_layer, layer)
+		) {
+			return true;
+		}
+
+
+		return false;
+
+	};
 
 	const _get_id = function(entity) {
 
@@ -582,8 +599,8 @@ lychee.define('lychee.app.State').requires([
 
 		setLayer: function(id, layer) {
 
-			id    = typeof id === 'string'                                                          ? id    : null;
-			layer = (lychee.interfaceof(_App_layer, layer) || lychee.interfaceof(_Ui_layer, layer)) ? layer : null;
+			id    = typeof id === 'string'          ? id    : null;
+			layer = _validate_layer(layer) === true ? layer : null;
 
 
 			if (id !== null) {

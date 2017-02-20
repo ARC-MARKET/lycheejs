@@ -27,17 +27,14 @@ fi;
 if [ "$OS" == "darwin" ]; then
 
 	OS="osx";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$(greadlink -f "$0")")/../"; pwd);
 
 elif [ "$OS" == "linux" ]; then
 
 	OS="linux";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 
 elif [ "$OS" == "freebsd" ] || [ "$OS" == "netbsd" ]; then
 
 	OS="bsd";
-	LYCHEEJS_ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../"; pwd);
 
 fi;
 
@@ -137,8 +134,8 @@ _handle_action () {
 
 			cd $LYCHEEJS_ROOT;
 
-			./bin/harvester.sh stop 2>&1;
-			./bin/harvester.sh start "$resource" 2>&1;
+			./libraries/harvester/bin/harvester.sh stop 2>&1;
+			./libraries/harvester/bin/harvester.sh start "$resource" 2>&1;
 			exit 0;
 
 		;;
@@ -155,7 +152,7 @@ _handle_action () {
 
 			cd $LYCHEEJS_ROOT;
 
-			./bin/harvester.sh stop 2>&1;
+			./libraries/harvester/bin/harvester.sh stop 2>&1;
 			exit 0;
 
 		;;
@@ -278,9 +275,9 @@ _put_api_project () {
 	apiurl="http://localhost:4848/api/project/$2";
 
 	result=$(curl --silent -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1);
-    echo "";
+	echo "";
 	echo "$result";
-    echo "";
+	echo "";
 
 }
 
@@ -290,9 +287,9 @@ _put_api_profile () {
 	apiurl="http://localhost:4848/api/profile/$2";
 
 	result=$(curl --silent -H "Content-Type: application/json" -X POST -d "$data" $apiurl 2>&1);
-    echo "";
+	echo "";
 	echo "$result";
-    echo "";
+	echo "";
 
 }
 
@@ -402,6 +399,60 @@ elif [ "$protocol" == "env" ]; then
 				_start_env $LYCHEEJS_ROOT/bin/runtime/node-sdl/linux/$ARCH/node $program $arg1 $arg2 $arg3;
 			elif [ "$OS" == "osx" ]; then
 				_start_env $LYCHEEJS_ROOT/bin/runtime/node-sdl/osx/$ARCH/node $program $arg1 $arg2 $arg3;
+			fi;
+
+		fi;
+
+	else
+
+		if [ "$platform" == "html" ]; then
+
+			if [ "$OS" == "linux" ]; then
+
+				chrome1=`which google-chrome`;
+				chrome2=`which chromium-browser`;
+				chrome3=`which chrome`;
+
+				if [ -x "$chrome1" ]; then
+					"$chrome1";
+				elif [ -x "$chrome2" ]; then
+					"$chrome2";
+				elif [ -x "$chrome3" ]; then
+					"$chrome3";
+				fi;
+
+			elif [ "$OS" == "osx" ]; then
+
+				chrome1="/Applications/Google Chrome.app";
+
+				if [ -d "$chrome1" ]; then
+					open -a "$chrome1";
+				fi;
+
+			fi;
+
+		elif [ "$platform" == "html-nwjs" ]; then
+
+			if [ "$OS" == "linux" ] || [ "$OS" == "bsd" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/html-nwjs/linux/$ARCH/nw;
+			elif [ "$OS" == "osx" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/html-nwjs/osx/$ARCH/nw;
+			fi;
+
+		elif [ "$platform" == "node" ]; then
+
+			if [ "$OS" == "linux" ] || [ "$OS" == "bsd" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/node/linux/$ARCH/node;
+			elif [ "$OS" == "osx" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/node/osx/$ARCH/node;
+			fi;
+
+		elif [ "$platform" == "node-sdl" ]; then
+
+			if [ "$OS" == "linux" ] || [ "$OS" == "bsd" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/node-sdl/linux/$ARCH/node;
+			elif [ "$OS" == "osx" ]; then
+				$LYCHEEJS_ROOT/bin/runtime/node-sdl/osx/$ARCH/node;
 			fi;
 
 		fi;

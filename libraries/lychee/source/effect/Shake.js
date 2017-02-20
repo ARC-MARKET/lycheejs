@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Shake').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

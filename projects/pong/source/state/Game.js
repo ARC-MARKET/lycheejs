@@ -40,13 +40,13 @@ lychee.define('game.state.Game').requires([
 		}
 
 
-		this.__player.target.y = position.y;
+		this.__good.target.y = position.y;
 
 	};
 
-	const _reset_game = function(winner) {
+	const _reset_game = function(player) {
 
-		winner = typeof winner === 'string' ? winner : null;
+		player = typeof player === 'string' ? player : null;
 
 
 		let ball = this.queryLayer('game', 'ball');
@@ -66,7 +66,7 @@ lychee.define('game.state.Game').requires([
 				velocity.y *= -1;
 			}
 
-			if (winner === 'player') {
+			if (player === 'good') {
 				velocity.x *= -1;
 			}
 
@@ -76,21 +76,73 @@ lychee.define('game.state.Game').requires([
 		}
 
 
-		if (winner === 'player') {
-			this.jukebox.play(_SOUNDS.cheer);
-		} else if (winner === 'enemy') {
-			this.jukebox.play(_SOUNDS.boo);
+		let stats = this.__statistics || null;
+		if (stats !== null) {
+
+			if (player === 'good') {
+				stats.good++;
+				this.jukebox.play(_SOUNDS.cheer);
+			} else if (player === 'evil') {
+				stats.evil++;
+				this.jukebox.play(_SOUNDS.boo);
+			}
+
+			let info = this.queryLayer('ui', 'info');
+			if (info !== null) {
+				info.setValue(stats.good + ' - ' + stats.evil);
+			}
+
 		}
 
 
-		let score = this.queryLayer('ui', 'score');
-		if (score !== null) {
-			score.setValue(this.__score.player + ' - ' + this.__score.enemy);
+		this.queryLayer('game', 'good').setPosition({ y: 0 });
+		this.queryLayer('game', 'evil').setPosition({ y: 0 });
+
+	};
+
+	const _bounce_effect = function(player) {
+
+		player = typeof player === 'string' ? player : null;
+
+
+		let color = '#ffffff';
+		if (player === 'good') {
+			color = '#14a5e2';
+		} else if (player === 'evil') {
+			color = '#de1010';
 		}
 
 
-		this.queryLayer('game', 'player').setPosition({ y: 0 });
-		this.queryLayer('game', 'enemy').setPosition({ y: 0 });
+		this.getLayer('game').addEffect(new _Shake({
+			type:     _Shake.TYPE.bounceeaseout,
+			duration: 300,
+			shake:    {
+				x: (Math.random() * 16) | 0,
+				y: (Math.random() * 16) | 0
+			}
+		}));
+
+		this.getLayer('ui').addEffect(new _Shake({
+			type:     _Shake.TYPE.bounceeaseout,
+			duration: 300,
+			shake:    {
+				x: (Math.random() * 16) | 0,
+				y: (Math.random() * 16) | 0
+			}
+		}));
+
+
+		let background = this.queryLayer('bg', 'background');
+		if (background !== null) {
+
+			background.setColor(color);
+			background.addEffect(new _Color({
+				type:     _Color.TYPE.easeout,
+				duration: 1000,
+				color:    '#050a0d'
+			}));
+
+		}
 
 	};
 
@@ -105,19 +157,19 @@ lychee.define('game.state.Game').requires([
 		_State.call(this, main);
 
 
-		this.__ai = {
+		this.__evil = {
 			clock:  null,
 			delta:  500,
 			target: { y: 0 }
 		};
 
-		this.__player = {
+		this.__good = {
 			target: { y: 0 }
 		};
 
-		this.__score = {
-			player: 0,
-			enemy:  0
+		this.__statistics = {
+			good: 0,
+			evil: 0
 		};
 
 
@@ -143,19 +195,18 @@ lychee.define('game.state.Game').requires([
 
 
 					entity = this.queryLayer('bg', 'background');
-					entity.width  = width;
-					entity.height = height;
+					entity.trigger('reshape', [ null, null, width, height ]);
 
-					entity = this.queryLayer('ui', 'score');
+					entity = this.queryLayer('ui', 'info');
 					entity.setPosition({
 						x: 0,
 						y: -1 / 2 * height + 42
 					});
 
-					entity = this.queryLayer('game', 'player');
+					entity = this.queryLayer('game', 'good');
 					entity.setPosition({ x: -1 / 2 * width + 42 });
 
-					entity = this.queryLayer('game', 'enemy');
+					entity = this.queryLayer('game', 'evil');
 					entity.setPosition({ x:  1 / 2 * width - 42 });
 
 				}
@@ -187,9 +238,14 @@ lychee.define('game.state.Game').requires([
 
 		enter: function(oncomplete) {
 
-			this.__score.enemy  = 0;
-			this.__score.player = 0;
-			this.__ai.target.y  = 0;
+			let stats = this.__statistics || null;
+			if (stats !== null) {
+
+				stats.good = 0;
+				stats.evil = 0;
+				this.__evil.target.y = 0;
+
+			}
 
 
 			_reset_game.call(this, null);
@@ -203,9 +259,10 @@ lychee.define('game.state.Game').requires([
 				welcome.setVisible(true);
 				welcome.bind('#touch', function(entity) {
 
-					this.__score.enemy  = 0;
-					this.__score.player = 0;
-					this.__ai.target.y  = 0;
+					stats.good = 0;
+					stats.evil = 0;
+					this.__evil.target.y = 0;
+
 
 					_reset_game.call(this, null);
 
@@ -248,15 +305,12 @@ lychee.define('game.state.Game').requires([
 			_State.prototype.update.call(this, clock, delta);
 
 
-			let jukebox    = this.jukebox;
-			let renderer   = this.renderer;
-			let background = this.queryLayer('bg', 'background');
-			let gamelayer  = this.getLayer('game');
-			let uilayer    = this.getLayer('ui');
+			let jukebox  = this.jukebox;
+			let renderer = this.renderer;
 
 			let ball     = this.queryLayer('game', 'ball');
-			let player   = this.queryLayer('game', 'player');
-			let enemy    = this.queryLayer('game', 'enemy');
+			let evil     = this.queryLayer('game', 'evil');
+			let good     = this.queryLayer('game', 'good');
 			let hwidth   = renderer.width / 2;
 			let hheight  = renderer.height / 2;
 			let position = ball.position;
@@ -277,149 +331,88 @@ lychee.define('game.state.Game').requires([
 				velocity.y = -1 * velocity.y;
 			}
 
+			if (good.position.y < -hheight + 52) {
+				good.position.y = -hheight + 52;
+				good.velocity.y = 0;
+			} else if (good.position.y > hheight - 52) {
+				good.position.y = hheight - 52;
+				good.velocity.y = 0;
+			}
 
-			if (position.x > hwidth) {
-				this.__score.player++;
-				_reset_game.call(this, 'player');
-				return;
-			} else if (position.x < -hwidth) {
-				this.__score.enemy++;
-				_reset_game.call(this, 'enemy');
-				return;
+			if (evil.position.y < -hheight + 52) {
+				evil.position.y = -hheight + 52;
+				evil.velocity.y = 0;
+			} else if (evil.position.y > hheight - 52) {
+				evil.position.y = hheight - 52;
+				evil.velocity.y = 0;
 			}
 
 
 
 			/*
-			 * 2: COLLISIONS
+			 * 2: GAME RESET
 			 */
 
-			if (ball.collidesWith(player) === true) {
+			if (position.x > hwidth) {
 
-				position.x = player.position.x + 24;
+				_reset_game.call(this, 'good');
+				return;
+
+			} else if (position.x < -hwidth) {
+
+				_reset_game.call(this, 'evil');
+				return;
+
+			}
+
+
+
+			/*
+			 * 3: COLLISIONS
+			 */
+
+			if (ball.collidesWith(good) === true) {
+
+				position.x = good.position.x + 24;
 				velocity.x = Math.abs(velocity.x);
 				jukebox.play(_SOUNDS.ping);
 
-				gamelayer.addEffect(new _Shake({
-					type:     _Shake.TYPE.bounceeaseout,
-					duration: 300,
-					shake:    {
-						x: (Math.random() * 16) | 0,
-						y: (Math.random() * 16) | 0
-					}
-				}));
+				_bounce_effect.call(this, 'good');
 
-				uilayer.addEffect(new _Shake({
-					type:     _Shake.TYPE.bounceeaseout,
-					duration: 300,
-					shake:    {
-						x: (Math.random() * 16) | 0,
-						y: (Math.random() * 16) | 0
-					}
-				}));
+			} else if (ball.collidesWith(evil) === true) {
 
-				background.setColor('#14a5e2');
-				background.addEffect(new _Color({
-					type:     _Color.TYPE.linear,
-					duration: 1000,
-					color:    '#050a0d'
-				}));
-
-			} else if (ball.collidesWith(enemy) === true) {
-
-				position.x = enemy.position.x - 24;
+				position.x = evil.position.x - 24;
 				velocity.x = -1 * Math.abs(velocity.x);
 				jukebox.play(_SOUNDS.pong);
 
-				gamelayer.addEffect(new _Shake({
-					type:     _Shake.TYPE.bounceeaseout,
-					duration: 300,
-					shake:    {
-						x: (Math.random() * 16) | 0,
-						y: (Math.random() * 16) | 0
-					}
-				}));
-
-				uilayer.addEffect(new _Shake({
-					type:     _Shake.TYPE.bounceeaseout,
-					duration: 300,
-					shake:    {
-						x: (Math.random() * 16) | 0,
-						y: (Math.random() * 16) | 0
-					}
-				}));
-
-				background.setColor('#de1010');
-				background.addEffect(new _Color({
-					type:     _Color.TYPE.easeout,
-					duration: 1000,
-					color:    '#050a0d'
-				}));
+				_bounce_effect.call(this, 'evil');
 
 			}
 
 
 
 			/*
-			 * 3: AI LOGIC
+			 * 4: CONTROLS
 			 */
 
-			let ai = this.__ai;
+			let c_evil = this.__evil;
+			let c_good = this.__good;
 
-			if (ai.clock === null) {
-				ai.clock = clock;
+			if (c_evil.clock === null) {
+				c_evil.clock = clock;
 			}
 
-			if ((clock - ai.clock) > ai.delta) {
+			if ((clock - c_evil.clock) > c_evil.delta) {
 
-				ai.target.y = position.y;
-				ai.clock    = clock;
+				c_evil.target.y = position.y;
+				c_evil.clock    = clock;
 
-				if (ai.target.y > enemy.position.y - 10 && ai.target.y < enemy.position.y + 10) {
-
-					ai.target.y = enemy.position.y;
-					enemy.setVelocity({ y: 0 });
-
-				} else {
-
-					if (ai.target.y > enemy.position.y - 10) {
-						enemy.setVelocity({ y:  200 });
-					}
-
-					if (ai.target.y < enemy.position.y + 10) {
-						enemy.setVelocity({ y: -200 });
-					}
-
-				}
+				evil.moveTo(c_evil.target);
 
 			}
 
-
-
-			/*
-			 * 4: PLAYER LOGIC
-			 */
-
-			let target = this.__player.target;
-			if (target.y !== null) {
-
-				if (target.y > player.position.y - 10 && target.y < player.position.y + 10) {
-
-					player.setVelocity({ y: 0 });
-					target.y = null;
-
-				} else {
-
-					if (target.y > player.position.y - 10) {
-						player.setVelocity({ y:  250 });
-					}
-
-					if (target.y < player.position.y + 10) {
-						player.setVelocity({ y: -250 });
-					}
-
-				}
-
+			if (c_good.target.y !== good.position.y) {
+				good.moveTo(c_good.target);
 			}
 
 		}

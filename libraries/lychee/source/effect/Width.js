@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Width').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

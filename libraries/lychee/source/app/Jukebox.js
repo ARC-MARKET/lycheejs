@@ -90,7 +90,9 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 
 			} else if (track instanceof Sound && this.sound === true) {
 
+				let found  = false;
 				let sounds = this.__sounds;
+
 				for (let s = 0, sl = sounds.length; s < sl; s++) {
 
 					let sound = sounds[s];
@@ -99,22 +101,51 @@ lychee.define('lychee.app.Jukebox').exports(function(lychee, global, attachments
 						sounds[s] = track.clone();
 						sounds[s].setVolume(volume);
 						sounds[s].play();
+						found = true;
 
 						break;
 
 					} else if (sound.isIdle === true) {
 
 						if (sound.url === track.url) {
+
 							sound.setVolume(volume);
 							sound.play();
-						} else {
-							sounds[s] = track.clone();
-							sounds[s].setVolume(volume);
-							sounds[s].play();
+							found = true;
+
+							break;
+
 						}
 
+					}
 
-						break;
+				}
+
+
+				if (found === false) {
+
+					if (track.isIdle === true) {
+
+						track.setVolume(volume);
+						track.play();
+
+					} else {
+
+						for (let s = 0, sl = sounds.length; s < sl; s++) {
+
+							let sound = sounds[s];
+							if (sound.isIdle === true) {
+
+								sounds[s] = null;
+								sounds[s] = track.clone();
+								sounds[s].setVolume(volume);
+								sounds[s].play();
+
+								break;
+
+							}
+
+						}
 
 					}
 

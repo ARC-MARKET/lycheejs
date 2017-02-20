@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Sound').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

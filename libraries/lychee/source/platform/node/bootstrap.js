@@ -75,6 +75,101 @@
 	let   _std_out = '';
 	let   _std_err = '';
 
+	const _INDENT         = '    ';
+	const _WHITESPACE     = new Array(512).fill(' ').join('');
+	const _args_to_string = function(args, offset) {
+
+		let output  = [];
+		let columns = process.stdout.columns;
+
+		for (let a = 0, al = args.length; a < al; a++) {
+
+			let value = args[a];
+			let o     = 0;
+
+			if (value instanceof Object) {
+
+				let tmp = [];
+
+				try {
+					tmp = JSON.stringify(value, null, _INDENT).split('\n');
+				} catch (err) {
+				}
+
+				if (tmp.length > 1) {
+
+					for (let t = 0, tl = tmp.length; t < tl; t++) {
+						output.push(tmp[t]);
+					}
+
+					o = output.length - 1;
+
+				} else {
+
+					let chunk = output[o];
+					if (chunk === undefined) {
+						output[o] = tmp[0].trim();
+					} else {
+						output[o] = (chunk + ' ' + tmp[0]).trim();
+					}
+
+				}
+
+			} else if (typeof value === 'string' && value.includes('\n')) {
+
+				let tmp = value.split('\n');
+
+				for (let t = 0, tl = tmp.length; t < tl; t++) {
+					output.push(tmp[t]);
+				}
+
+				o = output.length - 1;
+
+			} else {
+
+				let chunk = output[o];
+				if (chunk === undefined) {
+					output[o] = ('' + value).replace(/\t/g, _INDENT).trim();
+				} else {
+					output[o] = (chunk + (' ' + value).replace(/\t/g, _INDENT)).trim();
+				}
+
+			}
+
+		}
+
+
+		let ol = output.length;
+		if (ol > 1) {
+
+			for (let o = 0; o < ol; o++) {
+
+				let line = output[o];
+				let maxl = (o === 0 || o === ol - 1) ? (columns - offset) : columns;
+				if (line.length > maxl) {
+					output[o] = line.substr(0, maxl);
+				} else {
+					output[o] = line + _WHITESPACE.substr(0, maxl - line.length);
+				}
+
+			}
+
+			return output.join('\n');
+
+		} else {
+
+			let line = output[0];
+			let maxl = columns - offset * 2;
+			if (line.length > maxl) {
+				return line.substr(0, maxl);
+			} else {
+				return line + _WHITESPACE.substr(0, maxl - line.length);
+			}
+
+		}
+
+	};
+
 	console.clear = function() {
 
 		// clear screen
@@ -95,12 +190,11 @@
 
 		_std_out += args.join('\t') + '\n';
 
-		args.reverse();
-		args.push(' ');
-		args.reverse();
-		args.push(' ');
-
-		_log.apply(console, args);
+		_log.call(console,
+			' ',
+			_args_to_string(args, 2),
+			' '
+		);
 
 	};
 
@@ -114,14 +208,13 @@
 
 		_std_out += args.join('\t') + '\n';
 
-		args.reverse();
-		args.push('\u001b[37m');
-		args.push('\u001b[42m');
-		args.reverse();
-		args.push('\u001b[49m');
-		args.push('\u001b[39m');
-
-		_info.apply(console, args);
+		_info.call(console,
+			'\u001b[37m',
+			'\u001b[42m',
+			_args_to_string(args, 2),
+			'\u001b[49m',
+			'\u001b[39m'
+		);
 
 	};
 
@@ -135,14 +228,13 @@
 
 		_std_out += args.join('\t') + '\n';
 
-		args.reverse();
-		args.push('\u001b[37m');
-		args.push('\u001b[43m');
-		args.reverse();
-		args.push('\u001b[49m');
-		args.push('\u001b[39m');
-
-		_warn.apply(console, args);
+		_warn.call(console,
+			'\u001b[37m',
+			'\u001b[43m',
+			_args_to_string(args, 2),
+			'\u001b[49m',
+			'\u001b[39m'
+		);
 
 	};
 
@@ -156,14 +248,13 @@
 
 		_std_err += args.join('\t') + '\n';
 
-		args.reverse();
-		args.push('\u001b[37m');
-		args.push('\u001b[41m');
-		args.reverse();
-		args.push('\u001b[49m');
-		args.push('\u001b[39m');
-
-		_error.apply(console, args);
+		_error.call(console,
+			'\u001b[37m',
+			'\u001b[41m',
+			_args_to_string(args, 2),
+			'\u001b[49m',
+			'\u001b[39m'
+		);
 
 	};
 

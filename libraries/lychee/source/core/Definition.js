@@ -406,6 +406,10 @@ lychee.Definition = typeof lychee.Definition !== 'undefined' ? lychee.Definition
 	};
 
 
+	Composite.displayName           = 'lychee.Definition';
+	Composite.prototype.displayName = 'lychee.Definition';
+
+
 	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

@@ -35,7 +35,8 @@ lychee.define('lychee.net.Server').tags({
 		id:    'server',
 		type:  _Storage.TYPE.persistent,
 		model: {
-			id:   '::ffff:1337',
+			id:   '[::ffff]:1337',
+			type: 'client',
 			host: '::ffff',
 			port: 1337
 		}
@@ -81,11 +82,12 @@ lychee.define('lychee.net.Server').tags({
 
 		this.bind('connect', function(remote) {
 
-			let id  = remote.host + ':' + remote.port;
+			let id  = (/:/g.test(remote.host) ? '[' + remote.host + ']' : remote.host) + ':' + remote.port;
 			let obj = _storage.create();
 			if (obj !== null) {
 
 				obj.id   = id;
+				obj.type = 'client';
 				obj.host = remote.host;
 				obj.port = remote.port;
 
@@ -97,7 +99,7 @@ lychee.define('lychee.net.Server').tags({
 
 		this.bind('disconnect', function(remote) {
 
-			let id  = remote.host + ':' + remote.port;
+			let id  = (/:/g.test(remote.host) ? '[' + remote.host + ']' : remote.host) + ':' + remote.port;
 			let obj = _storage.read(id);
 			if (obj !== null) {
 				_storage.remove(id);

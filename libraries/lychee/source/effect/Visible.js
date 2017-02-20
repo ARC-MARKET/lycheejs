@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Visible').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

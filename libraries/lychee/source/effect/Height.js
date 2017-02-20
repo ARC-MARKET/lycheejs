@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Height').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

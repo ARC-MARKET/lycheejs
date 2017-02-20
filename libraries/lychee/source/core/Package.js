@@ -523,6 +523,10 @@ lychee.Package = typeof lychee.Package !== 'undefined' ? lychee.Package : (funct
 	};
 
 
+	Composite.displayName           = 'lychee.Package';
+	Composite.prototype.displayName = 'lychee.Package';
+
+
 	return Composite;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

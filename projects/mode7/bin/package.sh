@@ -15,7 +15,7 @@ if [ -d $PROJECT_ROOT/build ]; then
 		zip -qr "$PROJECT_ROOT/build/mode7_browser_all.zip" ./*;
 
 
-		rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD";
+		# rm -rf "$PROJECT_ROOT/build/$PROJECT_BUILD";
 
 	elif [ "$PROJECT_BUILD" == "html-nwjs/main" ]; then
 

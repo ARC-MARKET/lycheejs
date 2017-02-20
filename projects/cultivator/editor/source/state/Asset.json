@@ -27,7 +27,8 @@
 											"data": []
 										}
 									]
-								}, {
+								},
+								{
 									"constructor": "app.ui.element.Font",
 									"arguments": [
 										{
@@ -37,7 +38,8 @@
 											"visible": false
 										}
 									]
-								}, {
+								},
+								{
 									"constructor": "app.ui.element.Preview",
 									"arguments": [
 										{
@@ -50,8 +52,8 @@
 								}
 							],
 							"map": {
-								"select":  0,
-								"modify":  1,
+								"select": 0,
+								"modify": 1,
 								"preview": 2
 							}
 						}

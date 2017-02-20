@@ -16,15 +16,57 @@
 
 
 
-	(function() {
+	/*
+	 * CONSOLE POLYFILL
+	 */
 
-		if (typeof String.prototype.trim !== 'function') {
+	const _log          = console.log;
+	const _error        = console.error;
+	const _INDENT       = '    ';
+	const _INDENT_PLAIN = '           ';
+	const _WHITESPACE   = new Array(512).fill(' ').join('');
 
-			String.prototype.trim = function() {
-				return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, "");
-			};
+	const _console_log = function(value) {
 
+		let line = ('  (L) ' + value).replace(/\t/g, _INDENT).trimRight();
+		let maxl = process.stdout.columns - 4;
+		if (line.length > maxl) {
+			line = line.substr(0, maxl);
+		} else {
+			line = line + _WHITESPACE.substr(0, maxl - line.length);
 		}
+
+		_log.call(console, line);
+
+	};
+
+	const _console_error = function(value) {
+
+		let line = ('(E) ' + value).replace(/\t/g, _INDENT).trimRight();
+		let maxl = process.stdout.columns - 4;
+		if (line.length > maxl) {
+			line = line.substr(0, maxl);
+		} else {
+			line = line + _WHITESPACE.substr(0, maxl - line.length);
+		}
+
+		_error.call(console,
+			'\u001b[37m',
+			'\u001b[41m',
+			line,
+			'\u001b[49m',
+			'\u001b[39m'
+		);
+
+	};
+
+
+
+	/*
+	 * ECMA POLYFILL
+	 */
+
+	(function() {
 
 		if (typeof Object.values !== 'function') {
 
@@ -186,32 +228,6 @@
 
 	};
 
-	const _package_definitions = function(json) {
-
-		let files = [];
-
-		if (json !== null) {
-
-			let root = json.source.files || null;
-			if (root !== null) {
-				_walk_directory(files, root, '', false);
-			}
-
-		}
-
-
-		return files.map(function(value) {
-			return value.substr(1);
-		}).filter(function(value) {
-			return value.substr(0, 4) !== 'core' && value.substr(0, 8) !== 'platform';
-		}).map(function(value) {
-			return 'lychee.' + value.split('.')[0].split('/').join('.');
-		}).filter(function(value) {
-			return value.indexOf('__') === -1;
-		});
-
-	};
-
 	const _package_assets = function(json) {
 
 		let files = [];
@@ -232,6 +248,32 @@
 			if (a > b) return  1;
 			if (a < b) return -1;
 			return 0;
+		}).filter(function(value) {
+			return value.indexOf('__') === -1;
+		});
+
+	};
+
+	const _package_definitions = function(json) {
+
+		let files = [];
+
+		if (json !== null) {
+
+			let root = json.source.files || null;
+			if (root !== null) {
+				_walk_directory(files, root, '', false);
+			}
+
+		}
+
+
+		return files.map(function(value) {
+			return value.substr(1);
+		}).filter(function(value) {
+			return value.substr(0, 4) !== 'core' && value.substr(0, 8) !== 'platform';
+		}).map(function(value) {
+			return 'lychee.' + value.split('.')[0].split('/').join('.');
 		}).filter(function(value) {
 			return value.indexOf('__') === -1;
 		});
@@ -278,9 +320,9 @@
 
 
 		if (libraries.indexOf('./libraries/lychee') !== -1) {
-			console.log('\tprocess cwd: OKAY');
+			_console_log('\tprocess cwd: OKAY');
 		} else {
-			console.log('\tprocess cwd: FAIL (' + _ROOT + ' is not the lychee.js directory)');
+			_console_log('\tprocess cwd: FAIL (' + _ROOT + ' is not the lychee.js directory)');
 			errors++;
 		}
 
@@ -300,9 +342,9 @@
 
 		if (data !== null) {
 			_PACKAGE = data;
-			console.log('\t./libraries/lychee/lychee.pkg: OKAY');
+			_console_log('\t./libraries/lychee/lychee.pkg: OKAY');
 		} else {
-			console.log('\t./libraries/lychee/lychee.pkg: FAIL (Invalid JSON)');
+			_console_log('\t./libraries/lychee/lychee.pkg: FAIL (Invalid JSON)');
 			errors++;
 		}
 
@@ -324,11 +366,14 @@
 
 			} catch (err) {
 
-				console.log('\n\n\n');
-				console.log('Syntax Error in lychee.js core:');
-				console.log('- - - - - - - - - - - - - - - -');
-				console.log(err);
-				console.log('\n\n\n');
+				_console_error('+---------------------------------+');
+				_console_error('| Syntax Error in lychee.js Core  |');
+				_console_error('+---------------------------------+');
+				_console_error('\n');
+
+				('' || err.stack).split('\n').forEach(function(line) {
+					_console_error(line);
+				});
 
 				errors++;
 
@@ -340,7 +385,7 @@
 		if (errors === 0) {
 			console.info('SUCCESS');
 		} else {
-			console.error('FAILURE');
+			_console_error('FAILURE');
 			_process.exit(1);
 		}
 

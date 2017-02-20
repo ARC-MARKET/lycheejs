@@ -1,0 +1,19 @@
+{
+	"width": 1024,
+	"height": 512,
+	"states": {
+		"default": {
+			"animation": false
+		}
+	},
+	"map": {
+		"default": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 1024,
+				"h": 512
+			}
+		]
+	}
+}

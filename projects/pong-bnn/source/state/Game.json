@@ -1,0 +1,104 @@
+{
+	"layers": {
+		"bg": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "game.ui.sprite.Background",
+						"arguments": [
+							{}
+						]
+					}
+				],
+				"map": {
+					"background": 0
+				}
+			}
+		},
+		"game": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "game.entity.Ball",
+						"arguments": [
+							{
+								"position": {
+									"x": 0,
+									"y": 0
+								}
+							}
+						]
+					},
+					{
+						"constructor": "game.entity.Paddle",
+						"arguments": [
+							{
+								"state": "good",
+								"position": {
+									"x": -128,
+									"y": 0
+								}
+							}
+						]
+					},
+					{
+						"constructor": "game.entity.Paddle",
+						"arguments": [
+							{
+								"state": "evil",
+								"position": {
+									"x": 128,
+									"y": 0
+								}
+							}
+						]
+					}
+				],
+				"map": {
+					"ball": 0,
+					"good": 1,
+					"evil": 2
+				}
+			}
+		},
+		"ai": {
+			"constructor": "lychee.ai.Layer",
+			"arguments": [
+				{}
+			]
+		},
+		"ui": {
+			"constructor": "lychee.ui.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "lychee.ui.entity.Label",
+						"arguments": [
+							{
+								"value": "0 - 0",
+								"position": {
+									"x": 0,
+									"y": -64
+								}
+							}
+						]
+					}
+				],
+				"map": {
+					"info": 0
+				}
+			}
+		}
+	}
+}

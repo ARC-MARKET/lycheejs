@@ -1,1 +1,87 @@
-{"map":{"FE-1":[{"x":0,"y":0,"w":49,"h":49,"width":49,"height":49}],"FE-2":[{"x":49,"y":0,"w":49,"h":49,"width":49,"height":49}],"FE-3":[{"x":98,"y":0,"w":49,"h":49,"width":49,"height":49}],"FE-4":[{"x":147,"y":0,"w":49,"h":49,"width":49,"height":49}],"FE-5":[{"x":196,"y":0,"w":49,"h":49,"width":49,"height":49}],"FE-6":[{"x":0,"y":49,"w":49,"h":49,"width":49,"height":49}]},"states":{"FE-1":{"animation":false},"FE-2":{"animation":false},"FE-3":{"animation":false},"FE-4":{"animation":false},"FE-5":{"animation":false},"FE-6":{"animation":false}},"width":48,"height":48,"shape":1}
+{
+	"map": {
+		"FE-1": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		],
+		"FE-2": [
+			{
+				"x": 49,
+				"y": 0,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		],
+		"FE-3": [
+			{
+				"x": 98,
+				"y": 0,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		],
+		"FE-4": [
+			{
+				"x": 147,
+				"y": 0,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		],
+		"FE-5": [
+			{
+				"x": 196,
+				"y": 0,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		],
+		"FE-6": [
+			{
+				"x": 0,
+				"y": 49,
+				"w": 49,
+				"h": 49,
+				"width": 49,
+				"height": 49
+			}
+		]
+	},
+	"states": {
+		"FE-1": {
+			"animation": false
+		},
+		"FE-2": {
+			"animation": false
+		},
+		"FE-3": {
+			"animation": false
+		},
+		"FE-4": {
+			"animation": false
+		},
+		"FE-5": {
+			"animation": false
+		},
+		"FE-6": {
+			"animation": false
+		}
+	},
+	"width": 48,
+	"height": 48,
+	"shape": 1
+}

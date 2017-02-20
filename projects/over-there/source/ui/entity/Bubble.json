@@ -1,1 +1,178 @@
-{"map":{"research":[{"x":0,"y":0,"w":32,"h":32,"width":32,"height":32}],"sleep":[{"x":32,"y":0,"w":32,"h":32,"width":32,"height":32}],"phone":[{"x":64,"y":0,"w":32,"h":32,"width":32,"height":32}],"co2":[{"x":96,"y":0,"w":32,"h":32,"width":32,"height":32}],"electricity":[{"x":128,"y":0,"w":32,"h":32,"width":32,"height":32}],"human":[{"x":160,"y":0,"w":32,"h":32,"width":32,"height":32}],"methane":[{"x":192,"y":0,"w":32,"h":32,"width":32,"height":32}],"n2":[{"x":224,"y":0,"w":32,"h":32,"width":32,"height":32}],"oxygen":[{"x":0,"y":32,"w":32,"h":32,"width":32,"height":32}],"pressure":[{"x":32,"y":32,"w":32,"h":32,"width":32,"height":32}],"temperature":[{"x":64,"y":32,"w":32,"h":32,"width":32,"height":32}],"urine":[{"x":96,"y":32,"w":32,"h":32,"width":32,"height":32}],"water":[{"x":128,"y":32,"w":32,"h":32,"width":32,"height":32}]},"states":{"research":{"animation":false},"sleep":{"animation":false},"phone":{"animation":false},"co2":{"animation":false},"electricity":{"animation":false},"human":{"animation":false},"methane":{"animation":false},"n2":{"animation":false},"oxygen":{"animation":false},"pressure":{"animation":false},"temperature":{"animation":false},"urine":{"animation":false},"water":{"animation":false}},"width":32,"height":32,"shape":1}
+{
+	"map": {
+		"research": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"sleep": [
+			{
+				"x": 32,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"phone": [
+			{
+				"x": 64,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"co2": [
+			{
+				"x": 96,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"electricity": [
+			{
+				"x": 128,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"human": [
+			{
+				"x": 160,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"methane": [
+			{
+				"x": 192,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"n2": [
+			{
+				"x": 224,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"oxygen": [
+			{
+				"x": 0,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"pressure": [
+			{
+				"x": 32,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"temperature": [
+			{
+				"x": 64,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"urine": [
+			{
+				"x": 96,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"water": [
+			{
+				"x": 128,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		]
+	},
+	"states": {
+		"research": {
+			"animation": false
+		},
+		"sleep": {
+			"animation": false
+		},
+		"phone": {
+			"animation": false
+		},
+		"co2": {
+			"animation": false
+		},
+		"electricity": {
+			"animation": false
+		},
+		"human": {
+			"animation": false
+		},
+		"methane": {
+			"animation": false
+		},
+		"n2": {
+			"animation": false
+		},
+		"oxygen": {
+			"animation": false
+		},
+		"pressure": {
+			"animation": false
+		},
+		"temperature": {
+			"animation": false
+		},
+		"urine": {
+			"animation": false
+		},
+		"water": {
+			"animation": false
+		}
+	},
+	"width": 32,
+	"height": 32,
+	"shape": 1
+}

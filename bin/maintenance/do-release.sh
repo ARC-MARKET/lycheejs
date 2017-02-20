@@ -27,6 +27,7 @@ USER_LOG=`logname 2>/dev/null`;
 LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../../"; pwd);
 LYCHEEJS_FOLDER="/tmp/lycheejs";
 LYCHEEJS_BRANCH=$(cd $LYCHEEJS_ROOT && git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3);
+LYCHEEJS_FERTILIZER="$LYCHEEJS_FOLDER/libraries/fertilizer/bin/fertilizer.sh";
 OLD_VERSION=$(cd $LYCHEEJS_ROOT && cat ./libraries/lychee/source/core/lychee.js | grep VERSION | cut -d\" -f2);
 NEW_VERSION=$(_get_version);
 
@@ -148,7 +149,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 	cd $LYCHEEJS_FOLDER;
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-harvester.git $LYCHEEJS_FOLDER/projects/lycheejs-harvester;
-	$LYCHEEJS_FOLDER/bin/fertilizer.sh node/main /projects/lycheejs-harvester;
+	$LYCHEEJS_FERTILIZER node/main /projects/lycheejs-harvester;
 
 
 
@@ -158,7 +159,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
 	cd $LYCHEEJS_FOLDER;
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-library.git $LYCHEEJS_FOLDER/projects/lycheejs-library;
-	$LYCHEEJS_FOLDER/bin/fertilizer.sh auto /projects/lycheejs-library;
+	$LYCHEEJS_FERTILIZER auto /projects/lycheejs-library;
 
 
 
@@ -168,17 +169,7 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 
  	cd $LYCHEEJS_FOLDER;
 	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-bundle.git $LYCHEEJS_FOLDER/projects/lycheejs-bundle;
-	$LYCHEEJS_FOLDER/bin/fertilizer.sh auto /projects/lycheejs-bundle;
-
-
-
-	#
-	# BUILD AND PACKAGE lycheejs-website
-	#
-
-	cd $LYCHEEJS_FOLDER;
-	git clone --single-branch --branch master git@github.com:Artificial-Engineering/lycheejs-website.git $LYCHEEJS_FOLDER/projects/lycheejs-website;
-	$LYCHEEJS_FOLDER/bin/fertilizer.sh html/main /projects/lycheejs-website;
+	$LYCHEEJS_FERTILIZER auto /projects/lycheejs-bundle;
 
 
 
@@ -240,14 +231,6 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	./bin/publish.sh;
 
 
-	#
-	# PUBLISH lycheejs-website
-	#
-
-	cd $LYCHEEJS_FOLDER/projects/lycheejs-website;
-	./bin/publish.sh;
-
-
 
 	echo "";
 	echo "";
@@ -255,8 +238,8 @@ elif [ "$OLD_VERSION" != "$NEW_VERSION" ]; then
 	echo "";
 	echo "Manual Steps required to do now:";
 	echo "";
-	echo "- Create the $NEW_VERSION release in the lychee.js Bundle repository.";
-	echo "- Upload and attach the builds of it to the release.";
+	echo "- Create $NEW_VERSION release of lycheejs-bundle repository.";
+	echo "- Create $NEW_VERSION release of lycheejs-website repository.";
 	echo "";
 
 	exit 0;

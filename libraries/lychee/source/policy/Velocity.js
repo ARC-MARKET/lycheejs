@@ -5,17 +5,23 @@ lychee.define('lychee.policy.Velocity').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	let Composite = function(settings) {
 
-		let settings = lychee.assignsafe({
-			limit: 0xffff
-		}, data);
+		this.entity = null;
+		this.limit  = { x: Infinity, y: Infinity, z: Infinity };
 
 
-		this.entity = settings.entity || null;
-		this.limit  = settings.limit;
+		// No data validation garbage allowed for policies
 
-		settings = null;
+		if (settings.entity instanceof Object) {
+			this.entity = settings.entity;
+		}
+
+		if (settings.limit instanceof Object) {
+			this.limit.x = typeof settings.limit.x === 'number' ? (settings.limit.x | 0) : Infinity;
+			this.limit.y = typeof settings.limit.y === 'number' ? (settings.limit.y | 0) : Infinity;
+			this.limit.z = typeof settings.limit.z === 'number' ? (settings.limit.z | 0) : Infinity;
+		}
 
 	};
 
@@ -25,6 +31,8 @@ lychee.define('lychee.policy.Velocity').exports(function(lychee, global, attachm
 		/*
 		 * ENTITY API
 		 */
+
+		// deserialize: function(blob) {},
 
 		serialize: function() {
 
@@ -56,9 +64,13 @@ lychee.define('lychee.policy.Velocity').exports(function(lychee, global, attachm
 
 			if (entity !== null) {
 
-				values[0] = entity.velocity.x / limit;
-				values[1] = entity.velocity.y / limit;
-				values[2] = entity.velocity.z / limit;
+				let hx = limit.x / 2;
+				let hy = limit.y / 2;
+				let hz = limit.z / 2;
+
+				values[0] = (hx + entity.velocity.x) / (hx * 2);
+				values[1] = (hy + entity.velocity.y) / (hy * 2);
+				values[2] = (hz + entity.velocity.z) / (hz * 2);
 
 			}
 
@@ -71,16 +83,17 @@ lychee.define('lychee.policy.Velocity').exports(function(lychee, global, attachm
 
 			let entity = this.entity;
 			let limit  = this.limit;
-			let x      = values[0] * limit;
-			let y      = values[1] * limit;
-			let z      = values[2] * limit;
 
 
 			if (entity !== null) {
 
-				entity.velocity.x = x;
-				entity.velocity.y = y;
-				entity.velocity.z = z;
+				let hx = limit.x / 2;
+				let hy = limit.y / 2;
+				let hz = limit.z / 2;
+
+				entity.velocity.x = (values[0] * (hx * 2)) - hx;
+				entity.velocity.y = (values[1] * (hy * 2)) - hy;
+				entity.velocity.z = (values[2] * (hz * 2)) - hz;
 
 			}
 

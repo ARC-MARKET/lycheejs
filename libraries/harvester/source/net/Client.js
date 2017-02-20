@@ -1,6 +1,7 @@
 
 lychee.define('harvester.net.Client').requires([
 	'harvester.net.client.Console',
+	'harvester.net.client.Harvester',
 	'harvester.net.client.Library',
 	'harvester.net.client.Profile',
 	'harvester.net.client.Project',
@@ -49,6 +50,7 @@ lychee.define('harvester.net.Client').requires([
 		this.bind('connect', function() {
 
 			this.addService(new _client.Console(this));
+			this.addService(new _client.Harvester(this));
 			this.addService(new _client.Library(this));
 			this.addService(new _client.Profile(this));
 			this.addService(new _client.Project(this));

@@ -1,23 +1,48 @@
 {
 	"map": {
-		"active-o": [{
-			"x":  0, "y":  0, "w": 64, "h": 64, "width": 64, "height": 64
-		}],
-		"active-x": [{
-			"x": 64, "y":  0, "w": 64, "h": 64, "width": 64, "height": 64
-		}],
-		"default": [{
-			"x":  0, "y": 64, "w": 64, "h": 64, "width": 64, "height": 64
-		}]
+		"active-o": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 64,
+				"h": 64,
+				"width": 64,
+				"height": 64
+			}
+		],
+		"active-x": [
+			{
+				"x": 64,
+				"y": 0,
+				"w": 64,
+				"h": 64,
+				"width": 64,
+				"height": 64
+			}
+		],
+		"default": [
+			{
+				"x": 0,
+				"y": 64,
+				"w": 64,
+				"h": 64,
+				"width": 64,
+				"height": 64
+			}
+		]
 	},
-
 	"states": {
-		"default":  { "animation": false },
-		"active-o": { "animation": false },
-		"active-x": { "animation": false }
+		"default": {
+			"animation": false
+		},
+		"active-o": {
+			"animation": false
+		},
+		"active-x": {
+			"animation": false
+		}
 	},
-
-	"width":  64,
+	"width": 64,
 	"height": 64,
-	"shape":  1
+	"shape": 1
 }

@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Position').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

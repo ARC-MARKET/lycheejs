@@ -67,15 +67,36 @@ git checkout development;
 The lychee.js Release Tool is a wizard that automatically updates
 and creates the quaterly releases for everything including:
 
-- lycheejs (Engine repository)
-- lycheejs-runtime (update and publish on github)
-- lycheejs-library (publish on NPM and Bower)
-- lycheejs-harvester (build and publish on github)
-- lycheejs-website (build and publish on github)
+- lycheejs (build, package and publish on github)
+- [lycheejs-runtime](https://github.com/Artificial-Engineering/lycheejs-runtime.git) (build, package and publish on github)
+- [lycheejs-harvester](https://github.com/Artificial-Engineering/lycheejs-harvester.git) (build, package and publish on github)
+- [lycheejs-library](https://github.com/Artificial-Engineering/lycheejs-library.git) (build, package and publish on NPM and Bower)
+- [lycheejs-bundle](https://github.com/Artificial-Engineering/lycheejs-bundle.git) (build and package)
 
 ```bash
 cd /opt/lycheejs;
 
 ./bin/maintenance/do-release.sh;
 ```
+
+**IMPORTANT**: By default, the lychee.js Bundles are not published
+as this causes 3.0+ GB internet traffic. The bundles need to be
+verified and published manually after the build process.
+
+```bash
+cd /tmp/lycheejs/projects/lycheejs-bundle;
+
+# Warning: 3.0+ GB internet traffic
+./bin/publish.sh;
+```
+
+## Release Third-Party lychee.js Projects
+
+After the release has been completed and successfully published,
+the lychee.js Fertilizer has to be run on the third-party projects
+of the [Artificial-Engineering](https://github.com/Artificial-Engineering)
+and [Artificial-University](https://github.com/Artificial-University)
+organization.
+
+This includes the [lycheejs-website](https://github.com/Artificial-Engineering/lycheejs-website.git).
 

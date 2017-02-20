@@ -438,7 +438,6 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 
 				namespace[identifier].displayName = definition.id;
 				namespace[identifier].prototype = {};
-				namespace[identifier].prototype.displayName = definition.id;
 
 
 				let tplenums   = {};
@@ -495,6 +494,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 				}
 
 				Object.assign.apply(lychee, tplmethods);
+				namespace[identifier].prototype.displayName = definition.id;
+
 				Object.freeze(namespace[identifier].prototype);
 
 
@@ -512,6 +513,11 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 					Object.freeze(namespace[identifier]);
 				}
 
+				if (namespace[identifier].prototype instanceof Object) {
+					namespace[identifier].prototype.displayName = definition.id;
+					Object.freeze(namespace[identifier].prototype);
+				}
+
 			}
 
 		} else {
@@ -520,6 +526,8 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 			namespace[identifier].displayName = definition.id;
 			namespace[identifier].prototype = {};
 			namespace[identifier].prototype.displayName = definition.id;
+
+			Object.freeze(namespace[identifier].prototype);
 
 
 			this.global.console.error('lychee-Environment (' + this.id + '): Invalid Definition "' + definition.id + '", it is replaced with a Dummy Composite');
@@ -891,19 +899,9 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 	};
 
 
+	Composite.__FEATURES  = null;
+	Composite.__FILENAME  = null;
 
-	/*
-	 * BOOTSTRAP API
-	 */
-
-	Composite.__FEATURES = null;
-	Composite.__FILENAME = null;
-
-
-
-	/*
-	 * IMPLEMENTATION
-	 */
 
 	Composite.prototype = {
 
@@ -1618,6 +1616,10 @@ lychee.Environment = typeof lychee.Environment !== 'undefined' ? lychee.Environm
 		}
 
 	};
+
+
+	Composite.displayName           = 'lychee.Environment';
+	Composite.prototype.displayName = 'lychee.Environment';
 
 
 	return Composite;

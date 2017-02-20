@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Depth').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

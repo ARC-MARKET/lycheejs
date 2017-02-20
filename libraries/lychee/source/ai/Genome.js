@@ -117,7 +117,7 @@ lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) 
 
 		addGene: function(gene) {
 
-			gene = gene instanceof Array ? gene : null;
+			gene = gene instanceof Object ? gene : null;
 
 
 			if (gene !== null) {
@@ -141,7 +141,7 @@ lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) 
 		setGene: function(id, gene) {
 
 			id   = typeof id === 'string' ? id   : null;
-			gene = gene instanceof Array  ? gene : null;
+			gene = gene instanceof Object ? gene : null;
 
 
 			if (id !== null && gene !== null && this.__map[id] === undefined) {
@@ -185,7 +185,7 @@ lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) 
 
 		removeGene: function(gene) {
 
-			gene = gene instanceof Array ? gene : null;
+			gene = gene instanceof Object ? gene : null;
 
 
 			if (gene !== null) {
@@ -222,7 +222,7 @@ lychee.define('lychee.ai.Genome').exports(function(lychee, global, attachments) 
 
 		setGenes: function(genes) {
 
-			genes = genes instanceof Array ? genes : null;
+			genes = genes instanceof Object ? genes : null;
 
 
 			let all = true;

@@ -210,7 +210,7 @@ lychee.define('lychee.net.protocol.HTTP').exports(function(lychee, global, attac
 
 				chunk.headers['status'] = tmp.split(' ')[0];
 
-			} else if (tmp.indexOf(':') !== -1) {
+			} else if (/:/g.test(tmp)) {
 
 				let i_tmp = tmp.indexOf(':');
 				let key   = tmp.substr(0, i_tmp).trim().toLowerCase();

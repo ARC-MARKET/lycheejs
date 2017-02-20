@@ -2,14 +2,20 @@
 	"layers": {
 		"background": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.app.sprite.Background",
-					"arguments": [{
-						"color": "#8dc435"
-					}]
-				}],
+				"entities": [
+					{
+						"constructor": "lychee.app.sprite.Background",
+						"arguments": [
+							{
+								"color": "#8dc435"
+							}
+						]
+					}
+				],
 				"map": {
 					"background": 0
 				}
@@ -17,26 +23,35 @@
 		},
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "game.entity.Board",
-					"arguments": [{
-						"position": {
-							"x": 0,
-							"y": 0
-						}
-					}]
-				}, {
-					"constructor": "game.ui.Label",
-					"arguments": [{
-						"label": "0 : 0",
-						"position": {
-							"x":  128,
-							"y": -192
-						}
-					}]
-				}],
+				"entities": [
+					{
+						"constructor": "game.entity.Board",
+						"arguments": [
+							{
+								"position": {
+									"x": 0,
+									"y": 0
+								}
+							}
+						]
+					},
+					{
+						"constructor": "game.ui.Label",
+						"arguments": [
+							{
+								"label": "0 : 0",
+								"position": {
+									"x": 128,
+									"y": -192
+								}
+							}
+						]
+					}
+				],
 				"map": {
 					"board": 0,
 					"score": 1

@@ -98,7 +98,12 @@ lychee.define('Stash').tags({
 				if (err.code === 'ENOENT') {
 
 					if (_mkdir_p(_path.dirname(path), mode) === true) {
-						_fs.mkdirSync(path, mode);
+
+						try {
+							_fs.mkdirSync(path, mode);
+						} catch (err) {
+						}
+
 					}
 
 					try {

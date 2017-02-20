@@ -2,78 +2,121 @@
 	"layers": {
 		"bg": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.ui.sprite.Background",
-					"arguments": [{
-						"color": "#405050"
-					}]
-				}, {
-					"constructor": "lychee.ui.sprite.Emblem",
-					"arguments": [{}]
-				}],
+				"entities": [
+					{
+						"constructor": "lychee.ui.sprite.Background",
+						"arguments": [
+							{
+								"color": "#405050"
+							}
+						]
+					},
+					{
+						"constructor": "lychee.ui.sprite.Emblem",
+						"arguments": [
+							{}
+						]
+					}
+				],
 				"map": {
 					"background": 0,
-					"emblem":     1
+					"emblem": 1
 				}
 			}
 		},
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.ui.Blueprint",
-					"arguments": [{
-						"visible": true
-					}]
-				}, {
-					"constructor": "lychee.ui.Blueprint",
-					"arguments": [{
-						"visible": false
-					}],
-					"blob": {
-						"entities": [{
-							"constructor": "lychee.ui.element.Input",
-							"arguments": [{}]
-						}, {
-							"constructor": "lychee.ui.element.Jukebox",
-							"arguments": [{}]
-						}, {
-							"constructor": "lychee.ui.element.Network",
-							"arguments": [{}]
-						}, {
-							"constructor": "lychee.ui.element.Stash",
-							"arguments": [{}]
-						}, {
-							"constructor": "lychee.ui.element.Storage",
-							"arguments": [{}]
-						}, {
-							"constructor": "lychee.ui.element.Viewport",
-							"arguments": [{}]
-						}]
-					}
-				}, {
-					"constructor": "lychee.ui.Menu",
-					"arguments": [{
-						"options": [
-							"Welcome",
-							"Settings"
+				"entities": [
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": true
+							}
+						]
+					},
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": false
+							}
 						],
-						"value": "Welcome"
-					}]
-				}, {
-					"constructor": "lychee.ui.Notice",
-					"arguments": [{
-						"label": ""
-					}]
-				}],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "lychee.ui.element.Input",
+									"arguments": [
+										{}
+									]
+								},
+								{
+									"constructor": "lychee.ui.element.Jukebox",
+									"arguments": [
+										{}
+									]
+								},
+								{
+									"constructor": "lychee.ui.element.Network",
+									"arguments": [
+										{}
+									]
+								},
+								{
+									"constructor": "lychee.ui.element.Stash",
+									"arguments": [
+										{}
+									]
+								},
+								{
+									"constructor": "lychee.ui.element.Storage",
+									"arguments": [
+										{}
+									]
+								},
+								{
+									"constructor": "lychee.ui.element.Viewport",
+									"arguments": [
+										{}
+									]
+								}
+							]
+						}
+					},
+					{
+						"constructor": "lychee.ui.Menu",
+						"arguments": [
+							{
+								"options": [
+									"Welcome",
+									"Settings"
+								],
+								"value": "Welcome"
+							}
+						]
+					},
+					{
+						"constructor": "lychee.ui.Notice",
+						"arguments": [
+							{
+								"label": ""
+							}
+						]
+					}
+				],
 				"map": {
-					"welcome":  0,
+					"welcome": 0,
 					"settings": 1,
-					"menu":     2,
-					"notice":   3
+					"menu": 2,
+					"notice": 3
 				}
 			}
 		}

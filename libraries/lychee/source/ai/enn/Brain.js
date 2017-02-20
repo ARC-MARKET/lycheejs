@@ -1,16 +1,16 @@
 
 lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachments) {
 
-	const _NEURON_BIAS = 1;
-
-
-
 	/*
 	 * HELPERS
 	 */
 
 	const _random = function() {
 		return (Math.random() * 2) - 1;
+	};
+
+	const _sigmoid = function(value) {
+		return (1 / (1 + Math.exp((-1 * value) / 1)));
 	};
 
 	const _init_network = function() {
@@ -24,19 +24,25 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 		}, 0);
 
 
+		if (input_size === 0 || output_size === 0) {
+			return;
+		}
+
+
+		let layers_size = 3;
 		let hidden_size = 1;
 		let weight_size = 0;
 
 		if (input_size > output_size) {
 			hidden_size = input_size;
+			layers_size = Math.max(input_size - output_size, 3);
 		} else {
 			hidden_size = output_size;
+			layers_size = Math.max(output_size - input_size, 3);
 		}
 
 
-		let layer_amount = 6;
-
-		for (let l = 0; l < layer_amount; l++) {
+		for (let l = 0; l < layers_size; l++) {
 
 			let prev = hidden_size;
 			let size = hidden_size;
@@ -47,7 +53,7 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 			} else if (l === 1) {
 				prev = input_size;
 				size = hidden_size;
-			} else if (l === layer_amount - 1) {
+			} else if (l === layers_size - 1) {
 				prev = hidden_size;
 				size = output_size;
 			}
@@ -64,14 +70,14 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 				for (let p = 0; p < prev; p++) {
 					neuron.weights.push(_random());
-					weight_size++;
 				}
 
 				layer[n] = neuron;
 
 			}
 
-			this.__layers[l] = layer;
+			this.__layers[l]  = layer;
+			weight_size      += layer.length;
 
 		}
 
@@ -81,11 +87,59 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 		this.__size.output = output_size;
 		this.__size.weight = weight_size;
 
+		this._inputs  = null;
+		this._outputs = null;
+
+		this._inputs  = new Array(input_size);
+		this._outputs = new Array(output_size);
+
 	};
 
-	const _sigmoid = function(value) {
+	const _update_network = function(inputs, outputs) {
 
-		return (1 / (1 + Math.exp((-1 * value) / 1)));
+		let layers = this.__layers;
+
+
+		// Update Input Layer
+		let input_layer = layers[0];
+
+		for (let il = 0, ill = input_layer.length; il < ill; il++) {
+			input_layer[il].value = inputs[il];
+		}
+
+
+		// Update Hidden Layers
+		let prev_layer = layers[0];
+
+		for (let l = 1, ll = layers.length; l < ll; l++) {
+
+			let current_layer = layers[l];
+
+			for (let n = 0, nl = current_layer.length; n < nl; n++) {
+
+				let neuron = current_layer[n];
+				let value  = 0;
+
+				for (let p = 0, pl = prev_layer.length; p < pl; p++) {
+					value += prev_layer[p].value * neuron.weights[p];
+				}
+
+				value        += neuron.bias;
+				neuron.value  = _sigmoid(value);
+
+			}
+
+			prev_layer = current_layer;
+
+		}
+
+
+		// Update Output Layer
+		let output_layer = layers[layers.length - 1];
+
+		for (let o = 0, ol = output_layer.length; o < ol; o++) {
+			outputs[o] = output_layer[o].value;
+		}
 
 	};
 
@@ -108,7 +162,9 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 		this.__sensors_map  = [];
 
 		// cache structures
-		this.__size = {
+		this._inputs  = [];
+		this._outputs = [];
+		this.__size   = {
 			input:  0,
 			hidden: 0,
 			output: 0,
@@ -148,9 +204,8 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 			let blob     = {};
 
 
-			// XXX: controls and sensors are handled by lychee.ai.Agent
-			// if (this.controls.length > 0) settings.controls = lychee.serialize(this.controls);
-			// if (this.sensors.length > 0)  settings.sensors  = lychee.serialize(this.sensors);
+			if (this.controls.length > 0) settings.controls = lychee.serialize(this.controls);
+			if (this.sensors.length > 0)  settings.sensors  = lychee.serialize(this.sensors);
 
 
 			if (this.__layers.length > 0) {
@@ -174,17 +229,12 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 			let controls     = this.controls;
 			let controls_map = this.__controls_map;
-			let layers       = this.__layers;
 			let sensors      = this.sensors;
-			let training     = {
-				inputs:  null,
-				outputs: null
-			};
+			let inputs       = this._inputs;
+			let outputs      = this._outputs;
 
 
 			// 1. Transform Policies to Inputs
-			let inputs = new Array(this.__size.input);
-
 			for (let i = 0, s = 0, sl = sensors.length; s < sl; s++) {
 
 				let sensor = sensors[s];
@@ -196,54 +246,12 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 			}
 
-			training.inputs = inputs;
+
+			// 2. Update Network
+			_update_network.call(this, inputs, outputs);
 
 
-			// 2. Update Input Layer
-			let input_layer = layers[0];
-
-			for (let il = 0, ill = input_layer.length; il < ill; il++) {
-				input_layer[il].value = inputs[il];
-			}
-
-
-			// 3. Update Hidden Layers
-			let prev_layer = layers[0];
-
-			for (let l = 1, ll = layers.length; l < ll; l++) {
-
-				let current_layer = layers[l];
-
-				for (let n = 0, nl = current_layer.length; n < nl; n++) {
-
-					let neuron = current_layer[n];
-					let value  = 0;
-
-					for (let p = 0, pl = prev_layer.length; p < pl; p++) {
-						value += prev_layer[p].value * neuron.weights[p];
-					}
-
-					neuron.value = _sigmoid(value);
-
-				}
-
-				prev_layer = current_layer;
-
-			}
-
-
-			// 4. Update Output Layer
-			let outputs      = new Array(this.__size.output);
-			let output_layer = layers[layers.length - 1];
-
-			for (let o = 0, ol = output_layer.length; o < ol; o++) {
-				outputs[o] = output_layer[o].value;
-			}
-
-			training.outputs = outputs;
-
-
-			// 5. Transform Outputs to Policies
+			// 3. Transform Outputs to Policies
 			let offset = 0;
 
 			for (let c = 0, cl = controls_map.length; c < cl; c++) {
@@ -260,9 +268,6 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 
 			}
 
-
-			return training;
-
 		},
 
 
@@ -271,14 +276,15 @@ lychee.define('lychee.ai.enn.Brain').exports(function(lychee, global, attachment
 		 * CUSTOM API
 		 */
 
-		train: function(training) {
+		learn: function(inputs, outputs) {
 
-			training = training instanceof Object ? training : null;
+			inputs  = inputs instanceof Array  ? inputs  : null;
+			outputs = outputs instanceof Array ? outputs : null;
 
 
-			if (training !== null) {
+			if (inputs !== null && outputs !== null) {
 
-				// XXX: Feed Forward NN has no training
+				// XXX: Feed Forward NN cannot learn
 
 				return true;
 

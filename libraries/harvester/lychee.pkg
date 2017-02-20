@@ -269,16 +269,19 @@
 				]
 			},
 			"mod": {
+				"Beautifier": [
+					"js"
+				],
 				"Fertilizer": [
+					"js"
+				],
+				"Harvester": [
 					"js"
 				],
 				"Packager": [
 					"js"
 				],
 				"Server": [
-					"js"
-				],
-				"Updater": [
 					"js"
 				]
 			},
@@ -299,6 +302,9 @@
 					"Console": [
 						"js"
 					],
+					"Harvester": [
+						"js"
+					],
 					"Library": [
 						"js"
 					],
@@ -311,6 +317,9 @@
 				},
 				"remote": {
 					"Console": [
+						"js"
+					],
+					"Harvester": [
 						"js"
 					],
 					"Library": [

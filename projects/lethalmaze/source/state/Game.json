@@ -2,44 +2,63 @@
 	"layers": {
 		"game": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.app.Layer",
-					"arguments": [{
-						"relayout": false,
-						"width": 768,
-						"height": 768
-					}]
-				}, {
-					"constructor": "lychee.app.Layer",
-					"arguments": [{
-						"relayout": false,
-						"width": 768,
-						"height": 768
-					}]
-				}, {
-					"constructor": "lychee.app.Layer",
-					"arguments": [{
-						"relayout": false,
-						"width": 768,
-						"height": 768
-					}]
-				}, {
-					"constructor": "lychee.app.Layer",
-					"arguments": [{
-						"relayout": false
-					}],
-					"blob": {
-						"entities": [{
-							"constructor": "game.app.sprite.Portal",
-							"arguments": [{}]
-						}],
-						"map": {
-							"portal": 0
+				"entities": [
+					{
+						"constructor": "lychee.app.Layer",
+						"arguments": [
+							{
+								"relayout": false,
+								"width": 768,
+								"height": 768
+							}
+						]
+					},
+					{
+						"constructor": "lychee.app.Layer",
+						"arguments": [
+							{
+								"relayout": false,
+								"width": 768,
+								"height": 768
+							}
+						]
+					},
+					{
+						"constructor": "lychee.app.Layer",
+						"arguments": [
+							{
+								"relayout": false,
+								"width": 768,
+								"height": 768
+							}
+						]
+					},
+					{
+						"constructor": "lychee.app.Layer",
+						"arguments": [
+							{
+								"relayout": false
+							}
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "game.app.sprite.Portal",
+									"arguments": [
+										{}
+									]
+								}
+							],
+							"map": {
+								"portal": 0
+							}
 						}
 					}
-				}],
+				],
 				"map": {
 					"terrain": 0,
 					"objects": 1,
@@ -50,15 +69,24 @@
 		},
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "game.ui.layer.Control",
-					"arguments": [{}]
-				}, {
-					"constructor": "game.ui.entity.Timeout",
-					"arguments": [{}]
-				}],
+				"entities": [
+					{
+						"constructor": "game.ui.layer.Control",
+						"arguments": [
+							{}
+						]
+					},
+					{
+						"constructor": "game.ui.entity.Timeout",
+						"arguments": [
+							{}
+						]
+					}
+				],
 				"map": {
 					"control": 0,
 					"timeout": 1

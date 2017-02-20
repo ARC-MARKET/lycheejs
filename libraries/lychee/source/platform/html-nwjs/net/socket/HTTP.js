@@ -188,7 +188,6 @@ lychee.define('lychee.net.socket.HTTP').tags({
 
 					protocol   = new _Protocol(_Protocol.TYPE.client);
 					connection = new _net.Socket({
-						// fd:       null,
 						readable: true,
 						writable: true
 					});

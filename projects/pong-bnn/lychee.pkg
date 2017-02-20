@@ -1,0 +1,97 @@
+{
+	"api": {
+		"files": {}
+	},
+	"build": {
+		"environments": {
+			"html-nwjs/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html-nwjs",
+						"html"
+					]
+				},
+				"variant": "application"
+			},
+			"html/main": {
+				"build": "game.Main",
+				"debug": false,
+				"packages": [
+					[
+						"game",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"html"
+					]
+				},
+				"variant": "application"
+			}
+		},
+		"files": {}
+	},
+	"source": {
+		"environments": {},
+		"files": {
+			"Main": [
+				"js"
+			],
+			"ai": {
+				"Agent": [
+					"js"
+				]
+			},
+			"entity": {
+				"Ball": [
+					"js",
+					"json",
+					"png"
+				],
+				"Paddle": [
+					"evil.png",
+					"good.png",
+					"js",
+					"json"
+				]
+			},
+			"policy": {
+				"Ball": [
+					"js"
+				],
+				"Paddle": [
+					"js"
+				]
+			},
+			"state": {
+				"Game": [
+					"js",
+					"json",
+					"ping.snd",
+					"pong.snd"
+				]
+			},
+			"ui": {
+				"sprite": {
+					"Background": [
+						"js",
+						"json",
+						"png"
+					]
+				}
+			}
+		},
+		"tags": {}
+	}
+}

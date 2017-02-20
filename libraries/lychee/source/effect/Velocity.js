@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Velocity').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

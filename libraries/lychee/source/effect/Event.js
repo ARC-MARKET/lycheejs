@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Event').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

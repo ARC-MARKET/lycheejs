@@ -5,17 +5,23 @@ lychee.define('lychee.policy.Position').exports(function(lychee, global, attachm
 	 * IMPLEMENTATION
 	 */
 
-	let Composite = function(data) {
+	let Composite = function(settings) {
 
-		let settings = lychee.assignsafe({
-			limit: 0xffff
-		}, data);
+		this.entity = null;
+		this.limit  = { x: Infinity, y: Infinity, z: Infinity };
 
 
-		this.entity = settings.entity || null;
-		this.limit  = settings.limit;
+		// No data validation garbage allowed for policies
 
-		settings = null;
+		if (settings.entity instanceof Object) {
+			this.entity = settings.entity;
+		}
+
+		if (settings.limit instanceof Object) {
+			this.limit.x = typeof settings.limit.x === 'number' ? (settings.limit.x | 0) : Infinity;
+			this.limit.y = typeof settings.limit.y === 'number' ? (settings.limit.y | 0) : Infinity;
+			this.limit.z = typeof settings.limit.z === 'number' ? (settings.limit.z | 0) : Infinity;
+		}
 
 	};
 
@@ -25,6 +31,8 @@ lychee.define('lychee.policy.Position').exports(function(lychee, global, attachm
 		/*
 		 * ENTITY API
 		 */
+
+		// deserialize: function(blob) {},
 
 		serialize: function() {
 
@@ -53,11 +61,16 @@ lychee.define('lychee.policy.Position').exports(function(lychee, global, attachm
 			let limit  = this.limit;
 			let values = [ 0.5, 0.5, 0.5 ];
 
+
 			if (entity !== null) {
 
-				values[0] = entity.position.x / limit;
-				values[1] = entity.position.y / limit;
-				values[2] = entity.position.z / limit;
+				let hlx = limit.x / 2;
+				let hly = limit.y / 2;
+				let hlz = limit.z / 2;
+
+				values[0] = (hlx + entity.position.x) / (hlx * 2);
+				values[1] = (hly + entity.position.y) / (hly * 2);
+				values[2] = (hlz + entity.position.z) / (hlz * 2);
 
 			}
 
@@ -70,16 +83,17 @@ lychee.define('lychee.policy.Position').exports(function(lychee, global, attachm
 
 			let entity = this.entity;
 			let limit  = this.limit;
-			let x      = values[0] * limit;
-			let y      = values[1] * limit;
-			let z      = values[2] * limit;
 
 
 			if (entity !== null) {
 
-				entity.position.x = x;
-				entity.position.y = y;
-				entity.position.z = z;
+				let hlx = limit.x / 2;
+				let hly = limit.y / 2;
+				let hlz = limit.z / 2;
+
+				entity.position.x = (values[0] * (hlx * 2)) - hlx;
+				entity.position.y = (values[1] * (hly * 2)) - hly;
+				entity.position.z = (values[2] * (hlz * 2)) - hlz;
 
 			}
 

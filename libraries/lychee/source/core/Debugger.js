@@ -263,6 +263,9 @@ lychee.Debugger = typeof lychee.Debugger !== 'undefined' ? lychee.Debugger : (fu
 	};
 
 
+	Module.displayName = 'lychee.Debugger';
+
+
 	return Module;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

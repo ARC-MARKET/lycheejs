@@ -23,17 +23,19 @@ lychee.define('harvester.net.remote.Server').includes([
 
 				if (database['server'] instanceof Object) {
 
-					if (database['server']['@objects'] instanceof Array) {
+					let objects = database['server']['@objects'] || null;
+					if (objects instanceof Object) {
 
-						remotes.push.apply(remotes, database['server']['@objects'].map(function(remote) {
+						remotes = Object.values(objects).map(function(remote) {
 
 							return {
-								id:   remote.host + ':' + remote.port,
+								id:   remote.id,
+								type: remote.type,
 								host: remote.host,
 								port: remote.port
 							};
 
-						}));
+						});
 
 					}
 
@@ -49,32 +51,42 @@ lychee.define('harvester.net.remote.Server').includes([
 
 	const _serialize = function(project) {
 
-		let main        = global.MAIN || null;
-		let remotes     = _serialize_remotes(project);
-		let server_host = null;
-		let server_port = null;
+		project = project instanceof Object ? project : null;
 
-		if (project.server !== null) {
-			server_host = project.server.host;
-			server_port = project.server.port;
+
+		if (project !== null) {
+
+			let main        = global.MAIN || null;
+			let remotes     = _serialize_remotes(project);
+			let server_host = null;
+			let server_port = null;
+
+			if (project.server !== null) {
+				server_host = project.server.host;
+				server_port = project.server.port;
+			}
+
+
+			if (main !== null && server_host === null) {
+				server_host = main.server.host;
+			}
+
+			if (server_host === null) {
+				server_host = 'localhost';
+			}
+
+
+			return {
+				identifier: project.identifier,
+				host:       server_host,
+				port:       server_port,
+				remotes:    remotes
+			};
+
 		}
 
 
-		if (main !== null && server_host === null) {
-			server_host = main.server.host;
-		}
-
-		if (server_host === null) {
-			server_host = 'localhost';
-		}
-
-
-		return {
-			identifier: project.identifier,
-			host:       server_host,
-			port:       server_port,
-			remotes:    remotes
-		};
+		return null;
 
 	};
 
@@ -117,14 +129,25 @@ lychee.define('harvester.net.remote.Server').includes([
 
 		index: function(data) {
 
-			let main   = global.MAIN || null;
+			let host   = data['@host'] || null;
+			let main   = global.MAIN   || null;
 			let tunnel = this.tunnel;
+
+			if (host !== null) {
+
+				if (host.endsWith(':4848')) {
+					host = host.substr(0, host.length - 5);
+				}
+
+			}
 
 			if (main !== null && tunnel !== null) {
 
 				let projects = Object.values(main._projects).filter(function(project) {
 					return /cultivator/g.test(project.identifier) === false;
-				}).map(_serialize);
+				}).map(_serialize).forEach(function(project) {
+					project.host = project.host !== 'localhost' ? project.host : host;
+				});
 
 
 				tunnel.send(projects, {
@@ -138,16 +161,27 @@ lychee.define('harvester.net.remote.Server').includes([
 
 		connect: function(data) {
 
+			let host       = data['@host']   || null;
 			let identifier = data.identifier || null;
 			let main       = global.MAIN     || null;
 			let tunnel     = this.tunnel;
 
+			if (host !== null) {
+
+				if (host.endsWith(':4848')) {
+					host = host.substr(0, host.length - 5);
+				}
+
+			}
+
 			if (identifier !== null && main !== null && tunnel !== null) {
 
-				let project = main._projects[identifier] || null;
+				let project = _serialize(main._projects[identifier]);
 				if (project !== null) {
 
-					tunnel.send(_serialize(project), {
+					project.host = project.host !== 'localhost' ? project.host : host;
+
+					tunnel.send(project, {
 						id:    this.id,
 						event: 'connect'
 					});

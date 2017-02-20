@@ -131,8 +131,6 @@ lychee.define('lychee.ui.Sprite').includes([
 
 			if (this.visible === false) return;
 
-			_Entity.prototype.render.call(this, renderer, offsetX, offsetY);
-
 
 			let texture = this.texture;
 			if (texture !== null) {
@@ -184,6 +182,9 @@ lychee.define('lychee.ui.Sprite').includes([
 				}
 
 			}
+
+
+			_Entity.prototype.render.call(this, renderer, offsetX, offsetY);
 
 		},
 

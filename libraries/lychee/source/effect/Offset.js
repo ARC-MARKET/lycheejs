@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.Offset').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

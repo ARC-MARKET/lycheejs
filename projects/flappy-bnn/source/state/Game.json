@@ -1,0 +1,60 @@
+{
+	"layers": {
+		"bg": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "game.ui.sprite.Background",
+						"arguments": [
+							{}
+						]
+					}
+				],
+				"map": {
+					"background": 0
+				}
+			}
+		},
+		"game": {
+			"constructor": "lychee.app.Layer",
+			"arguments": [
+				{}
+			]
+		},
+		"ai": {
+			"constructor": "lychee.ai.Layer",
+			"arguments": [
+				{}
+			]
+		},
+		"ui": {
+			"constructor": "lychee.ui.Layer",
+			"arguments": [
+				{}
+			],
+			"blob": {
+				"entities": [
+					{
+						"constructor": "lychee.ui.entity.Label",
+						"arguments": [
+							{
+								"value": "Generation 1 - Score 0",
+								"position": {
+									"x": 0,
+									"y": -64
+								}
+							}
+						]
+					}
+				],
+				"map": {
+					"info": 0
+				}
+			}
+		}
+	}
+}

@@ -1,62 +1,256 @@
 {
-
-	"id":     "valley",
-	"title":  "Valley",
-	"type":   "circuit",
+	"id": "valley",
+	"title": "Valley",
+	"type": "circuit",
 	"rounds": 2,
-
 	"route": [
-		[ "straight", 150, null,      0 ],
-		[ "straight",  25, "hill",  200 ],
-		[ "straight",  25, "hill", -200 ],
-		[ "straight",  25, "hill",  400 ],
-		[ "straight",  25, "hill", -200 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "right-45",  50, null,      0 ],
-		[ "left-45",   50, null,      0 ],
-		[ "left-90",  100, null,      0 ],
-		[ "straight", 150, null,      0 ],
-		[ "left-90",   50, null,      0 ],
-		[ "right-90",  50, "hill",  200 ],
-		[ "right-90",  50, "hill",  400 ],
-		[ "straight", 100, "hill", -200 ],
-		[ "straight", 100, "hill",    0 ],
-		[ "left-90",   50, "hill",  400 ],
-		[ "left-90",   50, "hill",    0 ],
-		[ "straight",  50, "hill", -300 ],
-		[ "straight",  50, "hill",  100 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "straight", 100, "hill",    0 ],
-		[ "left-90",  100, null,      0 ],
-		[ "straight", 100, null,      0 ],
-		[ "left-90",   50, null,      0 ],
-		[ "right-90",  50, null,      0 ],
-		[ "right-90",  50, null,      0 ],
-		[ "right-90",  50, null,      0 ],
-		[ "left-90",   50, null,      0 ],
-		[ "straight",  50, "hill",  200 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "straight",  50, "hill",  200 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "straight",  50, "hill",  200 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "straight",  50, "hill",  200 ],
-		[ "straight",  50, "hill",    0 ],
-		[ "left-90",  100, null,      0 ],
-		[ "left-90",  100, null,      0 ],
-		[ "straight", 150, null,      0 ]    
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"straight",
+			25,
+			"hill",
+			200
+		],
+		[
+			"straight",
+			25,
+			"hill",
+			-200
+		],
+		[
+			"straight",
+			25,
+			"hill",
+			400
+		],
+		[
+			"straight",
+			25,
+			"hill",
+			-200
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"right-45",
+			50,
+			null,
+			0
+		],
+		[
+			"left-45",
+			50,
+			null,
+			0
+		],
+		[
+			"left-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"left-90",
+			50,
+			null,
+			0
+		],
+		[
+			"right-90",
+			50,
+			"hill",
+			200
+		],
+		[
+			"right-90",
+			50,
+			"hill",
+			400
+		],
+		[
+			"straight",
+			100,
+			"hill",
+			-200
+		],
+		[
+			"straight",
+			100,
+			"hill",
+			0
+		],
+		[
+			"left-90",
+			50,
+			"hill",
+			400
+		],
+		[
+			"left-90",
+			50,
+			"hill",
+			0
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			-300
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			100
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"straight",
+			100,
+			"hill",
+			0
+		],
+		[
+			"left-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			100,
+			null,
+			0
+		],
+		[
+			"left-90",
+			50,
+			null,
+			0
+		],
+		[
+			"right-90",
+			50,
+			null,
+			0
+		],
+		[
+			"right-90",
+			50,
+			null,
+			0
+		],
+		[
+			"right-90",
+			50,
+			null,
+			0
+		],
+		[
+			"left-90",
+			50,
+			null,
+			0
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			200
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			200
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			200
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			200
+		],
+		[
+			"straight",
+			50,
+			"hill",
+			0
+		],
+		[
+			"left-90",
+			100,
+			null,
+			0
+		],
+		[
+			"left-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			150,
+			null,
+			0
+		]
 	],
-
-	"palette": [{
-		"terrain": "#eeddaa",
-		"road":    "#666666",
-		"rumble":  "#ff3333",
-		"lane":    null
-	}, {
-		"terrain": "#ddcc99",
-		"road":    "#666666",
-		"rumble":  "#cccccc",
-		"lane":    "#cccccc"
-	}]
-
+	"palette": [
+		{
+			"terrain": "#eeddaa",
+			"road": "#666666",
+			"rumble": "#ff3333",
+			"lane": null
+		},
+		{
+			"terrain": "#ddcc99",
+			"road": "#666666",
+			"rumble": "#cccccc",
+			"lane": "#cccccc"
+		}
+	]
 }

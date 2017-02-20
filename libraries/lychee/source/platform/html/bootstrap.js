@@ -1679,7 +1679,12 @@
 				}
 
 				if (this.buffer.currentTime === 0) {
-					this.buffer.play();
+
+					let p = this.buffer.play();
+					if (typeof p === 'object' && typeof p.catch === 'function') {
+						p.catch(function(err) {});
+					}
+
 					this.isIdle = false;
 				}
 
@@ -1699,8 +1704,14 @@
 		resume: function() {
 
 			if (this.buffer !== null) {
-				this.buffer.play();
+
+				let p = this.buffer.play();
+				if (typeof p === 'object' && typeof p.catch === 'function') {
+					p.catch(function(err) {});
+				}
+
 				this.isIdle = false;
+
 			}
 
 		},
@@ -1973,8 +1984,14 @@
 				}
 
 				if (this.buffer.currentTime === 0) {
-					this.buffer.play();
+
+					let p = this.buffer.play();
+					if (typeof p === 'object' && typeof p.catch === 'function') {
+						p.catch(function(err) {});
+					}
+
 					this.isIdle = false;
+
 				}
 
 			}
@@ -1993,8 +2010,14 @@
 		resume: function() {
 
 			if (this.buffer !== null) {
-				this.buffer.play();
+
+				let p = this.buffer.play();
+				if (typeof p === 'object' && typeof p.catch === 'function') {
+					p.catch(function(err) {});
+				}
+
 				this.isIdle = false;
+
 			}
 
 		},

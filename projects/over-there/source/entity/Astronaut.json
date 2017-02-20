@@ -1,139 +1,159 @@
 {
-    "map": {
-        "default": [{
-            "x": 0,
-            "y": 0,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }],
-        "floating": [{
-            "x": 32,
-            "y": 0,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 64,
-            "y": 0,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 96,
-            "y": 0,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 0,
-            "y": 32,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }],
-        "working": [{
-            "x": 32,
-            "y": 32,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 64,
-            "y": 32,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 96,
-            "y": 32,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 0,
-            "y": 64,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }],
-        "working-left": [{
-            "x": 32,
-            "y": 64,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 64,
-            "y": 64,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 96,
-            "y": 64,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }],
-        "working-right": [{
-            "x": 0,
-            "y": 96,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 32,
-            "y": 96,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }, {
-            "x": 64,
-            "y": 96,
-            "w": 32,
-            "h": 32,
-            "width": 32,
-            "height": 32
-        }]
-    },
-    "states": {
-        "default": {
-            "animation": false
-        },
-        "floating": {
-            "animation": true,
-            "duration": 1000,
-            "loop": true
-        },
-        "working": {
-            "animation": true,
-            "duration": 1000,
-            "loop": true
-        },
-        "working-left": {
-            "animation": true,
-            "duration": 1000,
-            "loop": true
-        },
-        "working-right": {
-            "animation": true,
-            "duration": 1000,
-            "loop": true
-        }
-    }
+	"map": {
+		"default": [
+			{
+				"x": 0,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"floating": [
+			{
+				"x": 32,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 64,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 96,
+				"y": 0,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 0,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"working": [
+			{
+				"x": 32,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 64,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 96,
+				"y": 32,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 0,
+				"y": 64,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"working-left": [
+			{
+				"x": 32,
+				"y": 64,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 64,
+				"y": 64,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 96,
+				"y": 64,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		],
+		"working-right": [
+			{
+				"x": 0,
+				"y": 96,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 32,
+				"y": 96,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			},
+			{
+				"x": 64,
+				"y": 96,
+				"w": 32,
+				"h": 32,
+				"width": 32,
+				"height": 32
+			}
+		]
+	},
+	"states": {
+		"default": {
+			"animation": false
+		},
+		"floating": {
+			"animation": true,
+			"duration": 1000,
+			"loop": true
+		},
+		"working": {
+			"animation": true,
+			"duration": 1000,
+			"loop": true
+		},
+		"working-left": {
+			"animation": true,
+			"duration": 1000,
+			"loop": true
+		},
+		"working-right": {
+			"animation": true,
+			"duration": 1000,
+			"loop": true
+		}
+	}
 }

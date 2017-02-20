@@ -26,15 +26,14 @@ Support our libre Bot Cloud via BTC [1CamMuvrFU1QAMebPoDsL3JrioVDoxezY2](bitcoin
 
 ## IMPORTANT NOTICE
 
-We went live with our AI on 1. Sept 2016. This caused a totally fucked up
-and necessary hard rebase. If your Fork does not contain the
+We went live with our AI on 1. Sept 2016. This caused a broken git commit
+history and a necessary hard rebase. If your Fork does not contain the
 `:balloon: AI History starts here` on its `master` branch, please delete
 it and re-fork it again.
 
-We hope that this will not occur again in future, but git has harsh
-problems with rebases and squash-merges of overly complex branches
-(read: 500k+ commits per day). So we essentially use that specific
-commit to rebase onto from the `humansneednotapply` branch.
+We hope that this will not occur again in future, so far the new git
+history and the merge flow (using `theirs` merge strategy on above
+mentioned commit) appears to be stable.
 
 Thank you for your understanding.
 
@@ -83,7 +82,7 @@ Artificial Intelligence and better Software Architecture.
 
 Everything listed here requires zero lines of code overhead
 and is already fully integrated in the [lychee.js Boilerplate](./projects/boilerplate):
- 
+
 The lychee.js Core and Definition System:
 
 - Isomorphic Application Engine (runs pretty much everywhere)
@@ -195,7 +194,7 @@ repository).
 
 Notes:
 
-- **Windows** is **unsupported** as development host. Use a VM or the [Dockerfile](https://github.com/Artificial-Engineering/lycheejs-bundle/blob/master/bin/package/docker/Dockerfile) instead.
+- **Windows** is **unsupported** as development host. Use a VM, the [Docker Image](https://hub.docker.com/r/cookiengineer/lycheejs) or the [Dockerfile](https://github.com/Artificial-Engineering/lycheejs-bundle/blob/master/bin/package/docker/Dockerfile) instead.
 - GNU/Linux requires either of `apt-get`, `dnf`, `pacman`, `yum` or `zipper` installed beforehand.
 - Mac OSX requires [brew](https://brew.sh) installed beforehand.
 - FreeBSD/NetBSD requires `pkg` installed and [Linux Compatibility](https://www.freebsd.org/doc/handbook/linuxemu-lbc-install.html) activated beforehand.

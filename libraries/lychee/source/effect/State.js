@@ -1,8 +1,6 @@
 
 lychee.define('lychee.effect.State').exports(function(lychee, global, attachments) {
 
-
-
 	/*
 	 * IMPLEMENTATION
 	 */

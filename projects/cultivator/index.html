@@ -66,29 +66,40 @@ cd /opt/lycheejs;
 	})(global.location || {});
 
 
-	if (version !== null) {
+	if (version !== null && message !== null) {
 
 		version.innerHTML = lychee.VERSION;
 
-		let curr_year  = parseInt(lychee.VERSION.split('-')[0], 10);
-		let curr_month = parseInt(lychee.VERSION.split('-Q')[1], 10) * 3;
-		let last_year  = new Date().getFullYear();
-		let last_month = ((new Date().getMonth() / 3) | 0) * 3;
+		let install_year  = parseInt(lychee.VERSION.split('-')[0], 10);
+		let install_month = parseInt(lychee.VERSION.split('-Q')[1], 10) * 3;
+		let current_year  = new Date().getFullYear();
+		let current_month = ((new Date().getMonth() / 3) | 0) * 3;
 
-		if (last_year >= curr_year && last_month > curr_month) {
+
+		let needs_update = false;
+
+		if (install_year === current_year && current_month > install_month) {
+			needs_update = true;
+		}
+
+		if (install_year < current_year && current_month > 0) {
+			needs_update = true;
+		}
+
+		if (needs_update === true) {
 
 			setTimeout(function() {
 				message.className = 'visible';
 			}, 500);
 
 		}
- 
+
 	}
 
 
-	if (host === 'localhost' && main !== null) {
+	if (main !== null) {
 
-		let config = new Config('http://localhost:4848/api/project/index');
+		let config = new Config('http://' + host + ':4848/api/project/index');
 
 		config.onload = function(result) {
 
@@ -151,4 +162,4 @@ cd /opt/lycheejs;
 })(typeof global !== 'undefined' ? global : this, document.querySelector('#lychee-VERSION'), document.querySelector('#lychee-MESSAGE'), document.querySelector('main'));
 </script>
 </body>
-</html>    
+</html>

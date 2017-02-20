@@ -18,8 +18,10 @@ lychee.define('game.Main').requires([
 
 		let settings = Object.assign({
 
-			client: null,
-			server: null,
+			client:  null,
+			server:  null,
+			stash:   null,
+			storage: null,
 
 			input: {
 				delay:       0,

@@ -82,6 +82,9 @@ lychee.Asset = typeof lychee.Asset !== 'undefined' ? lychee.Asset : (function(gl
 	};
 
 
+	Callback.displayName = 'lychee.Asset';
+
+
 	return Callback;
 
 })(typeof window !== 'undefined' ? window : (typeof global !== 'undefined' ? global : this));

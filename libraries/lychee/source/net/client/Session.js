@@ -57,10 +57,10 @@ lychee.define('lychee.net.client.Session').includes([
 			let type = data.type;
 			if (type === 'update') {
 
-				this.admin = data.admin;
-				this.sid   = data.sid;
-				this.min   = data.min;
-				this.max   = data.max;
+				this.setAdmin(data.admin);
+				this.setSid(data.sid);
+				this.setMin(data.min);
+				this.setMax(data.max);
 
 			}
 
@@ -99,7 +99,7 @@ lychee.define('lychee.net.client.Session').includes([
 		deserialize: function(blob) {
 
 			if (blob.admin === true) {
-				this.admin = true;
+				this.setAdmin(true);
 			}
 
 		},
@@ -226,6 +226,20 @@ lychee.define('lychee.net.client.Session').includes([
 				}
 
 			}
+
+		},
+
+		setAdmin: function(admin) {
+
+			if (admin === true || admin === false) {
+
+				this.admin = true;
+
+				return true;
+
+			}
+
+			return false;
 
 		},
 

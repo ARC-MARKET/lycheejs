@@ -1,31 +1,70 @@
 {
-
-	"id":     "valley",
-	"title":  "Valley",
-	"type":   "circuit",
+	"id": "valley",
+	"title": "Valley",
+	"type": "circuit",
 	"rounds": 2,
-
 	"route": [
-		[ "straight", 150, null,      0 ],
-		[ "right-90", 100, null,      0 ],
-		[ "straight", 150, null,      0 ],
-		[ "right-90", 100, null,      0 ],
-		[ "straight", 150, null,      0 ],
-		[ "right-90", 100, null,      0 ],
-		[ "straight", 150, null,      0 ],
-		[ "right-90", 100, null,      0 ]
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"right-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"right-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"right-90",
+			100,
+			null,
+			0
+		],
+		[
+			"straight",
+			150,
+			null,
+			0
+		],
+		[
+			"right-90",
+			100,
+			null,
+			0
+		]
 	],
-
-	"palette": [{
-		"terrain": "#eeddaa",
-		"road":    "#666666",
-		"rumble":  "#ff3333",
-		"lane":    null
-	}, {
-		"terrain": "#ddcc99",
-		"road":    "#666666",
-		"rumble":  "#cccccc",
-		"lane":    "#cccccc"
-	}]
-
+	"palette": [
+		{
+			"terrain": "#eeddaa",
+			"road": "#666666",
+			"rumble": "#ff3333",
+			"lane": null
+		},
+		{
+			"terrain": "#ddcc99",
+			"road": "#666666",
+			"rumble": "#cccccc",
+			"lane": "#cccccc"
+		}
+	]
 }

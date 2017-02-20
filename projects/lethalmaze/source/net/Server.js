@@ -32,7 +32,7 @@ lychee.define('game.net.Server').requires([
 
 		this.bind('connect', function(remote) {
 
-			console.log('game.net.Server: Remote connected (' + remote.host + ':' + remote.port + ')');
+			console.log('game.net.Server: Remote connected (' + remote.id + ')');
 
 			remote.addService(new _Control(remote));
 
@@ -40,7 +40,7 @@ lychee.define('game.net.Server').requires([
 
 		this.bind('disconnect', function(remote) {
 
-			console.log('game.net.Server: Remote disconnected (' + remote.host + ':' + remote.port + ')');
+			console.log('game.net.Server: Remote disconnected (' + remote.id + ')');
 
 		}, this);
 

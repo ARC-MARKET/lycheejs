@@ -40,7 +40,15 @@
 				"variant": "library"
 			}
 		},
-		"files": {}
+		"files": {
+			"node": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			}
+		}
 	},
 	"source": {
 		"environments": {},

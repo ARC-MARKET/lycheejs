@@ -14,6 +14,12 @@ LYCHEEJS_NODE="";
 LYCHEEJS_ROOT=$(cd "$(dirname "$0")/../../"; pwd);
 LYCHEEJS_VERSION=$(cd $LYCHEEJS_ROOT && cat ./libraries/lychee/source/core/lychee.js | grep VERSION | cut -d\" -f2);
 
+ALWAYS_YES="false";
+
+if [ "$1" == "--yes" ] || [ "$1" == "-y" ]; then
+	ALWAYS_YES="true";
+fi;
+
 
 
 if [ "$OS" == "darwin" ]; then
@@ -48,25 +54,35 @@ elif [[ "$USER_WHO" == "root" && "$USER_LOG" == "root" ]]; then
 
 else
 
-	echo "";
-	echo "lychee.js Uninstall Tool";
-	echo "";
-	echo "All your data are belong to us.";
-	echo "This tool separates lychee.js from the operating system.";
-	echo "";
-	echo "No projects are harmed or modified, so after executing this script";
-	echo "your lychee.js installation is still available in sandboxed mode.";
-	echo "";
-	echo "lychee.js Folder:  $LYCHEEJS_ROOT";
-	echo "lychee.js Version: $LYCHEEJS_VERSION";
-	echo "";
+	if [ "$ALWAYS_YES" == "true" ]; then
 
-	read -p "Continue (y/n)? " -r
-
-	if [[ $REPLY =~ ^[Yy]$ ]]; then
+		# XXX: Continue
 		echo "";
+
 	else
-		exit 1;
+
+		echo "";
+		echo "lychee.js Uninstall Tool";
+		echo "";
+		echo "All your data are belong to us.";
+		echo "This tool separates lychee.js from the operating system.";
+		echo "";
+		echo "No projects are harmed or modified, so after executing this script";
+		echo "your lychee.js installation is still available in sandboxed mode.";
+		echo "";
+		echo "lychee.js Folder:  $LYCHEEJS_ROOT";
+		echo "lychee.js Version: $LYCHEEJS_VERSION";
+		echo "";
+
+		read -p "Continue (y/n)? " -r
+
+		if [[ $REPLY =~ ^[Yy]$ ]]; then
+			echo "";
+		else
+			echo "";
+			exit 1;
+		fi;
+
 	fi;
 
 
@@ -111,13 +127,13 @@ else
 			echo "";
 
 
-			rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
-			rm /usr/local/bin/lycheejs-editor 2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
+			rm /usr/local/bin/lycheejs-editor     2> /dev/null;
 			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper 2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
 
 
 			echo "> DONE";
@@ -141,13 +157,13 @@ else
 			echo "";
 
 
-			rm /usr/local/bin/lycheejs-breeder 2> /dev/null;
-			rm /usr/local/bin/lycheejs-editor 2> /dev/null;
+			rm /usr/local/bin/lycheejs-breeder    2> /dev/null;
+			rm /usr/local/bin/lycheejs-editor     2> /dev/null;
 			rm /usr/local/bin/lycheejs-fertilizer 2> /dev/null;
-			rm /usr/local/bin/lycheejs-harvester 2> /dev/null;
-			rm /usr/local/bin/lycheejs-helper 2> /dev/null;
-			rm /usr/local/bin/lycheejs-ranger 2> /dev/null;
-			rm /usr/local/bin/lycheejs-strainer 2> /dev/null;
+			rm /usr/local/bin/lycheejs-harvester  2> /dev/null;
+			rm /usr/local/bin/lycheejs-helper     2> /dev/null;
+			rm /usr/local/bin/lycheejs-ranger     2> /dev/null;
+			rm /usr/local/bin/lycheejs-strainer   2> /dev/null;
 
 
 			echo "> DONE";

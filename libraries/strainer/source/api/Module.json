@@ -1,102 +1,50 @@
-[{
-	"name":  "buffer",
-	"type":  "Buffer",
-	"value": {
-		"constructor": "Buffer",
-		"arguments": [ "" ]
+[
+	{
+		"name": "new _Array",
+		"type": "Array",
+		"value": []
+	},
+	{
+		"name": "new _Buffer",
+		"type": "Buffer",
+		"value": {
+			"constructor": "Buffer",
+			"arguments": [
+				""
+			]
+		}
+	},
+	{
+		"name": "asset",
+		"type": "lychee.Asset",
+		"value": {
+			"constructor": "lychee.Asset",
+			"arguments": []
+		}
+	},
+	{
+		"name": "id",
+		"type": "String",
+		"value": "<unique identifier>"
+	},
+	{
+		"name": "this",
+		"type": "Object",
+		"value": "this"
+	},
+	{
+		"name": "Math.sqrt",
+		"type": "Number",
+		"value": 13.37
+	},
+	{
+		"name": "object",
+		"type": "Object",
+		"value": {}
+	},
+	{
+		"name": "result",
+		"type": "Boolean",
+		"value": true
 	}
-}, {
-	"name":  "new Buffer",
-	"type":  "Buffer",
-	"value": {
-		"constructor": "Buffer",
-		"arguments": [ "" ]
-	} 
-}, {
-	"name":  "new _Buffer",
-	"type":  "Buffer",
-	"value": {
-		"constructor": "Buffer",
-		"arguments": [ "" ]
-	}
-}, {
-	"name":  "asset",
-	"type":  "lychee.Asset",
-	"value": {
-		"constructor": "lychee.Asset",
-		"arguments": []
-	}
-}, {
-	"name":  "id",
-	"type":  "String",
-	"value": "<unique identifier>"
-}, {
-	"name":  "this",
-	"type":  "Object",
-	"value": "this"
-}, {
-	"name":  "all",
-	"type":  "Boolean",
-	"value": true
-}, {
-	"name":  "result",
-	"type":  "Boolean",
-	"value": true
-}, {
-	"name":  "found",
-	"type":  "Boolean",
-	"value": true
-}, {
-	"name":  "valid",
-	"type":  "Boolean",
-	"value": true
-}, {
-	"name":  "Math.sqrt",
-	"type":  "Number",
-	"value": 13.37
-}, {
-	"name":  "width",
-	"type":  "Number",
-	"value": 1337
-}, {
-	"name":  "height",
-	"type":  "Number",
-	"value": 1337
-}, {
-	"name":  "depth",
-	"type":  "Number",
-	"value": 1337
-}, {
-	"name":  "label",
-	"type":  "String",
-	"value": "<label>"
-}, {
-	"name":  "new Array",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "new _Array",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "chunks",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "filtered",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "values",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "weights",
-	"type":  "Array",
-	"value": []
-}, {
-	"name":  "object",
-	"type":  "Object",
-	"value": {}
-}]
-
+]

@@ -577,7 +577,7 @@ lychee = typeof lychee !== 'undefined' ? lychee : (function(global) {
 
 		interfaceof: function(template, instance) {
 
-			if (instance === undefined) {
+			if (instance === null || instance === undefined) {
 				return false;
 			}
 

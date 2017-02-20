@@ -2,52 +2,77 @@
 	"layers": {
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.ui.Blueprint",
-					"arguments": [{
-						"visible": true,
-						"type": 2
-					}],
-					"blob": {
-						"entities": [{
-							"constructor": "lychee.ui.Element",
-							"arguments": [{
-								"label":    "WELCOME",
-								"options":  [ "Settings" ],
-								"width":    416,
-								"height":   416
-							}],
-							"blob": {
-								"entities": [{
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "This is the App Boilerplate.\n\nIt is an isomorphic App that is compatible with\nthe Editor, Fertilizer, Ranger and Strainer."
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "Navigate through the App via Touch, Mouse,\nTablet, Gamepad or Keyboard."
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "Gamepad Bindings:\n- Menu via [Start]\n- Select via [Joystick]\n- Scroll via [R] and [L]"
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "Keyboard Bindings:\n- Menu via [Esc]\n- Select via [Tab] and [Shift]+[Tab]\n- Scroll via [Page-Down] and [Page-Up]"
-									}]
-								}]
+				"entities": [
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": true,
+								"type": 2
 							}
-						}],
-						"map": {
-							"dialog": 0
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "lychee.ui.Element",
+									"arguments": [
+										{
+											"label": "WELCOME",
+											"options": [
+												"Settings"
+											],
+											"width": 416,
+											"height": 416
+										}
+									],
+									"blob": {
+										"entities": [
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "This is the App Boilerplate.\n\nIt is an isomorphic App that is compatible with\nthe Editor, Fertilizer, Ranger and Strainer."
+													}
+												]
+											},
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "Navigate through the App via Touch, Mouse,\nTablet, Gamepad or Keyboard."
+													}
+												]
+											},
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "Gamepad Bindings:\n- Menu via [Start]\n- Select via [Joystick]\n- Scroll via [R] and [L]"
+													}
+												]
+											},
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "Keyboard Bindings:\n- Menu via [Esc]\n- Select via [Tab] and [Shift]+[Tab]\n- Scroll via [Page-Down] and [Page-Up]"
+													}
+												]
+											}
+										]
+									}
+								}
+							],
+							"map": {
+								"dialog": 0
+							}
 						}
 					}
-				}],
+				],
 				"map": {
 					"welcome": 0
 				}

@@ -2,12 +2,18 @@
 	"layers": {
 		"background": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "app.entity.Background",
-					"arguments": [{}]
-				}],
+				"entities": [
+					{
+						"constructor": "app.entity.Background",
+						"arguments": [
+							{}
+						]
+					}
+				],
 				"map": {
 					"background": 0
 				}
@@ -15,240 +21,325 @@
 		},
 		"midground": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "app.entity.Midground",
-					"arguments": [{}]
-				}, {
-					"constructor": "app.entity.Emblem",
-					"arguments": [{}]
-				}],
+				"entities": [
+					{
+						"constructor": "app.entity.Midground",
+						"arguments": [
+							{}
+						]
+					},
+					{
+						"constructor": "app.entity.Emblem",
+						"arguments": [
+							{}
+						]
+					}
+				],
 				"map": {
 					"midground": 0,
-					"emblem":    1
+					"emblem": 1
 				}
 			}
 		},
 		"foreground": {
 			"constructor": "lychee.app.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.app.Layer",
-					"arguments": [{}],
-					"blob": {
-						"entities": [{
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 0
+				"entities": [
+					{
+						"constructor": "lychee.app.Layer",
+						"arguments": [
+							{}
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 0
+											},
+											"state": "node1"
+										}
+									]
 								},
-								"state": "node1"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 80
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 80
+											},
+											"state": "horizontal-medium"
+										}
+									]
 								},
-								"state": "horizontal-medium"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": -80
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": -80
+											},
+											"state": "horizontal-big"
+										}
+									]
 								},
-								"state": "horizontal-big"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 80,
-									"y": 0
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 80,
+												"y": 0
+											},
+											"state": "vertical-big"
+										}
+									]
 								},
-								"state": "vertical-big"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": -80,
-									"y": 0
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": -80,
+												"y": 0
+											},
+											"state": "vertical-big"
+										}
+									]
 								},
-								"state": "vertical-big"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 192
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 192
+											},
+											"state": "fgb"
+										}
+									]
 								},
-								"state": "fgb"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 304
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 304
+											},
+											"state": "horizontal-small"
+										}
+									]
 								},
-								"state": "horizontal-small"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 352
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 352
+											},
+											"state": "node0"
+										}
+									]
 								},
-								"state": "node0"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 48,
-									"y": 352
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 48,
+												"y": 352
+											},
+											"state": "vertical-small"
+										}
+									]
 								},
-								"state": "vertical-small"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": -48,
-									"y": 352
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": -48,
+												"y": 352
+											},
+											"state": "vertical-small"
+										}
+									]
 								},
-								"state": "vertical-small"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 400
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 400
+											},
+											"state": "horizontal-small"
+										}
+									]
 								},
-								"state": "horizontal-small"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": 512
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": 512
+											},
+											"state": "sm",
+											"country": "RU"
+										}
+									]
 								},
-								"state": "sm",
-								"country": "RU"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": -176,
-									"y": 0
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": -176,
+												"y": 0
+											},
+											"state": "node3"
+										}
+									]
 								},
-								"state": "node3"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 128,
-									"y": 0
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 128,
+												"y": 0
+											},
+											"state": "crewlock"
+										}
+									]
 								},
-								"state": "crewlock"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": -208
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": -208
+											},
+											"state": "destiny"
+										}
+									]
 								},
-								"state": "destiny"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": -336
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": -336
+											},
+											"state": "horizontal-big"
+										}
+									]
 								},
-								"state": "horizontal-big"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 0,
-									"y": -432
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 0,
+												"y": -432
+											},
+											"state": "harmony"
+										}
+									]
 								},
-								"state": "harmony"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": 80,
-									"y": -416
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": 80,
+												"y": -416
+											},
+											"state": "vertical-big"
+										}
+									]
 								},
-								"state": "vertical-big"
-							}]
-						}, {
-							"constructor": "app.entity.Airlock",
-							"arguments": [{
-								"position": {
-									"x": -80,
-									"y": -416
+								{
+									"constructor": "app.entity.Airlock",
+									"arguments": [
+										{
+											"position": {
+												"x": -80,
+												"y": -416
+											},
+											"state": "vertical-big"
+										}
+									]
 								},
-								"state": "vertical-big"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 208,
-									"y": -416
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 208,
+												"y": -416
+											},
+											"state": "columbus"
+										}
+									]
 								},
-								"state": "columbus"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": -192,
-									"y": -416
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": -192,
+												"y": -416
+											},
+											"state": "jem"
+										}
+									]
 								},
-								"state": "jem"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": 128,
-									"y": 352
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": 128,
+												"y": 352
+											},
+											"state": "dc1"
+										}
+									]
 								},
-								"state": "dc1"
-							}]
-						}, {
-							"constructor": "app.entity.Room",
-							"arguments": [{
-								"position": {
-									"x": -128,
-									"y": 352
-								},
-								"state": "mrm2"
-							}]
-						}]
+								{
+									"constructor": "app.entity.Room",
+									"arguments": [
+										{
+											"position": {
+												"x": -128,
+												"y": 352
+											},
+											"state": "mrm2"
+										}
+									]
+								}
+							]
+						}
 					}
-				}],
+				],
 				"map": {
 					"ship": 0
 				}
@@ -256,12 +347,18 @@
 		},
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "app.ui.layer.Overlay",
-					"arguments": [{}]
-				}],
+				"entities": [
+					{
+						"constructor": "app.ui.layer.Overlay",
+						"arguments": [
+							{}
+						]
+					}
+				],
 				"map": {
 					"overlay": 0
 				}

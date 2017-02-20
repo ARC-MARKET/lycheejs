@@ -4,25 +4,57 @@
 	},
 	"build": {
 		"environments": {
-			"node/main": {
+			"node-sdl/dist": {
 				"build": "strainer.Main",
 				"debug": false,
-				"sandbox": false,
 				"packages": [
 					[
 						"strainer",
 						"./lychee.pkg"
 					]
 				],
+				"sandbox": false,
 				"tags": {
 					"platform": [
 						"node"
 					]
 				},
-				"variant": "application"
+				"variant": "library"
+			},
+			"node/dist": {
+				"build": "strainer.Main",
+				"debug": false,
+				"packages": [
+					[
+						"strainer",
+						"./lychee.pkg"
+					]
+				],
+				"sandbox": false,
+				"tags": {
+					"platform": [
+						"node"
+					]
+				},
+				"variant": "library"
 			}
 		},
-		"files": {}
+		"files": {
+			"node": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			},
+			"node-sdl": {
+				"dist": {
+					"index": [
+						"js"
+					]
+				}
+			}
+		}
 	},
 	"source": {
 		"environments": {},

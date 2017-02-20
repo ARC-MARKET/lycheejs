@@ -15,6 +15,16 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 	};
 
+	const _color_to_rgb = function(color) {
+
+		let r = parseInt(color.substr(1, 2), 16) || 0;
+		let g = parseInt(color.substr(3, 2), 16) || 0;
+		let b = parseInt(color.substr(5, 2), 16) || 0;
+
+		return [ r, g, b ];
+
+	};
+
 
 
 	/*
@@ -28,6 +38,10 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 		this.duration = 250;
 		this.color    = '#000000';
 
+		this.__cache  = {
+			color:  [ 0, 0, 0 ],
+			origin: [ 0, 0, 0 ]
+		};
 		this.__origin = null;
 		this.__start  = null;
 
@@ -93,31 +107,26 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 				return true;
 			} else if (this.__origin === null) {
 				this.__origin = entity.color || '#000000';
+				this.__cache.color  = _color_to_rgb(this.color);
+				this.__cache.origin = _color_to_rgb(this.__origin);
 			}
 
 
-			let origin  = this.__origin;
-			let color   = this.color;
+			let color  = this.__cache.color;
+			let origin = this.__cache.origin;
 
-			let originr = parseInt(origin.substr(1, 2), 16) || 0;
-			let origing = parseInt(origin.substr(3, 2), 16) || 0;
-			let originb = parseInt(origin.substr(5, 2), 16) || 0;
 
-			let colorr  = parseInt(color.substr(1, 2), 16) || 0;
-			let colorg  = parseInt(color.substr(3, 2), 16) || 0;
-			let colorb  = parseInt(color.substr(5, 2), 16) || 0;
-
-			let r       = originr;
-			let g       = origing;
-			let b       = originb;
+			let r      = origin[0];
+			let g      = origin[1];
+			let b      = origin[2];
 
 
 			if (t <= 1) {
 
 				let f  = 0;
-				let dr = colorr - originr;
-				let dg = colorg - origing;
-				let db = colorb - originb;
+				let dr = color[0] - origin[0];
+				let dg = color[1] - origin[1];
+				let db = color[2] - origin[2];
 
 
 				let type = this.type;
@@ -188,7 +197,7 @@ lychee.define('lychee.effect.Color').exports(function(lychee, global, attachment
 
 			} else {
 
-				entity.color     = _rgb_to_color(colorr | 0, colorg | 0, colorb | 0);
+				entity.color     = this.color;
 				entity.__isDirty = true;
 
 

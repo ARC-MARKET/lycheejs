@@ -1,18 +1,18 @@
 
 lychee.define('lychee.ai.Layer').requires([
 	'lychee.ai.Agent',
-//	'lychee.ai.bnn.Agent',
-	'lychee.ai.enn.Agent'
-//	'lychee.ai.neat.Agent',
+	'lychee.ai.bnn.Agent',
+	'lychee.ai.enn.Agent',
+	'lychee.ai.neat.Agent'
 //	'lychee.ai.bneat.Agent',
 //	'lychee.ai.hyperneat.Agent'
 ]).includes([
-	'lychee.app.Layer'
+	'lychee.event.Emitter'
 ]).exports(function(lychee, global, attachments) {
 
-	const _Agent = lychee.import('lychee.ai.Agent');
-	const _Layer = lychee.import('lychee.app.Layer');
-	const _agent = {
+	const _Agent   = lychee.import('lychee.ai.Agent');
+	const _Emitter = lychee.import('lychee.event.Emitter');
+	const _agent   = {
 		ENN:       lychee.import('lychee.ai.enn.Agent'),
 		BNN:       lychee.import('lychee.ai.bnn.Agent'),
 		NEAT:      lychee.import('lychee.ai.neat.Agent'),
@@ -26,11 +26,39 @@ lychee.define('lychee.ai.Layer').requires([
 	 * HELPERS
 	 */
 
+	const _validate_agent = function(agent) {
+
+		if (agent instanceof Object) {
+
+			if (
+				typeof agent.update === 'function'
+				&& typeof agent.crossover === 'function'
+				&& typeof agent.fitness === 'number'
+				&& typeof agent.reward === 'function'
+				&& typeof agent.punish === 'function'
+			) {
+				return true;
+			}
+
+		}
+
+
+		return false;
+
+	};
+
 	const _create_agent = function() {
 
 		let Agent = _Agent;
 		let type  = this.type;
-		if (type === Composite.TYPE.ENN) {
+		if (type === Composite.TYPE.CUSTOM) {
+
+			let template = lychee.serialize(this.agents[0]);
+			if (template !== null) {
+				Agent = lychee.import(template['constructor']);
+			}
+
+		} else if (type === Composite.TYPE.ENN) {
 			Agent = _agent.ENN;
 		} else if (type === Composite.TYPE.BNN) {
 			Agent = _agent.BNN;
@@ -47,69 +75,21 @@ lychee.define('lychee.ai.Layer').requires([
 
 	};
 
-	const _initialize = function() {
 
-		let controls   = this.controls;
-		let entities   = this.entities;
-		let sensors    = this.sensors;
-		let population = this.__population;
+	const _on_epoche = function() {
 
-
-		for (let e = 0, el = entities.length; e < el; e++) {
-
-			let entity = entities[e];
-			let agent  = _create_agent.call(this);
-
-			agent.setSensors(sensors.map(function(sensor) {
-				return lychee.deserialize(lychee.serialize(sensor));
-			}));
-
-			agent.setControls(controls.map(function(control) {
-				return lychee.deserialize(lychee.serialize(control));
-			}));
-
-			agent.setEntity(entity);
+		let agents  = this.agents;
+		let fitness = this.__fitness;
 
 
-			population.push(agent);
-
-		}
-
-	};
-
-	const _epoche = function() {
-
-		let entities      = this.entities;
-		let oldcontrols   = [];
-		let oldsensors    = [];
-		let oldpopulation = this.__population;
-		let newpopulation = [];
-		let fitness       = this.__fitness;
-
-
-		oldpopulation.sort(function(a, b) {
-			if (a.fitness > b.fitness) return -1;
-			if (a.fitness < b.fitness) return  1;
-			return 0;
-		});
-
-
-		fitness.total   =  0;
-		fitness.average =  0;
+		fitness.total   = 0;
+		fitness.average = 0;
 		fitness.best    = -Infinity;
-		fitness.worst   =  Infinity;
+		fitness.worst   = Infinity;
 
-		for (let op = 0, opl = oldpopulation.length; op < opl; op++) {
+		for (let a = 0, al = agents.length; a < al; a++) {
 
-			let agent = oldpopulation[op];
-
-			oldsensors.push(agent.sensors);
-			oldcontrols.push(agent.controls);
-
-			// XXX: Avoid updates of Brain
-			agent.sensors  = [];
-			agent.controls = [];
-			agent.setEntity(null);
+			let agent = agents[a];
 
 			fitness.total += agent.fitness;
 			fitness.best   = Math.max(fitness.best,  agent.fitness);
@@ -117,62 +97,99 @@ lychee.define('lychee.ai.Layer').requires([
 
 		}
 
-		fitness.average = fitness.total / oldpopulation.length;
 
-
-		let amount = Math.round(0.2 * oldpopulation.length);
-		if (amount % 2 === 1) {
-			amount++;
+		// Worst Case: All Agents are retards
+		if (fitness.total !== 0) {
+			fitness.average = fitness.total / agents.length;
+		} else {
+			return;
 		}
 
-		if (amount > 0) {
+
+		let old_a      = 0;
+		let new_agents = [];
+		let old_agents = agents.slice(0).sort(function(a, b) {
+			if (a.fitness > b.fitness) return -1;
+			if (a.fitness < b.fitness) return  1;
+			return 0;
+		});
+
+
+		if (old_agents.length > 8) {
+
+			let partition = Math.round(0.2 * old_agents.length);
+			if (partition % 2 === 1) {
+				partition++;
+			}
+
 
 			// Survivor Population
-			for (let a = 0; a < amount; a++) {
-				newpopulation.push(oldpopulation[a]);
+			for (let p = 0; p < partition; p++) {
+				new_agents.push(old_agents[p]);
+				old_a++;
 			}
 
 
 			// Mutant Population
-			for (let a = 0; a < amount; a++) {
-				newpopulation.push(_create_agent.call(this));
+			for (let p = 0; p < partition; p++) {
+
+				let agent = _create_agent.call(this);
+
+				agent.brain.setSensors(old_agents[old_a].brain.sensors);
+				agent.brain.setControls(old_agents[old_a].brain.controls);
+
+				new_agents.push(agent);
+				old_a++;
+
 			}
 
 
 			// Breed Population
-			let b     = 0;
-			let count = 0;
+			let b       = 0;
+			let b_tries = 0;
 
-			while (newpopulation.length < oldpopulation.length) {
+			while (new_agents.length < old_agents.length) {
 
-				let agent_mum = oldpopulation[b];
-				let agent_dad = oldpopulation[b + 1];
+				let agent_mum = old_agents[b];
+				let agent_dad = old_agents[b + 1];
 				let children  = agent_mum.crossover(agent_dad);
 
 				if (children !== null) {
 
-					let agent_sister  = children[0];
-					let agent_brother = children[1];
+					let agent_sis = children[0];
+					let agent_bro = children[1];
 
-					if (newpopulation.indexOf(agent_sister) === -1) {
-						newpopulation.push(agent_sister);
+					if (new_agents.indexOf(agent_sis) === -1) {
+
+						agent_sis.brain.setSensors(old_agents[old_a].brain.sensors);
+						agent_sis.brain.setControls(old_agents[old_a].brain.controls);
+
+						new_agents.push(agent_sis);
+						old_a++;
+
 					}
 
-					if (newpopulation.indexOf(agent_brother) === -1) {
-						newpopulation.push(agent_brother);
+					if (new_agents.indexOf(agent_bro) === -1) {
+
+						agent_bro.brain.setSensors(old_agents[old_a].brain.sensors);
+						agent_bro.brain.setControls(old_agents[old_a].brain.controls);
+
+						new_agents.push(agent_bro);
+						old_a++;
+
 					}
 
 				}
 
 
 				b += 1;
-				b %= amount;
+				b %= partition;
 
-				count += 1;
+				b_tries++;
 
 
-				// Fallback if there's no crossover() Implementation
-				if (count > oldpopulation.length) {
+				// XXX: Not enough Agents for healthy Evolution
+				if (b_tries > old_agents.length) {
 					break;
 				}
 
@@ -181,21 +198,33 @@ lychee.define('lychee.ai.Layer').requires([
 		}
 
 
-		if (newpopulation.length < oldpopulation.length) {
+		if (new_agents.length < old_agents.length) {
 
 			if (lychee.debug === true) {
-				console.warn('lychee.ai.Layer: Too less Agents for healthy Evolution');
+				console.warn('lychee.ai.Layer: Not enough Agents for healthy Evolution');
 			}
 
+			let diff = old_agents.length - new_agents.length;
 
-			let diff = oldpopulation.length - newpopulation.length;
+			for (let o = 0; o < old_agents.length; o++) {
 
-			for (let o = 0; o < oldpopulation.length; o++) {
+				let old_agent = old_agents[o];
+				if (new_agents.indexOf(old_agent) === -1) {
 
-				if (newpopulation.indexOf(oldpopulation[o]) === -1) {
-					newpopulation.push(oldpopulation[o]);
+					let other = old_agents[old_a];
+					if (other !== old_agent) {
+						old_agent.brain.setSensors(other.brain.sensors);
+						old_agent.brain.setControls(other.brain.controls);
+					}
+
+					old_agent.fitness = 0;
+
+					new_agents.push(old_agent);
+					old_a++;
 					diff--;
+
 				}
+
 
 				if (diff === 0) {
 					break;
@@ -206,27 +235,15 @@ lychee.define('lychee.ai.Layer').requires([
 		}
 
 
-		for (let np = 0, npl = newpopulation.length; np < npl; np++) {
-
-			let agent  = newpopulation[np];
-			let entity = entities[np];
-
-			agent.sensors  = oldsensors[np];
-			agent.controls = oldcontrols[np];
-
-			agent.setEntity(entity);
-			agent.setFitness(0);
-
-			this.trigger('epoche', [ agent ]);
-
+		// XXX: Don't break references
+		for (let n = 0, nl = new_agents.length; n < nl; n++) {
+			this.agents[n] = new_agents[n];
+			this.agents[n].alive = true;
 		}
 
 
-		this.__population = newpopulation;
-
-		oldpopulation = null;
-		oldsensors    = null;
-		oldcontrols   = null;
+		new_agents = null;
+		old_agents = null;
 
 	};
 
@@ -241,10 +258,19 @@ lychee.define('lychee.ai.Layer').requires([
 		let settings = Object.assign({}, data);
 
 
-		this.lifetime = 30000;
-		this.sensors  = [];
-		this.controls = [];
-		this.type     = Composite.TYPE.ENN;
+		// XXX: Keep Layer API compatibility
+		this.width    = 0;
+		this.height   = 0;
+		this.depth    = 0;
+		this.radius   = 0;
+		this.alpha    = 1;
+		this.entities = [];
+		this.position = { x: 0, y: 0, z: 0 };
+		this.visible  = true;
+
+
+		this.agents = [];
+		this.type   = Composite.TYPE.CUSTOM;
 
 		this.__fitness = {
 			total:    0,
@@ -252,43 +278,40 @@ lychee.define('lychee.ai.Layer').requires([
 			best:    -Infinity,
 			worst:    Infinity
 		};
-		this.__population = [];
-		this.__start      = null;
+		this.__map     = {};
 
 
-		this.setSensors(settings.sensors);
-		this.setControls(settings.controls);
-		this.setLifetime(settings.lifetime);
+		this.setAgents(settings.agents);
 
-		delete settings.sensors;
-		delete settings.controls;
-		delete settings.lifetime;
+		if (lychee.enumof(Composite.TYPE, settings.type) && this.type !== settings.type) {
+			this.setType(settings.type);
+		} else {
+			this.trigger('epoche');
+		}
 
 
-		_Layer.call(this, settings);
+		_Emitter.call(this);
+
+		settings = null;
+
 
 
 		/*
 		 * INITIALIZATION
 		 */
 
-		if (settings.type !== this.type) {
-			this.setType(settings.type);
-		} else {
-			_initialize.call(this);
-		}
-
-		settings = null;
+		this.bind('epoche', _on_epoche, this);
 
 	};
 
 
 	Composite.TYPE = {
-		ENN:       0,
-		BNN:       1,
-		NEAT:      2,
-		BNEAT:     3,
-		HYPERNEAT: 4
+		CUSTOM:    0,
+		ENN:       1,
+		BNN:       2,
+		NEAT:      3,
+		BNEAT:     4,
+		HYPERNEAT: 5
 	};
 
 
@@ -302,54 +325,66 @@ lychee.define('lychee.ai.Layer').requires([
 
 		serialize: function() {
 
-			let data = _Layer.prototype.serialize.call(this);
+			let data = _Emitter.prototype.serialize.call(this);
 			data['constructor'] = 'lychee.ai.Layer';
 
-			let settings = data['arguments'][0];
+			let settings = {};
 			let blob     = (data['blob'] || {});
 
 
-			if (this.sensors.length > 0)          settings.sensors  = this.sensors.map(lychee.serialize);
-			if (this.controls.length > 0)         settings.controls = this.controls.map(lychee.serialize);
-			if (this.lifetime !== 30000)          settings.lifetime = this.lifetime;
-			if (this.type !== Composite.TYPE.ENN) settings.type     = this.type;
+			if (this.type !== Composite.TYPE.ENN) settings.type = this.type;
 
 
-			data['blob'] = Object.keys(blob).length > 0 ? blob : null;
+			if (this.agents.length > 0) {
+				blob.agents = this.agents.map(lychee.serialize);
+			}
+
+			if (blob.agents instanceof Array && Object.keys(this.__map).length > 0) {
+
+				blob.map = Object.map(this.__map, function(val, key) {
+
+					let index = this.agents.indexOf(val);
+					if (index !== -1) {
+						return index;
+					}
+
+
+					return undefined;
+
+				}, this);
+
+			}
+
+
+			data['arguments'][0] = settings;
+			data['blob']         = Object.keys(blob).length > 0 ? blob : null;
 
 
 			return data;
 
 		},
 
+		render: function(renderer, offsetX, offsetY) {
+			// XXX: Do nothing
+		},
+
 		update: function(clock, delta) {
 
-			_Layer.prototype.update.call(this, clock, delta);
+			let agents   = this.agents;
+			let is_alive = false;
+			for (let a = 0, al = agents.length; a < al; a++) {
 
-
-			if (this.__start === null) {
-				this.__start = clock;
-			}
-
-
-			let population = this.__population;
-			for (let p = 0, pl = population.length; p < pl; p++) {
-
-				let agent = population[p];
-
-				agent.update(clock, delta);
-				this.trigger('update', [ agent ]);
+				let agent = agents[a];
+				if (agent.alive === true) {
+					agent.update(clock, delta);
+					is_alive = true;
+				}
 
 			}
 
 
-			let t = (clock - this.__start) / this.lifetime;
-			if (t > 1) {
-
-				_epoche.call(this);
-
-				this.__start = clock;
-
+			if (is_alive === false) {
+				this.trigger('epoche');
 			}
 
 		},
@@ -360,36 +395,22 @@ lychee.define('lychee.ai.Layer').requires([
 		 * CUSTOM API
 		 */
 
-		setControls: function(controls) {
+		addAgent: function(agent) {
 
-			controls = controls instanceof Array ? controls.unique() : null;
-
-
-			if (controls !== null) {
-
-				this.controls = controls.filter(function(control) {
-					return control instanceof Object;
-				});
-
-				return true;
-
-			}
+			agent = _validate_agent(agent) === true ? agent : null;
 
 
-			return false;
+			if (agent !== null) {
 
-		},
+				let index = this.agents.indexOf(agent);
+				if (index === -1) {
 
-		setLifetime: function(lifetime) {
-
-			lifetime = typeof lifetime === 'number' ? (lifetime | 0) : null;
+					this.agents.push(agent);
 
 
-			if (lifetime !== null) {
+					return true;
 
-				this.lifetime = lifetime;
-
-				return true;
+				}
 
 			}
 
@@ -398,16 +419,143 @@ lychee.define('lychee.ai.Layer').requires([
 
 		},
 
-		setSensors: function(sensors) {
+		setAgent: function(id, agent) {
 
-			sensors = sensors instanceof Array ? sensors.unique() : null;
+			id    = typeof id === 'string'          ? id    : null;
+			agent = _validate_agent(agent) === true ? agent : null;
 
 
-			if (sensors !== null) {
+			if (id !== null && agent !== null && this.__map[id] === undefined) {
 
-				this.sensors = sensors.filter(function(sensor) {
-					return sensor instanceof Object;
-				});
+				this.__map[id] = agent;
+
+				let result = this.addAgent(agent);
+				if (result === true) {
+					return true;
+				} else {
+					delete this.__map[id];
+				}
+
+			}
+
+
+			return false;
+
+		},
+
+		getAgent: function(id) {
+
+			id = typeof id === 'string' ? id : null;
+
+
+			let found = null;
+
+
+			if (id !== null) {
+
+				let num = parseInt(id, 10);
+
+				if (this.__map[id] !== undefined) {
+					found = this.__map[id];
+				} else if (isNaN(num) === false) {
+					found = this.agents[num] || null;
+				}
+
+			}
+
+
+			return found;
+
+		},
+
+		removeAgent: function(agent) {
+
+			agent = _validate_agent(agent) === true ? agent : null;
+
+
+			if (agent !== null) {
+
+				let found = false;
+
+				let index = this.agents.indexOf(agent);
+				if (index !== -1) {
+
+					this.agents.splice(index, 1);
+					found = true;
+
+				}
+
+
+				for (let id in this.__map) {
+
+					if (this.__map[id] === agent) {
+
+						delete this.__map[id];
+						found = true;
+
+					}
+
+				}
+
+
+				return found;
+
+			}
+
+
+			return false;
+
+		},
+
+		setAgents: function(agents) {
+
+			agents = agents instanceof Array ? agents : null;
+
+
+			let all = true;
+
+			if (agents !== null) {
+
+				for (let a = 0, al = agents.length; a < al; a++) {
+
+					let result = this.addAgent(agents[a]);
+					if (result === false) {
+						all = false;
+					}
+
+				}
+
+			}
+
+
+			return all;
+
+		},
+
+		removeAgents: function() {
+
+			let agents = this.agents;
+
+			for (let a = 0, al = agents.length; a < al; a++) {
+
+				this.removeAgent(agents[a]);
+
+				al--;
+				a--;
+
+			}
+
+			return true;
+
+		},
+
+		setPosition: function(position) {
+
+			if (position instanceof Object) {
+
+				this.position.x = typeof position.x === 'number' ? position.x : this.position.x;
+				this.position.y = typeof position.y === 'number' ? position.y : this.position.y;
+				this.position.z = typeof position.z === 'number' ? position.z : this.position.z;
 
 				return true;
 
@@ -429,8 +577,7 @@ lychee.define('lychee.ai.Layer').requires([
 				if (oldtype !== type) {
 
 					this.type = type;
-
-					_initialize.call(this);
+					this.trigger('epoche');
 
 					return true;
 

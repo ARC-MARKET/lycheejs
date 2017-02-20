@@ -2,106 +2,144 @@
 	"layers": {
 		"ui": {
 			"constructor": "lychee.ui.Layer",
-			"arguments": [{}],
+			"arguments": [
+				{}
+			],
 			"blob": {
-				"entities": [{
-					"constructor": "lychee.ui.Blueprint",
-					"arguments": [{
-						"visible": true,
-						"type": 2
-					}],
-					"blob": {
-						"entities": [{
-							"constructor": "lychee.ui.Element",
-							"arguments": [{
-								"label":    "WELCOME",
-								"options":  [ "Boot" ],
-								"width":    416,
-								"height":   416,
-								"position": {
-									"x": 0,
-									"y": 0
-								}
-							}],
-							"blob": {
-								"entities": [{
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "The lycheejs-harvester is not booted up."
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Text",
-									"arguments": [{
-										"value": "Select a Profile to boot the lychee.js Harvester.\nIf you have no clue, select \"development\"."
-									}]
-								}, {
-									"constructor": "lychee.ui.entity.Select",
-									"arguments": [{
-										"options": [ "development", "production" ],
-										"value": "development"
-									}]
-								}],
-								"map": {
-									"profile": 2
-								}
+				"entities": [
+					{
+						"constructor": "lychee.ui.Blueprint",
+						"arguments": [
+							{
+								"visible": true,
+								"type": 2
 							}
-						}, {
-							"constructor": "lychee.ui.Element",
-							"arguments": [{
-								"label":    "STATUS",
-								"options":  [],
-								"width":    640,
-								"height":   480,
-								"position": {
-									"x": 0,
-									"y": 0
-								}
-							}],
-							"blob": {
-								"entities": [{
-									"constructor": "lychee.ui.layer.Table",
-									"arguments": [{
-										"width":  608,
-										"height": 384,
-										"position": {
-											"x":  0,
-											"y": 32
-										}
-									}],
-									"blob": {
-										"model": {
-											"identifier": {
-												"constructor": "app.ui.entity.Identifier",
-												"arguments": [{
-													"width": 224,
-													"height": 32
-												}]
-											},
-											"control": {
-												"constructor": "app.ui.layer.Control",
-												"arguments": [{
-													"width": 224,
-													"height": 32
-												}]
-											},
-											"web": {
-												"constructor": "app.ui.layer.Web",
-												"arguments": [{
-													"width": 224,
-													"height": 32
-												}]
+						],
+						"blob": {
+							"entities": [
+								{
+									"constructor": "lychee.ui.Element",
+									"arguments": [
+										{
+											"label": "WELCOME",
+											"options": [
+												"Boot"
+											],
+											"width": 416,
+											"height": 416,
+											"position": {
+												"x": 0,
+												"y": 0
 											}
 										}
+									],
+									"blob": {
+										"entities": [
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "The lycheejs-harvester is not booted up."
+													}
+												]
+											},
+											{
+												"constructor": "lychee.ui.entity.Text",
+												"arguments": [
+													{
+														"value": "Select a Profile to boot the lychee.js Harvester.\nIf you have no clue, select \"development\"."
+													}
+												]
+											},
+											{
+												"constructor": "lychee.ui.entity.Select",
+												"arguments": [
+													{
+														"options": [
+															"development",
+															"production"
+														],
+														"value": "development"
+													}
+												]
+											}
+										],
+										"map": {
+											"profile": 2
+										}
 									}
-								}]
+								},
+								{
+									"constructor": "lychee.ui.Element",
+									"arguments": [
+										{
+											"label": "STATUS",
+											"options": [],
+											"width": 640,
+											"height": 480,
+											"position": {
+												"x": 0,
+												"y": 0
+											}
+										}
+									],
+									"blob": {
+										"entities": [
+											{
+												"constructor": "lychee.ui.layer.Table",
+												"arguments": [
+													{
+														"width": 608,
+														"height": 384,
+														"position": {
+															"x": 0,
+															"y": 32
+														}
+													}
+												],
+												"blob": {
+													"model": {
+														"identifier": {
+															"constructor": "app.ui.entity.Identifier",
+															"arguments": [
+																{
+																	"width": 224,
+																	"height": 32
+																}
+															]
+														},
+														"control": {
+															"constructor": "app.ui.layer.Control",
+															"arguments": [
+																{
+																	"width": 224,
+																	"height": 32
+																}
+															]
+														},
+														"web": {
+															"constructor": "app.ui.layer.Web",
+															"arguments": [
+																{
+																	"width": 224,
+																	"height": 32
+																}
+															]
+														}
+													}
+												}
+											}
+										]
+									}
+								}
+							],
+							"map": {
+								"dialog": 0,
+								"status": 1
 							}
-						}],
-						"map": {
-							"dialog": 0,
-							"status": 1
 						}
 					}
-				}],
+				],
 				"map": {
 					"welcome": 0
 				}

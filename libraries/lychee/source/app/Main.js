@@ -50,7 +50,7 @@ lychee.define('lychee.app.Main').requires([
 
 		} else if (/http|https/g.test(proto)) {
 
-			return location.origin + ':4848';
+			return 'http://' + hostname + ':4848';
 
 		} else {
 

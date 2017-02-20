@@ -118,6 +118,7 @@ lychee.define('lychee.net.Tunnel').requires([
 		let settings = Object.assign({}, data);
 
 
+		this.id        = 'localhost:1337';
 		this.codec     = lychee.interfaceof(_JSON, settings.codec) ? settings.codec : _JSON;
 		this.host      = 'localhost';
 		this.port      = 1337;
@@ -447,6 +448,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (host !== null) {
 
+				this.id   = (/:/g.test(host) ? '[' + host + ']' : host) + ':' + this.port;
 				this.host = host;
 
 				return true;
@@ -465,6 +467,7 @@ lychee.define('lychee.net.Tunnel').requires([
 
 			if (port !== null) {
 
+				this.id   = (/:/g.test(this.host) ? '[' + this.host + ']' : this.host) + ':' + port;
 				this.port = port;
 
 				return true;
