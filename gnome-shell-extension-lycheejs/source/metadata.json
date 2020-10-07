@@ -1,7 +1,7 @@
 {
 	"name":          "lychee.js Harvester",
 	"description":   "Manage lychee.js Projects and Libraries",
-	"uuid":          "lycheejs@artificial.engineering",
+	"uuid":          "lycheejs@cookie.engineer",
 	"shell-version": [
 		"3.26.2"
 	]

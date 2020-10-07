@@ -1,4 +1,4 @@
-# Maintainer: Robot <robot@artificial.engineering>
+# Maintainer: Robot <@robot>
 pkgname=gnome-shell-extension-lycheejs
 _pkgname=${pkgname%-git}
 
@@ -13,7 +13,7 @@ makedepends=('git')
 source=("git+/path/to/gnome-shell-extension-lycheejs")
 md5sums=('SKIP')
 
-_folder="lycheejs@artificial.engineering"
+_folder="lycheejs@cookie.engineer"
 
 pkgver() {
     cd "$srcdir/$_pkgname"

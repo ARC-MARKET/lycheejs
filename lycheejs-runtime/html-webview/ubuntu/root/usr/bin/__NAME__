@@ -1,3 +1,0 @@
-#!/bin/bash
-exec webapp-container /usr/share/__NAME__/index.html
-

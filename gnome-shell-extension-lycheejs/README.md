@@ -51,10 +51,10 @@ makepkg -s;
 Manual installation:
 
 ```bash
-mkdir -p $HOME/.local/share/gnome-shell/extensions/lycheejs@artificial.engineering;
-cd $HOME/.local/share/gnome-shell/extensions/lycheejs@artificial.engineering;
+mkdir -p $HOME/.local/share/gnome-shell/extensions/lycheejs@cookie.engineer;
+cd $HOME/.local/share/gnome-shell/extensions/lycheejs@cookie.engineer;
 
-cp -R /path/to/gnome-shell-extension-lycheejs/source/* lycheejs@artificial.engineering/;
+cp -R /path/to/gnome-shell-extension-lycheejs/source/* lycheejs@cookie.engineer/;
 ```
 
 
@@ -78,6 +78,6 @@ the `/source` folder into your local shell extensions like so:
 ```bash
 cd $HOME/.local/share/gnome-shell/extensions;
 
-ln -s /path/to/gnome-shell-extension-lycheejs/source lycheejs@artificial.engineering;
+ln -s /path/to/gnome-shell-extension-lycheejs/source lycheejs@cookie.engineer;
 ```
 

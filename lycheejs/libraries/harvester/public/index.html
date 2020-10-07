@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>lychee.js Engine</title>
+	<link rel="shortcut icon" type="image/png" href="/desktop.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="robots" content="noindex">
+
+	<!-- BOOTSTRAP -->
+	<script src="/libraries/crux/build/html/dist.js"></script>
+
+	<!-- DESIGN -->
+	<script src="/design/index.js"></script>
+	<link rel="stylesheet" href="/design/index.css">
+
+	<!-- RETRO -->
+	<script src="/design/retro.js"></script>
+	<link rel="stylesheet" href="/design/retro.css">
+
+</head>
+<body id="body">
+<header>
+	<h1>
+		<img alt="lychee.js Logo" src="/desktop.svg" width="128" height="128">
+		<img alt="lychee.js Retro Logo" src="/desktop-retro.png" width="128" height="128">
+	</h1>
+	<h2>lychee<span>js</span></h2>
+</header>
+<article>
+	<label>lychee.js Overview</label>
+	<p>
+		The <a target="_blank" href="/guide/index.html">lychee.js Guide</a> helps you to get started easily.
+		Please also take a look at the <a href="lycheejs://file=/README.md">README.md</a> and the <a href="lycheejs://file=/CHANGELOG.md">CHANGELOG.md</a>.
+	</p>
+	<p>
+		Installed lychee.js Version: <span id="lychee-VERSION">2017-Q4</span>.
+	</p>
+	<hr>
+	<div>
+		<a class="button" href="/guide/index.html" target="_blank">lychee.js&nbsp;Guide</a>
+		<a class="button" href="lycheejs://cmd=lycheejs-studio">lychee.js&nbsp;Studio</a>
+		<a class="button" href="lycheejs://cmd=lycheejs-ranger">lychee.js&nbsp;Ranger</a>
+	</div>
+</article>
+<main id="main">
+	<article id="warning" class="warning">
+		<label>Warning: lychee.js Harvester is unreachable</label>
+		<p>
+			Please make sure that the lychee.js Harvester is booted correctly
+			(<a href="lycheejs://file=/README.md">README.md</a>) and that no
+			Firewall or Browser Extension blocks connections to or from it.
+			<br><br>
+			The lychee.js Harvester uses ports <q>4848</q> and <q>8080</q> as
+			management ports and ports <q>49152 to 65534</q> as dynamic ports
+			for project- or library-specific websocket servers.
+		</p>
+	</article>
+</main>
+<script>
+(function(global) {
+
+	lychee.init(null);
+
+
+
+	/*
+	 * HELPERS
+	 */
+
+	const $api = function(url, callback) {
+
+		let config = new Config(url);
+
+		config.onload = function(result) {
+			callback(result === true ? this.buffer : []);
+		};
+
+		config.load();
+
+	};
+
+	const _render = function(project, mask) {
+
+		let article = $('article').set({
+			'data-id': project.identifier
+		});
+
+		$('label').set({
+			html: project.identifier.split('/').pop()
+		}).appendTo(article);
+
+		$('img').set({
+			src: project.identifier + '/icon.png'
+		}).appendTo(article);
+
+
+		if (mask[0] === 1) {
+
+			$('a.button').set({
+				href:    'lycheejs://edit=' + project.identifier,
+				html:    'Edit',
+				onclick: function() {
+					location.href = 'lycheejs://edit=' + project.identifier;
+				}
+			}).appendTo(article);
+
+		}
+
+		if (mask[1] === 1) {
+
+			$('a.button').set({
+				href:    'lycheejs://file=' + project.identifier,
+				html:    'File',
+				onclick: function() {
+					location.href = 'lycheejs://file=' + project.identifier;
+				}
+			}).appendTo(article);
+
+		}
+
+		if (mask[2] === 1) {
+
+			$('a.button').set({
+				href:    project.identifier + '/index.html',
+				html:    'Open',
+				onclick: function() {
+					global.open(project.identifier + '/index.html');
+				}
+			}).appendTo(article);
+
+		}
+
+		return article;
+
+	};
+
+
+
+	/*
+	 * IMPLEMENTATION
+	 */
+
+	let main = $('#main');
+	if (main !== null) {
+
+		const host    = global.location.hostname || 'localhost';
+		const warning = $('#warning');
+
+
+		$api('http://' + host + ':4848/api/library/index', function(buffer) {
+			buffer.map(l => _render(l, /ranger|studio/g.test(l.identifier) ? [0,1,1] : [0,1,0])).forEach(a => a.appendTo(main));
+			warning.clear();
+		});
+
+		$api('http://' + host + ':4848/api/project/index', function(buffer) {
+			buffer.map(p => _render(p, [1,1,1])).forEach(a => a.appendTo(main));
+			warning.clear();
+		});
+
+	}
+
+	let version = $('#lychee-VERSION');
+	if (version !== null) {
+		version.html('' + lychee.VERSION);
+	}
+
+})(typeof global !== 'undefined' ? global : this);
+</script>
+</body>
+</html>
