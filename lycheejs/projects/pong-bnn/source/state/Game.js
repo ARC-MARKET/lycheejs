@@ -242,10 +242,6 @@ lychee.define('game.state.Game').requires([
 
 			if (renderer !== null && layer !== null) {
 
-				lychee.debug = true;
-				console.log(layer.query('what > ever'));
-				console.log(this.query('simulation > game > ball > what > ever'));
-
 				layer.unbind('epoche');
 
 

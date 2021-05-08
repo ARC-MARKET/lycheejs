@@ -79,6 +79,9 @@ lychee.define('game.state.Simulation').requires([
 
 		enter: function(oncomplete) {
 
+			oncomplete = oncomplete instanceof Function ? oncomplete : null;
+
+
 			return _State.prototype.enter.call(this, oncomplete);
 
 		},
