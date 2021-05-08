@@ -2,7 +2,6 @@
 # Runtime Caches
 
 /lychee.store
-/bin/runtime
 /bin/runtime-backup
 /bin/lycheejs-runtime.zip
 /bin/lycheejs-runtime-only-node.zip

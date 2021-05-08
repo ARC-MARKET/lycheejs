@@ -67,20 +67,3 @@ Example Output:
 1 problem
 ```
 
-## IDE Integration
-
-**VIM** or **NeoVIM**:
-
-An integration for VIM's [ALE](https://github.com/w0rp/ALE) plugin
-is available.
-
-Copy the [strainer.vim](/bin/linter/ale/strainer.vim) file to
-`~/.vim/ale_linters/javascript/strainer.vim` and add the following
-lines to your `.vimrc`:
-
-```vim
-if filereadable("lychee.store") || filereadable("lychee.pkg")
-	let g:ale_linters = { 'javascript': [ 'strainer' ] }
-endif
-```
-

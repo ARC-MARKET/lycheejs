@@ -103,8 +103,8 @@ lycheejs-helper cmd "lycheejs-ranger?data="$(echo '{"foo":"bar"}' | base64);
 ```
 
 ```bash
-lycheejs-helper "lycheejs://web=https://lychee.js.org";
-lycheejs-helper web "https://lychee.js.org";
+lycheejs-helper "lycheejs://web=https://cookie.engineer";
+lycheejs-helper web "https://cookie.engineer";
 ```
 
 

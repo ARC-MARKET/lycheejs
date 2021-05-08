@@ -35,9 +35,6 @@ lycheejs-harvester; # show help
 The profiles are stored in `/opt/lycheejs/libraries/harvester/profiles`
 and the defaulted profiles are `development` and `production`.
 
-Another example profile is also available, which demonstrates
-the profile of the `artificial.engineering` website.
-
 Each profile consists of a JSON structure that contains these settings:
 
 ```javascript

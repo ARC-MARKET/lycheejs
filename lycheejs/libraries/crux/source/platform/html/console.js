@@ -237,15 +237,15 @@
 
 		if (is_chrome || is_opera) {
 
-			log.call(console, '%c\u2588\u2588\u2588\u2588\u2588%c\u2584\u2584%c\u2588\u2588\u2588\u2588\u2588 %clychee.%cjs%c ' + ver + '     ', css[0], css[2], css[0], css[1], css[2], css[1]);
-			log.call(console, '%c\u2588%c\u2580\u2584\u2584%c\u2588%c\u2580\u2580%c\u2588%c\u2584\u2584\u2580%c\u2588 %cIsomorphic Engine     ', css[0], css[1], css[0], css[2], css[0], css[1], css[0], css[1]);
-			log.call(console, '%c\u2588%c\u2584\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2584%c\u2588 %chttps://lychee.js.org ',         css[0], css[1], css[0], css[1]);
+			log.call(console, '%c\u2588\u2588\u2588\u2588\u2588%c\u2584\u2584%c\u2588\u2588\u2588\u2588\u2588 %clychee.%cjs%c ' + ver + '       ', css[0], css[2], css[0], css[1], css[2], css[1]);
+			log.call(console, '%c\u2588%c\u2580\u2584\u2584%c\u2588%c\u2580\u2580%c\u2588%c\u2584\u2584\u2580%c\u2588 %cIsomorphic Engine       ', css[0], css[1], css[0], css[2], css[0], css[1], css[0], css[1]);
+			log.call(console, '%c\u2588%c\u2584\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2584%c\u2588 %chttps://cookie.engineer ',         css[0], css[1], css[0], css[1]);
 
 		} else if (is_firefox || is_safari) {
 
-			log.call(console, '%c\u2588\u2588\u2588\u2588\u2588%c\u2584\u2584%c\u2588\u2588\u2588\u2588\u2588 %clychee.%cjs%c ' + ver + '     ', css[0], css[2], css[0], css[1], css[2], css[1]);
-			log.call(console, '%c\u2588%c\u2580\u2584\u2584%c\u2588%c\u2580\u2580%c\u2588%c\u2584\u2584\u2580%c\u2588 %cIsomorphic Engine     ', css[0], css[1], css[0], css[2], css[0], css[1], css[0], css[1]);
-			log.call(console, '%c\u2588%c\u2584\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2584%c\u2588 %chttps://lychee.js.org ',         css[0], css[1], css[0], css[1]);
+			log.call(console, '%c\u2588\u2588\u2588\u2588\u2588%c\u2584\u2584%c\u2588\u2588\u2588\u2588\u2588 %clychee.%cjs%c ' + ver + '       ', css[0], css[2], css[0], css[1], css[2], css[1]);
+			log.call(console, '%c\u2588%c\u2580\u2584\u2584%c\u2588%c\u2580\u2580%c\u2588%c\u2584\u2584\u2580%c\u2588 %cIsomorphic Engine       ', css[0], css[1], css[0], css[2], css[0], css[1], css[0], css[1]);
+			log.call(console, '%c\u2588%c\u2584\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2580\u2584%c\u2588 %chttps://cookie.engineer ',         css[0], css[1], css[0], css[1]);
 
 			log.call(console, '%c                                     ', css[1]);
 			log.call(console, '%c   Please use Chrome/Chromium/Opera  ', css[1]);

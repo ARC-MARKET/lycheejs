@@ -3,12 +3,12 @@
 	"name":        "${id}",
 	"title":       "${id} (powered by lychee.js)",
 	"version":     "${version}",
-	"homepage":    "https://lychee.js.org",
+	"homepage":    "https://cookie.engineer",
 	"description": "Next-Gen Isomorphic Application Engine",
 	"license":     "(MIT AND GPL-3.0)",
 	"repository":  {
 		"type": "git",
-		"url": "https://github.com/Artificial-Engineering/lycheejs.git"
+		"url": "https://github.com/cookiengineer/lycheejs.git"
 	},
 	"window": {
 		"title":    "${id} (powered by lychee.js)",

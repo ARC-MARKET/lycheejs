@@ -93,7 +93,7 @@ The following Repositories are related to the lychee.js Engine:
 - [lychee.js Experiments](../lycheejs-experiments) contains all lychee.js Experiments and Prototypes.
 - [lychee.js Runtime](../lycheejs-runtime) contains all pre-compiled lychee.js Runtimes and Fertilizers.
 - [lychee.js Library](../lycheejs-library) contains the lychee.js Library (installable via `bower` and `npm`, forked from `/libraries/lychee`).
-- [lychee.js Website](../lycheejs-website) contains the lychee.js Website (hosted at [lychee.js.org](https://lychee.js.org)).
+- [lychee.js Website](../lycheejs-website) contains the lychee.js Website.
 - [lychee.js Future](../lycheejs-future) contains all Concepts and Ideas not yet finished.
 
 The following Accounts are related to the lychee.js Engine:
@@ -181,13 +181,6 @@ Alternatively, advanced users are encouraged to use the `nidium` runtime on iOS 
 
 If you want to install the lychee.js Engine, the best way to do
 so is to follow through the [Quickstart Guide](/guides/quickstart).
-
-```bash
-# Install lychee.js Engine into /opt/lycheejs
-sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
-```
-
-![Installation CLI Animation](./guides/quickstart/asset/installation.svg)
 
 
 ## License

@@ -176,7 +176,7 @@ All entries in the changelog are listed in this specific order:
 - Added: lychee.policy Stack implements feature vectorization adapters.
 - Added: Project Pong-BNN as a Backpropagated NN demo.
 - Added: Project Flappy-ENN as an Evolutionary NN demo.
-- Added: lychee.js Harvester synchronizes to `harvester.artificial.engineering`.
+- Added: lychee.js Harvester synchronizes to the Web.
 - Added: lychee.js Harvester beautifies JSON files.
 - Fixed: lychee.Stash creates recursive directories correctly.
 - Fixed: `html` platform plays `Music` and `Sound` correctly via (new) Promise API.

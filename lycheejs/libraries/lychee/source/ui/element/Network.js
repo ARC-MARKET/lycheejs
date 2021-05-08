@@ -21,11 +21,7 @@ lychee.define('lychee.ui.element.Network').requires([
 		let tmp   = (location.origin || '').split(':');
 		let proto = tmp[0] || '';
 
-		if (/app|file|chrome-extension/g.test(proto)) {
-
-			return 'http://harvester.artificial.engineering:4848';
-
-		} else if (/http|https/g.test(proto)) {
+		if (/http|https/g.test(proto)) {
 
 			let port = parseInt(tmp[tmp.length - 1], 10);
 			if (!isNaN(port)) {

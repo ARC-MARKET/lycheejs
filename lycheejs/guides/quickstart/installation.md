@@ -7,22 +7,7 @@ The lychee.js Engine is distributed via two different channels:
 - `lychee.js Engine` which is an isomorphic engine and contains AI automation, all tools and software bots.
 
 
-
-## lychee.js Library Installation (not recommended)
-
-The lychee.js Library is a self-hosted library that is not integrated
-with the software bots and not integrated with the lychee.js Engine.
-
-It exists for the purpose of reusing your lychee.js Projects and
-Libraries in other Projects (like in an HTML5 App or a Node.js Server).
-
-The [README](../../../lycheejs-library/README.md)
-of the lychee.js Library repository contains detailed usage instructions.
-
-The recommended, failsafe way is to use our lychee.js Engine
-Net Installer.
-
-## lychee.js Engine Installation (recommended)
+## lychee.js Engine Installation
 
 The lychee.js Engine is a self-hosted engine and development environment
 that includes all necessary runtimes, binaries and external SDKs that
@@ -33,11 +18,6 @@ The lychee.js Engine installation requires at least 4GB of free memory
 space at `/opt/lycheejs`. 16GB are recommended to have a fully working
 AI knowledge integration.
 
-Depending on the internet connection speed the installation will take
-a couple minutes (needs to download ca. 800MB zip file of runtime
-binaries which is hosted in the releases section of the [lycheejs](https://github.com/cookiengineer/lycheejs/releases)
-repository).
-
 **Notes**:
 
 - Windows 10 is supported via Windows Subsystem for Linux (WSL) and Ubuntu.
@@ -46,17 +26,23 @@ repository).
 - FreeBSD/NetBSD requires `pkg` installed and [Linux Compatibility](https://www.freebsd.org/doc/handbook/linuxemu-lbc-install.html) activated beforehand.
 
 ```bash
-# Install lychee.js Engine into /opt/lycheejs
+# install lychee.js Engine into /opt/lycheejs
+sudo mkdir -m 0777 /opt/lycheejs;
+git clone https://github.com/cookiengineer/lycheejs;
 
-sudo bash -c "$(curl -fsSL https://lychee.js.org/install.sh)";
+
+cd /opt/lycheejs;
+
+# install and update dependencies
+sudo ./bin/maintenance/do-install.sh;
+sudo ./bin/runtime/do-update.sh;
+
+# rebuild and start
+bash ./bin/configure.sh;
+lycheejs-harvester start development;
+
+# Now visit http://localhost:8080 in Chromium
 ```
-
-![Quickstart CLI Animation](./asset/installation.svg)
-
-1. Clone the [lycheejs Engine](../../../lycheejs-engine) folder into `/opt/lycheejs`.
-2. Execute the [/bin/maintenance/do-install.sh](/bin/maintenance/do-install.sh) script.
-3. Execute the [/bin/maintenance/do-update.sh](/bin/maintenance/do-update.sh) script.
-4. Execute the [/bin/configure.sh](/bin/configure.sh) script.
 
 
 The `/bin/maintenance/do-install.sh` script supports the following flags:

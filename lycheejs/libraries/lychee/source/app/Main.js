@@ -40,11 +40,7 @@ lychee.define('lychee.app.Main').requires([
 		let origin   = location.origin   || '';
 		let proto    = origin.split(':')[0];
 
-		if (/app|file|chrome-extension/g.test(proto)) {
-
-			return 'http://harvester.artificial.engineering:4848';
-
-		} else if (hostname === 'localhost') {
+		if (hostname === 'localhost') {
 
 			return 'http://localhost:4848';
 

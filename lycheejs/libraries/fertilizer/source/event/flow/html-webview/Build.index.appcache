@@ -10,6 +10,5 @@ manifest.json
 
 NETWORK:
 /api
-http://harvester.artificial.engineering:4848
 http://localhost:4848
 

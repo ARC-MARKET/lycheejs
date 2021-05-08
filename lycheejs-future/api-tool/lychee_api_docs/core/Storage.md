@@ -17,7 +17,7 @@ The `settings` object consists of the following properties:
 ```javascript
 var model = {
 	name:  'robot',
-	squad: 'Artificial-Engineering',
+	squad: 'awesome-squad',
 	score: 1337
 };
 

@@ -10,7 +10,7 @@
 	"memory": {},
 	"errors": [
 		{
-			"url": "/opt/Software/Artificial-Engineering/lycheejs-future/cosmo/source/Main.js",
+			"url": "/opt/lycheejs/projects/lycheejs-future/cosmo/source/Main.js",
 			"rule": "no-exports",
 			"reference": null,
 			"message": "Invalid Definition (missing exports()).",

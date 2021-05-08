@@ -101,7 +101,7 @@ _print_help() {
 	echo " (L)     lycheejs-helper start /projects/boilerplate                       ";
 	echo " (L) ";
 	echo " (L)     lycheejs-helper lycheejs://cmd=lycheejs-ranger?data=[base64_data] ";
-	echo " (L)     lycheejs-helper lycheejs://web=https://lychee.js.org              ";
+	echo " (L)     lycheejs-helper lycheejs://web=https://cookie.engineer            ";
 	echo " (L)     lycheejs-helper cmd lycheejs-studio                               ";
 	echo " (L) ";
 	echo " (L)     lycheejs-helper stop /projects/boilerplate                        ";

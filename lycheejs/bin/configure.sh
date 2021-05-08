@@ -203,7 +203,7 @@ if [ "$OS" == "linux" ] || [ "$OS" == "osx" ] || [ "$OS" == "bsd" ]; then
 		if [ "$check_remote" == "" ]; then
 
 			echo -e "[remote \"upstream\"]" >> .git/config;
-			echo -e "\turl = https://github.com/Artificial-Engineering/lycheejs.git" >> .git/config;
+			echo -e "\turl = https://github.com/cookiengineer/lycheejs.git" >> .git/config;
 			echo -e "\tfetch = +refs/heads/*:refs/remotes/upstream/*" >> .git/config;
 
 		fi;
